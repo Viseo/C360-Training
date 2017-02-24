@@ -72,7 +72,7 @@ new Vue({
                         this.isNewTrainingTitle = true;
                         this.resetTrainingForm();
                         this.resetTopicForm(); //Reset the Form
-                        window.location.replace('addTrainingTopic.html');
+                        //window.location.replace('addTrainingTopic.html');
                     },
                     function (response) {
                         console.log("Error: ",response);
