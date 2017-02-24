@@ -22,7 +22,7 @@
             <div class="col-md-6 col-lg-6">
                 <div class="row"><!-- row 3-->
                     <div class="col-md-9 col-lg-9">
-                        <form class="fieldset-border" @submit.prevent="verifyTrainingForm">
+                        <form class="" @submit.prevent="verifyTrainingForm">
                             <fieldset class="fieldset-border">
                                 <legend class="fieldset-border">Ajouter une formation</legend>
                                 <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -52,14 +52,16 @@
                             </fieldset>
                         </form>
                     </div>
-                    <div class="col-md-3 col-lg-3" style="margin-top:35px;border: 1px solid black ;">
+                    <div class="col-md-3 col-lg-3 col-right">
                         <div class="row">
-                            <form class="form-horizontal">
-                                <div class=" form-group has-feedback col-sm-12 col-md-12 col-lg-12" >
-                                    <label class="label-control" for="nt">Nouvea uthème</label>
-                                    <input type="text" class="form-control" id="nt" name="nt" v-model="topic.name">
-                                    <span  class="glyphicon glyphicon-floppy-save form-control-feedback" @click="verifyTopicForm"></span>
-                                </div>
+                            <form>
+                                <fieldset>
+                                    <div class=" form-group has-feedback col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+                                        <label class="label-control" for="nt">Nouveau thème</label>
+                                        <input type="text" class="form-control" id="nt" name="nt" v-model="topic.name">
+                                        <span  class="glyphicon glyphicon-floppy-save form-control-feedback" @click="verifyTopicForm"></span>
+                                    </div>
+                                </fieldset>
 
                             </form>
                         </div>
@@ -70,8 +72,6 @@
     </div><!--Fin row 1-->
     <pre>{{ $data | json }}</pre>
 </div>
-
 <script src="app/controller/registerTrainingTopic.js"></script>
-
 </body>
 </html>
