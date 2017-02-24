@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/addTrainingTopic.css">
+
+    <script src="lib/vue.js"></script>
+    <script src="lib/vee-validate.js"></script>
+    <script src="lib/vue-resource.js"></script>
+    <script src="lib/vue-router.js"></script>
+
+    <title>AjouterFormation</title>
+</head>
+<body>
+<div class="container-fluid" id="TrainingTopic">
+    <div class="row"><!-- row 1-->
+        <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
+        <div class="row"><!-- row 2-->
+            <div class="col-md-6 col-lg-6">
+                <div class="row"><!-- row 3-->
+                    <div class="col-md-9 col-lg-9">
+                        <form class="fieldset-border" @submit.prevent="verifyTrainingForm">
+                            <fieldset class="fieldset-border">
+                                <legend class="fieldset-border">Ajouter une formation</legend>
+                                <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <label for="formation" class="label-control">Formation</label>
+                                    <input type="text" class="form-control" id="formation" name="formation" v-model="training.trainingTitle">
+                                </div>
+                                <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <label>1/2journées</label>
+                                    <select class="form-control" v-model="training.numberHalfDays">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                    <label>Thèmes</label>
+                                    <select class="form-control" v-model="training.topicDescription">
+                                        <option v-for="option in optionsTopic" :value="option">{{ option.name }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3" style="margin-top:25px;">
+                                    <input type="submit" class="btn btn-default" value="Valider"/>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="col-md-3 col-lg-3" style="margin-top:35px;border: 1px solid black ;">
+                        <div class="row">
+                            <form class="form-horizontal">
+                                <div class=" form-group has-feedback col-sm-12 col-md-12 col-lg-12" >
+                                    <label class="label-control" for="nt">Nouvea uthème</label>
+                                    <input type="text" class="form-control" id="nt" name="nt" v-model="topic.name">
+                                    <span  class="glyphicon glyphicon-floppy-save form-control-feedback" @click="verifyTopicForm"></span>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+               </div><!--Fin row 3-->
+            </div>
+        </div><!--Fin row 2-->
+    </div><!--Fin row 1-->
+    <pre>{{ $data | json }}</pre>
+</div>
+
+<script src="app/controller/registerTrainingTopic.js"></script>
+
+</body>
+</html>
