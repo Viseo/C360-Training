@@ -4,6 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VeeValidate);
 Vue.use(VueRouter);
+
 new Vue({
     el: '#app',
     data: {
@@ -15,14 +16,54 @@ new Vue({
             password:'',
             confirmPassword:''
         },
-        collaboratorToRegister:{}, // on le définit dans la fonction verifyFrom()
+        collaboratorToRegister:{},
+
         isNewPersonalIdNumber:true,
         isNewEmail:true,
+        msgmatricule:false,
+        msgnom:false,
+        msgprenom:false,
+        msgemail:false,
+        msgpwd:false,
+        msgconfirmpwd:false,
+        showPass:false,
+        showPassConf:false,
+
         border: 'color-red',
         color_inscription: 'color-blue',
         color_connexion: 'color-blue'
     },
     methods: {
+        messageMatricule(){
+            if(this.collaborator.personnalIdNumber == ''){
+                this.msgmatricule = true;
+            }
+        },
+        messageNom(){
+            if(this.collaborator.lastName == ''){
+                this.msgnom = true;
+            }
+        },
+        messagePrenom(){
+            if(this.collaborator.firstName == ''){
+                this.msgprenom = true;
+            }
+        },
+        messageEmail(){
+            if(this.collaborator.email == ''){
+                this.msgemail = true;
+            }
+        },
+        messagePwd(){
+            if(this.collaborator.password == ''){
+                this.msgpwd = true;
+            }
+        },
+        messageConfirmpwd(){
+            if(this.collaborator.confirmPassword == ''){
+                this.msgconfirmpwd = true;
+            }
+        },
         resetForm() {
             this.collaborator.personnalIdNumber = '';
             this.collaborator.lastName = '';
@@ -45,7 +86,6 @@ new Vue({
                         this.isNewPersonalIdNumber = true;
                         this.resetForm(); //Reset the Form
                         window.location.replace('pageblanche.html');
-                        //this.$router.replace('pageblanche.html');
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -63,26 +103,14 @@ new Vue({
                 );
         },
         verifyForm() {
-            this.isNewPersonalIdNumber = true;
-            this.isNewEmail = true;
-            this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
-            this.saveAction();
-        },
-        changeColorConnexion(){
-            if(this.color_connexion == 'color-blue' && this.color_inscription == 'color-blue'){
-                this.color_connexion = 'color-grey';
-            }else if(this.color_connexion == 'color-blue' && this.color_inscription == 'color-grey'){
-                this.color_connexion = 'color-grey';
-                this.color_inscription = 'color-blue';
-            }
-        },
-        changeColorInscription(){
-            if(this.color_inscription == 'color-blue' && this.color_connexion == 'color-blue'){
-                this.color_inscription = 'color-grey';
-            }else if(this.color_inscription == 'color-blue' && this.color_connexion == 'color-grey'){
-                this.color_inscription = 'color-grey';
-                this.color_connexion = 'color-blue';
+            this.messageMatricule(); this.messageNom(); this.messagePrenom(); this.messageEmail(); this.messagePwd(); this.messageConfirmpwd();
+            if(!this.msgmatricule && !this.msgnom && !this.msgprenom && !this.msgemail && !this.msgpwd && !this.msgconfirmpwd){
+                this.isNewPersonalIdNumber = true;
+                this.isNewEmail = true;
+                this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
+                this.saveAction();
             }
         }
+
     }
 });
