@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/ajouterformation.css">
+    <script src="lib/vue.js"></script>
+    <script src="lib/vee-validate.js"></script>
+    <script src="lib/vue-resource.js"></script>
+    <script src="lib/vue-router.js"></script>
+
     <title>AjouterFormation</title>
 </head>
 <body>
@@ -15,27 +20,24 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <form>
+                    <form id="app" @submit.prevent="verifyFormation">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Ajouter une formation</legend>
-                            <div class="form-group col-sm-3 col-md-3" >
+                            <div class="form-group col-sm-3 col-md-3 " >
                                 <label for="formation" class="label-control">Formation</label>
-                                <input type="text" class="form-control" id="formation" name="formation"/>
-                            </div>
-                            <div class="form-group  col-md-2">
+                                <input v-model="formation.nomformation" type="text" class="form-control" id="formation" name="formation" @focus="msgformation = false; confirmFormation = false;" @blur="messageFormationName" />
+                           </div>
+                            <div class="form-group  col-md-2" >
                                 <label>1/2 journées</label>
-                                <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                <select v-model="formation.demijournee" class="form-control"  @focus="msgdemijournee = false; confirmFormation = false;" @blur="messageDemiJournee">
+                                    <option></option>
+                                    <option  v-for="n in 200">{{n}}</option>
                                 </select>
                             </div>
-                            <div class="form-group  col-md-2">
+                            <div class="form-group  col-md-2" >
                                 <label>Thèmes</label>
-                                <select class="form-control">
+                                <select v-model="formation.theme" class="form-control"  @focus="msgtheme = false; confirmFormation = false; "@blur="messageTheme">
+                                    <option></option>
                                     <option>Thème1</option>
                                     <option>Thème2</option>
                                     <option>Thème3</option>
@@ -44,6 +46,7 @@
                                 </select>
                             </div>
                             <div class="form-group  col-md-2" style="margin-top: 25px;">
+
                                 <input type="submit" class="btn btn-default" value="Valider"/>
                             </div>
                             <div class="ligne"></div>
@@ -52,13 +55,22 @@
                                 <input type="text" class="form-control" id="nt" />
                                 <span class="glyphicon glyphicon-floppy-save form-control-feedback"></span>
                             </div>
+                            <div class="col-md-offset-2">
+                                <span v-show="!isNewFormationName" class="text-center color-red ">Une formation identique existe déjà dans le système.</span>
+                                <span v-show="msgformation || msgdemijournee || msgtheme" class="text-center color-red ">Veuillez remplir tous les champs.</span>
+                                <span v-show="confirmFormation" class="text-center color-green ">La formation a été créée avec succès.</span>
+
+                            </div>
                         </fieldset>
                     </form>
                 </div>
-            </div>
+                </div>
             <div class="col-md-5"></div>
+
         </div>
     </div>
 </div>
 </body>
 </html>
+
+<script src="app/controller/registerFormation.js"></script>
