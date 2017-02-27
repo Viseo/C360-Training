@@ -1,32 +1,41 @@
-form{
-    width:auto;
-    height:128px;
-    padding:20px;
-}
-fieldset.fieldset-border {
-    border: 1px groove black !important;
-    padding: 0 1.4em 1.4em 1.4em !important;
-    margin: 0 0 1.5em 0 !important;
-    -webkit-box-shadow:  0px 0px 0px 0px #000;
-    box-shadow:  0px 0px 0px 0px #000;
-}
-legend.fieldset-border{
-    width:inherit; /* Or auto */
-    padding:0 10px; /* To give a bit of padding on the left and right */
+h3{
+    width:31px; /* Or auto */
+    min-width: 31%;
+    padding:6px 10px; /* To give a bit of padding on the left and right */
     border-bottom:none;
     background-color: blue;
     color: white;
+    position: relative;
+    top:21px;
+
 }
+
 .form-control-feedback{
     pointer-events: auto;
 }
 
 .col-right{
-    margin-top:34px;
-    border: 1px solid black;
-    border-left:none;
-    margin-left:-35px;
+    /*margin-top:34px;*/
+    /*border: 1px solid black;*/
+    /*border-left:none;*/
+    /*margin-left:-35px;*/
 
+}
+table{
+    border:1px solid black;
+
+}
+table td {
+    /*
+    width: 15%;
+    */
+    padding-top:20px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-bottom: 0px;
+}
+.td-right{
+    border-left: 1px solid black;
 }
 
 .color-green { color: #4cae4c}
