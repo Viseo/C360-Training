@@ -71,12 +71,9 @@ var TrainingTopic = new Vue({
                 .then(
                     function (response) {
                         this.isNewTrainingTitle = true;
-                        this.confirmTopic = true;
+                        this.confirmFormation = true;
                         this.resetTrainingForm();
                         this.resetTopicForm();
-
-                        //Reset the Form
-                        //window.location.replace('addTrainingTopic.html');
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -89,6 +86,7 @@ var TrainingTopic = new Vue({
                 );
         },
         verifyTrainingForm() {
+            this.training.trainingTitle = this.training.trainingTitle.replace(/ +/g, "");
             this.messageTrainingTitle(); this.messageNumberHalfDays(); this.messageTopic();
             if(!this.msgtrainingTitle && !this.msgnumberHalfDays && !this.msgtopic) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
@@ -134,15 +132,13 @@ var TrainingTopic = new Vue({
                 );
         },
         verifyTopicForm() {
-            /*this.messageTopic();
-             if( !this.msgtopic ){
-             this.isNewTopic = true;
-             this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
-             this.saveTopicAction();
-             }*/
-            this.isNewTopic = true;
-            this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
-            this.saveTopicAction();
+            this.topic.name = this.topic.name.replace(/ +/g, "");
+            this.messageName();
+            if(!this.msgname) {
+                this.isNewTopic = true;
+                this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
+                this.saveTopicAction();
+            }
         }
 
 
