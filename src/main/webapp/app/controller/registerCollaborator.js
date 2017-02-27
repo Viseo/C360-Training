@@ -74,8 +74,6 @@ new Vue({
             this.collaboratorToRegister = {};
         },
         saveAction() {
-            this.collaboratorToRegister.lastName = this.collaborator.lastName.replace(" ", "");  //delete useless spaces between words
-            this.collaboratorToRegister.firstName = this.collaborator.firstName.replace(" ", "");  //delete useless spaces between words
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
 
             //post the form to the server
@@ -103,6 +101,8 @@ new Vue({
                 );
         },
         verifyForm() {
+            this.collaborator.lastName = this.collaborator.lastName.replace(/ +/g, " ").replace(/ +$/, "");
+            this.collaborator.firstName = this.collaborator.firstName.replace(/ +/g, " ").replace(/ +$/, "");
             this.messageMatricule(); this.messageNom(); this.messagePrenom(); this.messageEmail(); this.messagePwd(); this.messageConfirmpwd();
             if(!this.msgmatricule && !this.msgnom && !this.msgprenom && !this.msgemail && !this.msgpwd && !this.msgconfirmpwd){
                 this.isNewPersonalIdNumber = true;
