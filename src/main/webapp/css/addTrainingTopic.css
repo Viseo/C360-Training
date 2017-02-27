@@ -1,8 +1,9 @@
-h3{
-    width:31px; /* Or auto */
+h4{
+    width:29%;
     min-width: 31%;
-    padding:6px 10px; /* To give a bit of padding on the left and right */
-    border-bottom:none;
+    max-width:29%;
+    margin-left: 15px;
+    padding:6px 12px; /* To give a bit of padding on the left and right */
     background-color: blue;
     color: white;
     position: relative;
@@ -10,17 +11,14 @@ h3{
 
 }
 
+.form-group{
+    margin-bottom: 0px;
+}
 .form-control-feedback{
     pointer-events: auto;
 }
 
-.col-right{
-    /*margin-top:34px;*/
-    /*border: 1px solid black;*/
-    /*border-left:none;*/
-    /*margin-left:-35px;*/
 
-}
 table{
     border:1px solid black;
 
@@ -34,6 +32,7 @@ table td {
     padding-right:10px;
     padding-bottom: 0px;
 }
+
 .td-right{
     border-left: 1px solid black;
 }
