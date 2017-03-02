@@ -18,70 +18,62 @@
 <div class="container-fluid" id="TrainingTopic">
     <div class="row"><!-- row 1-->
         <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
-            <div class="col-xs-12 col-sm-10 col-md-7 col-lg-7 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+            <div class="col-sm-12 col-md-10 col-lg-7">
 
                     <form class="" @submit.prevent="verifyTrainingForm">
                         <legend>Ajouter une formation</legend>
                         <table>
                             <td width="20%">
-                                <div class="form-group">
+                                <div class="form-group" :class="{'input': true,'has-error': errors.has('formation') }">
                                     <label for="formation" class="label-control">Formation</label><br/><br/>
-                                    <input type="text" class="form-control" id="formation" name="formation"
+                                    <input type="text" v-validate="'formation'" class="form-control" id="formation" name="formation"
                                            v-model="training.trainingTitle"
                                            @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                           @blur="messageTrainingTitle">
+                                           @blur="messageTrainingTitle" placeholder="Formation">
+
+
                                 </div>
                             </td>
                             <td width="15%">
                                 <div class="form-group">
-                                    <label>1/2journées</label><br/><br/>
+                                    <label>1/2 journées</label><br/><br/>
                                     <select class="form-control" v-model="training.numberHalfDays"
                                             @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
                                             @blur="messageNumberHalfDays">
-                                        <option></option>
+                                        <option value="" disabled selected style="display:none;">--</option>
                                         <option v-for="n in 200">{{n}}</option>
                                     </select>
                                 </div>
                             </td>
-                            <td width="25%">
+                            <td width="20%">
                                 <div class="form-group">
                                     <label>Thèmes</label><br/><br/>
                                     <select class="form-control" v-model="training.topicDescription"
                                             @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
                                             @blur="messageTopic">
-                                        <option></option>
+                                        <option value="" disabled selected style="display:none;">--</option>
                                         <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                         </option>
                                     </select>
                                 </div>
                             </td>
-                            <td class="text-center" width="15%">
+                            <td class="text-center" width="20%">
                                 <div class="form-group">
                                     <label></label><br/><br/>
-                                    <input type="submit" class="btn btn-default" value="Valider"/>
+                                    <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
                                 </div>
-                                <!-- <div>
-                                     <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà dans le système.</span>
-                                     <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                           class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                                     <span v-show="confirmFormation && isNewTrainingTitle"
-                                           class="text-center color-green ">La formation a été créée avec succès.</span>
-                                 </div>-->
+
                             </td>
                             <td width="30%" class="td-right">
                                 <form>
-                                    <div class=" form-group has-feedback">
-                                        <label class="label-control" for="nt">Nouveau thème</label><br/><br/>
-                                        <input type="text" class="form-control" id="nt" name="nt" v-model="topic.name"
+                                    <div class=" form-group has-feedback" :class="{'input': true,'has-error': errors.has('topic') }">
+                                        <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
+                                        <input type="text" class="form-control" id="topic" name="topic" v-model="topic.name"
                                                @focus="msgname = false; confirmTopic = false; isNewTopic = true;"
-                                               @blur="messageName">
+                                               @blur="messageName" placeholder="Thème" v-validate="'topic'">
                                         <span class="glyphicon glyphicon-floppy-save form-control-feedback"
                                               @click="verifyTopicForm" style="margin-top: 20px;"></span>
                                     </div>
-                                    <!--<div>
-                                        <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
-                                        <span v-show="confirmTopic && isNewTopic" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-                                    </div>-->
                                 </form>
 
                             </td>
@@ -92,14 +84,18 @@
                                         <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà dans le système.</span>
                                         <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
                                               class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                                        <span v-show="confirmFormation && isNewTrainingTitle"
+                                        <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
                                               class="text-center color-green ">La formation a été créée avec succès.</span>
+                                        <span v-show="errors.has('formation') && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{ errors.first('formation') }}</span>
+
                                     </div>
                                 </td>
                                 <td class="text-center td-right" style="height: 60px;">
                                     <div>
+                                        <span v-show="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
                                         <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
-                                        <span v-show="confirmTopic && isNewTopic" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                        <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                        <span v-show="errors.has('topic') && !msgname" class="color-red">{{ errors.first('topic') }}</span>
                                     </div>
                                 </td>
                             </tr>

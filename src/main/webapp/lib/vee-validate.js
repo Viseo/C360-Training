@@ -6,13 +6,15 @@
 
     var matricule = function (value) { return /^[A-Z]{3}[0-9]{4}$/.test(value); };
 
-    var nom = function (value) { return /^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.' '-/']{2,125}$/.test(value); };
+    var nom = function (value) { return /^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(value); };
 
-    var prenom = function (value) { return /^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.' '-/']{2,125}$/.test(value); };
+    var prenom = function (value) { return /^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.' '-]{2,125}$/.test(value); };
 
     var mdp = function (value) { return /^[a-zA-Z0-9-ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.' '-/']{6,125}$/.test(value); };
 
     var formation = function (value) { return /^[a-zA-Z0-9-.'_@:+#%]*$/.test(value);  };
+
+    var topic = function (value) { return /^[a-zA-Z0-9-.'_@:+#%]*$/.test(value);  };
 
     var alpha = function (value) { return /^[a-zA-Z]*$/.test(value); };
 
@@ -769,6 +771,7 @@
         prenom: prenom,
         mdp: mdp,
         formation: formation,
+        topic: topic,
         alpha_dash: alpha_dash,
         alpha_num: alpha_num,
         alpha_spaces: alpha_spaces,
@@ -1276,7 +1279,8 @@
         nom: function () { return ("Veuillez entrer un nom valide."); },
         prenom: function () { return ("Veuillez entrer un pénom valide."); },
         mdp:function () { return ("Le mot de passe doit avoir au minimum 6 caractères."); },
-        formation: function() { return ("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)"); },
+        formation: function() { return ("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)."); },
+        topic: function() { return ("Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)."); },
         alpha_dash: function (field) { return ("The " + field + " field may contain alpha-numeric characters as well as dashes and underscores."); },
         alpha_num: function (field) { return ("The " + field + " field may only contain alpha-numeric characters."); },
         alpha_spaces: function (field) { return ("The " + field + " field may only contain alphabetic characters as well as spaces."); },

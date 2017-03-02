@@ -61,7 +61,7 @@
 
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName " onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom">
+                                        <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom">
                                         <span v-show="msgnom" class="color-red ">Nom est obligatoire.</span>
                                         <span v-show="errors.has('nom')" class="color-red ">{{ errors.first('nom') }}</span>
                                     </div>
