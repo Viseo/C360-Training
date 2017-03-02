@@ -47,7 +47,7 @@
                                         <i class="glyphicon glyphicon-barcode"></i>
                                         <input type="text" v-validate="'matricule'" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
                                                placeholder="ABC1234" v-model="collaborator.personnalIdNumber" @focus="isNewPersonalIdNumber = true; msgmatricule = false" @blur="messageMatricule"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
-                                        <span v-show="msgmatricule" class="color-red ">Matricule est obligatoire.</span>
+                                        <span v-show="msgmatricule && !errors.has('matricule')" class="color-red ">Matricule est obligatoire.</span>
                                         <span v-show="errors.has('matricule')" class="color-red ">{{ errors.first('matricule') }}</span>
                                         <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
                                     </div>
@@ -63,7 +63,7 @@
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-user"></i>
                                         <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom"  maxlength="125" minlength="2">
-                                        <span v-show="msgnom" class="color-red ">Nom est obligatoire.</span>
+                                        <span v-show="msgnom && !errors.has('nom')" class="color-red ">Nom est obligatoire.</span>
                                         <span v-show="errors.has('nom')" class="color-red ">{{ errors.first('nom') }}</span>
                                     </div>
 
@@ -77,7 +77,7 @@
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-user"></i>
                                         <input type="text" v-validate="'prenom'" name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="collaborator.firstName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="msgprenom = false" @blur="messagePrenom"  maxlength="125" minlength="2">
-                                        <span v-show="msgprenom" class="color-red ">Prénom est obligatoire.</span>
+                                        <span v-show="msgprenom && !errors.has('prenom')" class="color-red ">Prénom est obligatoire.</span>
                                         <span v-show="errors.has('prenom')" class="color-red ">{{ errors.first('prenom') }}</span>
                                     </div>
 
@@ -91,7 +91,7 @@
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-envelope"></i>
                                         <input type="email" v-validate="'email'" name="email" id="email" tabindex="2" class="form-control" placeholder="eric.dupont@viseo.com"  v-model="collaborator.email" @focus="isNewEmail = true; msgemail = false" @blur="messageEmail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'eric.dupont@viseo.com'">
-                                        <span v-show="msgemail" class="color-red ">Email est obligatoire.</span>
+                                        <span v-show="msgemail && !errors.has('email')" class="color-red ">Email est obligatoire.</span>
                                         <span v-show="errors.has('email')" class="color-red ">{{ errors.first('email') }}</span>
                                         <span v-show="!isNewEmail" class="color-red ">Ce email a déjà été enregistré.</span>
                                     </div>
@@ -109,7 +109,7 @@
                                         <span @click="showPass = false" v-show="showPass && collaborator.password" class="glyphicon glyphicon-eye-close" > </span>
                                         <input type="password" v-model="collaborator.password" v-show="!showPass" v-validate="'mdp'" name="mdp" id="mdp" tabindex="2" class="form-control" placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="msgpwd = false" @blur="messagePwd">
                                         <input type="text" v-model="collaborator.password" v-show="showPass"v-validate="'mdp'" name="mdp" id="mdp2" tabindex="2" class="form-control" @focus="msgpwd = false" @blur="messagePwd" >
-                                        <span v-show="msgpwd" class="color-red ">Mot de passe est obligatoire.</span>
+                                        <span v-show="msgpwd && !errors.has('mdp')" class="color-red ">Mot de passe est obligatoire.</span>
                                         <span v-show="errors.has('mdp')" class="color-red">{{ errors.first('mdp') }}</span>
                                     </div>
 
@@ -126,7 +126,7 @@
                                         <span @click="showPassConf = false" v-show="showPassConf && collaborator.confirmPassword" class="glyphicon glyphicon-eye-close " > </span>
                                         <input type="password"  v-model="collaborator.confirmPassword" v-validate="'confirmed:mdp'" v-show="!showPassConf" name="mdpc" id="mdpc" tabindex="2" class="form-control" placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="msgconfirmpwd = false" @blur="messageConfirmpwd">
                                         <input type="text"  v-model="collaborator.confirmPassword" v-validate="'confirmed:mdp'" v-show="showPassConf" name="mdpc" id="mdpc2" tabindex="2" class="form-control" @focus="msgconfirmpwd = false" @blur="messageConfirmpwd">
-                                        <span v-show="msgconfirmpwd" class="color-red ">Confirmation est obligatoire.</span>
+                                        <span v-show="msgconfirmpwd && !errors.has('mdpc')" class="color-red ">Confirmation est obligatoire.</span>
                                         <span v-show="errors.has('mdpc')" class="color-red">{{ errors.first('mdpc') }}</span>
                                     </div>
 

@@ -10,7 +10,7 @@
 
     var prenom = function (value) { return /^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(value); };
 
-    var mdp = function (value) { return /^[a-zA-Z0-9-ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.-]{6,125}$/.test(value); };
+    var mdp = function (value) { return /^(.){6,125}$/.test(value); };
 
     var alpha = function (value) { return /^[a-zA-Z]*$/.test(value); };
 
