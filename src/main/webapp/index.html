@@ -24,8 +24,8 @@
 
 
                 <ul class="tab-group">
-                    <li class="tab active"><a href="#register-form">Inscription</a></li>
-                    <li class="tab"><a href="#connexion">Connexion</a></li>
+                    <li :class="tabinscription"><a @click="tabinscription = 'tab active'; tabconnexion = 'tab';">Inscription</a></li>
+                    <li :class="tabconnexion"><a @click="tabinscription = 'tab'; tabconnexion = 'tab active';"  >Connexion</a></li>
                 </ul>
 
 
@@ -46,7 +46,7 @@
                                     <div class="inner-addon left-addon">
                                         <i class="glyphicon glyphicon-barcode"></i>
                                         <input type="text" v-validate="'matricule'" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
-                                               placeholder="ABC1234" v-model="collaborator.personnalIdNumber" @focus="isNewPersonalIdNumber = true; msgmatricule = false" @blur="messageMatricule"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'ABC1234' ">
+                                               placeholder="ABC1234" v-model="collaborator.personnalIdNumber" @focus="isNewPersonalIdNumber = true; msgmatricule = false" @blur="messageMatricule"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
                                         <span v-show="msgmatricule" class="color-red ">Matricule est obligatoire.</span>
                                         <span v-show="errors.has('matricule')" class="color-red ">{{ errors.first('matricule') }}</span>
                                         <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
@@ -62,7 +62,7 @@
 
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName " onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom">
+                                        <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom"  maxlength="125" minlength="2">
                                         <span v-show="msgnom" class="color-red ">Nom est obligatoire.</span>
                                         <span v-show="errors.has('nom')" class="color-red ">{{ errors.first('nom') }}</span>
                                     </div>
@@ -76,7 +76,7 @@
 
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        <input type="text" v-validate="'prenom'" name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="collaborator.firstName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="msgprenom = false" @blur="messagePrenom">
+                                        <input type="text" v-validate="'prenom'" name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="collaborator.firstName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="msgprenom = false" @blur="messagePrenom"  maxlength="125" minlength="2">
                                         <span v-show="msgprenom" class="color-red ">Prénom est obligatoire.</span>
                                         <span v-show="errors.has('prenom')" class="color-red ">{{ errors.first('prenom') }}</span>
                                     </div>
