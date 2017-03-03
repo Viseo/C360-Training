@@ -1279,6 +1279,8 @@
         nom: function () { return ("Veuillez entrer un nom valide."); },
         prenom: function () { return ("Veuillez entrer un pénom valide."); },
         mdp:function () { return ("Le mot de passe doit avoir au minimum 6 caractères."); },
+        formation: function() { return ("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)."); },
+        topic: function() { return ("Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)."); },
         alpha_dash: function (field) { return ("The " + field + " field may contain alpha-numeric characters as well as dashes and underscores."); },
         alpha_num: function (field) { return ("The " + field + " field may only contain alpha-numeric characters."); },
         alpha_spaces: function (field) { return ("The " + field + " field may only contain alphabetic characters as well as spaces."); },
