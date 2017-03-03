@@ -12,6 +12,10 @@
 
     var mdp = function (value) { return /^(.){6,125}$/.test(value); };
 
+    var formation = function (value) { return /^[a-zA-Z0-9-.'_@:+#%]*$/.test(value);  };
+
+    var topic = function (value) { return /^[a-zA-Z0-9-.'_@:+#%]*$/.test(value);  };
+
     var alpha = function (value) { return /^[a-zA-Z]*$/.test(value); };
 
     var alpha_dash = function (value) { return /^[a-zA-Z0-9_-]*$/.test(value); };
@@ -766,6 +770,8 @@
         nom: nom,
         prenom: prenom,
         mdp: mdp,
+        formation: formation,
+        topic: topic,
         alpha_dash: alpha_dash,
         alpha_num: alpha_num,
         alpha_spaces: alpha_spaces,

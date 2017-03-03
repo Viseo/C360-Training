@@ -1,32 +1,27 @@
-h4{
-    width:29%;
-    min-width: 31%;
-    max-width:29%;
-    margin-left: 15px;
-    padding:6px 12px; /* To give a bit of padding on the left and right */
-    background-color: #428bca;
+legend{
+    display: block;
+    width: inherit;
+    margin-bottom: -1%;
+    margin-left: 25px;
+    padding: 0 10px;
+    border-bottom: none;
+    background-color: #0F1B65;
     color: white;
-    position: relative;
-    top:21px;
-
 }
 
 .form-group{
     margin-bottom: 0px;
 }
+
 .form-control-feedback{
     pointer-events: auto;
 }
-
 
 table{
     border:1px solid black;
 
 }
 table td {
-    /*
-    width: 15%;
-    */
     padding-top:20px;
     padding-left:10px;
     padding-right:10px;
@@ -38,7 +33,7 @@ table td {
 }
 
 .color-green { color: #4cae4c}
-.color-blue {color: #428bca;}
+.color-blue {color: #1E90FF;}
 .color-grey {color: #A9A9A9;}
 .color-red {color: #B22222;}
 
