@@ -37,3 +37,37 @@ table td {
 .color-grey {color: #A9A9A9;}
 .color-red {color: #B22222;}
 
+.table-borderless tbody tr td,
+.table-borderless tbody tr th,
+.table-borderless thead tr th,
+.table-borderless thead tr td,
+.table-borderless tfoot tr th,
+.table-borderless tfoot tr td {
+    border: none;
+   border-top: 1px solid #797979;
+
+
+
+}
+
+.deletetopic{
+    border-bottom:1px solid #E1E1E1;
+    width: 100%;
+    text-align: center;
+    background: #fff;
+    padding-top:20px;
+    font-size:12px;
+    font-family:arial;
+    font-weight: normal;
+}
+
+#addFormation input[type=submit]{
+    font-weight: bold;
+    width:100%;
+    max-width:50%;
+
+
+}
+
+
+
