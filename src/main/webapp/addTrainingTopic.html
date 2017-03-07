@@ -105,7 +105,32 @@
 
             </div>
     </div><!--Fin row 1-->
+
+    <div class="row"><!-- row 1-->
+        <br><br><br>
+        <div class="col-sm-12 col-md-10 col-lg-7">
+            <legend>Formations ajoutées</legend>
+            <table>
+                <tr v-for="topic in optionsTopic">
+                    <td v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
+                        {{topic.name}}
+                        <hr>
+                        <table>
+                            <tr>
+                                <td v-for="training in TrainingFilter(topic.name)">
+                                    <button>{{training.trainingTitle}}</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- <pre>{{$data | json}}</pre> -->
 </div>
+
 <script src="app/controller/registerTrainingTopic.js"></script>
 </body>
 </html>
+

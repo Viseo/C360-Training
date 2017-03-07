@@ -3,7 +3,6 @@
  */
 Vue.use(VueResource);
 Vue.use(VeeValidate);
-Vue.use(VueRouter);
 
 new Vue({
     el: '#app',

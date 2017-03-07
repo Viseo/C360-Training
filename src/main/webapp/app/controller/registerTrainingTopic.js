@@ -3,7 +3,6 @@
  */
 Vue.use(VueResource);
 Vue.use(VeeValidate);
-Vue.use(VueRouter);
 
 var TrainingTopic = new Vue({
     el: '#TrainingTopic',
@@ -20,6 +19,9 @@ var TrainingTopic = new Vue({
         },
         topicToRegister:{},
         optionsTopic: [],
+        optionsTraining:[],
+        trainingsChosen:[],
+        topicsChosen:[],
         isNewTrainingTitle:true,
         isNewTopic:true,
         confirmFormation:false,
@@ -29,7 +31,6 @@ var TrainingTopic = new Vue({
         msgnumberHalfDays:false,
         msgtopic:false,
         msgname:false,
-
 
 
     },
@@ -60,9 +61,6 @@ var TrainingTopic = new Vue({
             this.training.topicDescription = '';
             this.trainingToRegister = {};
         },
-        resetFormTheme(){
-            this.theme.nouveautheme = '';
-        },
         saveTrainingAction() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
@@ -72,6 +70,7 @@ var TrainingTopic = new Vue({
                     function (response) {
                         this.isNewTrainingTitle = true;
                         this.confirmFormation = true;
+                        this.updateTrainings();
                         this.resetTrainingForm();
                         this.resetTopicForm();
                     },
@@ -94,26 +93,12 @@ var TrainingTopic = new Vue({
             }
         },
 
-        updateTopics(){
-            this.$http.get("api/themes").then(
-                function(response){
-                    this.optionsTopic = response.data;
-
-                    this.resetTopicForm();
-                },
-                function(response){
-                    console.log("Error: ",response);
-                    console.error(response);
-                }
-            );
-        },
         resetTopicForm() {
             this.topic.name = '';
             this.topicToRegister = {};
         },
         saveTopicAction() {
             this.topicToRegister.name = this.topic.name.replace(" ", "").toUpperCase();  //delete useless spaces between words
-
             //post the form to the server
             this.$http.post("api/themes", this.topicToRegister)
                 .then(
@@ -139,10 +124,45 @@ var TrainingTopic = new Vue({
                 this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
                 this.saveTopicAction();
             }
+        },
+
+        updateTopics(){
+            this.$http.get("api/themes").then(
+                function(response){
+                    this.optionsTopic = response.data;
+                    this.optionsTopic.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+                    this.resetTopicForm();
+                },
+                function(response){
+                    console.log("Error: ",response);
+                    console.error(response);
+                }
+            );
+        },
+        updateTrainings (){
+            this.$http.get("api/formations").then(
+                function(response){
+                    this.optionsTraining = response.data;
+                    this.optionsTraining.sort(function(a,b) {return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);} );
+                    this.resetTrainingForm();
+                },
+                function(response){
+                    console.log("Error: ",response);
+                    console.error(response);
+                }
+            );
+        },
+        TrainingFilter(value){
+            this.trainingsChosen = [];
+            for (var tmp in this.optionsTraining){
+                if(this.optionsTraining[tmp].topicDescription.name == value){
+                    this.trainingsChosen.push(this.optionsTraining[tmp]);
+                }
+            }
+            return this.trainingsChosen;
         }
-
-
     }
 });
 
 window.onload = TrainingTopic.updateTopics();
+window.onload = TrainingTopic.updateTrainings();
