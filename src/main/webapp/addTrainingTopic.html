@@ -123,46 +123,40 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
-                <table class="table table-borderless" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
+                <table>
+                    <tr>
+                        <td>
+                        <table class="table table-borderless tabnone" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
 
-                    <div class="row">
-                        <thead>
-                        <tr>
-                            <th class="col-lg-2 col-md-2">{{topic.name}}</th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2 deletetopic"><a class="text-warning" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                        </tr>
-                        </thead>
-
-
-                        </div>
-
-                        <div class="row">
-                        <tr >
-                            <td class="col-lg-2 col-md-2" v-for="training in TrainingFilter(topic.name)">
-
-
-                                <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
-
-                            </td>
-                        </tr>
-
-                    </div>
-
+                            <div class="row">
+                                <thead>
+                                <tr>
+                                    <th class="col-lg-2 col-md-2">{{topic.name}}</th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                    <th class="col-lg-2 col-md-2"></th>
+                                    <th class="col-lg-2 col-md-2 deletetopic"><a class="text-warning" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                </tr>
+                                </thead>
+                            </div>
+                            <div class="row">
+                                <tr v-for="group in TrainingTraim(TrainingFilter(topic.name))">
+                                    <td class="col-lg-2 col-md-2" v-for="training in group">
+                                        <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
+                                    </td>
+                                </tr>
+                            </div>
+                            </tr>
+                        </table>
+                        </td>
                     </tr>
-
-
-
-
                 </table>
-
 
         </div>
     </div><!--Fin row 2-->
-
+        <!--<button @click="TrainingTraim(TrainingFilter('C'))"></button>
+        <pre>{{$data | json}}</pre>-->
 </div>
 <script src="app/controller/registerTrainingTopic.js"></script>
 </div>

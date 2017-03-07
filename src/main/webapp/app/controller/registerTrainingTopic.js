@@ -31,6 +31,7 @@ var TrainingTopic = new Vue({
         msgnumberHalfDays:false,
         msgtopic:false,
         msgname:false,
+        test:undefined
 
 
     },
@@ -154,12 +155,35 @@ var TrainingTopic = new Vue({
         },
         TrainingFilter(value){
             this.trainingsChosen = [];
-            for (var tmp in this.optionsTraining){
-                if(this.optionsTraining[tmp].topicDescription.name == value){
+            for (var tmp in this.optionsTraining) {
+                if (this.optionsTraining[tmp].topicDescription.name == value) {
                     this.trainingsChosen.push(this.optionsTraining[tmp]);
                 }
             }
+            //return this.TrainingTraim(this.trainingsChosen);
             return this.trainingsChosen;
+        },
+        TrainingTraim(value){
+            this.test = [];
+            var tmp = [];
+            var longueur = value.length;
+            var compteur = 0;
+            for (var element in value){
+                longueur --;
+                compteur ++;
+                if(compteur >= 1 && compteur < 6){
+                    tmp.push(value[element]);
+                    if(longueur == 0){
+                        this.test.push(tmp);
+                    }
+                }else if(compteur == 6) {
+                    tmp.push(value[element]);
+                    this.test.push(tmp);
+                    tmp = [];
+                    compteur = 0;
+                }
+            }
+            return this.test;
         }
     }
 });

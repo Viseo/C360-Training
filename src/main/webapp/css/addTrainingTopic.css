@@ -43,11 +43,7 @@ table td {
 .table-borderless thead tr td,
 .table-borderless tfoot tr th,
 .table-borderless tfoot tr td {
-    border: none;
-   border-top: 1px solid #797979;
-
-
-
+    border-top: none;
 }
 
 .deletetopic{
@@ -60,13 +56,17 @@ table td {
     font-weight: normal;
 }
 
-#addFormation input[type=submit]{
+#addFormation button{
     font-weight: bold;
     width:120px;
     height:35px;
     max-width:170px;
 
 
+}
+
+.tabnone{
+    border:none;
 }
 
 
