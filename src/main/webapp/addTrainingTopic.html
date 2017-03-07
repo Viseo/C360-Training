@@ -15,7 +15,8 @@
     <title>AjouterFormation</title>
 </head>
 <body>
-<div class="container-fluid" id="TrainingTopic">
+<div id="TrainingTopic">
+<div class="container-fluid">
     <div class="row"><!-- row 1-->
         <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
@@ -122,11 +123,12 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
-                <table class="table table-borderless">
+                <table class="table table-borderless" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
+
                     <div class="row">
                         <thead>
                         <tr>
-                            <th class="col-lg-2 col-md-2">MOBILE</th>
+                            <th class="col-lg-2 col-md-2">{{topic.name}}</th>
                             <th class="col-lg-2 col-md-2"></th>
                             <th class="col-lg-2 col-md-2"></th>
                             <th class="col-lg-2 col-md-2"></th>
@@ -140,183 +142,18 @@
 
                         <div class="row">
                         <tr >
+                            <td class="col-lg-2 col-md-2" v-for="training in TrainingFilter(topic.name)">
 
-                            <td class="col-lg-2 col-md-2">
 
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
+                                <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
 
                             </td>
-
-                            <td class="col-lg-2 col-md-2">
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                            </td>
-
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Android"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group" value="Xamarin"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"  value="iOS"/>
-
-
-                            </td>
-
                         </tr>
 
                     </div>
 
                     </tr>
 
-                    <div class="row">
-                        <thead>
-                        <tr>
-                            <th class="col-lg-2 col-md-2">MOBILE</th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2 deletetopic"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</th>
-                        </tr>
-                        </thead>
-
-
-                    </div>
-
-                    <div class="row">
-                        <tr>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                            </td>
-
-                            <td class="col-lg-2 col-md-2">
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                            </td>
-
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Android"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"  value="Xamarin"/>
-
-                            </td>
-                            <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group" value="iOS"/>
-
-
-                            </td>
-
-                        </tr>
-
-                    </div>
-
-                    <div class="row">
-                        <thead>
-                        <tr>
-                            <th class="col-lg-2 col-md-2">MOBILE</th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2"></th>
-                            <th class="col-lg-2 col-md-2 deletetopic"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</th>
-                        </tr>
-                        </thead>
-
-
-                    </div>
-
-                    <div class="row">
-                    <tr>
-                        <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"
-                                       value="Java"/>
-
-                        </td>
-
-                        <td class="col-lg-2 col-md-2">
-
-                            <input type="submit" class="btn btn-default btn-group"
-                                   value="Java"/>
-
-                        </td>
-
-                        <td class="col-lg-2 col-md-2">
-
-
-                            <input type="submit" class="btn btn-default btn-group"
-                                   value="Java"/>
-
-                        </td>
-                        <td class="col-lg-2 col-md-2">
-
-
-                            <input type="submit" class="btn btn-default btn-group"
-                                   value="Android"/>
-
-                        </td>
-                        <td class="col-lg-2 col-md-2">
-
-
-                            <input type="submit" class="btn btn-default btn-group"  value="Xamarin"/>
-
-                        </td>
-                        <td class="col-lg-2 col-md-2">
-
-
-                                <input type="submit" class="btn btn-default btn-group"  value="OLKJUIPKJHQSKOIUNHJL"/>
-
-
-                        </td>
-
-                        </tr>
-
-                    </div>
 
 
 
@@ -328,5 +165,6 @@
 
 </div>
 <script src="app/controller/registerTrainingTopic.js"></script>
+</div>
 </body>
 </html>
