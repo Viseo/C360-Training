@@ -160,7 +160,6 @@ var TrainingTopic = new Vue({
                     this.trainingsChosen.push(this.optionsTraining[tmp]);
                 }
             }
-            //return this.TrainingTraim(this.trainingsChosen);
             return this.trainingsChosen;
         },
         TrainingTraim(value){
@@ -169,14 +168,13 @@ var TrainingTopic = new Vue({
             var longueur = value.length;
             var compteur = 0;
             for (var element in value){
-                longueur --;
-                compteur ++;
-                if(compteur >= 1 && compteur < 6){
+                longueur --;  compteur ++;
+                if(compteur >= 1 && compteur < 4){
                     tmp.push(value[element]);
                     if(longueur == 0){
                         this.test.push(tmp);
                     }
-                }else if(compteur == 6) {
+                }else if(compteur == 4) {
                     tmp.push(value[element]);
                     this.test.push(tmp);
                     tmp = [];

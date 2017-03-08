@@ -47,9 +47,7 @@ table td {
 }
 
 .deletetopic{
-    border-bottom:1px solid #E1E1E1;
-    width: 100%;
-    text-align: center;
+    text-align: right;
     padding-top:20px;
     font-size:12px;
     font-family:arial;
@@ -58,15 +56,24 @@ table td {
 
 #addFormation button{
     font-weight: bold;
-    width:120px;
+    width:100%;
     height:35px;
-    max-width:170px;
-
-
+    font-size:80%;
 }
 
 .tabnone{
     border:none;
+}
+
+table.espace
+{
+    border-collapse: collapse;
+    margin:0;
+}
+
+table.fix
+{
+    table-layout:fixed;
 }
 
 

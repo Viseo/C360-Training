@@ -114,7 +114,7 @@
 
     <div class="container-fluid" id="addFormation">
     <div class="row"><!-- row 1-->
-        <div class="col-md-12" style="padding:10px;"></div>
+        <div class="col-md-12 col-sm-12 col-lg-12" style="padding:10px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
 
             <div class="row">
@@ -123,27 +123,24 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
-                <table>
+                <table class="espace fix">
                     <tr>
                         <td>
-                        <table class="table table-borderless tabnone" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
-
+                        <table class="table table-borderless tabnone espace fix" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
                             <div class="row">
                                 <thead>
                                 <tr>
-                                    <th class="col-lg-2 col-md-2">{{topic.name}}</th>
-                                    <th class="col-lg-2 col-md-2"></th>
-                                    <th class="col-lg-2 col-md-2"></th>
-                                    <th class="col-lg-2 col-md-2"></th>
-                                    <th class="col-lg-2 col-md-2"></th>
-                                    <th class="col-lg-2 col-md-2 deletetopic"><a class="text-warning" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                    <th class="col-lg-3 col-md-3">{{topic.name}}</th>
+                                    <th class="col-lg-3 col-md-3"></th>
+                                    <th class="col-lg-3 col-md-3"></th>
+                                    <th class="col-lg-3 col-md-3 deletetopic"><a class="text-warning" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                 </tr>
                                 </thead>
                             </div>
                             <div class="row">
                                 <tr v-for="group in TrainingTraim(TrainingFilter(topic.name))">
-                                    <td class="col-lg-2 col-md-2" v-for="training in group">
-                                        <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
+                                    <td class="col-lg-3 col-md-3" v-for="training in group">
+                                        <button class="btn btn-default btn-group" style="word-wrap:break-word;">{{training.trainingTitle}}</button>
                                     </td>
                                 </tr>
                             </div>
