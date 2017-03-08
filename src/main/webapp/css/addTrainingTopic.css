@@ -47,20 +47,31 @@ table td {
 }
 
 .deletetopic{
-    border-bottom:1px solid #E1E1E1;
     width: 100%;
     text-align: center;
     padding-top:20px;
     font-size:12px;
     font-family:arial;
     font-weight: normal;
+
+}
+
+.changecolor:hover{
+    color: #bc0f0b;
+
+}
+a.changecolor{
+    text-decoration:none;
+    color: black;
 }
 
 #addFormation button{
     font-weight: bold;
-    width:120px;
+    width:160px;
     height:35px;
     max-width:170px;
+    font-size: 10px;
+
 
 
 }
