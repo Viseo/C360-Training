@@ -37,3 +37,6 @@ table td {
 .color-grey {color: #A9A9A9;}
 .color-red {color: #B22222;}
 
+[v-cloak] {
+    display: none;
+}
