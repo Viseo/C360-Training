@@ -131,7 +131,7 @@ var TrainingTopic = new Vue({
             this.$http.get("api/themes").then(
                 function(response){
                     this.optionsTopic = response.data;
-                    this.optionsTopic.slice().sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+                    this.optionsTopic.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
                     this.resetTopicForm();
                 },
                 function(response){
@@ -144,7 +144,7 @@ var TrainingTopic = new Vue({
             this.$http.get("api/formations").then(
                 function(response){
                     this.optionsTraining = response.data;
-                    this.optionsTraining.slice().sort(function(a,b) {return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);} );
+                    this.optionsTraining.sort(function(a,b) {return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);} );
                     this.resetTrainingForm();
                 },
                 function(response){

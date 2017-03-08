@@ -42,7 +42,6 @@
                             <select class="form-control" v-model="training.numberHalfDays"
                                     @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
                                     @blur="messageNumberHalfDays">
-                                <option value=""  disabled selected style="display:none;">--</option>
                                 <option v-for="n in 200">{{n}}</option>
                             </select>
                         </div>
@@ -53,7 +52,6 @@
                             <select class="form-control" v-model="training.topicDescription"
                                     @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
                                     @blur="messageTopic">
-                                <option value=""  disabled selected style="display:none;">--</option>
                                 <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                 </option>
                             </select>
