@@ -35,6 +35,10 @@ var TrainingTopic = new Vue({
 
 
     },
+    mounted: function(){
+        this.updateTopics();
+        this.updateTrainings();
+    },
     methods: {
         messageTrainingTitle(){
             if(this.training.trainingTitle == ''){
@@ -187,6 +191,3 @@ var TrainingTopic = new Vue({
         }
     }
 });
-
-window.onload = TrainingTopic.updateTopics();
-window.onload = TrainingTopic.updateTrainings();

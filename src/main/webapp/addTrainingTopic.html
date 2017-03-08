@@ -14,7 +14,9 @@
     <title>AjouterFormation</title>
 </head>
 <body>
-<div id="TrainingTopic">
+<div id="TrainingTopic" v-cloak>
+
+
 <div class="container-fluid">
     <div class="row"><!-- row 1-->
         <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
@@ -96,7 +98,7 @@
                             <div>
                                 <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
                                 <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
-                                <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                <span :duration="{ enter: 500, leave: 800 }" v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
                                 <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
                             </div>
                         </td>
@@ -111,6 +113,7 @@
 
 
     <div class="container-fluid" id="addFormation">
+
     <div class="row" ><!-- row 1-->
         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
@@ -154,7 +157,9 @@
         <!--<button @click="TrainingTraim(TrainingFilter('C'))"></button>
         <pre>{{$data | json}}</pre>-->
 </div>
-<script src="app/controller/registerTrainingTopic.js"></script>
+
+
 </div>
+<script src="app/controller/registerTrainingTopic.js"></script>
 </body>
 </html>
