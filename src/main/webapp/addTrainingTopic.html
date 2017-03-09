@@ -10,12 +10,13 @@
     <script src="lib/vue.js"></script>
     <script src="lib/vee-validate.js"></script>
     <script src="lib/vue-resource.js"></script>
-    <script src="lib/vue-router.js"></script>
 
     <title>AjouterFormation</title>
 </head>
 <body>
-<div id="TrainingTopic">
+<div id="TrainingTopic" v-cloak>
+
+
 <div class="container-fluid">
     <div class="row"><!-- row 1-->
         <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
@@ -31,7 +32,8 @@
                                    name="formation"
                                    v-model="training.trainingTitle"
                                    @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                   @blur="messageTrainingTitle" placeholder="Formation">
+                                   @blur="messageTrainingTitle" placeholder="Formation"
+                                   maxlength="20">
 
 
                         </div>
@@ -42,7 +44,6 @@
                             <select class="form-control" v-model="training.numberHalfDays"
                                     @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
                                     @blur="messageNumberHalfDays">
-                                <option value=""  disabled selected style="display:none;">--</option>
                                 <option v-for="n in 200">{{n}}</option>
                             </select>
                         </div>
@@ -53,7 +54,6 @@
                             <select class="form-control" v-model="training.topicDescription"
                                     @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
                                     @blur="messageTopic">
-                                <option value=""  disabled selected style="display:none;">--</option>
                                 <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                 </option>
                             </select>
@@ -98,7 +98,7 @@
                             <div>
                                 <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
                                 <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
-                                <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                <span :duration="{ enter: 500, leave: 800 }" v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
                                 <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
                             </div>
                         </td>
@@ -113,8 +113,9 @@
 
 
     <div class="container-fluid" id="addFormation">
-    <div class="row"><!-- row 1-->
-        <div class="col-md-12 col-sm-12 col-lg-12" style="padding:10px;"></div>
+
+    <div class="row" ><!-- row 1-->
+        <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
 
             <div class="row">
@@ -123,26 +124,28 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
-                <table class="espace fix">
+                <table class="fix">
                     <tr>
                         <td>
-                        <table class="table table-borderless tabnone espace fix" v-for="topic in optionsTopic" v-show="typeof TrainingFilter(topic.name) !== 'undefined' && TrainingFilter(topic.name).length > 0 ">
+                        <table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen">
+
                             <div class="row">
                                 <thead>
                                 <tr>
                                     <th class="col-lg-3 col-md-3">{{topic.name}}</th>
                                     <th class="col-lg-3 col-md-3"></th>
                                     <th class="col-lg-3 col-md-3"></th>
-                                    <th class="col-lg-3 col-md-3 deletetopic"><a class="text-warning" href="#"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                    <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                 </tr>
                                 </thead>
                             </div>
                             <div class="row">
-                                <tr v-for="group in TrainingTraim(TrainingFilter(topic.name))">
+
+                                <!--<tr v-for="group in TrainingTraim(TrainingFilter(topic.name))">
                                     <td class="col-lg-3 col-md-3" v-for="training in group">
-                                        <button class="btn btn-default btn-group" style="word-wrap:break-word;">{{training.trainingTitle}}</button>
+                                        <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
                                     </td>
-                                </tr>
+                                </tr>-->
                             </div>
                             </tr>
                         </table>
@@ -155,7 +158,9 @@
         <!--<button @click="TrainingTraim(TrainingFilter('C'))"></button>
         <pre>{{$data | json}}</pre>-->
 </div>
-<script src="app/controller/registerTrainingTopic.js"></script>
+
+
 </div>
+<script src="app/controller/registerTrainingTopic.js"></script>
 </body>
 </html>

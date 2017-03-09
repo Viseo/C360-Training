@@ -35,6 +35,11 @@ var TrainingTopic = new Vue({
 
 
     },
+    mounted: function(){
+        this.updateTopics();
+        this.updateTrainings();
+
+    },
     methods: {
         messageTrainingTitle(){
             if(this.training.trainingTitle == ''){
@@ -146,6 +151,7 @@ var TrainingTopic = new Vue({
                     this.optionsTraining = response.data;
                     this.optionsTraining.sort(function(a,b) {return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);} );
                     this.resetTrainingForm();
+                    this.TopicwithTraining();
                 },
                 function(response){
                     console.log("Error: ",response);
@@ -153,22 +159,40 @@ var TrainingTopic = new Vue({
                 }
             );
         },
-        TrainingFilter(value){
+        TopicwithTraining(){
             this.trainingsChosen = [];
-            for (var tmp in this.optionsTraining) {
-                if (this.optionsTraining[tmp].topicDescription.name == value) {
-                    this.trainingsChosen.push(this.optionsTraining[tmp]);
-                }
+            for(var tmp in this.optionsTraining){
+              this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
             }
-            return this.trainingsChosen;
+
+
+        this.trainingsChosen = this.removeDuplicates(this.trainingsChosen,"id");
+
         },
+        removeDuplicates(arr, prop) {
+    var new_arr = [];
+    var lookup  = {};
+
+    for (var i in arr) {
+        lookup[arr[i][prop]] = arr[i];
+    }
+
+    for (i in lookup) {
+        new_arr.push(lookup[i]);
+    }
+
+    return new_arr;
+},
+
+
         TrainingTraim(value){
             this.test = [];
             var tmp = [];
             var longueur = value.length;
             var compteur = 0;
             for (var element in value){
-                longueur --;  compteur ++;
+                longueur --;
+                compteur ++;
                 if(compteur >= 1 && compteur < 4){
                     tmp.push(value[element]);
                     if(longueur == 0){
@@ -185,6 +209,3 @@ var TrainingTopic = new Vue({
         }
     }
 });
-
-window.onload = TrainingTopic.updateTopics();
-window.onload = TrainingTopic.updateTrainings();
