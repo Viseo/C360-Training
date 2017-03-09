@@ -15,32 +15,25 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'src/main/webapp/lib/angular.js',
-            'src/main/webapp/lib/angular-animate.js',
-            'src/main/webapp/lib/angular-route.js',
-            'src/main/webapp/lib/angular-mocks.js',
-            'src/main/webapp/lib/*.js',
-            'src/main/webapp/app/modules.js',
-            'src/main/webapp/app/filter.js',
-            'src/main/webapp/app/routing.js',
-            'src/main/webapp/app/services/*',
-            'src/main/webapp/app/controller/*',
-            'src/test/javaScript/formFunctions.js',
+            'src/main/webapp/lib/vue.js',
+            'src/main/webapp/lib/vue-resource.js',
+            'src/main/webapp/lib/vue-resource-mock.min.js',
+            'src/main/webapp/lib/vee-validate.js',
+            'src/main/webapp/app/controller/registerCollaborator.js',
             'src/test/javaScript/spec/*.js'
         ],
 
 
         // list of files to exclude
         exclude: [
-            'src/main/webapp/app/services/serviceInitBdd.js',
-            'src/main/webapp/app/controller/global.js'
+
         ],
 
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/main/webapp/app/**/*.js': ['coverage']
+
         },
 
 
@@ -48,7 +41,7 @@ module.exports = function (config) {
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
 
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress'],
 
         // web server port
         port: 9876,

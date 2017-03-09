@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VeeValidate);
 
-new Vue({
+var registerCollaborator = new Vue({
     el: '#app',
     data: {
         collaborator:{

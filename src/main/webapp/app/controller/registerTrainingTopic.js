@@ -31,8 +31,9 @@ var TrainingTopic = new Vue({
         msgnumberHalfDays:false,
         msgtopic:false,
         msgname:false,
-        test:undefined
-
+        test:undefined,
+        trainingsOfTopic:[],
+        allTopicTraining:[]
 
     },
     mounted: function(){
@@ -42,22 +43,22 @@ var TrainingTopic = new Vue({
     },
     methods: {
         messageTrainingTitle(){
-            if(this.training.trainingTitle == ''){
+            if (this.training.trainingTitle == '') {
                 this.msgtrainingTitle = true;
             }
         },
         messageNumberHalfDays(){
-            if(this.training.numberHalfDays == ''){
+            if (this.training.numberHalfDays == '') {
                 this.msgnumberHalfDays = true;
             }
         },
         messageTopic(){
-            if(this.training.topicDescription == ''){
+            if (this.training.topicDescription == '') {
                 this.msgtopic = true;
             }
         },
         messageName(){
-            if(this.topic.name == ''){
+            if (this.topic.name == '') {
                 this.msgname = true;
             }
         },
@@ -81,10 +82,10 @@ var TrainingTopic = new Vue({
                         this.resetTopicForm();
                     },
                     function (response) {
-                        console.log("Error: ",response);
+                        console.log("Error: ", response);
                         if (response.data.message == "trainingTitle") {
                             this.isNewTrainingTitle = false;
-                        }else{
+                        } else {
                             console.error(response);
                         }
                     }
@@ -92,8 +93,10 @@ var TrainingTopic = new Vue({
         },
         verifyTrainingForm() {
             this.training.trainingTitle = this.training.trainingTitle.replace(/ +/g, "");
-            this.messageTrainingTitle(); this.messageNumberHalfDays(); this.messageTopic();
-            if(!this.msgtrainingTitle && !this.msgnumberHalfDays && !this.msgtopic) {
+            this.messageTrainingTitle();
+            this.messageNumberHalfDays();
+            this.messageTopic();
+            if (!this.msgtrainingTitle && !this.msgnumberHalfDays && !this.msgtopic) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
                 this.saveTrainingAction();
             }
@@ -113,7 +116,7 @@ var TrainingTopic = new Vue({
                         this.updateTopics();
                     },
                     function (response) {
-                        console.log("Error: ",response);
+                        console.log("Error: ", response);
                         if (response.data.message == "name") {
                             this.isNewTopic = false;
                         } else {
@@ -125,7 +128,7 @@ var TrainingTopic = new Vue({
         verifyTopicForm() {
             this.topic.name = this.topic.name.replace(/ +/g, "");
             this.messageName();
-            if(!this.msgname) {
+            if (!this.msgname) {
                 this.isNewTopic = true;
                 this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
                 this.saveTopicAction();
@@ -134,71 +137,71 @@ var TrainingTopic = new Vue({
 
         updateTopics(){
             this.$http.get("api/themes").then(
-                function(response){
+                function (response) {
                     this.optionsTopic = response.data;
-                    this.optionsTopic.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+                    this.optionsTopic.sort(function (a, b) {
+                        return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                    });
                     this.resetTopicForm();
                 },
-                function(response){
-                    console.log("Error: ",response);
+                function (response) {
+                    console.log("Error: ", response);
                     console.error(response);
                 }
             );
         },
         updateTrainings (){
             this.$http.get("api/formations").then(
-                function(response){
+                function (response) {
                     this.optionsTraining = response.data;
-                    this.optionsTraining.sort(function(a,b) {return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);} );
+                    this.optionsTraining.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
                     this.resetTrainingForm();
                     this.TopicwithTraining();
+                    this.TopicTrainingTraim();
                 },
-                function(response){
-                    console.log("Error: ",response);
+                function (response) {
+                    console.log("Error: ", response);
                     console.error(response);
                 }
             );
         },
         TopicwithTraining(){
             this.trainingsChosen = [];
-            for(var tmp in this.optionsTraining){
-              this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
+            for (var tmp in this.optionsTraining) {
+                this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
             }
-
-
-        this.trainingsChosen = this.removeDuplicates(this.trainingsChosen,"id");
-
+            this.trainingsChosen = this.removeDuplicates(this.trainingsChosen, "id");
         },
         removeDuplicates(arr, prop) {
-    var new_arr = [];
-    var lookup  = {};
+            var new_arr = [];
+            var lookup = {};
 
-    for (var i in arr) {
-        lookup[arr[i][prop]] = arr[i];
-    }
+            for (var i in arr) {
+                lookup[arr[i][prop]] = arr[i];
+            }
 
-    for (i in lookup) {
-        new_arr.push(lookup[i]);
-    }
+            for (i in lookup) {
+                new_arr.push(lookup[i]);
+            }
 
-    return new_arr;
-},
-
-
+            return new_arr;
+        },
         TrainingTraim(value){
             this.test = [];
             var tmp = [];
             var longueur = value.length;
             var compteur = 0;
-            for (var element in value){
-                longueur --;
-                compteur ++;
-                if(compteur >= 1 && compteur < 4){
+            for (var element in value) {
+                longueur--;
+                compteur++;
+                if (compteur >= 1 && compteur < 4) {
                     tmp.push(value[element]);
-                    if(longueur == 0){
+                    if (longueur == 0) {
                         this.test.push(tmp);
                     }
-                }else if(compteur == 4) {
+                } else if (compteur == 4) {
                     tmp.push(value[element]);
                     this.test.push(tmp);
                     tmp = [];
@@ -206,6 +209,22 @@ var TrainingTopic = new Vue({
                 }
             }
             return this.test;
-        }
+        },
+        TrainingFilter(value){
+             this.trainingsOfTopic = [];
+             for (var tmp in this.optionsTraining) {
+                 if (this.optionsTraining[tmp].topicDescription.name == value) {
+                     this.trainingsOfTopic.push(this.optionsTraining[tmp]);
+                 }
+             }
+             return this.trainingsOfTopic;
+        },
+         TopicTrainingTraim(){
+             this.allTopicTraining = [];
+             for (var tmp in this.trainingsChosen){
+                this.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.trainingsChosen[tmp].name)));
+             }
+         }
+
     }
 });

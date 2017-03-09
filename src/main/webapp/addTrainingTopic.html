@@ -125,32 +125,40 @@
                 </div>
             </div>
                 <table class="fix">
+
                     <tr>
                         <td>
-                        <table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen">
+                            <template v-for="grandgroup in allTopicTraining">
+                                <template v-for="group in grandgroup">
+                        <table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen" >
 
                             <div class="row">
                                 <thead>
                                 <tr>
-                                    <th class="col-lg-3 col-md-3">{{topic.name}}</th>
+                                    <th class="col-lg-3 col-md-3">{{group}}</th>
                                     <th class="col-lg-3 col-md-3"></th>
                                     <th class="col-lg-3 col-md-3"></th>
                                     <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                 </tr>
                                 </thead>
                             </div>
+
                             <div class="row">
 
-                                <!--<tr v-for="group in TrainingTraim(TrainingFilter(topic.name))">
+                                <tr >
                                     <td class="col-lg-3 col-md-3" v-for="training in group">
                                         <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
                                     </td>
-                                </tr>-->
+                                </tr>
                             </div>
+
                             </tr>
                         </table>
+                                </template>
+                            </template>
                         </td>
                     </tr>
+
                 </table>
 
         </div>
