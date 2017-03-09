@@ -129,13 +129,13 @@
                     <tr>
                         <td>
 
-
-                        <table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen" >
-
+                        <template v-for="grandgroup in allTopicTraining">
+                        <!--<table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen" >-->
+                            <table class="table table-borderless tabnone fix">
                             <div class="row">
                                 <thead>
                                 <tr>
-                                    <th class="col-lg-3 col-md-3">{{topic.name}}</th>
+                                    <th class="col-lg-3 col-md-3">{{grandgroup[0][0].topicDescription.name}}</th>
                                     <th class="col-lg-3 col-md-3"></th>
                                     <th class="col-lg-3 col-md-3"></th>
                                     <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
@@ -144,18 +144,18 @@
                             </div>
 
                             <div class="row">
-                                <template v-for="grandgroup in allTopicTraining">
+
                                 <tr v-for="group in grandgroup">
                                     <td class="col-lg-3 col-md-3" v-for="training in group">
                                         <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
                                     </td>
                                 </tr>
-                                </template>
+
                             </div>
 
                             </tr>
                         </table>
-
+                        </template>
 
                         </td>
                     </tr>
@@ -164,7 +164,7 @@
 
         </div>
     </div><!--Fin row 2-->
-        <button @click="TrainingTraim(TrainingFilter('C'))"></button>
+        <!--<button>{{ allTopicTraining[0] }}</button>-->
         <!--<pre>{{$data | json}}</pre>-->
 </div>
 
