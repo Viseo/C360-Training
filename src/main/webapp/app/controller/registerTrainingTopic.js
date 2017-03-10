@@ -173,6 +173,9 @@ var TrainingTopic = new Vue({
                 this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
             }
             this.trainingsChosen = this.removeDuplicates(this.trainingsChosen, "id");
+            this.trainingsChosen.sort(function (a, b) {
+                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+            });
         },
         removeDuplicates(arr, prop) {
             var new_arr = [];

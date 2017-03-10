@@ -111,9 +111,7 @@
     </div><!--Fin row 1-->
 </div>
 
-
     <div class="container-fluid" id="addFormation">
-
     <div class="row" ><!-- row 1-->
         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
@@ -125,12 +123,9 @@
                 </div>
             </div>
                 <table class="fix">
-
                     <tr>
                         <td>
-
                         <template v-for="grandgroup in allTopicTraining">
-                        <!--<table class="table table-borderless tabnone fix" v-for="topic in trainingsChosen" >-->
                             <table class="table table-borderless tabnone fix">
                             <div class="row">
                                 <thead>
@@ -154,21 +149,17 @@
                             </div>
 
                             </tr>
-                        </table>
+                            </table>
                         </template>
 
                         </td>
                     </tr>
-
                 </table>
-
         </div>
     </div><!--Fin row 2-->
-        <!--<button>{{ allTopicTraining[0] }}</button>-->
+        <button>{{ trainingsChosen }}</button>
         <!--<pre>{{$data | json}}</pre>-->
 </div>
-
-
 </div>
 <script src="app/controller/registerTrainingTopic.js"></script>
 </body>
