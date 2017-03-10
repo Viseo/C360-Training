@@ -19,11 +19,15 @@
 
 <div class="container-fluid">
     <div class="row"><!-- row 1-->
-        <div class="col-md-12" style="padding:40px;background-color:blue;margin-bottom: 30px;"></div>
+        <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
         <div class="col-sm-12 col-md-10 col-lg-7">
 
             <form class="" @submit.prevent="verifyTrainingForm">
-                <legend>Ajouter une formation</legend>
+                <div class="row">
+                <div class="col-lg-7 col-md-7 text-center">
+                    <legend>Ajouter une formation</legend>
+                </div>
+                </div>
                 <table>
                     <td width="20%">
                         <div class="form-group" :class="{'input': true,'has-error': errors.has('formation') }">
@@ -142,7 +146,7 @@
 
                                 <tr v-for="group in grandgroup">
                                     <td class="col-lg-3 col-md-3" v-for="training in group">
-                                        <button class="btn btn-default btn-group">{{training.trainingTitle}}</button>
+                                        <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
                                     </td>
                                 </tr>
 
