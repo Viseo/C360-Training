@@ -214,20 +214,29 @@ var TrainingTopic = new Vue({
             return this.test;
         },
         TrainingFilter(value){
-             this.trainingsOfTopic = [];
-             for (var tmp in this.optionsTraining) {
-                 if (this.optionsTraining[tmp].topicDescription.name == value) {
-                     this.trainingsOfTopic.push(this.optionsTraining[tmp]);
-                 }
-             }
-             return this.trainingsOfTopic;
+            this.trainingsOfTopic = [];
+            for (var tmp in this.optionsTraining) {
+                if (this.optionsTraining[tmp].topicDescription.name == value) {
+                    this.trainingsOfTopic.push(this.optionsTraining[tmp]);
+                }
+            }
+            return this.trainingsOfTopic;
         },
-         TopicTrainingTraim(){
-             this.allTopicTraining = [];
-             for (var tmp in this.trainingsChosen){
+        TopicTrainingTraim(){
+            this.allTopicTraining = [];
+            for (var tmp in this.trainingsChosen) {
                 this.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.trainingsChosen[tmp].name)));
-             }
-         }
+            }
+        },
+        isEmptyFormation(){
+            if (this.trainingsChosen.length > 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
 
     }
 });
