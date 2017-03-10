@@ -84,7 +84,7 @@
                     <tr>
                         <td colspan="4" class="text-center">
                             <div>
-                                <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà dans le système.</span>
+                                <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
                                 <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
                                       class="text-center color-red ">Veuillez remplir tous les champs.</span>
                                 <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
@@ -97,8 +97,8 @@
                         <td class="text-center td-right" style="height: 60px;">
                             <div>
                                 <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
-                                <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
-                                <span :duration="{ enter: 500, leave: 800 }" v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
+                                <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
                                 <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
                             </div>
                         </td>
