@@ -126,9 +126,10 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
+            <div id="" style="overflow-y: scroll; height:200px;">
                 <table class="fix">
                     <tr>
-                        <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
+                       <!-- <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td> -->
                         <td>
                         <template v-for="grandgroup in allTopicTraining">
                         <table class="table table-borderless tabnone fix">
@@ -161,6 +162,7 @@
                         </td>
                     </tr>
                 </table>
+            </div>
         </div>
     </div><!--Fin row 2-->
 </div>
