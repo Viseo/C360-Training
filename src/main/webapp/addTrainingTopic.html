@@ -126,7 +126,9 @@
                 <legend>Formation ajoutées</legend>
                 </div>
             </div>
+            <div style="width: 100%; height: 380px; overflow-y: scroll;">
                 <table class="fix">
+                    <tbody>
                     <tr>
                         <td>
                         <template v-for="grandgroup in allTopicTraining">
@@ -143,13 +145,13 @@
                             </div>
 
                             <div class="row">
-
+                                <tbody>
                                 <tr v-for="group in grandgroup">
                                     <td class="col-lg-3 col-md-3" v-for="training in group">
                                         <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
                                     </td>
                                 </tr>
-
+                                </tbody>
                             </div>
 
                             </tr>
@@ -158,7 +160,9 @@
 
                         </td>
                     </tr>
+                    </tbody>
                 </table>
+            </div>
         </div>
     </div><!--Fin row 2-->
 </div>
