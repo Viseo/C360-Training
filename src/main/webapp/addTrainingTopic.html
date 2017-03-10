@@ -128,9 +128,10 @@
             </div>
                 <table class="fix">
                     <tr>
+                        <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
                         <td>
                         <template v-for="grandgroup in allTopicTraining">
-                            <table class="table table-borderless tabnone fix">
+                        <table class="table table-borderless tabnone fix">
                             <div class="row">
                                 <thead>
                                 <tr>
@@ -141,6 +142,7 @@
                                 </tr>
                                 </thead>
                             </div>
+
 
                             <div class="row">
 
