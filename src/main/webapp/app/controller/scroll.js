@@ -1,12 +1,7 @@
-/**
- * Created by XME3612 on 10/03/2017.
- */
+$('#scroll-up').click(function() {
+    $('#test').animate({scrollTop: +250}, 1000);
+})
 
-Vue.use(scrollSpy);
-
-new Vue({
-    el: '#test',
-    data: {
-        scrollPos: 0
-    }
+$('#scroll-down').click(function() {
+    $('#test').animate({scrollTop: -250}, 1000);
 })
