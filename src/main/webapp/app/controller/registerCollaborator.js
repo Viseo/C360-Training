@@ -43,7 +43,8 @@ new Vue({
         color_inscription: 'color-blue',
         color_connexion: 'color-blue',
         tabconnexion: "tab",
-        tabinscription: "tab active"
+        tabinscription: "tab active",
+        Msgmatricule:true
 
     },
 
@@ -74,14 +75,15 @@ new Vue({
             this.msgmatricule = false;
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
                 this[msg] = '';
-                return true;
+                this.Msgmatricule = true;
             } else {
-                this[msg] = 'Veuillez entrer  code de login valide';
-                return false;
+                this[msg] = 'Veuillez entrer code de login valide';
+                this.Msgmatricule = false;
 
             }
         },
         messageMatricule(){
+            this.Msgmatricule = true;
             if (this.personnalIdNumber == '') {
                 this.msgmatricule = true;
             }

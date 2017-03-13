@@ -30,14 +30,14 @@
                                 <!-- MATRICULE-->
                                 <div class="form-group">
                                     <label for="matricule">Code de login</label>
-                                    <div class="inner-addon left-addon" :class="{'has-error': personnalIdNumber}">
+                                    <div class="inner-addon left-addon" :class="{'has-error': msgmatricule || !Msgmatricule}">
                                         <i class="glyphicon glyphicon-barcode"></i>
                                         <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
                                                placeholder="ABC1234" v-model="personnalIdNumber" @focus="msgmatricule = false" @blur="messageMatricule"
                                                onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
                                         <span v-show="msgmatricule" class="color-red">Matricule est obligatoire.</span>
                                         <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
-                                        <span v-show="personnalIdNumber" class="color-red">{{ matriculeMsg }}</span>
+                                        <span v-show="!Msgmatricule" class="color-red">{{ matriculeMsg }}</span>
                                     </div>
                                 </div>
                                 <!-- NOM -->
