@@ -2,7 +2,6 @@
  * Created by XME3612 on 20/02/2017.
  */
 Vue.use(VueResource);
-Vue.use(VeeValidate);
 Vue.use(VueRouter);
 
 new Vue({
@@ -10,14 +9,26 @@ new Vue({
     data: {
         collaborator:{
             personnalIdNumber:'',
-            firstName:'',
             lastName:'',
+            firstName:'',
             email:'',
             password:'',
-            confirmPassword:''
+            confirmPassword:'',
         },
+        personnalIdNumber:'',
+        lastName:'',
+        firstName:'',
+        email:'',
+        password:'',
+        confirmPassword:'',
+        matriculeMsg:'',
+        lastNameMsg:'',
+        firstNameMsg:'',
+        emailMsg:'',
+        passwordMsg:'',
+        confirmPasswordMsg:'',
         collaboratorToRegister:{},
-
+        verif: true,
         isNewPersonalIdNumber:true,
         isNewEmail:true,
         msgmatricule:false,
@@ -28,53 +39,131 @@ new Vue({
         msgconfirmpwd:false,
         showPass:false,
         showPassConf:false,
-
         border: 'color-red',
         color_inscription: 'color-blue',
         color_connexion: 'color-blue',
-
         tabconnexion: "tab",
         tabinscription: "tab active"
 
     },
+
+    watch: {
+        personnalIdNumber: function(value) {
+            this.VerfiMatricule(value, 'matriculeMsg');
+        },
+        lastName: function(value) {
+            this.verifLastName(value, 'lastNameMsg');
+        },
+        firstName: function(value) {
+            this.verifFirstName(value, 'firstNameMsg');
+        },
+        email: function(value) {
+            this.verifEmail(value, 'emailMsg');
+        },
+        password: function(value) {
+            this.verifPassword(value, 'passwordMsg');
+        },
+        confirmPassword: function(value) {
+            this.verifConfirmPassword(value, 'confirmPasswordMsg');
+        }
+
+    },
     methods: {
+        VerfiMatricule(personnalIdNumber, msg) {
+            this.isNewPersonalIdNumber = true;
+            this.msgmatricule = false;
+            if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'Veuillez entrer  code de login valide';
+                return false;
+
+            }
+        },
         messageMatricule(){
-            if(this.collaborator.personnalIdNumber == ''){
+            if (this.personnalIdNumber == '') {
                 this.msgmatricule = true;
             }
         },
+        verifLastName(lastName, msg) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'Veuillez entrer un nom valide';
+                return false;
+            }
+        },
         messageNom(){
-            if(this.collaborator.lastName == ''){
+            if(this.lastName == ''){
                 this.msgnom = true;
             }
         },
+        verifFirstName(firstName, msg) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/ .test(firstName)) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'Veuillez entrer un Prénom valide';
+                return false;
+            }
+        },
         messagePrenom(){
-            if(this.collaborator.firstName == ''){
+            if(this.firstName == ''){
                 this.msgprenom = true;
             }
         },
+        verifEmail(email, msg) {
+            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'Veuillez entrer un email valide';
+                return false;
+            }
+        },
         messageEmail(){
-            if(this.collaborator.email == ''){
+            if(this.email == ''){
                 this.msgemail = true;
             }
         },
+        verifPassword(password, msg) {
+            if (/^(.){6,125}$/.test(password)) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'Le mot de passe doit avoir au minimum 6 caractères';
+                return false;
+            }
+        },
         messagePwd(){
-            if(this.collaborator.password == ''){
+            if(this.password == ''){
                 this.msgpwd = true;
             }
         },
+        verifConfirmPassword(confirmPassword, msg) {
+            if (this.confirmPassword === this.password) {
+                this[msg] = '';
+                return true;
+            } else {
+                this[msg] = 'La confirmation du mot de passe n\'est pas valide';
+                return false;
+            }
+        },
+
         messageConfirmpwd(){
-            if(this.collaborator.confirmPassword == ''){
+            if(this.confirmPassword == ''){
                 this.msgconfirmpwd = true;
             }
         },
         resetForm() {
-            this.collaborator.personnalIdNumber = '';
-            this.collaborator.lastName = '';
-            this.collaborator.firstName = '';
-            this.collaborator.email = '';
-            this.collaborator.password = '';
-            this.collaborator.confirmPassword = '';
+            this.personnalIdNumber = '';
+            this.lastName = '';
+            this.firstName = '';
+            this.email = '';
+            this.password = '';
+            this.confirmPassword = '';
             this.collaboratorToRegister = {};
         },
         saveAction() {
@@ -105,12 +194,18 @@ new Vue({
                 );
         },
         verifyForm() {
-            this.collaborator.lastName = this.collaborator.lastName.replace(/ +/g, " ").replace(/ +$/, "");
-            this.collaborator.firstName = this.collaborator.firstName.replace(/ +/g, " ").replace(/ +$/, "");
+            this.lastName = this.lastName.replace(/ +/g, " ").replace(/ +$/, "");
+            this.firstName = this.firstName.replace(/ +/g, " ").replace(/ +$/, "");
             this.messageMatricule(); this.messageNom(); this.messagePrenom(); this.messageEmail(); this.messagePwd(); this.messageConfirmpwd();
             if(!this.msgmatricule && !this.msgnom && !this.msgprenom && !this.msgemail && !this.msgpwd && !this.msgconfirmpwd){
                 this.isNewPersonalIdNumber = true;
                 this.isNewEmail = true;
+                this.collaborator.personnalIdNumber=this.personnalIdNumber;
+                this.collaborator.lastName=this.lastName;
+                this.collaborator.firstName=this.firstName;
+                this.collaborator.email=this.email;
+                this.collaborator.password=this.password;
+                this.collaborator.confirmPassword=this.confirmPassword;
                 this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
                 this.saveAction();
             }
