@@ -1,4 +1,12 @@
 /**
  * Created by XME3612 on 10/03/2017.
  */
-$('#container').scrollable({'vertical' : 'true'});
+
+Vue.use(scrollSpy);
+
+new Vue({
+    el: '#test',
+    data: {
+        scrollPos: 0
+    }
+})
