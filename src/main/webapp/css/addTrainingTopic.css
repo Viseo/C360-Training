@@ -70,10 +70,12 @@ a.changecolor{
     height:35px;
     font-size: 80%;
 
+
+
 }
 
 
-.tabnonborder{
+.tabnone{
     border:none;
 }
 
@@ -81,6 +83,9 @@ table.fix{
     table-layout: fixed;
     margin:0;
     border-collapse: collapse;
+    display: table;
+    width: 100%;
+    height: 100%;
 
 }
 
@@ -89,3 +94,7 @@ table.fix{
 
 [v-cloak] { display:none; }
 
+.scrollit{
+    overflow-y: scroll;
+    max-height:360px;
+}
