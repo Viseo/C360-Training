@@ -43,10 +43,11 @@ new Vue({
         color_inscription: 'color-blue',
         color_connexion: 'color-blue',
         tabconnexion: "tab",
-        tabinscription: "tab active"
+        tabinscription: "tab active",
+        Msgmatricule:true
+
 
     },
-
     watch: {
         personnalIdNumber: function(value) {
             this.VerfiMatricule(value, 'matriculeMsg');
@@ -75,13 +76,15 @@ new Vue({
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
                 this[msg] = '';
                 return true;
+                this.Msgmatricule = true;
             } else {
                 this[msg] = 'Veuillez entrer  code de login valide';
                 return false;
-
+                this.Msgmatricule = false;
             }
         },
         messageMatricule(){
+            this.Msgmatricule = true;
             if (this.personnalIdNumber == '') {
                 this.msgmatricule = true;
             }
@@ -151,7 +154,6 @@ new Vue({
                 return false;
             }
         },
-
         messageConfirmpwd(){
             if(this.confirmPassword == ''){
                 this.msgconfirmpwd = true;
@@ -168,7 +170,6 @@ new Vue({
         },
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
-
             //post the form to the server
             this.$http.post("api/collaborateurs", this.collaboratorToRegister)
                 .then(
