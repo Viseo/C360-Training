@@ -40,17 +40,14 @@ var TrainingTopic = new Vue({
             this.VerifTrainingTitle(value, 'trainingTitleMsg');
         },
 
-
         trainingTitle: function (value) {
             this.VerifTrainingTitle(value, 'trainingTitleMsg');
         },
-
 
         nameTheme: function (value) {
             this.VerifnameTheme(value, 'nameThemeMsg');
         },
     },
-
     methods: {
         VerifTrainingTitle(trainingTitle, msg) {
             if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(trainingTitle)) {
@@ -59,7 +56,6 @@ var TrainingTopic = new Vue({
             } else {
                 this[msg] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
                 this.isTrainingTitleValid = false;
-
             }
         },
         messageTrainingTitle(){
@@ -78,7 +74,6 @@ var TrainingTopic = new Vue({
                 this.msgtopic = true;
             }
         },
-
         VerifnameTheme(nameTheme, msg) {
             if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(nameTheme)) {
                 this[msg] = '';
@@ -138,7 +133,6 @@ var TrainingTopic = new Vue({
                 this.saveTrainingAction();
             }
         },
-
         updateTopics(){
             this.$http.get("api/themes").then(
                 function (response) {
