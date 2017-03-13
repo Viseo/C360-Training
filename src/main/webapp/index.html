@@ -129,11 +129,10 @@
                 </div>
 
                 <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid;" id="test">
-
+                    <img src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%;">
                     <table class="fix tabnonborder" >
 
                         <tbody>
-                        <tr><td><input type="button" value="Scroll" id="scroll-up" /></td></tr>
                         <tr>
                             <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
                             <td>
@@ -163,14 +162,11 @@
                                         </tr>
                                     </table>
                                 </template>
-
                             </td>
                         </tr>
-                        <tr><td><input type="button" value="Scroll" id="scroll-down" /></td></tr>
                         </tbody>
-
                     </table>
-
+                    <img src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%">
                 </div>
             </div>
         </div><!--Fin row 2-->
