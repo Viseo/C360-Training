@@ -95,6 +95,8 @@ table.fix{
 [v-cloak] { display:none; }
 
 .scrollit{
-    overflow-y: scroll;
+    overflow: scroll;
+    overflow-y: hidden;
+    overflow-x: hidden;
     max-height:360px;
 }

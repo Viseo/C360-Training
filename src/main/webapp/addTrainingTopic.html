@@ -12,6 +12,7 @@
     <script src="lib/vue-resource.js"></script>
 
     <title>AjouterFormation</title>
+    <script src="lib/jquery.tools.min.js"></script>
 </head>
 <body>
 <div id="TrainingTopic" v-cloak>
@@ -128,11 +129,13 @@
             </div>
 
                 <table class="fix">
-                    <tr>
+
+
+                    <tr><td><button class="glyphicon glyphicon-chevron-up" style="width:40px; position: absolute; left: 50%; margin-top: 5%;" id="scroll-up" ></button></td></tr>
+
                         <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
                         <td>
-
-                            <div class="scrollit">
+                            <div class="scrollit" id="test">
                         <template v-for="grandgroup in allTopicTraining">
                         <table class="table table-borderless tabnone fix">
                             <div class="row">
@@ -162,7 +165,9 @@
                         </template>
                             </div>
                         </td>
-                    </tr>
+
+                    <tr><td><button class="glyphicon glyphicon-chevron-down" style="width:40px; position: absolute; left: 50%; margin-top: 40%;" id="scroll-down"></button></td></tr>
+
                 </table>
 
         </div>
@@ -170,5 +175,14 @@
 </div>
 </div>
 <script src="app/controller/registerTrainingTopic.js"></script>
+<script>
+    $('#scroll-down').click(function() {
+        $('#test').animate({scrollTop: +250}, 1000);
+    })
+
+    $('#scroll-up').click(function() {
+        $('#test').animate({scrollTop: -250}, 1000);
+    })
+</script>
 </body>
 </html>
