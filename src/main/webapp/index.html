@@ -2,177 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Enregistrement collaborateur</title>
+
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/addTrainingTopic.css">
+    <link rel="stylesheet" href="css/enregistrement.css">
 
     <script src="lib/vue.js"></script>
     <script src="lib/vee-validate.js"></script>
     <script src="lib/vue-resource.js"></script>
-    <script type="text/javascript" src="lib/jquery.min.js"></script>
 
-    <title>AjouterFormation</title>
+
 </head>
 <body>
-<div id="TrainingTopic" v-cloak>
+<div class="container-fluid" id="app">
+    <div class="row">
+        <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
+            <div class="panel panel-default">
 
 
-    <div class="container-fluid">
-        <div class="row"><!-- row 1-->
-            <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
-            <div class="col-sm-12 col-md-10 col-lg-7">
 
-                <form class="" @submit.prevent="verifyTrainingForm">
+                <ul class="tab-group">
+                    <li :class="tabinscription"><a @click="tabinscription = 'tab active'; tabconnexion = 'tab';">Inscription</a></li>
+                    <li :class="tabconnexion"><a @click="tabinscription = 'tab'; tabconnexion = 'tab active';"  >Connexion</a></li>
+                </ul>
+
+
+                <div class="panel-body">
+
+
                     <div class="row">
-                        <div class="col-lg-7 col-md-7 text-center">
-                            <legend>Ajouter une formation</legend>
-                        </div>
-                    </div>
-                    <table>
-                        <td width="20%">
-                            <div class="form-group" :class="{'input': true,'has-error': errors.has('formation') }">
-                                <label for="formation" class="label-control">Formation</label><br/><br/>
-                                <input type="text" v-validate="'formation'" class="form-control" id="formation"
-                                       name="formation"
-                                       v-model="training.trainingTitle"
-                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                       @blur="messageTrainingTitle" placeholder="Formation"
-                                       maxlength="20">
+                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
+
+                            <form id="register-form" @submit.prevent="verifyForm">
+
+                                <!-- MATRICULE-->
 
 
-                            </div>
-                        </td>
-                        <td width="15%">
-                            <div class="form-group">
-                                <label>1/2 journées</label><br/><br/>
-                                <select class="form-control" v-model="training.numberHalfDays"
-                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                        @blur="messageNumberHalfDays">
-                                    <option v-for="n in 200">{{n}}</option>
-                                </select>
-                            </div>
-                        </td>
-                        <td width="20%">
-                            <div class="form-group">
-                                <label>Thèmes</label><br/><br/>
-                                <select class="form-control" v-model="training.topicDescription"
-                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                        @blur="messageTopic">
-                                    <option v-for="option in optionsTopic" :value="option">{{ option.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </td>
-                        <td class="text-center" width="20%">
-                            <div class="form-group">
-                                <label></label><br/><br/>
-                                <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
-                            </div>
+                                <div class="form-group" :class="{'input': true,'has-error': errors.has('matricule') || msgmatricule}">
+                                    <label for="matricule">Code de login</label>
 
-                        </td>
-                        <td width="30%" class="td-right">
-                            <form>
-                                <div class=" form-group has-feedback"
-                                     :class="{'input': true,'has-error': errors.has('topic') }">
-                                    <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
-                                    <input type="text" class="form-control" id="topic" name="topic" v-model="topic.name"
-                                           @focus="msgname = false; confirmTopic = false; isNewTopic = true;"
-                                           @blur="messageName" placeholder="Thème" v-validate="'topic'">
-                                    <span class="glyphicon glyphicon-floppy-save form-control-feedback"
-                                          @click="verifyTopicForm" style="margin-top: 20px;"></span>
+                                    <div class="inner-addon left-addon">
+                                        <i class="glyphicon glyphicon-barcode"></i>
+                                        <input type="text" v-validate="'matricule'" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
+                                               placeholder="ABC1234" v-model="collaborator.personnalIdNumber" @focus="isNewPersonalIdNumber = true; msgmatricule = false" @blur="messageMatricule"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
+                                        <span v-show="msgmatricule && !errors.has('matricule')" class="color-red ">Matricule est obligatoire.</span>
+                                        <span v-show="errors.has('matricule')" class="color-red ">{{ errors.first('matricule') }}</span>
+                                        <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
+                                    </div>
+
                                 </div>
+
+
+                                <!-- NOM -->
+
+                                <div class="form-group" :class="{'input': true,'has-error': errors.has('nom') || msgnom }">
+                                    <label for="nom">Nom</label>
+
+                                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                        <input type="text" v-validate="'nom'" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="collaborator.lastName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom"  maxlength="125" minlength="2">
+                                        <span v-show="msgnom && !errors.has('nom')" class="color-red ">Nom est obligatoire.</span>
+                                        <span v-show="errors.has('nom')" class="color-red ">{{ errors.first('nom') }}</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- PRENOM -->
+
+                                <div class="form-group" :class="{'input': true,'has-error': errors.has('prenom') || msgprenom }">
+                                    <label for="prenom">Prénom</label>
+
+                                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                                        <i class="glyphicon glyphicon-user"></i>
+                                        <input type="text" v-validate="'prenom'" name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="collaborator.firstName" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="msgprenom = false" @blur="messagePrenom"  maxlength="125" minlength="2">
+                                        <span v-show="msgprenom && !errors.has('prenom')" class="color-red ">Prénom est obligatoire.</span>
+                                        <span v-show="errors.has('prenom')" class="color-red ">{{ errors.first('prenom') }}</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- EMAIL -->
+
+                                <div class="form-group" :class="{'input': true,'has-error': errors.has('email') || msgemail }">
+                                    <label for="email">Email</label>
+
+                                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                                        <i class="glyphicon glyphicon-envelope"></i>
+                                        <input type="email" v-validate="'email'" name="email" id="email" tabindex="2" class="form-control" placeholder="eric.dupont@viseo.com"  v-model="collaborator.email" @focus="isNewEmail = true; msgemail = false" @blur="messageEmail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                                        <span v-show="msgemail && !errors.has('email')" class="color-red ">Email est obligatoire.</span>
+                                        <span v-show="errors.has('email')" class="color-red ">{{ errors.first('email') }}</span>
+                                        <span v-show="!isNewEmail" class="color-red ">Ce email a déjà été enregistré.</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- MOT DE PASSE -->
+
+                                <div class="form-group" :class="{'input': true, 'has-error': errors.has('mdp') || msgpwd }">
+                                    <label for="mdp">Mot de passe</label>
+
+                                    <div class="password" :class="{ 'control': true }">
+                                        <i class="glyphicon glyphicon-lock"></i>
+                                        <span @click="showPass = !showPass" v-show="!showPass && collaborator.password" class="glyphicon glyphicon-eye-open" > </span>
+                                        <span @click="showPass = false" v-show="showPass && collaborator.password" class="glyphicon glyphicon-eye-close" > </span>
+                                        <input type="password" v-model="collaborator.password" v-show="!showPass" v-validate="'mdp'" name="mdp" id="mdp" tabindex="2" class="form-control" placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="msgpwd = false" @blur="messagePwd">
+                                        <input type="text" v-model="collaborator.password" v-show="showPass"v-validate="'mdp'" name="mdp" id="mdp2" tabindex="2" class="form-control" @focus="msgpwd = false" @blur="messagePwd" >
+                                        <span v-show="msgpwd && !errors.has('mdp')" class="color-red ">Mot de passe est obligatoire.</span>
+                                        <span v-show="errors.has('mdp')" class="color-red">{{ errors.first('mdp') }}</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- CONFIRMATION MOT DE PASSE -->
+
+                                <div class="form-group" :class="{'input': true, 'has-error': errors.has('mdpc') || msgconfirmpwd }">
+                                    <label for="mdpc">Confirmation mot de passe</label>
+
+                                    <div class="password" :class="{ 'control': true }">
+                                        <i class="glyphicon glyphicon-lock "></i>
+                                        <span @click="showPassConf = !showPassConf" v-show="!showPassConf && collaborator.confirmPassword" class="glyphicon glyphicon-eye-open " > </span>
+                                        <span @click="showPassConf = false" v-show="showPassConf && collaborator.confirmPassword" class="glyphicon glyphicon-eye-close " > </span>
+                                        <input type="password"  v-model="collaborator.confirmPassword" v-validate="'confirmed:mdp'" v-show="!showPassConf" name="mdpc" id="mdpc" tabindex="2" class="form-control" placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="msgconfirmpwd = false" @blur="messageConfirmpwd">
+                                        <input type="text"  v-model="collaborator.confirmPassword" v-validate="'confirmed:mdp'" v-show="showPassConf" name="mdpc" id="mdpc2" tabindex="2" class="form-control" @focus="msgconfirmpwd = false" @blur="messageConfirmpwd">
+                                        <span v-show="msgconfirmpwd && !errors.has('mdpc')" class="color-red ">Confirmation est obligatoire.</span>
+                                        <span v-show="errors.has('mdpc')" class="color-red">{{ errors.first('mdpc') }}</span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-lg-offset-3 col-md-offset-3">
+                                            <button type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-primary" >S'inscrire</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </form>
 
-                        </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" class="text-center">
-                                <div>
-                                    <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-                                    <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                          class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                                    <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                          class="text-center color-green ">La formation a été créée avec succès.</span>
-                                    <span v-show="errors.has('formation') && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                           class="color-red">{{ errors.first('formation') }}</span>
 
-                                </div>
-                            </td>
-                            <td class="text-center td-right" style="height: 60px;">
-                                <div>
-                                    <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
-                                    <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
-                                    <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-                                    <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
-                                </div>
-                            </td>
-                        </tr>
+                        </div>
 
-                    </table>
-                </form>
-
-            </div>
-        </div><!--Fin row 1-->
-    </div>
-
-    <div class="container-fluid" id="addFormation">
-        <div class="row" ><!-- row 1-->
-            <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-            <div class="col-sm-12 col-md-10 col-lg-7">
-
-                <div class="row">
-
-                    <div class="col-lg-7 col-md-7 text-center">
-                        <legend>Formation ajoutées</legend>
                     </div>
                 </div>
 
-                <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid;" id="test">
-                    <img src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%;">
-                    <table class="fix tabnonborder" >
 
-                        <tbody>
-                        <tr>
-                            <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
-                            <td>
-                                <template v-for="grandgroup in allTopicTraining">
-                                    <table class="table table-borderless tabnonborder fix">
-                                        <div class="row">
-                                            <thead>
-                                            <tr>
-                                                <th class="col-lg-3 col-md-3">{{grandgroup[0][0].topicDescription.name}}</th>
-                                                <th class="col-lg-3 col-md-3"></th>
-                                                <th class="col-lg-3 col-md-3"></th>
-                                                <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                                            </tr>
-                                            </thead>
-                                        </div>
 
-                                        <div class="row">
-                                            <tbody>
-                                            <tr v-for="group in grandgroup">
-                                                <td class="col-lg-3 col-md-3" v-for="training in group">
-                                                    <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </div>
 
-                                        </tr>
-                                    </table>
-                                </template>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <img src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%">
-                </div>
+
             </div>
-        </div><!--Fin row 2-->
+
+
+
+        </div>
+
+
     </div>
 </div>
-<script src="app/controller/registerTrainingTopic.js"></script>
-<script src="app/controller/scroll.js"></script>
+</div>
+</div>
+
+</div>
+
+
+
+<script src="app/controller/registerCollaborator.js"></script>
+
+
 </body>
 </html>

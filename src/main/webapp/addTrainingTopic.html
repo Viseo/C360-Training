@@ -10,7 +10,7 @@
     <script src="lib/vue.js"></script>
     <script src="lib/vee-validate.js"></script>
     <script src="lib/vue-resource.js"></script>
-    <script src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
 
     <title>AjouterFormation</title>
 </head>
@@ -129,13 +129,10 @@
                 </div>
 
                 <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid;" id="test">
-                    <input type="button" value="Scroll" id="scroll-up"/>
+                    <img src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%;">
+                    <table class="fix tabnonborder" >
 
-                    <table class="fix tabnonborder">
                         <tbody>
-                        <tr>
-                            <td></td>
-                        </tr>
                         <tr>
                             <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
                             <td>
@@ -165,14 +162,11 @@
                                         </tr>
                                     </table>
                                 </template>
-
                             </td>
                         </tr>
-                        <tr><td><input type="button" value="Scroll" id="scroll-down" /></td></tr>
                         </tbody>
-
                     </table>
-
+                    <img src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%">
                 </div>
             </div>
         </div><!--Fin row 2-->
