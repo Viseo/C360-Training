@@ -44,10 +44,13 @@ new Vue({
         color_connexion: 'color-blue',
         tabconnexion: "tab",
         tabinscription: "tab active",
-        Msgmatricule:true
-
-
-    },
+        isMatriculeValid:true,
+        isLastNameValid:true,
+        isFirstNameValid:true,
+        isEmailValid :true,
+        isPasswordValid:true,
+        isConfirmPasswordValid:true
+},
     watch: {
         personnalIdNumber: function(value) {
             this.VerfiMatricule(value, 'matriculeMsg');
@@ -75,16 +78,14 @@ new Vue({
             this.msgmatricule = false;
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
                 this[msg] = '';
-                return true;
-                this.Msgmatricule = true;
+                this.isMatriculeValid = true;
             } else {
                 this[msg] = 'Veuillez entrer  code de login valide';
-                return false;
-                this.Msgmatricule = false;
+                this.isMatriculeValid = false;
             }
         },
         messageMatricule(){
-            this.Msgmatricule = true;
+            this.isMatriculeValid = true;
             if (this.personnalIdNumber == '') {
                 this.msgmatricule = true;
             }
@@ -92,13 +93,14 @@ new Vue({
         verifLastName(lastName, msg) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
                 this[msg] = '';
-                return true;
+                this.isLastNameValid=true;
             } else {
                 this[msg] = 'Veuillez entrer un nom valide';
-                return false;
+                this.isLastNameValid=false;
             }
         },
         messageNom(){
+            this.isLastNameValid=true;
             if(this.lastName == ''){
                 this.msgnom = true;
             }
@@ -106,13 +108,14 @@ new Vue({
         verifFirstName(firstName, msg) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/ .test(firstName)) {
                 this[msg] = '';
-                return true;
+                this.isFirstNameValid=true;
             } else {
                 this[msg] = 'Veuillez entrer un Prénom valide';
-                return false;
+                this.isFirstNameValid=false;
             }
         },
         messagePrenom(){
+            this.isFirstNameValid = true;
             if(this.firstName == ''){
                 this.msgprenom = true;
             }
@@ -120,13 +123,14 @@ new Vue({
         verifEmail(email, msg) {
             if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)) {
                 this[msg] = '';
-                return true;
+                this.isEmailValid=true;
             } else {
                 this[msg] = 'Veuillez entrer un email valide';
-                return false;
+                this.isEmailValid=false;
             }
         },
         messageEmail(){
+            this.isEmailValid=true;
             if(this.email == ''){
                 this.msgemail = true;
             }
@@ -134,13 +138,14 @@ new Vue({
         verifPassword(password, msg) {
             if (/^(.){6,125}$/.test(password)) {
                 this[msg] = '';
-                return true;
+                this.isPasswordValid=true;
             } else {
                 this[msg] = 'Le mot de passe doit avoir au minimum 6 caractères';
-                return false;
+                this.isPasswordValid=false;
             }
         },
         messagePwd(){
+            this.isPasswordValid=true;
             if(this.password == ''){
                 this.msgpwd = true;
             }
@@ -148,13 +153,14 @@ new Vue({
         verifConfirmPassword(confirmPassword, msg) {
             if (this.confirmPassword === this.password) {
                 this[msg] = '';
-                return true;
+                this.isConfirmPasswordValid=true;
             } else {
                 this[msg] = 'La confirmation du mot de passe n\'est pas valide';
-                return false;
+                this.isConfirmPasswordValid=false;
             }
         },
         messageConfirmpwd(){
+            this.isConfirmPasswordValid=true;
             if(this.confirmPassword == ''){
                 this.msgconfirmpwd = true;
             }
