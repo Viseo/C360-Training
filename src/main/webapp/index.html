@@ -29,7 +29,7 @@
                                 <!-- MATRICULE-->
                                 <div class="form-group">
                                     <label for="matricule">Code de login</label>
-                                    <div class="inner-addon left-addon" :class="{'has-error': msgmatricule || !isMatriculeValid}">
+                                    <div class="inner-addon left-addon" :class="{'has-error': msgmatricule || !isMatriculeValid || !isNewPersonalIdNumber}">
                                         <i class="glyphicon glyphicon-barcode"></i>
                                         <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
                                                placeholder="ABC1234" v-model="personnalIdNumber" @focus="msgmatricule = false" @blur="messageMatricule"
@@ -65,7 +65,7 @@
 
                                 </div>
                                 <!-- EMAIL-->
-                                <div class="form-group" :class="{'has-error':!isEmailValid || msgemail }">
+                                <div class="form-group" :class="{'has-error':!isEmailValid || msgemail || !isEmailValid}">
                                     <label for="email">Email</label>
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-envelope"></i>
