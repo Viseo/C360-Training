@@ -27,6 +27,9 @@ var TrainingTopic = new Vue({
         isNewTrainingTitle: true,
         isNewTopic: true,
         confirmFormation: false,
+        optionsTraining:[],
+        trainingsChosen:[],
+        topicsChosen:[],
         confirmTopic: false,
         msgtrainingTitle: false,
         msgnumberHalfDays: false,
@@ -34,23 +37,24 @@ var TrainingTopic = new Vue({
         msgname: false,
         isTrainingTitleValid: true,
         isNameThemeValid:true,
+        test:undefined,
+        trainingsOfTopic:[],
+        allTopicTraining:[]
     },
     watch: {
         trainingTitle: function (value) {
             this.VerifTrainingTitle(value, 'trainingTitleMsg');
         },
 
-
-        trainingTitle: function (value) {
-            this.VerifTrainingTitle(value, 'trainingTitleMsg');
-        },
-
-
         nameTheme: function (value) {
             this.VerifnameTheme(value, 'nameThemeMsg');
         },
     },
+    mounted: function(){
+        this.updateTopics();
+        this.updateTrainings();
 
+    },
     methods: {
         VerifTrainingTitle(trainingTitle, msg) {
             if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(trainingTitle)) {
@@ -59,7 +63,6 @@ var TrainingTopic = new Vue({
             } else {
                 this[msg] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
                 this.isTrainingTitleValid = false;
-
             }
         },
         messageTrainingTitle(){
@@ -78,7 +81,6 @@ var TrainingTopic = new Vue({
                 this.msgtopic = true;
             }
         },
-
         VerifnameTheme(nameTheme, msg) {
             if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(nameTheme)) {
                 this[msg] = '';
@@ -100,9 +102,6 @@ var TrainingTopic = new Vue({
             this.topicDescription = '';
             this.trainingToRegister = {};
         },
-        resetFormTheme(){
-            this.theme.nouveautheme = '';
-        },
         saveTrainingAction() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
@@ -112,6 +111,7 @@ var TrainingTopic = new Vue({
                     function (response) {
                         this.isNewTrainingTitle = true;
                         this.confirmFormation = true;
+                        this.updateTrainings();
                         this.resetTrainingForm();
                         this.resetTopicForm();
                     },
@@ -139,19 +139,6 @@ var TrainingTopic = new Vue({
             }
         },
 
-        updateTopics(){
-            this.$http.get("api/themes").then(
-                function (response) {
-                    this.optionsTopic = response.data;
-
-                    this.resetTopicForm();
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
         resetTopicForm() {
             this.nameTheme = '';
             this.topicToRegister = {};
@@ -185,7 +172,110 @@ var TrainingTopic = new Vue({
                 this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
                 this.saveTopicAction();
             }
+        },
+
+        updateTopics(){
+            this.$http.get("api/themes").then(
+                function (response) {
+                    this.optionsTopic = response.data;
+                    this.optionsTopic.sort(function (a, b) {
+                        return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                    });
+                    this.resetTopicForm();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        updateTrainings (){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.optionsTraining = response.data;
+                    this.optionsTraining.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    this.resetTrainingForm();
+                    this.TopicwithTraining();
+                    this.TopicTrainingTraim();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        TopicwithTraining(){
+            this.trainingsChosen = [];
+            for (var tmp in this.optionsTraining) {
+                this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
+            }
+            this.trainingsChosen = this.removeDuplicates(this.trainingsChosen, "id");
+            this.trainingsChosen.sort(function (a, b) {
+                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+            });
+        },
+        removeDuplicates(arr, prop) {
+            var new_arr = [];
+            var lookup = {};
+
+            for (var i in arr) {
+                lookup[arr[i][prop]] = arr[i];
+            }
+
+            for (i in lookup) {
+                new_arr.push(lookup[i]);
+            }
+
+            return new_arr;
+        },
+        TrainingTraim(value){
+            this.test = [];
+            var tmp = [];
+            var longueur = value.length;
+            var compteur = 0;
+            for (var element in value) {
+                longueur--;
+                compteur++;
+                if (compteur >= 1 && compteur < 4) {
+                    tmp.push(value[element]);
+                    if (longueur == 0) {
+                        this.test.push(tmp);
+                    }
+                } else if (compteur == 4) {
+                    tmp.push(value[element]);
+                    this.test.push(tmp);
+                    tmp = [];
+                    compteur = 0;
+                }
+            }
+            return this.test;
+        },
+        TrainingFilter(value){
+            this.trainingsOfTopic = [];
+            for (var tmp in this.optionsTraining) {
+                if (this.optionsTraining[tmp].topicDescription.name == value) {
+                    this.trainingsOfTopic.push(this.optionsTraining[tmp]);
+                }
+            }
+            return this.trainingsOfTopic;
+        },
+        TopicTrainingTraim(){
+            this.allTopicTraining = [];
+            for (var tmp in this.trainingsChosen) {
+                this.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.trainingsChosen[tmp].name)));
+            }
+        },
+        isEmptyFormation(){
+            if (this.trainingsChosen.length > 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
+
         }
+
     }
 });
-window.onload = TrainingTopic.updateTopics();

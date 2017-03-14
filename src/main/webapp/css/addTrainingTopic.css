@@ -5,7 +5,7 @@ legend{
     margin-left: 25px;
     padding: 0 10px;
     border-bottom: none;
-    background-color: #0F1B65;
+    background-color: #428bca;
     color: white;
 }
 
@@ -37,6 +37,52 @@ table td {
 .color-grey {color: #A9A9A9;}
 .color-red {color: #B22222;}
 
-[v-cloak] {
-    display: none;
+.table-borderless tbody tr td,
+.table-borderless tbody tr th,
+.table-borderless thead tr th,
+.table-borderless thead tr td,
+.table-borderless tfoot tr th,
+.table-borderless tfoot tr td {
+    border-top: none;
 }
+
+.deletetopic{
+    text-align: right;
+    padding-top:20px;
+    font-size:12px;
+    font-family:arial;
+    font-weight: normal;
+
+}
+
+.changecolor:hover{
+    color: #bc0f0b;
+
+}
+a.changecolor{
+    text-decoration:none;
+    color: black;
+}
+
+#addFormation button{
+    font-weight: bold;
+    width:100%;
+    height:35px;
+    font-size: 80%;
+
+}
+
+
+.tabnonborder{
+    border:none;
+}
+
+table.fix{
+    table-layout: fixed;
+    margin:0;
+    border-collapse: collapse;
+
+}
+
+
+[v-cloak] { display:none; }
