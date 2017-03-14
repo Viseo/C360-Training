@@ -10,179 +10,169 @@
     <script src="lib/vue.js"></script>
     <script src="lib/vee-validate.js"></script>
     <script src="lib/vue-resource.js"></script>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
 
     <title>AjouterFormation</title>
-    <script src="lib/jquery.tools.min.js"></script>
 </head>
 <body>
 <div id="TrainingTopic" v-cloak>
 
 
-<div class="container-fluid">
-    <div class="row"><!-- row 1-->
-        <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
-        <div class="col-sm-12 col-md-10 col-lg-7">
+    <div class="container-fluid">
+        <div class="row"><!-- row 1-->
+            <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
+            <div class="col-sm-12 col-md-10 col-lg-7">
 
-            <form class="" @submit.prevent="verifyTrainingForm">
-                <div class="row">
-                <div class="col-lg-7 col-md-7 text-center">
-                    <legend>Ajouter une formation</legend>
-                </div>
-                </div>
-                <table>
-                    <td width="20%">
-                        <div class="form-group" :class="{'input': true,'has-error': errors.has('formation') }">
-                            <label for="formation" class="label-control">Formation</label><br/><br/>
-                            <input type="text" v-validate="'formation'" class="form-control" id="formation"
-                                   name="formation"
-                                   v-model="training.trainingTitle"
-                                   @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                   @blur="messageTrainingTitle" placeholder="Formation"
-                                   maxlength="20">
-
-
+                <form class="" @submit.prevent="verifyTrainingForm">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7 text-center">
+                            <legend>Ajouter une formation</legend>
                         </div>
-                    </td>
-                    <td width="15%">
-                        <div class="form-group">
-                            <label>1/2 journées</label><br/><br/>
-                            <select class="form-control" v-model="training.numberHalfDays"
-                                    @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                    @blur="messageNumberHalfDays">
-                                <option v-for="n in 200">{{n}}</option>
-                            </select>
-                        </div>
-                    </td>
-                    <td width="20%">
-                        <div class="form-group">
-                            <label>Thèmes</label><br/><br/>
-                            <select class="form-control" v-model="training.topicDescription"
-                                    @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                    @blur="messageTopic">
-                                <option v-for="option in optionsTopic" :value="option">{{ option.name }}
-                                </option>
-                            </select>
-                        </div>
-                    </td>
-                    <td class="text-center" width="20%">
-                        <div class="form-group">
-                            <label></label><br/><br/>
-                            <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
-                        </div>
+                    </div>
+                    <table>
+                        <td width="20%">
+                            <div class="form-group" :class="{'input': true,'has-error': errors.has('formation') }">
+                                <label for="formation" class="label-control">Formation</label><br/><br/>
+                                <input type="text" v-validate="'formation'" class="form-control" id="formation"
+                                       name="formation"
+                                       v-model="training.trainingTitle"
+                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
+                                       @blur="messageTrainingTitle" placeholder="Formation"
+                                       maxlength="20">
 
-                    </td>
-                    <td width="30%" class="td-right">
-                        <form>
-                            <div class=" form-group has-feedback"
-                                 :class="{'input': true,'has-error': errors.has('topic') }">
-                                <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
-                                <input type="text" class="form-control" id="topic" name="topic" v-model="topic.name"
-                                       @focus="msgname = false; confirmTopic = false; isNewTopic = true;"
-                                       @blur="messageName" placeholder="Thème" v-validate="'topic'">
-                                <span class="glyphicon glyphicon-floppy-save form-control-feedback"
-                                      @click="verifyTopicForm" style="margin-top: 20px;"></span>
-                            </div>
-                        </form>
-
-                    </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" class="text-center">
-                            <div>
-                                <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-                                <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                      class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                                <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                      class="text-center color-green ">La formation a été créée avec succès.</span>
-                                <span v-show="errors.has('formation') && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                                       class="color-red">{{ errors.first('formation') }}</span>
 
                             </div>
                         </td>
-                        <td class="text-center td-right" style="height: 60px;">
-                            <div>
-                                <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
-                                <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
-                                <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-                                <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
+                        <td width="15%">
+                            <div class="form-group">
+                                <label>1/2 journées</label><br/><br/>
+                                <select class="form-control" v-model="training.numberHalfDays"
+                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;"
+                                        @blur="messageNumberHalfDays">
+                                    <option v-for="n in 200">{{n}}</option>
+                                </select>
                             </div>
                         </td>
-                    </tr>
+                        <td width="20%">
+                            <div class="form-group">
+                                <label>Thèmes</label><br/><br/>
+                                <select class="form-control" v-model="training.topicDescription"
+                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
+                                        @blur="messageTopic">
+                                    <option v-for="option in optionsTopic" :value="option">{{ option.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="text-center" width="20%">
+                            <div class="form-group">
+                                <label></label><br/><br/>
+                                <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
+                            </div>
 
-                </table>
-            </form>
+                        </td>
+                        <td width="30%" class="td-right">
+                            <form>
+                                <div class=" form-group has-feedback"
+                                     :class="{'input': true,'has-error': errors.has('topic') }">
+                                    <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
+                                    <input type="text" class="form-control" id="topic" name="topic" v-model="topic.name"
+                                           @focus="msgname = false; confirmTopic = false; isNewTopic = true;"
+                                           @blur="messageName" placeholder="Thème" v-validate="'topic'">
+                                    <span class="glyphicon glyphicon-floppy-save form-control-feedback"
+                                          @click="verifyTopicForm" style="margin-top: 20px;"></span>
+                                </div>
+                            </form>
 
-        </div>
-    </div><!--Fin row 1-->
-</div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div>
+                                    <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
+                                    <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+                                          class="text-center color-red ">Veuillez remplir tous les champs.</span>
+                                    <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+                                          class="text-center color-green ">La formation a été créée avec succès.</span>
+                                    <span v-show="errors.has('formation') && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+                                           class="color-red">{{ errors.first('formation') }}</span>
+
+                                </div>
+                            </td>
+                            <td class="text-center td-right" style="height: 60px;">
+                                <div>
+                                    <span v-show="msgname"  class="text-center color-red ">Veuillez remplir le champ.</span>
+                                    <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
+                                    <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                                    <span v-show="errors.has('topic') && !msgname"  class="color-red">{{ errors.first('topic') }}</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+
+            </div>
+        </div><!--Fin row 1-->
+    </div>
 
     <div class="container-fluid" id="addFormation">
-    <div class="row" ><!-- row 1-->
-        <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-        <div class="col-sm-12 col-md-10 col-lg-7">
+        <div class="row" ><!-- row 1-->
+            <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+            <div class="col-sm-12 col-md-10 col-lg-7">
 
-            <div class="row">
+                <div class="row">
 
-                <div class="col-lg-7 col-md-7 text-center">
-                <legend>Formation ajoutées</legend>
+                    <div class="col-lg-7 col-md-7 text-center">
+                        <legend>Formation ajoutées</legend>
+                    </div>
+                </div>
+
+                <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid;" id="test">
+                    <img src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%;">
+                    <table class="fix tabnonborder" >
+
+                        <tbody>
+                        <tr>
+                            <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
+                            <td>
+                                <template v-for="grandgroup in allTopicTraining">
+                                    <table class="table table-borderless tabnonborder fix">
+                                        <div class="row">
+                                            <thead>
+                                            <tr>
+                                                <th class="col-lg-3 col-md-3">{{grandgroup[0][0].topicDescription.name}}</th>
+                                                <th class="col-lg-3 col-md-3"></th>
+                                                <th class="col-lg-3 col-md-3"></th>
+                                                <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                            </tr>
+                                            </thead>
+                                        </div>
+
+                                        <div class="row">
+                                            <tbody>
+                                            <tr v-for="group in grandgroup">
+                                                <td class="col-lg-3 col-md-3" v-for="training in group">
+                                                    <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </div>
+
+                                        </tr>
+                                    </table>
+                                </template>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <img src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%">
                 </div>
             </div>
-
-                <table class="fix">
-
-
-                    <tr><td><button class="glyphicon glyphicon-chevron-up" style="width:40px; position: absolute; left: 50%; margin-top: 5%;" id="scroll-up" ></button></td></tr>
-
-                        <td v-show="isEmptyFormation()" >Aucune formation n'a été créé.</td>
-                        <td>
-                            <div class="scrollit" id="test">
-                        <template v-for="grandgroup in allTopicTraining">
-                        <table class="table table-borderless tabnone fix">
-                            <div class="row">
-                                <thead>
-                                <tr>
-                                    <th class="col-lg-3 col-md-3">{{grandgroup[0][0].topicDescription.name}}</th>
-                                    <th class="col-lg-3 col-md-3"></th>
-                                    <th class="col-lg-3 col-md-3"></th>
-                                    <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                                </tr>
-                                </thead>
-                            </div>
-
-
-                            <div class="row">
-
-                                <tr v-for="group in grandgroup">
-                                    <td class="col-lg-3 col-md-3" v-for="training in group">
-                                        <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
-                                    </td>
-                                </tr>
-
-                            </div>
-
-                            </tr>
-                            </table>
-                        </template>
-                            </div>
-                        </td>
-
-                    <tr><td><button class="glyphicon glyphicon-chevron-down" style="width:40px; position: absolute; left: 50%; margin-top: 40%;" id="scroll-down"></button></td></tr>
-
-                </table>
-
-        </div>
-    </div><!--Fin row 2-->
-</div>
+        </div><!--Fin row 2-->
+    </div>
 </div>
 <script src="app/controller/registerTrainingTopic.js"></script>
-<script>
-    $('#scroll-down').click(function() {
-        $('#test').animate({scrollTop: +250}, 1000);
-    })
-
-    $('#scroll-up').click(function() {
-        $('#test').animate({scrollTop: -250}, 1000);
-    })
-</script>
+<script src="app/controller/scroll.js"></script>
 </body>
 </html>
