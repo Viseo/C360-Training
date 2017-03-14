@@ -36,7 +36,7 @@
                                                onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
                                         <span v-show="msgmatricule" class="color-red">Matricule est obligatoire.</span>
                                         <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
-                                        <span v-show="!isMatriculeValid" class="color-red">{{ matriculeMsg }}</span>
+                                        <span v-show="!isMatriculeValid && !msgmatricule" class="color-red">{{ matriculeMsg }}</span>
                                     </div>
                                 </div>
                                 <!-- NOM -->
@@ -48,7 +48,7 @@
                                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="msgnom = false" @blur="messageNom"
                                                maxlength="125" minlength="2">
                                         <span v-show="msgnom" class="color-red">Nom est obligatoire.</span>
-                                        <span v-show="!isLastNameValid" class="color-red">{{ lastNameMsg }}</span>
+                                        <span v-show="!isLastNameValid && !msgnom" class="color-red">{{ lastNameMsg }}</span>
                                     </div>
                                 </div>
                                 <!-- PRENOM -->
@@ -60,7 +60,7 @@
                                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="msgprenom = false" @blur="messagePrenom"
                                                maxlength="125" minlength="2">
                                         <span v-show="msgprenom" class="color-red ">Prénom est obligatoire.</span>
-                                        <span v-show="!isFirstNameValid" class="color-red">{{ firstNameMsg }}</span>
+                                        <span v-show="!isFirstNameValid && !msgprenom" class="color-red">{{ firstNameMsg }}</span>
                                     </div>
 
                                 </div>
@@ -74,7 +74,7 @@
                                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                                         <span v-show="msgemail" class="color-red ">Email est obligatoire.</span>
                                         <span v-show="!isEmailValid" class="color-red">{{ emailMsg }}</span>
-                                        <span v-show="!isNewEmail" class="color-red ">Ce email a déjà été enregistré.</span>
+                                        <span v-show="!isNewEmail && !msgemail" class="color-red ">Ce email a déjà été enregistré.</span>
                                     </div>
                                 </div>
                                 <!-- MOT DE PASSE -->
@@ -90,7 +90,7 @@
                                         <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
                                                @focus="msgpwd = false" @blur="messagePwd">
                                         <span v-show="msgpwd"  class="color-red ">Mot de passe est obligatoire.</span>
-                                        <span v-show="!isPasswordValid" class="color-red">{{ passwordMsg }}</span>
+                                        <span v-show="!isPasswordValid && !msgpwd" class="color-red">{{ passwordMsg }}</span>
                                     </div>
                                 </div>
                                 <!-- CONFIRMATION MOT DE PASSE -->
@@ -106,7 +106,7 @@
                                         <input type="text" v-model="confirmPassword" v-show="showPassConf" name="mdpc" id="mdpc2" tabindex="2" class="form-control"
                                                @focus="msgconfirmpwd = false"  @blur="messageConfirmpwd">
                                         <span v-show="msgconfirmpwd" class="color-red ">Confirmation est obligatoire.</span>
-                                        <span v-show="!isConfirmPasswordValid" class="color-red">{{ confirmPasswordMsg }}</span>
+                                        <span v-show="!isConfirmPasswordValid && !msgconfirmpwd" class="color-red">{{ confirmPasswordMsg }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
