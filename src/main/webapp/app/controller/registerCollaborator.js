@@ -65,6 +65,7 @@ new Vue({
         },
         password: function(value) {
             this.verifPassword(value, 'passwordMsg');
+            this.verifConfirmPassword(value, 'passwordMsg');
         },
         confirmPassword: function(value) {
             this.verifConfirmPassword(value, 'confirmPasswordMsg');
@@ -157,21 +158,6 @@ new Vue({
                 this.msgconfirmpwd = true;
             }
         },
-        resetForm() {
-            this.personnalIdNumber = '';
-            this.lastName = '';
-            this.firstName = '';
-            this.email = '';
-            this.password = '';
-            this.confirmPassword = '';
-            this.collaboratorToRegister = {};
-            this.isMatriculeValid='';
-            this.isLastNameValid='';
-            this.isFirstNameValid='';
-            this.isEmailValid ='';
-            this.isPasswordValid='';
-            this.isConfirmPasswordValid='';
-        },
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
             //post the form to the server
@@ -180,8 +166,7 @@ new Vue({
                     function (response) {
                         this.isNewEmail = true;
                         this.isNewPersonalIdNumber = true;
-                        this.resetForm(); //Reset the Form
-                        window.location.replace('pageblanche.html');
+                        window.location.pathname = '/pageblanche.html';
                     },
                     function (response) {
                         console.log("Error: ",response);
