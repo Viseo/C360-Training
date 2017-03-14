@@ -65,7 +65,6 @@ var TrainingTopic = new Vue({
             }
         },
         messageTrainingTitle(){
-            this.isTrainingTitleValid = true;
             if (this.trainingTitle == '') {
                 this.msgtrainingTitle = true;
             }

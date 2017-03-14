@@ -69,7 +69,6 @@ new Vue({
         confirmPassword: function(value) {
             this.verifConfirmPassword(value, 'confirmPasswordMsg');
         }
-
     },
     methods: {
         VerfiMatricule(personnalIdNumber, msg) {
@@ -84,7 +83,6 @@ new Vue({
             }
         },
         messageMatricule(){
-            this.isMatriculeValid = true;
             if (this.personnalIdNumber == '') {
                 this.msgmatricule = true;
             }
@@ -99,7 +97,6 @@ new Vue({
             }
         },
         messageNom(){
-            this.isLastNameValid=true;
             if(this.lastName == ''){
                 this.msgnom = true;
             }
@@ -114,13 +111,12 @@ new Vue({
             }
         },
         messagePrenom(){
-            this.isFirstNameValid = true;
             if(this.firstName == ''){
                 this.msgprenom = true;
             }
         },
         verifEmail(email, msg) {
-            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)) {
+            if (/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email)) {
                 this[msg] = '';
                 this.isEmailValid=true;
             } else {
@@ -129,7 +125,6 @@ new Vue({
             }
         },
         messageEmail(){
-            this.isEmailValid=true;
             if(this.email == ''){
                 this.msgemail = true;
             }
@@ -144,7 +139,6 @@ new Vue({
             }
         },
         messagePwd(){
-            this.isPasswordValid=true;
             if(this.password == ''){
                 this.msgpwd = true;
             }
@@ -159,7 +153,6 @@ new Vue({
             }
         },
         messageConfirmpwd(){
-            this.isConfirmPasswordValid=true;
             if(this.confirmPassword == ''){
                 this.msgconfirmpwd = true;
             }
@@ -172,6 +165,12 @@ new Vue({
             this.password = '';
             this.confirmPassword = '';
             this.collaboratorToRegister = {};
+            this.isMatriculeValid='';
+            this.isLastNameValid='';
+            this.isFirstNameValid='';
+            this.isEmailValid ='';
+            this.isPasswordValid='';
+            this.isConfirmPasswordValid='';
         },
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
