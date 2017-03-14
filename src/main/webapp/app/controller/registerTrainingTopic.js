@@ -65,17 +65,17 @@ var TrainingTopic = new Vue({
             }
         },
         messageTrainingTitle(){
-            if (this.trainingTitle == '') {
+            if (this.trainingTitle == '' || this.trainingTitle == undefined) {
                 this.msgtrainingTitle = true;
             }
         },
         messageNumberHalfDays(){
-            if (this.numberHalfDays == '') {
+            if (this.numberHalfDays == '' || this.numberHalfDays == undefined) {
                 this.msgnumberHalfDays = true;
             }
         },
         messageTopic(){
-            if (this.topicDescription == '') {
+            if (this.topicDescription == '' || this.topicDescription == undefined) {
                 this.msgtopic = true;
             }
         },
@@ -90,7 +90,7 @@ var TrainingTopic = new Vue({
         },
         messageName(){
             this.isNameThemeValid = true;
-            if (this.nameTheme == '') {
+            if (this.nameTheme == '' || this.nameTheme == undefined) {
                 this.msgname = true;
             }
         },
