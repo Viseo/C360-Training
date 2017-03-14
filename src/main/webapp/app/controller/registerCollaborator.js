@@ -165,6 +165,12 @@ new Vue({
             this.password = '';
             this.confirmPassword = '';
             this.collaboratorToRegister = {};
+            this.isMatriculeValid='';
+            this.isLastNameValid='';
+            this.isFirstNameValid='';
+            this.isEmailValid ='';
+            this.isPasswordValid='';
+            this.isConfirmPasswordValid='';
         },
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
