@@ -65,7 +65,7 @@
 
                                 </div>
                                 <!-- EMAIL-->
-                                <div class="form-group" :class="{'has-error':!isEmailValid || msgemail || !isEmailValid}">
+                                <div class="form-group" :class="{'has-error':!isEmailValid || msgemail || !isNewEmail}">
                                     <label for="email">Email</label>
                                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                                         <i class="glyphicon glyphicon-envelope"></i>
@@ -73,8 +73,8 @@
                                                v-model="email" @focus="isNewEmail = true; msgemail = false"  @blur="messageEmail" onfocus="this.placeholder = ''"
                                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                                         <span v-show="msgemail" class="color-red ">Email est obligatoire.</span>
-                                        <span v-show="!isEmailValid" class="color-red">{{ emailMsg }}</span>
-                                        <span v-show="!isNewEmail && !msgemail" class="color-red ">Ce email a déjà été enregistré.</span>
+                                        <span v-show="!isEmailValid && !msgemail" class="color-red">{{ emailMsg }}</span>
+                                        <span v-show="!isNewEmail" class="color-red ">Ce email a déjà été enregistré.</span>
                                     </div>
                                 </div>
                                 <!-- MOT DE PASSE -->
