@@ -8,25 +8,30 @@
     <link rel="stylesheet" href="css/addTrainingTopic.css">
     <script src="lib/vue.js"></script>
     <script src="lib/vue-resource.js"></script>
-    <script src="lib/vue-router.js"></script>
     <script type="text/javascript" src="lib/jquery.min.js"></script>
 
     <title>AjouterFormation</title>
 </head>
 <body>
-<div class="container-fluid" id="TrainingTopic"  v-cloak>
-    <div class="row"><!-- row 1-->
-        <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
+<div id="TrainingTopic" v-cloak>
+    <div class="container-fluid">
+        <div class="row"><!-- row 1-->
+            <div class="col-md-12" style="padding:40px;background-color:#428bca;margin-bottom: 30px;"></div>
             <div class="col-sm-12 col-md-10 col-lg-7">
                     <form class="" @submit.prevent="verifyTrainingForm">
-                        <legend>Ajouter une formation</legend>
+                        <div class="row">
+                            <div class="col-lg-7 col-md-7 text-center">
+                                <legend>Ajouter une formation</legend>
+                            </div>
+                        </div>
                         <table>
                             <td width="20%">
                                 <div class="form-group" :class="{'has-error':!isTrainingTitleValid }">
                                     <label for="formation" class="label-control">Formation</label><br/><br/>
                                     <input type="text" class="form-control" id="formation" name="formation"
                                            v-model="trainingTitle" @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                                           @blur="messageTrainingTitle" placeholder="Formation">
+                                           @blur="messageTrainingTitle" placeholder="Formation"
+                                           maxlength="20">
                                 </div>
                             </td>
                             <td width="15%">
