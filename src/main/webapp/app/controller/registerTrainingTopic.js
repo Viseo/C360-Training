@@ -2,7 +2,6 @@
  * Created by BBA3616 on 24/02/2017.
  */
 Vue.use(VueResource);
-Vue.use(VueRouter);
 
 var TrainingTopic = new Vue({
     el: '#TrainingTopic',

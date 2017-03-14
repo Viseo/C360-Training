@@ -2,7 +2,6 @@
  * Created by XME3612 on 20/02/2017.
  */
 Vue.use(VueResource);
-Vue.use(VueRouter);
 
 new Vue({
     el: '#app',
