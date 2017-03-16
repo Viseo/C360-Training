@@ -2,8 +2,66 @@
  * Created by BBA3616 on 24/02/2017.
  */
 Vue.use(VueResource);
+Vue.component('bandeau',{
+    props: ['color','size' ],
+    data: function(){
+            return {
+                styleBandeau: {
+                    'padding': this.size + 'px',
+                    'background-color': this.color,
+                    'margin-bottom': '30px'
+                }
+            }
+    },
+    template:'<div :style="styleBandeau"></div>',
+});
 
-var TrainingTopic = new Vue({
+Vue.component('table-container-title', {
+    props: ['title'],
+    template: '<div class="container-fluid">' +
+    '<div class="row">' +
+    '<div class="col-sm-12 col-md-10 col-lg-7">' +
+    '<div class="row">' +
+    '<div class="col-lg-7 col-md-7 text-center">' +
+    '<legend>{{ title }}</legend>' +
+    '</div>' +
+    '</div>' +
+    '<table>'+
+    '<slot></slot>' +
+    '</table>'+
+    '</div>' +
+    '</div>' +
+    '</div>'
+});
+
+Vue.component('drop-down-menu', {
+    props: ['valuestodisplay', 'forvalue','value','focus','blur'],
+    template: '<select v-model="value" class="form-control"' +
+    '@focus="focus"' +
+    '@blur="blur">' +
+    '<option v-for="n in parseInt(forvalue)"> {{ n }}' +
+    '</option>' +
+    '</select>'
+});
+
+Vue.component('table-field',{
+    props: ['fieldsize','fieldname'],
+    data(){
+        return {
+
+        };
+    },
+    template:'<td :width="fieldsize">'+
+    '<div class="form-group">'+
+    '<label class="label-control">{{ fieldname }}</label><br/><br/>'+
+        '<slot></slot>'+
+        '</div>'+
+        '</td>'
+
+
+});
+
+new Vue({
     el: '#TrainingTopic',
     data: {
         training: {
