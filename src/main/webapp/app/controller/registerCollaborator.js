@@ -189,7 +189,7 @@ new Vue({
             this.lastName = this.lastName.replace(/ +/g, " ").replace(/ +$/, "");
             this.firstName = this.firstName.replace(/ +/g, " ").replace(/ +$/, "");
             this.messageMatricule(); this.messageNom(); this.messagePrenom(); this.messageEmail(); this.messagePwd(); this.messageConfirmpwd();
-            if(!this.msgmatricule && !this.msgnom && !this.msgprenom && !this.msgemail && !this.msgpwd && !this.msgconfirmpwd){
+            if(!this.msgmatricule && !this.msgnom && !this.msgprenom && !this.msgemail && !this.msgpwd && !this.msgconfirmpwd && this.isConfirmPasswordValid){
                 this.isNewPersonalIdNumber = true;
                 this.isNewEmail = true;
                 this.collaborator.personnalIdNumber=this.personnalIdNumber;
