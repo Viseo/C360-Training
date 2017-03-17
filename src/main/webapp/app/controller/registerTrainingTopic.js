@@ -113,7 +113,6 @@ var TrainingTopic = new Vue({
                         this.updateTrainings();
                         this.resetTrainingForm();
                         setTimeout(function(){ this.confirmFormation = false; }.bind(this), 2000);
-
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -275,7 +274,6 @@ var TrainingTopic = new Vue({
             else {
                 return true;
             }
-
         }
 
     }
