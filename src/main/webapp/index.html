@@ -34,7 +34,7 @@
                                         <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
                                                placeholder="ABC1234" v-model="personnalIdNumber" @focus="msgmatricule = false" @blur="messageMatricule"
                                                onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
-                                        <span v-show="msgmatricule" class="color-red">Matricule est obligatoire.</span>
+                                        <span v-show="msgmatricule" class="color-red">Code de login est obligatoire.</span>
                                         <span v-show="!isNewPersonalIdNumber" class="color-red ">Ce code de login a déjà été enregistré.</span>
                                         <span v-show="!isMatriculeValid && !msgmatricule" class="color-red">{{ matriculeMsg }}</span>
                                     </div>
@@ -128,12 +128,7 @@
 </div>
 </div>
 </div>
-
 </div>
-
-
 <script src="app/controller/registerCollaborator.js"></script>
-
-
 </body>
 </html>

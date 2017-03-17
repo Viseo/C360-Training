@@ -52,11 +52,10 @@ var TrainingTopic = new Vue({
     mounted: function(){
         this.updateTopics();
         this.updateTrainings();
-
     },
     methods: {
         VerifTrainingTitle(trainingTitle, msg) {
-            if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(trainingTitle)) {
+            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
                 this[msg] = '';
                 this.isTrainingTitleValid = true;
             } else {
@@ -80,18 +79,19 @@ var TrainingTopic = new Vue({
             }
         },
         VerifnameTheme(nameTheme, msg) {
-            if (/^[a-zA-Z0-9-.'_@:+#%]*$/.test(nameTheme)) {
+            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(nameTheme)) {
                 this[msg] = '';
                 this.isNameThemeValid = true;
             } else {
                 this[msg] = "Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)";
                 this.isNameThemeValid = false;
+
             }
         },
         messageName(){
-            this.isNameThemeValid = true;
             if (this.nameTheme == '' || this.nameTheme == undefined) {
                 this.msgname = true;
+
             }
         },
         resetTrainingForm() {
@@ -99,6 +99,7 @@ var TrainingTopic = new Vue({
             this.numberHalfDays = '';
             this.topicDescription = '';
             this.trainingToRegister = {};
+
         },
         saveTrainingAction() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
@@ -111,7 +112,7 @@ var TrainingTopic = new Vue({
                         this.confirmFormation = true;
                         this.updateTrainings();
                         this.resetTrainingForm();
-                        this.resetTopicForm();
+
                     },
                     function (response) {
                         console.log("Error: ", response);
