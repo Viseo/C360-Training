@@ -30,7 +30,7 @@
                                 <div class="form-group">
                                     <label for="matricule">Code de login</label>
                                     <div class="inner-addon left-addon" :class="{'has-error': msgmatricule || !isMatriculeValid || !isNewPersonalIdNumber}">
-                                        <i class="glyphicon glyphicon-barcode"></i>
+                                        <i class="glyphicon glyphicon-th"></i>
                                         <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
                                                placeholder="ABC1234" v-model="personnalIdNumber" @focus="msgmatricule = false" @blur="messageMatricule"
                                                onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
