@@ -132,6 +132,7 @@ var TrainingTopic = new Vue({
             this.messageTrainingTitle();
             this.messageNumberHalfDays();
             this.messageTopic();
+            this.msgname=false;
             if (!this.msgtrainingTitle && !this.msgnumberHalfDays && !this.msgtopic) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
                 this.saveTrainingAction();
@@ -167,6 +168,9 @@ var TrainingTopic = new Vue({
             this.nameTheme = this.nameTheme.replace(/ +/g, "");
             this.topic.name = this.nameTheme;
             this.messageName();
+            this.msgtrainingTitle = false;
+            this.msgnumberHalfDays = false;
+            this.msgtopic = false;
             if (!this.msgname) {
                 this.isNewTopic = true;
                 this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
