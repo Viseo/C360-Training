@@ -34,12 +34,12 @@ Vue.component('table-container-title', {
     '</div>'
 });
 
-Vue.component('drop-down-menu', {
-    props: ['valuestodisplay', 'forvalue','value','focus','blur'],
+Vue.component('drop-down-menu-number', {
+    props: {number:{type: Number} , focus:{type: String} , blur :{type: String}, value:{} },
     template: '<select v-model="value" class="form-control"' +
     '@focus="focus"' +
     '@blur="blur">' +
-    '<option v-for="n in parseInt(forvalue)"> {{ n }}' +
+    '<option v-for="n in number"> {{ n }}' +
     '</option>' +
     '</select>'
 });
@@ -58,6 +58,31 @@ Vue.component('table-field',{
         '</div>'+
         '</td>'
 
+
+});
+
+Vue.component('input-text',{
+    props: ['value','focus','blur', 'insidename', 'maxletter'],
+    data(){
+        return {
+
+        };
+    },
+    template:'<input type="text" class="form-control" v-model="value" :placeholder="insidename"'+
+'@focus="focus"'+
+'@blur="blur"'+
+':maxlength="maxletter"></input>'
+
+});
+
+Vue.component('custom-button',{
+    props: ['typeofbutton','click','size', 'buttonname'],
+    data(){
+        return {
+
+        };
+    },
+    template:'<button :class="typeofbutton" :width="size" @click="click">{{ buttonname }}</button>'
 
 });
 

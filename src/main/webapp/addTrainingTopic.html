@@ -17,13 +17,24 @@
     <div>
     <bandeau size="40" color="#428bca"></bandeau>
         <table-container-title title="Ajouter une formation">
-            <table-field fieldsize="20%" fieldname="Formation"></table-field>
-            <table-field fieldsize="15%" fieldname="1/2 journées">
-                <drop-down-menu value="numberHalfDays" focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                blur="messageNumberHalfDays" forvalue="200" valuestodisplay="n"></drop-down-menu>
+            <table-field fieldsize="20%" fieldname="Formation">
+                <input-text :value="trainingTitle" insidename="Formation" v-bind:maxletter="20" focus="" bur=""></input-text>
             </table-field>
-            <table-field fieldsize="20%" fieldname="Thèmes"></table-field>
-            <table-field fieldsize="20%"></table-field>
+            <table-field fieldsize="15%" fieldname="1/2 journées">
+                <drop-down-menu-number :value="numberHalfDays" focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
+                blur="messageNumberHalfDays" v-bind:number="200"></drop-down-menu-number>
+            </table-field>
+            <table-field fieldsize="20%" fieldname="Thèmes">
+                <select class="form-control" v-model="topicDescription"
+                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
+                        @blur="messageTopic">
+                    <option v-for="option in optionsTopic">{{ option.name }}
+                    </option>
+                </select>
+            </table-field>
+            <table-field fieldsize="20%">
+                <custom-button typeofbutton="btn btn-default" size="80%" buttonname="Valider"></custom-button>
+            </table-field>
             <table-field class="td-right" fieldsize="30%" fieldname="Nouveau thème"></table-field>
         </table-container-title>
     </div>
