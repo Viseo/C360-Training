@@ -81,11 +81,13 @@ new Vue({
                 this.isLoginValid = false;
             }
         },
+
         isLoginEmpty(){
             if (this.personnalIdNumber == '') {
                 this.loginEmpty = true;
             }
         },
+
         verifyLastName(lastName, errorMessageLastName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
                 this[errorMessageLastName] = '';
@@ -95,11 +97,13 @@ new Vue({
                 this.isLastNameValid=false;
             }
         },
+
         isLastNameEmpty(){
             if(this.lastName == ''){
                 this.lastNameEmpty = true;
             }
         },
+
         verifyFirstName(firstName, errorMessageFirstName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/ .test(firstName)) {
                 this[errorMessageFirstName] = '';
@@ -109,11 +113,13 @@ new Vue({
                 this.isFirstNameValid=false;
             }
         },
+
         isFirstNameEmpty(){
             if(this.firstName == ''){
                 this.firstNameEmpty = true;
             }
         },
+
         verifyEmail(email, errorMessageEmail){
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
                     .test(email)) {
@@ -125,11 +131,13 @@ new Vue({
                 this.isEmailValid=false;
             }
         },
+
         isEmailEmpty(){
             if(this.email == ''){
                 this.emailEmpty = true;
             }
         },
+
         verifyPassword(password, errorMessagePassword) {
             if (/^(.){6,125}$/.test(password)) {
                 this[errorMessagePassword] = '';
@@ -139,6 +147,7 @@ new Vue({
                 this.isPasswordValid=false;
             }
         },
+
         isPasswordEmpty(){
             if(this.password == ''){
                 this.passwordEmpty = true;
@@ -153,11 +162,13 @@ new Vue({
                 this.isConfirmPasswordValid=false;
             }
         },
+
         isConfirmPasswordEmpty(){
             if(this.confirmPassword == ''){
                 this.confirmPasswordEmpty = true;
             }
         },
+
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
             //post the form to the server
@@ -183,6 +194,7 @@ new Vue({
                     }
                 );
         },
+
         verifyForm (){
             this.lastName = this.lastName.replace(/ +/g, " ").replace(/ +$/, "");
             this.firstName = this.firstName.replace(/ +/g, " ").replace(/ +$/, "");
