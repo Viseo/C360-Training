@@ -1,4 +1,4 @@
-import MyComponent from '../../../main/webapp/app/controller/Bandeau.Vue'
+import MyComponent from '../../../main/webapp/app/controller/bandeau.Vue'
 
 describe('test', function () {
 

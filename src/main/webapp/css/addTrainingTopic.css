@@ -15,6 +15,7 @@ legend{
 
 .form-control-feedback{
     pointer-events: auto;
+
 }
 
 table{
@@ -29,7 +30,10 @@ table td {
 }
 
 .td-right{
-    border-left: 1px solid black;
+    border-left: 1px solid #dcdcdc;
+    height: 100px;
+    position: absolute;
+    margin-left: 625px;
 }
 
 .color-green { color: #4cae4c}

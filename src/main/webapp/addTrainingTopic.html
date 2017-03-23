@@ -10,34 +10,61 @@
     <script src="lib/vue-resource.js"></script>
     <script type="text/javascript" src="lib/jquery.min.js"></script>
 
-    <title>AjouterFormation</title>
+    <title>Gestion Formation</title>
 </head>
 <body>
 <div id="TrainingTopic" v-cloak>
-    <div>
+
     <bandeau size="40" color="#428bca"></bandeau>
-        <table-container-title title="Ajouter une formation">
-            <table-field fieldsize="20%" fieldname="Formation">
-                <input-text :value="trainingTitle" insidename="Formation" v-bind:maxletter="20" focus="" bur=""></input-text>
-            </table-field>
-            <table-field fieldsize="15%" fieldname="1/2 journées">
-                <drop-down-menu-number :value="numberHalfDays" focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
-                blur="messageNumberHalfDays" v-bind:number="200"></drop-down-menu-number>
-            </table-field>
-            <table-field fieldsize="20%" fieldname="Thèmes">
-                <select class="form-control" v-model="topicDescription"
-                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;"
-                        @blur="messageTopic">
-                    <option v-for="option in optionsTopic">{{ option.name }}
-                    </option>
-                </select>
-            </table-field>
-            <table-field fieldsize="20%">
-                <custom-button typeofbutton="btn btn-default" size="80%" buttonname="Valider"></custom-button>
-            </table-field>
-            <table-field class="td-right" fieldsize="30%" fieldname="Nouveau thème"></table-field>
+    <table-container-title title="Ajouter une formation">
+        <table-field class="col-md-3 col-lg-3" fieldname="Formation">
+            <input-text :value="trainingTitle" insidename="Formation" v-bind:maxletter="20" focus="" bur=""></input-text>
+        </table-field>
+        <table-field class="col-md-2 col-lg-2" fieldname="1/2 journées">
+            <drop-down-menu-number :numberhalfdays="numberHalfDays" focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;"
+                                   blur="messageNumberHalfDays" v-bind:number="200"></drop-down-menu-number>
+        </table-field>
+        <table-field class="col-md-2 col-lg-2" fieldname="Thèmes">
+            <drop-down-menu-topic></drop-down-menu-topic>
+        </table-field>
+        <table-field class="col-md-2 col-lg-2" fieldname="">
+            <div class="row">
+            <custom-button class="col-lg-10 col-md-10 col-sm-12"typeofbutton="btn btn-default" buttonname="Valider"></custom-button>
+            </div>
+        </table-field>
+        <div class="td-right"> </div>
+        <div class="col-md-3 col-lg-3">
+
+        <table-field fieldname="Nouveau thème">
+
+            <input-form-text-icon icon="glyphicon glyphicon-plus" insidename="Thème"></input-form-text-icon>
+        </table-field>
+        </div>
+        <message-erreur></message-erreur>
+<!--<tr>
+                <td colspan="4" class="text-center">
+                    <div>
+                        <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà dans le système.</span>
+                        <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+                              class="text-center color-red ">Veuillez remplir tous les champs.</span>
+                        <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+                              class="text-center color-green ">La formation a été créée avec succès.</span>
+                        <span v-show=" !isTrainingTitleValid && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{trainingTitleMsg}}</span>
+
+                    </div>
+                </td>
+                <td class="text-center td-right" style="height: 60px;">
+                    <div>
+                        <span v-show="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
+                        <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà dans le système.</span>
+                        <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+                        <span v-show="!isNameThemeValid" class="color-red">{{ nameThemeMsg }}</span>
+                    </div>
+                </td>
+</tr></br>-->
+
         </table-container-title>
-    </div>
+
 
             <!--<td width="20%">
                 <div class="form-group" :class="{'has-error':!isTrainingTitleValid }">
