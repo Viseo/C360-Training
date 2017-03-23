@@ -31,9 +31,7 @@ table td {
 
 .td-right{
     border-left: 1px solid #dcdcdc;
-    height: 100px;
-    position: absolute;
-    margin-left: 625px;
+    position: relative;
 }
 
 .color-green { color: #4cae4c}

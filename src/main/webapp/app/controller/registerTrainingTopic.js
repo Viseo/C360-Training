@@ -346,10 +346,12 @@ template:`<div class="container-fluid">
         </div>
         </div>
         
-        <div class="col-md-3 col-lg-3">
+        <div class="td-right col-md-3 col-lg-3">
     <div class="form-group">
     <label class="label-control">Nouveau thème</label>
-        <div>
+    
+    
+        <div >
         
 <div class="form-group has-feedback" :class="{'has-error':  !isNameThemeValid  } ">
     <input type="text" class="form-control" v-model="nameTheme" 
@@ -382,121 +384,6 @@ placeholder="Thème">
     </div>
     </div>
     </div>`
-});
-
-
-Vue.component('table-container-title', {
-    props: ['title'],
-    template: '<div class="container-fluid">' +
-    '<div class="row">' +
-    '<div class="col-sm-12 col-md-10 col-lg-7">' +
-    '<div class="row">' +
-    '<div class="col-lg-7 col-md-7 text-center">' +
-    '<legend>{{ title }}</legend>' +
-    '</div>' +
-    '</div>' +
-    '<div class="panel panel-default">'+
-    '<div class="panel-body" style="max-height: 100%; "><slot></slot></div>' +
-    '</div>'+
-    '</div>' +
-    '</div>' +
-    '</div>'
-});
-
-Vue.component('drop-down-menu-number', {
-    props: {number:{type: Number} , focus:{type: String} , blur :{type: String}, value:{default:''} },
-    template: '<select v-model="value" class="form-control"' +
-    '@focus="focus"' +
-    '@blur="blur">' +
-    '<option v-for="n in number"> {{ n }}' +
-    '</option>' +
-    '</select>'
-});
-
-Vue.component('drop-down-menu-topic', {
-    props: {focus:{type: String} , blur :{type: String}, value:{default:''} },
-    template: '<select v-model="value" class="form-control"' +
-    '@focus="focus"' +
-    '@blur="blur">' +
-    '<option v-for="option in optionsTopic">{{ option.name }}' +
-    '</option>' +
-    '</select>'
-});
-
-Vue.component('table-field',{
-    props: ['fieldsize','fieldname'],
-    data(){
-        return {
-
-        };
-    },
-    template:'<div :width="fieldsize">'+
-    '<div class="form-group">'+
-    '<label v-if="fieldname" class="label-control">{{ fieldname }}</label>'+
-    '<label v-if="!fieldname" class="label-control">&nbsp</label>'+
-        '<div><slot></slot><div>'+
-        '</div>'+
-        '</div>'
-
-
-});
-Vue.component('message-erreur', {
-   template: `<div class="row"><div  style="margin-top: 5px;"class="col-lg-5 col-md-5 col-lg-offset-3 col-md-offset-3">
-                        <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-                        <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                              class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                        <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
-                              class="text-center color-green ">La formation a été créée avec succès.</span>
-                        <span v-show=" !isTrainingTitleValid && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{trainingTitleMsg}}</span>
-
-                </div>
-                <div style="margin-top: 5px;" class="col-lg-3 col-md-3 col-lg-offset-1 col-md-offset-1">
-                        <span v-show="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
-                        <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
-                        <span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-                        <span v-show="!isNameThemeValid" class="color-red">{{ nameThemeMsg }}</span>
-                </div></div>`
-});
-Vue.component('input-text',{
-    props: ['value','focus','blur', 'insidename', 'maxletter'],
-    data(){
-        return {
-
-        };
-    },
-    template:'<input type="text" class="form-control" v-model="value" :placeholder="insidename"'+
-'@focus="focus"'+
-'@blur="blur"'+
-':maxlength="maxletter"></input>'
-
-});
-
-Vue.component('input-form-text-icon',{
-    props: ['icon','insidename'],
-    data: function(){
-        return {
-            classGlyphicon: this.icon + ' form-control-feedback'
-        }
-    },
-   template:`<div class=" form-group has-feedback" >
-                        <input type="text" class="form-control" v-model="nameTheme"
-                               :placeholder="insidename">
-                        <span :class="classGlyphicon" @click="verifyTopicForm"></span></div>`
-
-});
-
-
-Vue.component('custom-button',{
-    props: ['typeofbutton','click','size', 'buttonname'],
-    data(){
-        return {
-                stylebutton:{
-                    'width': this.size
-                }
-        };
-    },
-    template:'<button  :class="typeofbutton" :style="stylebutton" @click="click">{{ buttonname }}</button >'
-
 });
 
 new Vue({
