@@ -303,8 +303,9 @@ template:`<div class="container-fluid">
     <label class="label-control">Formation</label>
         <div>
         
-        <input type="text" class="form-control"  placeholder="Formation" maxlength="20" v-model="trainingTitle"
-                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;"></input>
+                                <input type="text" class="form-control" v-model="trainingTitle"
+                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;"
+                                        placeholder="Formation" maxlength="20">
         
         </div>
         </div>
@@ -314,11 +315,10 @@ template:`<div class="container-fluid">
     <div class="form-group">
     <label class="label-control">1/2 journées</label>
         <div>
-        
-                    <select class="form-control" v-model="numberHalfDays"  @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;"
-                       >
-                        <option v-for="n in 200">{{n}}</option>
-                    </select>
+                                <select class="form-control" v-model="numberHalfDays"
+                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;">
+                                    <option v-for="n in 200">{{n}}</option>
+                                </select>
         </div>
         </div>
         </div>
@@ -327,12 +327,11 @@ template:`<div class="container-fluid">
     <div class="form-group">
     <label class="label-control">Thèmes</label>
         <div>
-                            <select class="form-control" v-model="topicDescription"
-                            @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;"
-                            >
-                        <option v-for="option in optionsTopic">{{ option.name }}
-                        </option>
-                    </select>
+                                <select class="form-control" v-model="topicDescription"
+                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;">
+                                    <option v-for="option in optionsTopic" :value="option">{{ option.name }}
+                                    </option>
+                                </select>
         
         </div>
         </div>
@@ -363,19 +362,20 @@ placeholder="Thème">
         </div>
         
         <div class="row"><div  style="margin-top: 5px;"class="col-lg-5 col-md-5 col-lg-offset-3 col-md-offset-3">
-    <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-    <span v-show="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+    <span v-if="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
+    <span v-else-if="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
     class="text-center color-red ">Veuillez remplir tous les champs.</span>
-    <span v-show="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+    <span v-else-if="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
     class="text-center color-green ">La formation a été créée avec succès.</span>
-    <span v-show=" !isTrainingTitleValid && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{trainingTitleMsg}}</span>
-
+    <span v-else-if=" !isTrainingTitleValid && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{trainingTitleMsg}}</span>
+    <span v-else><br/><br/></span>
 </div>
 <div style="margin-top: 5px;" class="col-lg-3 col-md-3 col-lg-offset-1 col-md-offset-1">
-    <span v-show="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
-<span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
-<span v-show="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-<span v-show="!isNameThemeValid" class="color-red">{{ nameThemeMsg }}</span>
+    <span v-if="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
+<span v-else-if="!isNewTopic" class="text-center color-red">Un thème identique existe déjà.</span>
+<span v-else-if="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+<span v-else-if="!isNameThemeValid" class="color-red">{{ nameThemeMsg }}</span>
+    <span v-else><br/><br/></span>
 </div></div>
     </div>
     </div>
