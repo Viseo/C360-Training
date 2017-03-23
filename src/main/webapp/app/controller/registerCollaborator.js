@@ -63,21 +63,21 @@ new Vue({
         password: function(value) {
             this.verifyPassword(value, 'errorMessagePassword');
             if(this.confirmPassword!='')
-                this.verifyConfirmPassword(value, 'errorMessageConfirmPasswor');
+                this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
         },
         confirmPassword: function(value) {
             this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
         }
     },
     methods: {
-        verifyLogin(personnalIdNumber, msg) {
+        verifyLogin(personnalIdNumber, errorMessageLogin) {
             this.personalIdNumberAlreadyExist = true;
             this.loginEmpty = false;
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
-                this[msg] = '';
+                this[errorMessageLogin] = '';
                 this.isLoginValid = true;
             } else {
-                this[msg] = 'Veuillez entrer  code de login valide';
+                this[errorMessageLogin] = 'Veuillez entrer  code de login valide';
                 this.isLoginValid = false;
             }
         },
@@ -86,12 +86,12 @@ new Vue({
                 this.loginEmpty = true;
             }
         },
-        verifyLastName(lastName, msg) {
+        verifyLastName(lastName, errorMessageLastName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
-                this[msg] = '';
+                this[errorMessageLastName] = '';
                 this.isLastNameValid=true;
             } else {
-                this[msg] = 'Veuillez entrer un nom valide';
+                this[errorMessageLastName] = 'Veuillez entrer un nom valide';
                 this.isLastNameValid=false;
             }
         },
@@ -100,12 +100,12 @@ new Vue({
                 this.lastNameEmpty = true;
             }
         },
-        verifyFirstName(firstName, msg) {
+        verifyFirstName(firstName, errorMessageFirstName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/ .test(firstName)) {
-                this[msg] = '';
+                this[errorMessageFirstName] = '';
                 this.isFirstNameValid=true;
             } else {
-                this[msg] = 'Veuillez entrer un Prénom valide';
+                this[errorMessageFirstName] = 'Veuillez entrer un Prénom valide';
                 this.isFirstNameValid=false;
             }
         },
@@ -114,14 +114,14 @@ new Vue({
                 this.firstNameEmpty = true;
             }
         },
-        verifyEmail(email, msg) {
+        verifyEmail(email, errorMessageEmail) {
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
                     .test(email)) {
 
-                this[msg] = '';
+                this[errorMessageEmail] = '';
                 this.isEmailValid=true;
             } else {
-                this[msg] = 'Veuillez entrer un email valide';
+                this[errorMessageEmail] = 'Veuillez entrer un email valide';
                 this.isEmailValid=false;
             }
         },
@@ -130,12 +130,12 @@ new Vue({
                 this.emailEmpty = true;
             }
         },
-        verifyPassword(password, msg) {
+        verifyPassword(password, errorMessagePassword) {
             if (/^(.){6,125}$/.test(password)) {
-                this[msg] = '';
+                this[errorMessagePassword] = '';
                 this.isPasswordValid=true;
             } else {
-                this[msg] = 'Le mot de passe doit avoir au minimum 6 caractères';
+                this[errorMessagePassword] = 'Le mot de passe doit avoir au minimum 6 caractères';
                 this.isPasswordValid=false;
             }
         },
@@ -144,12 +144,12 @@ new Vue({
                 this.passwordEmpty = true;
             }
         },
-        verifyConfirmPassword(confirmPassword, msg) {
+        verifyConfirmPassword(confirmPassword, errorMessageConfirmPassword) {
             if (this.confirmPassword === this.password) {
-                this[msg] = '';
+                this[errorMessageConfirmPassword] = '';
                 this.isConfirmPasswordValid=true;
             } else {
-                this[msg] = 'La confirmation du mot de passe n\'est pas valide';
+                this[errorMessageConfirmPassword] = 'La confirmation du mot de passe n\'est pas valide';
                 this.isConfirmPasswordValid=false;
             }
         },
