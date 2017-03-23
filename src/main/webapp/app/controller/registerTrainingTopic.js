@@ -3,11 +3,11 @@
  */
 Vue.use(VueResource);
 
-Vue.component('bandeau',{
+Vue.component('blue-header',{
     template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
 });
 
-Vue.component('addformation', {
+Vue.component('add-formation-panel', {
     data: function(){
         return {
             training: {
@@ -22,24 +22,26 @@ Vue.component('addformation', {
             topic: {
                 name: ''
             },
-            nameTheme: '',
-            trainingTitleMsg: '',
-            nameThemeMsg: '',
+            newTopic: '',
             topicToRegister: {},
-            optionsTopic: [],
+            trainingTitleRegexErrorMessage: '',
+            newThemeRegexErrorMessage: '',
             isNewTrainingTitle: true,
             isNewTopic: true,
             confirmFormation: false,
-            optionsTraining:[],
-            trainingsChosen:[],
-            topicsChosen:[],
             confirmTopic: false,
-            msgtrainingTitle: false,
-            msgnumberHalfDays: false,
-            msgtopic: false,
-            msgname: false,
+            trainingTitleErrorMessage: false,
+            numberHalfDaysErrorMessage: false,
+            topicErrorMessage: false,
+            newTopicErrorMessage: false,
             isTrainingTitleValid: true,
             isNameThemeValid:true,
+
+
+            optionsTraining:[],
+            optionsTopic: [],
+            trainingsChosen:[],
+            topicsChosen:[],
             test:undefined,
             trainingsOfTopic:[],
             allTopicTraining:[]
@@ -47,20 +49,21 @@ Vue.component('addformation', {
     },
     watch: {
         trainingTitle: function (value) {
-            this.VerifTrainingTitle(value, 'trainingTitleMsg');
+            this.verifyTrainingField(value, 'trainingTitleRegexErrorMessage');
         },
 
-        nameTheme: function (value) {
-            this.VerifnameTheme(value, 'nameThemeMsg');
+        newTopic: function (value) {
+            this.verifyNewTopicField(value, 'newThemeRegexErrorMessage');
         },
     },
+
     mounted: function(){
-        this.updateTopics();
-        this.updateTrainings();
-
+        this.gatherTopicsFromDatabase();
+        this.gatherTrainingsFromDatabase();
     },
+
     methods: {
-        VerifTrainingTitle(trainingTitle, msg) {
+        verifyTrainingField(trainingTitle, msg) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
                 this[msg] = '';
                 this.isTrainingTitleValid = true;
@@ -69,22 +72,8 @@ Vue.component('addformation', {
                 this.isTrainingTitleValid = false;
             }
         },
-        messageTrainingTitle(){
-            if (this.trainingTitle == '' || this.trainingTitle == undefined) {
-                this.msgtrainingTitle = true;
-            }
-        },
-        messageNumberHalfDays(){
-            if (this.numberHalfDays == '' || this.numberHalfDays == undefined) {
-                this.msgnumberHalfDays = true;
-            }
-        },
-        messageTopic(){
-            if (this.topicDescription == '' || this.topicDescription == undefined) {
-                this.msgtopic = true;
-            }
-        },
-        VerifnameTheme(nameTheme, msg) {
+
+        verifyNewTopicField(nameTheme, msg) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(nameTheme)) {
                 this[msg] = '';
                 this.isNameThemeValid = true;
@@ -94,12 +83,62 @@ Vue.component('addformation', {
 
             }
         },
-        messageName(){
-            if (this.nameTheme == '' || this.nameTheme == undefined) {
-                this.msgname = true;
+
+        isTrainingTitleEmpty(){
+            if (this.trainingTitle == '' || this.trainingTitle == undefined) {
+                this.trainingTitleErrorMessage = true;
+            }
+        },
+
+        isNumberHalfDaysEmpty(){
+            if (this.numberHalfDays == '' || this.numberHalfDays == undefined) {
+                this.numberHalfDaysErrorMessage = true;
+            }
+        },
+
+        isTopicEmpty(){
+            if (this.topicDescription == '' || this.topicDescription == undefined) {
+                this.topicErrorMessage = true;
+            }
+        },
+
+
+        isNewTopicEmpty(){
+            if (this.newTopic == '' || this.newTopic == undefined) {
+                this.newTopicErrorMessage = true;
 
             }
         },
+
+        verifyTrainingFormBeforeSubmit() {
+            this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
+            this.training.trainingTitle = this.trainingTitle;
+            this.training.numberHalfDays = this.numberHalfDays;
+            this.training.topicDescription = this.topicDescription;
+            this.isTrainingTitleEmpty();
+            this.isNumberHalfDaysEmpty();
+            this.isTopicEmpty();
+            this.newTopicErrorMessage=false;
+            if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
+                this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
+                this.saveTrainingIntoDatabase();
+            }
+        },
+
+        verifyTopicFormBeforeSubmit() {
+            this.newTopic = this.newTopic.replace(/ +/g, "");
+            this.topic.name = this.newTopic;
+            this.isNewTopicEmpty();
+            this.trainingTitleErrorMessage = false;
+            this.numberHalfDaysErrorMessage = false;
+            this.topicErrorMessage = false;
+            if (!this.newTopicErrorMessage) {
+                this.isNewTopic = true;
+                this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
+                this.saveTopicIntoDatabase();
+            }
+        },
+
         resetTrainingForm() {
             this.trainingTitle = '';
             this.numberHalfDays = '';
@@ -107,7 +146,13 @@ Vue.component('addformation', {
             this.trainingToRegister = {};
 
         },
-        saveTrainingAction() {
+
+        resetTopicForm() {
+            this.newTopic = '';
+            this.topicToRegister = {};
+        },
+
+        saveTrainingIntoDatabase() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
             //post the form to the server
@@ -116,7 +161,7 @@ Vue.component('addformation', {
                     function (response) {
                         this.isNewTrainingTitle = true;
                         this.confirmFormation = true;
-                        this.updateTrainings();
+                        this.gatherTrainingsFromDatabase();
                         this.resetTrainingForm();
                         setTimeout(function(){ this.confirmFormation = false; }.bind(this), 2000);
                     },
@@ -130,34 +175,16 @@ Vue.component('addformation', {
                     }
                 );
         },
-        verifyTrainingForm() {
-            this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
-            this.training.trainingTitle = this.trainingTitle;
-            this.training.numberHalfDays = this.numberHalfDays;
-            this.training.topicDescription = this.topicDescription;
-            this.messageTrainingTitle();
-            this.messageNumberHalfDays();
-            this.messageTopic();
-            this.msgname=false;
-            if (!this.msgtrainingTitle && !this.msgnumberHalfDays && !this.msgtopic) {
-                this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
-                this.saveTrainingAction();
-            }
-        },
 
-        resetTopicForm() {
-            this.nameTheme = '';
-            this.topicToRegister = {};
-        },
-        saveTopicAction() {
-            this.topicToRegister.name = this.nameTheme.replace(" ", "").toUpperCase();  //delete useless spaces between words
+        saveTopicIntoDatabase() {
+            this.topicToRegister.name = this.newTopic.replace(" ", "").toUpperCase();  //delete useless spaces between words
 
             //post the form to the server
             this.$http.post("api/themes", this.topicToRegister)
                 .then(
                     function (response) {
                         this.confirmTopic = true;
-                        this.updateTopics();
+                        this.gatherTopicsFromDatabase();
                         setTimeout(function(){ this.confirmTopic = false; }.bind(this), 2000);
                     },
                     function (response) {
@@ -170,21 +197,8 @@ Vue.component('addformation', {
                     }
                 );
         },
-        verifyTopicForm() {
-            this.nameTheme = this.nameTheme.replace(/ +/g, "");
-            this.topic.name = this.nameTheme;
-            this.messageName();
-            this.msgtrainingTitle = false;
-            this.msgnumberHalfDays = false;
-            this.msgtopic = false;
-            if (!this.msgname) {
-                this.isNewTopic = true;
-                this.topicToRegister = JSON.parse(JSON.stringify(this.topic));
-                this.saveTopicAction();
-            }
-        },
 
-        updateTopics(){
+        gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
                     this.optionsTopic = response.data;
@@ -199,7 +213,8 @@ Vue.component('addformation', {
                 }
             );
         },
-        updateTrainings (){
+
+        gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
                     this.optionsTraining = response.data;
@@ -216,6 +231,7 @@ Vue.component('addformation', {
                 }
             );
         },
+
         TopicwithTraining(){
             this.trainingsChosen = [];
             for (var tmp in this.optionsTraining) {
@@ -277,7 +293,8 @@ Vue.component('addformation', {
                 this.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.trainingsChosen[tmp].name)));
             }
         },
-        isEmptyFormation(){
+
+        showChevrons(){
             if (this.trainingsChosen.length > 0) {
                 return false;
             }
@@ -304,7 +321,7 @@ template:`<div class="container-fluid">
         <div>
         
                                 <input type="text" class="form-control" v-model="trainingTitle"
-                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;"
+                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                                         placeholder="Formation" maxlength="20">
         
         </div>
@@ -316,7 +333,7 @@ template:`<div class="container-fluid">
     <label class="label-control">1/2 journées</label>
         <div>
                                 <select class="form-control" v-model="numberHalfDays"
-                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;">
+                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                                     <option v-for="n in 200">{{n}}</option>
                                 </select>
         </div>
@@ -328,7 +345,7 @@ template:`<div class="container-fluid">
     <label class="label-control">Thèmes</label>
         <div>
                                 <select class="form-control" v-model="topicDescription"
-                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;msgname=false;">
+                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                                     <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                     </option>
                                 </select>
@@ -341,7 +358,7 @@ template:`<div class="container-fluid">
     <div class="form-group">
     <label class="label-control">&nbsp</label>
         <div class="row">
-        <button  @click="verifyTrainingForm" class="btn btn-default col-lg-10 col-md-10 col-sm-12" >Valider</button >
+        <button  @click="verifyTrainingFormBeforeSubmit" class="btn btn-default col-lg-10 col-md-10 col-sm-12" >Valider</button >
         </div>
         </div>
         </div>
@@ -354,10 +371,10 @@ template:`<div class="container-fluid">
         <div >
         
 <div class="form-group has-feedback" :class="{'has-error':  !isNameThemeValid  } ">
-    <input type="text" class="form-control" v-model="nameTheme" 
-    @focus="msgname = false; confirmTopic = false; isNewTopic = true;msgtrainingTitle = false;msgnumberHalfDays = false;msgtopic = false;"
+    <input type="text" class="form-control" v-model="newTopic" 
+    @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true;trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
 placeholder="Thème">
-    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicForm"></span></div>
+    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"></span></div>
                         
         </div>
         </div>
@@ -365,18 +382,18 @@ placeholder="Thème">
         
         <div class="row"><div  style="margin-top: 5px;"class="col-lg-5 col-md-5 col-lg-offset-3 col-md-offset-3">
     <span v-if="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-    <span v-else-if="(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+    <span v-else-if="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
     class="text-center color-red ">Veuillez remplir tous les champs.</span>
-    <span v-else-if="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)"
+    <span v-else-if="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || topicErrorMessage)"
     class="text-center color-green ">La formation a été créée avec succès.</span>
-    <span v-else-if=" !isTrainingTitleValid && !(msgtrainingTitle || msgnumberHalfDays || msgtopic)" class="color-red">{{trainingTitleMsg}}</span>
+    <span v-else-if=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)" class="color-red">{{trainingTitleRegexErrorMessage}}</span>
     <span v-else><br/><br/></span>
 </div>
 <div style="margin-top: 5px;" class="col-lg-3 col-md-3 col-lg-offset-1 col-md-offset-1">
-    <span v-if="msgname" class="text-center color-red ">Veuillez remplir le champ.</span>
+    <span v-if="newTopicErrorMessage" class="text-center color-red ">Veuillez remplir le champ.</span>
 <span v-else-if="!isNewTopic" class="text-center color-red">Un thème identique existe déjà.</span>
-<span v-else-if="confirmTopic && isNewTopic && !msgname" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-<span v-else-if="!isNameThemeValid" class="color-red">{{ nameThemeMsg }}</span>
+<span v-else-if="confirmTopic && isNewTopic && !newTopicErrorMessage" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
+<span v-else-if="!isNameThemeValid" class="color-red">{{ newThemeRegexErrorMessage }}</span>
     <span v-else><br/><br/></span>
 </div></div>
     </div>
