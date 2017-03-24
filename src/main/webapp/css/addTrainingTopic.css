@@ -5,6 +5,7 @@ legend{
     margin-left: 25px;
     padding: 0 10px;
     border-bottom: none;
+    border-radius: 5px;
     background-color: #428bca;
     color: white;
 }
@@ -87,5 +88,8 @@ table.fix{
 
 }
 
-
+.roundedCorner{
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
+}
 [v-cloak] { display:none; }

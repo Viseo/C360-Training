@@ -409,8 +409,8 @@ Vue.component('show-formation-panel', {
                        </div>
                    </div>
 
-                   <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid #dcdcdc; border-radius:10px;" id="test">
-                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%; z-index:1;">
+                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
@@ -433,7 +433,7 @@ Vue.component('show-formation-panel', {
                <tbody>
             <tr v-for="trainings in topicTraining">
                 <td  v-for="training in trainings" width="25%">
-                    <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}</button>
+                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
                 </td>
             </tr>
             </tbody>
@@ -444,7 +444,7 @@ Vue.component('show-formation-panel', {
                            </tr>
                            </tbody>
                        </table>
-                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                    </div>
                </div>
            </div>
