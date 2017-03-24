@@ -15,10 +15,12 @@ legend{
 
 .form-control-feedback{
     pointer-events: auto;
+
 }
 
 table{
-    border:1px solid black;
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
 
 }
 table td {
@@ -29,7 +31,7 @@ table td {
 }
 
 .td-right{
-    border-left: 1px solid black;
+    border-left: 1px solid #dcdcdc;
 }
 
 .color-green { color: #4cae4c}
@@ -81,6 +83,7 @@ table.fix{
     table-layout: fixed;
     margin:0;
     border-collapse: collapse;
+
 
 }
 
