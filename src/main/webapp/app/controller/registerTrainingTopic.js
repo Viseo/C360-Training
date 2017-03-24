@@ -25,7 +25,7 @@ Vue.component('add-formation-panel', {
             newTopic: '',
             topicToRegister: {},
             trainingTitleRegexErrorMessage: '',
-            newThemeRegexErrorMessage: '',
+            newTopicRegexErrorMessage: '',
             isNewTrainingTitle: true,
             isNewTopic: true,
             confirmFormation: false,
@@ -35,7 +35,7 @@ Vue.component('add-formation-panel', {
             topicErrorMessage: false,
             newTopicErrorMessage: false,
             isTrainingTitleValid: true,
-            isNameThemeValid:true,
+            isNameTopicValid:true,
 
 
             optionsTraining:[],
@@ -48,12 +48,12 @@ Vue.component('add-formation-panel', {
         }
     },
     watch: {
-        trainingTitle: function (value) {
-            this.verifyTrainingField(value, 'trainingTitleRegexErrorMessage');
+        trainingTitle: function (trainingTitleValue) {
+            this.verifyTrainingField(trainingTitleValue, 'trainingTitleRegexErrorMessage');
         },
 
-        newTopic: function (value) {
-            this.verifyNewTopicField(value, 'newThemeRegexErrorMessage');
+        newTopic: function (newTopicValue) {
+            this.verifyNewTopicField(newTopicValue, 'newTopicRegexErrorMessage');
         },
     },
 
@@ -63,23 +63,23 @@ Vue.component('add-formation-panel', {
     },
 
     methods: {
-        verifyTrainingField(trainingTitle, msg) {
+        verifyTrainingField(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
-                this[msg] = '';
+                this[errorMessage] = '';
                 this.isTrainingTitleValid = true;
             } else {
-                this[msg] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
+                this[errorMessage] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
                 this.isTrainingTitleValid = false;
             }
         },
 
-        verifyNewTopicField(nameTheme, msg) {
-            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(nameTheme)) {
-                this[msg] = '';
-                this.isNameThemeValid = true;
+        verifyNewTopicField(newTopic, errorMessage) {
+            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(newTopic)) {
+                this[errorMessage] = '';
+                this.isNameTopicValid = true;
             } else {
-                this[msg] = "Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)";
-                this.isNameThemeValid = false;
+                this[errorMessage] = "Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)";
+                this.isNameTopicValid = false;
 
             }
         },
@@ -321,7 +321,7 @@ template:`<div class="container-fluid">
         <div>
         
                                 <input type="text" class="form-control" v-model="trainingTitle"
-                                       @focus="msgtrainingTitle = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
+                                       @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                                         placeholder="Formation" maxlength="20">
         
         </div>
@@ -333,7 +333,7 @@ template:`<div class="container-fluid">
     <label class="label-control">1/2 journées</label>
         <div>
                                 <select class="form-control" v-model="numberHalfDays"
-                                        @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                        @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                                     <option v-for="n in 200">{{n}}</option>
                                 </select>
         </div>
@@ -345,7 +345,7 @@ template:`<div class="container-fluid">
     <label class="label-control">Thèmes</label>
         <div>
                                 <select class="form-control" v-model="topicDescription"
-                                        @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                        @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                                     <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                     </option>
                                 </select>
@@ -370,7 +370,7 @@ template:`<div class="container-fluid">
     
         <div >
         
-<div class="form-group has-feedback" :class="{'has-error':  !isNameThemeValid  } ">
+<div class="form-group has-feedback" :class="{'has-error':  !isNameTopicValid  } ">
     <input type="text" class="form-control" v-model="newTopic" 
     @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true;trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
 placeholder="Thème">
@@ -384,7 +384,7 @@ placeholder="Thème">
     <span v-if="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
     <span v-else-if="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
     class="text-center color-red ">Veuillez remplir tous les champs.</span>
-    <span v-else-if="confirmFormation && isNewTrainingTitle && !(msgtrainingTitle || msgnumberHalfDays || topicErrorMessage)"
+    <span v-else-if="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
     class="text-center color-green ">La formation a été créée avec succès.</span>
     <span v-else-if=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)" class="color-red">{{trainingTitleRegexErrorMessage}}</span>
     <span v-else><br/><br/></span>
@@ -393,7 +393,7 @@ placeholder="Thème">
     <span v-if="newTopicErrorMessage" class="text-center color-red ">Veuillez remplir le champ.</span>
 <span v-else-if="!isNewTopic" class="text-center color-red">Un thème identique existe déjà.</span>
 <span v-else-if="confirmTopic && isNewTopic && !newTopicErrorMessage" class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-<span v-else-if="!isNameThemeValid" class="color-red">{{ newThemeRegexErrorMessage }}</span>
+<span v-else-if="!isNameTopicValid" class="color-red">{{ newTopicRegexErrorMessage }}</span>
     <span v-else><br/><br/></span>
 </div></div>
     </div>
