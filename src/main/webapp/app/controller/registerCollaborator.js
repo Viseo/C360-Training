@@ -1,52 +1,169 @@
 Vue.use(VueResource);
 
-new Vue({
-    el: '#app',
-    data: {
-        collaborator:{
+Vue.component('navigation-menu',{
+
+    data:function(){
+        return{
+            color_inscription: 'color-blue',
+            color_connexion: 'color-blue',
+            tabconnexion: "tab",
+            tabinscription: "tab active",
+        }
+    },
+    template:`
+             <ul class="tab-group">
+                <li :class="tabinscription">
+                    <a @click="tabinscription = 'tab active'; tabconnexion = 'tab';">Inscription</a>
+                </li>
+                <li :class="tabconnexion">
+                    <a @click="tabinscription = 'tab'; tabconnexion = 'tab active';">Connexion</a>
+                </li>
+            </ul>
+        `,
+
+})
+
+Vue.component('formulaire', {
+    template: `
+             <form id="registr-form" @submit.prevent="verifyForm">
+                <!-- MATRICULE-->
+                <div class="form-group">
+                    <label for="matricule">Code de login</label>
+                    <div class="inner-addon left-addon" :class="{'has-error': loginEmpty || !isLoginValid || !personalIdNumberAlreadyExist}">
+                        <i class="glyphicon glyphicon-th"></i>
+                        <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
+                               placeholder="ABC1234" v-model="personnalIdNumber" @focus="loginEmpty = false" @blur="isLoginEmpty"
+                               onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
+                        <span v-show="loginEmpty" class="color-red">Code de login est obligatoire.</span>
+                        <span v-show="!personalIdNumberAlreadyExist" class="color-red ">Ce code de login a déjà été enregistré.</span>
+                        <span v-show="!isLoginValid && !loginEmpty" class="color-red">{{ errorMessageLogin }}</span>
+                    </div>
+                </div>
+                <!-- NOM -->
+                <div class="form-group" :class="{'has-error': lastNameEmpty || !isLastNameValid}">
+                    <label for="nom">Nom</label>
+                    <div class="inner-addon left-addon">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <input type="text" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="lastName"
+                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="lastNameEmpty = false" @blur="isLastNameEmpty"
+                               maxlength="125" minlength="2">
+                        <span v-show="lastNameEmpty" class="color-red">Nom est obligatoire.</span>
+                        <span v-show="!isLastNameValid && !lastNameEmpty" class="color-red">{{ errorMessageLastName }}</span>
+                    </div>
+                </div>
+                <!-- PRENOM -->
+                <div class="form-group" :class="{'has-error': !isFirstNameValid || firstNameEmpty }">
+                    <label for="prenom">Prénom</label>
+                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <input type="text"  name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="firstName"
+                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="firstNameEmpty = false" @blur="isFirstNameEmpty"
+                               maxlength="125" minlength="2">
+                        <span v-show="firstNameEmpty" class="color-red ">Prénom est obligatoire.</span>
+                        <span v-show="!isFirstNameValid && !firstNameEmpty" class="color-red">{{ errorMessageFirstName }}</span>
+                    </div>
+            
+                </div>
+                <!-- EMAIL-->
+                <div class="form-group" :class="{'has-error':!isEmailValid || emailEmpty || !emailAlreadyExist}">
+                    <label for="email">Email</label>
+                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-envelope"></i>
+                        <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
+                               v-model="email" @focus="emailAlreadyExist = true; emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                               onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                        <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
+                        <span v-show="!isEmailValid && !emailEmpty" class="color-red">{{ errorMessageEmail }}</span>
+                        <span v-show="!emailAlreadyExist" class="color-red ">Ce email a déjà été enregistré.</span>
+                    </div>
+                </div>
+                <!-- MOT DE PASSE -->
+                <div class="form-group" :class="{'has-error': !isPasswordValid || passwordEmpty }">
+                    <label for="mdp">Mot de passe</label>
+                    <div class="password" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-lock"></i>
+                        <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
+                        <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
+                        <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
+                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false"
+                               @blur="isPasswordEmpty">
+                        <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
+                               @focus="passwordEmpty = false" @blur="isPasswordEmpty">
+                        <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
+                        <span v-show="!isPasswordValid && !passwordEmpty" class="color-red">{{ errorMessagePassword }}</span>
+                    </div>
+                </div>
+                <!-- CONFIRMATION MOT DE PASSE -->
+                <div class="form-group"   :class="{'has-error': !isConfirmPasswordValid|| confirmPasswordEmpty }">
+                    <label for="mdpc">Confirmation mot de passe</label>
+                    <div class="password" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-lock "></i>
+                        <span @click="showPassConf = !showPassConf" v-show="!showPassConf && confirmPassword" class="glyphicon glyphicon-eye-open "> </span>
+                        <span @click="showPassConf = false"  v-show="showPassConf && confirmPassword" class="glyphicon glyphicon-eye-close "> </span>
+                        <input type="password" v-model="confirmPassword"  v-show="!showPassConf" name="mdpc" id="mdpc" tabindex="2" class="form-control"
+                               placeholder="••••••"  onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="confirmPasswordEmpty = false"
+                               @blur="isConfirmPasswordEmpty">
+                        <input type="text" v-model="confirmPassword" v-show="showPassConf" name="mdpc" id="mdpc2" tabindex="2" class="form-control"
+                               @focus="confirmPasswordEmpty = false"  @blur="isConfirmPasswordEmpty">
+                        <span v-show="confirmPasswordEmpty" class="color-red ">Confirmation est obligatoire.</span>
+                        <span v-show="!isConfirmPasswordValid && !confirmPasswordEmpty" class="color-red">{{ errorMessageConfirmPassword }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
+                            <button type="submit" name="register-submit" id="register-submit"
+                                    tabindex="4" class="form-control btn btn-primary">S'inscrire
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>          
+            `,
+    data: function () {
+        return {
+            collaborator:{
+                personnalIdNumber:'',
+                lastName:'',
+                firstName:'',
+                email:'',
+                password:'',
+                confirmPassword:'',
+            },
             personnalIdNumber:'',
             lastName:'',
             firstName:'',
             email:'',
             password:'',
             confirmPassword:'',
-        },
-        personnalIdNumber:'',
-        lastName:'',
-        firstName:'',
-        email:'',
-        password:'',
-        confirmPassword:'',
-        errorMessageLogin:'',
-        errorMessageLastName:'',
-        errorMessageFirstName:'',
-        errorMessageEmail:'',
-        errorMessagePassword:'',
-        errorMessageConfirmPassword:'',
-        collaboratorToRegister:{},
-        verif: true,
-        personalIdNumberAlreadyExist:true,
-        emailAlreadyExist:true,
-        loginEmpty:false,
-        lastNameEmpty:false,
-        firstNameEmpty:false,
-        emailEmpty:false,
-        passwordEmpty:false,
-        confirmPasswordEmpty:false,
-        showPass:false,
-        showPassConf:false,
-        border: 'color-red',
-        color_inscription: 'color-blue',
-        color_connexion: 'color-blue',
-        tabconnexion: "tab",
-        tabinscription: "tab active",
-        isLoginValid:true,
-        isLastNameValid:true,
-        isFirstNameValid:true,
-        isEmailValid :true,
-        isPasswordValid:true,
-        isConfirmPasswordValid:true
-},
+            errorMessageLogin:'',
+            errorMessageLastName:'',
+            errorMessageFirstName:'',
+            errorMessageEmail:'',
+            errorMessagePassword:'',
+            errorMessageConfirmPassword:'',
+            collaboratorToRegister:{},
+            verif: true,
+            personalIdNumberAlreadyExist:true,
+            emailAlreadyExist:true,
+            loginEmpty:false,
+            lastNameEmpty:false,
+            firstNameEmpty:false,
+            emailEmpty:false,
+            passwordEmpty:false,
+            confirmPasswordEmpty:false,
+            showPass:false,
+            showPassConf:false,
+            border: 'color-red',
+            isLoginValid:true,
+            isLastNameValid:true,
+            isFirstNameValid:true,
+            isEmailValid :true,
+            isPasswordValid:true,
+            isConfirmPasswordValid:true
+        }
+    },
+
     watch: {
         personnalIdNumber: function(value) {
             this.verifyLogin(value, 'errorMessageLogin');
@@ -69,6 +186,7 @@ new Vue({
             this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
         }
     },
+
     methods: {
         verifyLogin(personnalIdNumber, errorMessageLogin) {
             this.personalIdNumberAlreadyExist = true;
@@ -213,4 +331,8 @@ new Vue({
             }
         },
     }
+})
+
+new Vue({
+    el: '#app',
 });
