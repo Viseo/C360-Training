@@ -1,6 +1,7 @@
 /**
  * Created by BBA3616 on 24/02/2017.
  */
+
 Vue.use(VueResource);
 
 Vue.component('blue-header',{
@@ -40,11 +41,11 @@ Vue.component('add-formation-panel', {
 
             optionsTraining:[],
             optionsTopic: [],
-            trainingsChosen:[],
             topicsChosen:[],
             test:undefined,
             trainingsOfTopic:[],
-            allTopicTraining:[]
+
+            state: training_store.state
         }
     },
     watch: {
@@ -233,12 +234,12 @@ Vue.component('add-formation-panel', {
         },
 
         TopicwithTraining(){
-            this.trainingsChosen = [];
+            this.state.trainingsChosen = [];
             for (var tmp in this.optionsTraining) {
-                this.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
+                this.state.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
             }
-            this.trainingsChosen = this.removeDuplicates(this.trainingsChosen, "id");
-            this.trainingsChosen.sort(function (a, b) {
+            this.state.trainingsChosen = this.removeDuplicates(this.state.trainingsChosen, "id");
+            this.state.trainingsChosen.sort(function (a, b) {
                 return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
             });
         },
@@ -288,20 +289,11 @@ Vue.component('add-formation-panel', {
             return this.trainingsOfTopic;
         },
         TopicTrainingTraim(){
-            this.allTopicTraining = [];
-            for (var tmp in this.trainingsChosen) {
-                this.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.trainingsChosen[tmp].name)));
+            this.state.allTopicTraining = [];
+            for (var tmp in this.state.trainingsChosen) {
+                this.state.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.state.trainingsChosen[tmp].name)));
             }
         },
-
-        showChevrons(){
-            if (this.trainingsChosen.length > 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
 
     },
 template:`<div class="container-fluid">
@@ -402,6 +394,97 @@ placeholder="Thème">
     </div>
     </div>`
 });
+
+Vue.component('show-formation-panel', {
+    data: function() {
+        return {
+            state: training_store.state,
+
+        }
+    },
+    computed: {
+        showChevrons(){
+            if (this.state.trainingsChosen.length > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    },
+    template: ` <div class="container-fluid" id="addFormation">
+           <div class="row" >
+               <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+               <div class="col-sm-12 col-md-10 col-lg-7">
+
+                   <div class="row">
+
+                       <div class="col-lg-7 col-md-7 text-center">
+                           <legend>Formation ajoutées</legend>
+                       </div>
+                   </div>
+
+                   <div style="width: 100%; height: 360px; overflow-y:hidden; border: 1px solid;" id="test">
+                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="20" height="20" style="position: absolute; left:50%; z-index:1;">
+                       <table class="fix tabnonborder" >
+                           <tbody>
+                           <tr>
+                               <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                               <td>
+                                   <template v-for="grandgroup in state.allTopicTraining">
+                                       <table class="table table-borderless tabnonborder fix">
+                                           <div class="row">
+                                               <thead>
+                                               <tr>
+                                                   <th class="col-lg-3 col-md-3">{{grandgroup[0][0].topicDescription.name}}</th>
+                                                   <th class="col-lg-3 col-md-3"></th>
+                                                   <th class="col-lg-3 col-md-3"></th>
+                                                   <th class="col-lg-3 col-md-3 deletetopic"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                               </tr>
+                                               </thead>
+                                           </div>
+
+                                           <div class="row">
+                                               <tbody>
+                                               <tr v-for="group in grandgroup">
+                                                   <td class="col-lg-3 col-md-3" v-for="trainingg in group">
+                                                       <button class="btn btn-toolbar btn-group">{{trainingg.trainingTitle}}</button>
+                                                   </td>
+                                               </tr>
+                                               </tbody>
+                                           </div>
+
+                                           </tr>
+                                       </table>
+                                   </template>
+                               </td>
+                           </tr>
+                           </tbody>
+                       </table>
+                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="20" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                   </div>
+               </div>
+           </div>
+       </div>`
+
+
+
+
+
+
+
+});
+
+class trainingStore {
+    constructor () {
+        this.state = {
+            trainingsChosen:[],
+            allTopicTraining:[],
+        }
+    }
+}
+
+let training_store = new trainingStore();
 
 new Vue({
     el: '#TrainingTopic'
