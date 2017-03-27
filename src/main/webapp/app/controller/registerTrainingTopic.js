@@ -37,13 +37,11 @@ Vue.component('add-formation-panel', {
             newTopicErrorMessage: false,
             isTrainingTitleValid: true,
             isNameTopicValid:true,
-
-
-            optionsTraining:[],
-            optionsTopic: [],
+            selectOptionsOfTraining:[],
+            selectOptionsOfTopic: [],
             topicsChosen:[],
-            test:undefined,
-            trainingsOfTopic:[],
+            arrangeTrainings:undefined,
+            allTrainingsOfATopicChosen:[],
 
             state: training_store.state
         }
@@ -202,8 +200,8 @@ Vue.component('add-formation-panel', {
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
-                    this.optionsTopic = response.data;
-                    this.optionsTopic.sort(function (a, b) {
+                    this.selectOptionsOfTopic = response.data;
+                    this.selectOptionsOfTopic.sort(function (a, b) {
                         return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
                     });
                     this.resetTopicForm();
@@ -218,13 +216,13 @@ Vue.component('add-formation-panel', {
         gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
-                    this.optionsTraining = response.data;
-                    this.optionsTraining.sort(function (a, b) {
+                    this.selectOptionsOfTraining = response.data;
+                    this.selectOptionsOfTraining.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.resetTrainingForm();
                     this.TopicwithTraining();
-                    this.TopicTrainingTraim();
+                    this.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -235,8 +233,8 @@ Vue.component('add-formation-panel', {
 
         TopicwithTraining(){
             this.state.trainingsChosen = [];
-            for (var tmp in this.optionsTraining) {
-                this.state.trainingsChosen.push(this.optionsTraining[tmp].topicDescription);
+            for (var tmp in this.selectOptionsOfTraining) {
+                this.state.trainingsChosen.push(this.selectOptionsOfTraining[tmp].topicDescription);
             }
             this.state.trainingsChosen = this.removeDuplicates(this.state.trainingsChosen, "id");
             this.state.trainingsChosen.sort(function (a, b) {
@@ -257,8 +255,8 @@ Vue.component('add-formation-panel', {
 
             return new_arr;
         },
-        TrainingTraim(value){
-            this.test = [];
+        reorganizeTrainings(value){
+            this.arrangeTrainings = [];
             var tmp = [];
             var longueur = value.length;
             var compteur = 0;
@@ -268,30 +266,30 @@ Vue.component('add-formation-panel', {
                 if (compteur >= 1 && compteur < 4) {
                     tmp.push(value[element]);
                     if (longueur == 0) {
-                        this.test.push(tmp);
+                        this.arrangeTrainings.push(tmp);
                     }
                 } else if (compteur == 4) {
                     tmp.push(value[element]);
-                    this.test.push(tmp);
+                    this.arrangeTrainings.push(tmp);
                     tmp = [];
                     compteur = 0;
                 }
             }
-            return this.test;
+            return this.arrangeTrainings;
         },
-        TrainingFilter(value){
-            this.trainingsOfTopic = [];
-            for (var tmp in this.optionsTraining) {
-                if (this.optionsTraining[tmp].topicDescription.name == value) {
-                    this.trainingsOfTopic.push(this.optionsTraining[tmp]);
+        chooseAllTrainingsOfATopic(value){
+            this.allTrainingsOfATopicChosen = [];
+            for (var tmp in this.selectOptionsOfTraining) {
+                if (this.selectOptionsOfTraining[tmp].topicDescription.name == value) {
+                    this.allTrainingsOfATopicChosen.push(this.selectOptionsOfTraining[tmp]);
                 }
             }
-            return this.trainingsOfTopic;
+            return this.allTrainingsOfATopicChosen;
         },
-        TopicTrainingTraim(){
+        reorganizeAllTopicsAndTrainings(){
             this.state.allTopicTraining = [];
             for (var tmp in this.state.trainingsChosen) {
-                this.state.allTopicTraining.push(this.TrainingTraim(this.TrainingFilter(this.state.trainingsChosen[tmp].name)));
+                this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
             }
         },
 
@@ -329,7 +327,7 @@ template:`
                                 <label>Thèmes</label><br/><br/>
                                 <select class="form-control" v-model="topicDescription"
                                         @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                                    <option v-for="option in optionsTopic" :value="option">{{ option.name }}
+                                    <option v-for="option in selectOptionsOfTopic" :value="option">{{ option.name }}
                                     </option>
                                 </select>
                             </div>
