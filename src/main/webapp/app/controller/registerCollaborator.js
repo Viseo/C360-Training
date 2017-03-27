@@ -23,7 +23,7 @@ let NavigationMenu = Vue.component('navigation-menu',{
 
 })
 
-Vue.component('formulaire', {
+let Formulaire = Vue.component('formulaire', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
                 <!-- MATRICULE-->
@@ -175,7 +175,7 @@ Vue.component('formulaire', {
             this.verifyFirstName(value, 'errorMessageFirstName');
         },
         email: function(value) {
-            this.verifyEmail(value, 'errorMessageEmail');
+            this.verifyEmail(value);
         },
         password: function(value) {
             this.verifyPassword(value, 'errorMessagePassword');
@@ -238,14 +238,14 @@ Vue.component('formulaire', {
             }
         },
 
-        verifyEmail(email, errorMessageEmail){
+        verifyEmail(email){
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
                     .test(email)) {
 
-                this[errorMessageEmail] = '';
+                this.errorMessageEmail = '';
                 this.isEmailValid=true;
             } else {
-                this[errorMessageEmail] = 'Veuillez entrer un email valide';
+                this.errorMessageEmail = 'Veuillez entrer un email valide';
                 this.isEmailValid=false;
             }
         },
@@ -333,3 +333,6 @@ Vue.component('formulaire', {
     }
 })
 
+new Vue({
+    el:'#app'
+});
