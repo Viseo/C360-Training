@@ -1,29 +1,50 @@
 Vue.use(VueResource);
 
-Vue.component('navigation-menu',{
-
+Vue.component('connect-user',{
     data:function(){
         return{
             color_inscription: 'color-blue',
             color_connexion: 'color-blue',
             tabconnexion: "tab",
             tabinscription: "tab active",
+            newCollab: true
         }
     },
     template:`
-             <ul class="tab-group">
-                <li :class="tabinscription">
-                    <a @click="tabinscription = 'tab active'; tabconnexion = 'tab';">Inscription</a>
-                </li>
-                <li :class="tabconnexion">
-                    <a @click="tabinscription = 'tab'; tabconnexion = 'tab active';">Connexion</a>
-                </li>
-            </ul>
+            <div class="panel panel-default">
+                <ul class="tab-group">
+                    <li :class="tabinscription">
+                        <a @click="showInscriptionForm()">Inscription</a>
+                    </li>
+                    <li :class="tabconnexion">
+                        <a @click="showConnexionForm()">Connexion</a>
+                    </li>
+                </ul>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
+                            <inscription-form v-if="newCollab"></inscription-form>
+                            <connexion-form v-else></connexion-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         `,
-
+    methods: {
+        showInscriptionForm() {
+            this.tabinscription = 'tab active';
+            this.tabconnexion = 'tab';
+            this.newCollab=true;
+        },
+        showConnexionForm() {
+            this.tabinscription = 'tab';
+            this.tabconnexion = 'tab active';
+            this.newCollab=false;
+        }
+    }
 })
 
-Vue.component('formulaire', {
+Vue.component('inscriptionForm', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
                 <!-- MATRICULE-->
@@ -328,6 +349,130 @@ Vue.component('formulaire', {
                 this.collaborator.confirmPassword=this.confirmPassword;
                 this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
                 this.saveAction();
+            }
+        },
+    }
+})
+
+Vue.component('connexionForm', {
+    template: `
+             <form id="registr-form" @submit.prevent="verifyForm">
+                <!-- EMAIL-->
+                <div class="form-group" :class="{'has-error':emailEmpty}">
+                    <label for="email">Email</label>
+                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-envelope"></i>
+                        <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
+                               v-model="email" @focus="emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                               onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                        <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
+                        <span v-show="!emailEmpty" class="color-red">{{ errorMessageEmail }}</span>
+                    </div>
+                </div>
+                <!-- MOT DE PASSE -->
+                <div class="form-group" :class="{'has-error':passwordEmpty }">
+                    <label for="mdp">Mot de passe</label>
+                    <div class="password" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-lock"></i>
+                        <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
+                        <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
+                        <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
+                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false"
+                               @blur="isPasswordEmpty">
+                        <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
+                               @focus="passwordEmpty = false" @blur="isPasswordEmpty">
+                        <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
+                        <span v-show="!passwordEmpty" class="color-red">{{ errorMessagePassword }}</span>
+                    </div>
+                </div>
+                <div class="checkbox">
+                     <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
+                            <button type="submit" name="register-submit" id="register-submit"
+                                    tabindex="4" class="form-control btn btn-primary">S'inscrire
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>          
+            `,
+    data: function () {
+        return {
+            collaborator:{
+                email:'',
+                password:'',
+            },
+            email:'',
+            password:'',
+            errorMessageEmail:'',
+            errorMessagePassword:'',
+            verif: true,
+            emailEmpty:false,
+            passwordEmpty:false,
+            showPass:false,
+            stayConnected:false,
+            border: 'color-red',
+        }
+    },
+
+    watch: {
+        email: function(value) {
+            this.verifyEmail(value, 'errorMessageEmail');
+        },
+        password: function(value) {
+            this.verifyPassword(value, 'errorMessagePassword');
+            if(this.confirmPassword!='')
+                this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
+        },
+    },
+
+    methods: {
+        isEmailEmpty(){
+            if(this.email == ''){
+                this.emailEmpty = true;
+            }
+        },
+
+
+        isPasswordEmpty(){
+            if(this.password == ''){
+                this.passwordEmpty = true;
+            }
+        },
+
+        saveAction() {
+            delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
+            //post the form to the server
+            this.$http.post("api/collaborateurs", this.collaboratorToRegister)
+                .then(
+                    function (response) {
+                        this.personalIdNumberAlreadyExist = true;
+                        window.location.pathname = '/pageblanche.html';
+                    },
+                    function (response) {
+                        console.log("Error: ",response);
+                        if (response.data.message == "personnalIdNumber") {
+                            this.personalIdNumberAlreadyExist = false;
+                        }
+                        else if(response.data.message == "email"){
+                            this.personalIdNumberAlreadyExist = true;
+                        }else{
+                            console.error(response);
+                        }
+                    }
+                );
+        },
+
+        verifyForm (){
+            this.isEmailEmpty(); this.isPasswordEmpty();
+            if(!this.emailEmpty && !this.passwordEmpty){
+                this.collaborator.email=this.email;
+                this.collaborator.password=this.password;
+                this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
+               // this.saveAction();
             }
         },
     }
