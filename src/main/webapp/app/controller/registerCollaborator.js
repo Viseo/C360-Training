@@ -1,6 +1,6 @@
 Vue.use(VueResource);
 
-Vue.component('navigation-menu',{
+let NavigationMenu = Vue.component('navigation-menu',{
 
     data:function(){
         return{
@@ -333,6 +333,3 @@ Vue.component('formulaire', {
     }
 })
 
-new Vue({
-    el: '#app',
-});

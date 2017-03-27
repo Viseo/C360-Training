@@ -18,7 +18,7 @@ module.exports = function (config) {
             'src/main/webapp/lib/vue.js',
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-resource-mock.min.js',
-            'src/main/webapp/app/controller/registerTrainingTopic.js',
+            'src/main/webapp/app/controller/registerCollaborator.js',
             'src/test/javaScript/spec/*.js'
         ],
 
