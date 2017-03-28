@@ -14,7 +14,7 @@ describe('test', function () {
 
     });
 
-    it('hould check variable initialization from navigation-menu component', function () {
+    it('should check variable initialization from navigation-menu component', function () {
         expect(vmNavigationMenu.color_connexion).toBe('color-blue');
         expect(vmNavigationMenu.color_inscription).toBe('color-blue');
         expect(vmNavigationMenu.tabconnexion).toBe('tab');

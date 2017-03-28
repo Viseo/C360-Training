@@ -466,7 +466,3 @@ class trainingStore {
 }
 
 let training_store = new trainingStore();
-
-new Vue({
-    el: '#TrainingTopic'
-});

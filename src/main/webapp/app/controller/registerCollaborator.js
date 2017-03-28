@@ -332,7 +332,3 @@ let Formulaire = Vue.component('formulaire', {
         },
     }
 })
-
-new Vue({
-    el:'#app'
-});
