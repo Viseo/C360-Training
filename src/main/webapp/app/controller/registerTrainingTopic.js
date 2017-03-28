@@ -8,7 +8,7 @@ Vue.component('blue-header',{
     template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
 });
 
-Vue.component('add-formation-panel', {
+let AddFormationPanel = Vue.component('add-formation-panel', {
     data: function(){
         return {
             training: {
@@ -378,14 +378,13 @@ template:`
 `
 });
 
-Vue.component('show-formation-panel', {
+let ShowFormation = Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,
-
         }
     },
-    computed: {
+    methods: {
         showChevrons(){
             if (this.state.trainingsChosen.length > 0) {
                 return true;
@@ -408,7 +407,7 @@ Vue.component('show-formation-panel', {
                    </div>
 
                 <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                       <img v-show="showChevrons()" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
@@ -442,7 +441,7 @@ Vue.component('show-formation-panel', {
                            </tr>
                            </tbody>
                        </table>
-                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                       <img v-show="showChevrons()" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                    </div>
                </div>
            </div>
