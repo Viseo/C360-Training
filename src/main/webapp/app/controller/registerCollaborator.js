@@ -387,7 +387,7 @@ Vue.component('connexionForm', {
                 </div>
                 <div class="checkbox">
                      <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
-                     <a href="#" @click="showPopup=true" class="forgotPassword">Mot de passe oublié</a>
+                     <a href="#" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a>
                      <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
                         <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
                      </div>
@@ -423,6 +423,13 @@ Vue.component('connexionForm', {
         }
     },
     methods: {
+        showPopupFn() {
+            var self = this;
+            this.showPopup=true;
+            setTimeout(function(){
+                self.showPopup = false;
+            }, 10000);
+        },
         isEmailEmpty(){
             if(this.email == ''){
                 this.emailEmpty = true;
