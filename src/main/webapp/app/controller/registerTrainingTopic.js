@@ -3,6 +3,11 @@
  */
 
 Vue.use(VueResource);
+
+Vue.component('blue-header',{
+    template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
+});
+
 Vue.component('error-messages',{
     props:['height','colspan',
            'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
@@ -33,26 +38,21 @@ Vue.component('error-messages',{
 });
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type','valueoptions', 'valuefor', 'icon'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
     data: function(){
       return{
           textValue: this.value,
-          optionsValue: this.valueoptions,
-          forValue: this.valuefor
       }
     },
     methods:{
         updateValue(value){
-            console.log('updateValue');
             this.textValue = value;
             this.$emit('input',value);
         },
         handleFocus(){
-            console.log('handleFocus');
             this.$emit('focus');
         },
         handleClick(){
-            console.log('handleClick');
             this.$emit('click');
         }
     },
@@ -60,37 +60,33 @@ Vue.component('input-text',{
                             <div class="form-group has-feedback " 
                                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
-                                <input 
-                                    v-if="type==='input'" 
-                                    type="text" 
-                                    class="form-control"
-                                    :value="textValue" 
-                                    @input="updateValue($event.target.value)"
-                                    :placeholder="placeholder" 
-                                    :maxlength="maxlength"
-                                    @focus="handleFocus"/>
+                                <input v-if="type==='input'" 
+                                       type="text" 
+                                       class="form-control"
+                                       :value="textValue" 
+                                       @input="updateValue($event.target.value)"
+                                       :placeholder="placeholder" 
+                                       :maxlength="maxlength"
+                                       @focus="handleFocus"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
                                       :class="icon"
-                                      @click="handleClick"
-                                      >
+                                      @click="handleClick">
                                 </span>
 
-                                <select 
-                                    v-else-if="type==='select'"
-                                    class="form-control" 
-                                    :value="textValue" 
-                                    @input="updateValue($event.target.value)"
-                                    @focus="handleFocus">
-                                    <option v-for="n in forValue" >{{ n }}</option>
+                                <select v-else-if="type==='select'"
+                                        class="form-control" 
+                                        :value="textValue" 
+                                        @input="updateValue($event.target.value)"
+                                        @focus="handleFocus">
+                                        <option selected disabled hidden style='display: none' value=''></option>
+                                        <option v-for="item in collection" >
+                                            {{printProp ? item[printProp] : item }}
+                                        </option>
                                 </select>
                          
                             </div>
               </td>`
-});
-
-Vue.component('blue-header',{
-    template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
 });
 
 let AddFormationPanel = Vue.component('add-formation-panel', {
@@ -381,7 +377,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     },
 template:`
  <div class="container-fluid">
-        <div class="row"><!-- row 1-->
+        <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-7">
                     <div class="row">
                         <div class="col-lg-7 col-md-7 text-center">
@@ -397,31 +393,29 @@ template:`
                             maxlength="20"
                             @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
                             :isValid="isTrainingTitleValid"
-                            type='input'
-                        >
+                            type='input'>
                         </input-text>
                         <input-text
                             width="15%"
                             label="1/2 journées"
                             v-model="numberHalfDays"
                             @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
-                          
-                            :valuefor="200"
+                            :collection="200"
                             type="select"
                          >
                          </input-text>
-                    
-                        <td width="20%">
-                            <div class="form-group">
-                                <label>Thèmes</label><br/>
-                                <select class="form-control" v-model="topicDescription"
-                                        @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                                    <option v-for="option in selectOptionsOfTopic" :value="option">{{ option.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </td>
-                        <td class="text-center" width="20%">
+                         <input-text
+                            width="20%"
+                            label="Thèmes"
+                            v-model="topicDescription"
+                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
+                            :collection="selectOptionsOfTopic"
+                            print-prop="name"
+                            type="select"
+                         >
+                         </input-text>
+                        <td class="text-center" 
+                            width="20%">
                             <div class="form-group">
                                  <label>&nbsp</label><br/>
                                  <input type="submit" 
@@ -456,13 +450,13 @@ template:`
                                             :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
                             </error-messages>
                             <error-messages class="td-right"
-                                            :height="60" 
+                                            :height="80" 
                                             identicalErrorMessage="Un thème identique existe déjà." 
                                             fillFieldErrorMessage="Veuillez remplir le champ." 
                                             successMessage="Le nouveau thème a été ajouté avec succès." 
                                             :regexErrorMessage="newTopicRegexErrorMessage"
                                             :emptyIdenticalError="!isNewTopic"
-                                            :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                            :emptyFillError="newTopicErrorMessage"
                                             :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
                                             :emptyRegexError=" !isNewTopicValid">
                             </error-messages>
@@ -470,7 +464,7 @@ template:`
                     </table>
                 </form>
             </div>
-        </div><!--Fin row 1-->
+        </div>
     </div>
 `
 });
@@ -492,58 +486,71 @@ Vue.component('show-formation-panel', {
             }
         }
     },
-    template: ` <div class="container-fluid" id="addFormation">
+    template: `
+<div class="container-fluid" id="addFormation">
            <div class="row" >
-               <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+               <div class="col-md-12 col-lg-12 col-sm-12" 
+                    style="padding:10px;">
+               </div>
                <div class="col-sm-12 col-md-10 col-lg-7">
-
                    <div class="row">
-
-                       <div class="col-lg-7 col-md-7 text-center">
+                       <div class="col-lg-7 col-md-7 text-center" style="z-index:1;">
                            <legend>Formation ajoutées</legend>
                        </div>
                    </div>
-
-                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" 
+                     id="test" 
+                     class="roundedCorner">
+                       <img v-show="showChevrons" 
+                            src="css/up.png" 
+                            id="scroll-up" 
+                            width="60" 
+                            height="20" 
+                            style="position: absolute; left:50%; z-index:2;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
                                <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
                                <td>
-                                   <template v-for="topicTraining in state.allTopicTraining">
-                                       <table class="table table-borderless tabnonborder fix">
-                                          
-                                              
-            <thead>
-            <tr>
-                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                <th width="25%"></th>
-                <th width="25%"></th>
-                <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-            </tr>
-            </thead>
-                                           
-
-               <tbody>
-            <tr v-for="trainings in topicTraining">
-                <td  v-for="training in trainings" width="25%">
-                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
-                </td>
-            </tr>
-            </tbody>
-                                           </tr>
-                                       </table>
-                                   </template>
+                                  <template v-for="topicTraining in state.allTopicTraining">
+                                    <table class="table table-borderless tabnonborder fix">                  
+                                        <thead>
+                                            <tr>
+                                                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                <th width="25%"></th>
+                                                <th width="25%"></th>
+                                                <th class="deletetopic" 
+                                                    width="25%">
+                                                    <a href="#" class="changecolor">
+                                                        <span class="glyphicon glyphicon-trash"></span> Supprimer ce thème
+                                                    </a>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="trainings in topicTraining">
+                                                <td  v-for="training in trainings" width="25%">
+                                                    <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                  </template>
                                </td>
                            </tr>
                            </tbody>
                        </table>
-                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                       <img v-show="showChevrons" 
+                            src="css/down.png" 
+                            id="scroll-down" 
+                            width="60" 
+                            height="20" 
+                            style="position: absolute; left:50%; top:95%; z-index:2;">
                    </div>
                </div>
            </div>
-       </div>`
+</div>`
 
 
 
