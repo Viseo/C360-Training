@@ -319,7 +319,6 @@ Vue.component('inscriptionForm', {
                         window.location.pathname = '/pageblanche.html';
                     },
                     function (response) {
-                        console.log("Error: ",response);
                         if (response.data.message == "personnalIdNumber") {
                             this.personalIdNumberAlreadyExist = false;
                             this.emailAlreadyExist = true;
@@ -366,6 +365,7 @@ Vue.component('connexionForm', {
                                v-model="email" @focus="emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
+                        <span v-show="!isNotNewEmail" class="color-red ">Veuillez renseigner votre Email</span>
                     </div>
                 </div>
                 <!-- MOT DE PASSE -->
@@ -401,6 +401,7 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
+                <pre>{{$data|json}}</pre>
             </form>          
             `,
     data: function () {
@@ -420,6 +421,8 @@ Vue.component('connexionForm', {
             stayConnected:true,
             showPopup:false,
             border: 'color-red',
+            allUsers:undefined,
+            isNotNewEmail:true
         }
     },
     methods: {
@@ -459,7 +462,30 @@ Vue.component('connexionForm', {
                     this.password = "";
                     this.user.password = "";
                     this.isErrorAuthentification = true;
+                    this.gatherUsersFromDatabase();
                 });
+        },
+        gatherUsersFromDatabase(){
+            this.$http.get("api/collaborateurs").then(
+                function (response) {
+                    this.allUsers = response.data;
+                    this.VerifyEmailFromDatabase();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        VerifyEmailFromDatabase(){
+            this.isNotNewEmail = false;
+            for (var tmp in this.allUsers) {
+                if (this.user.email == this.allUsers[tmp].email){
+                    this.isNotNewEmail = true;
+                    break;
+                }
+
+            }
         }
     }
 })

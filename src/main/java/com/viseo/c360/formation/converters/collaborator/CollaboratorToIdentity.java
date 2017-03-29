@@ -15,6 +15,8 @@ public class CollaboratorToIdentity {
         dto.setVersion(source.getVersion());
         dto.setFirstName(source.getFirstName());
         dto.setLastName(source.getLastName());
+        dto.setEmail(source.getEmail());
+        dto.setPassword(source.getPassword());
         return dto;
     }
 
