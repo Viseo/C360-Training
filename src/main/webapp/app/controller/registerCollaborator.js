@@ -357,15 +357,15 @@ Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
                 <!-- EMAIL-->
-                <div class="form-group" :class="{'has-error':emailEmpty}">
+                <div class="form-group" :class="{'has-error':emailEmpty || !isNotNewEmail}">
                     <label for="email">Email</label>
                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                         <i class="glyphicon glyphicon-envelope"></i>
                         <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
-                               v-model="email" @focus="emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                               v-model="email" @focus="emailEmpty = false; isNotNewEmail = true;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
-                        <span v-show="!isNotNewEmail" class="color-red ">Veuillez renseigner votre Email</span>
+                        <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Veuillez renseigner votre Email</span>
                     </div>
                 </div>
                 <!-- MOT DE PASSE -->
@@ -429,11 +429,15 @@ Vue.component('connexionForm', {
             if (this.email == '') {
                 this.emailEmpty = true;
             } else {
-                var self = this;
-                this.showPopup = true;
-                setTimeout(function () {
-                    self.showPopup = false;
-                }, 10000);
+                this.VerifyEmailFromDatabase();
+                this.isErrorAuthentification = false;
+                if(this.isNotNewEmail == true){
+                    var self = this;
+                    this.showPopup = true;
+                    setTimeout(function () {
+                        self.showPopup = false;
+                    }, 10000);
+                }
             }
         },
         isEmailEmpty(){
@@ -472,7 +476,7 @@ Vue.component('connexionForm', {
             this.$http.get("api/collaborateurs").then(
                 function (response) {
                     this.allUsers = response.data;
-                    this.VerifyEmailFromDatabase();
+
                 },
                 function (response) {
                     console.log("Error: ", response);
