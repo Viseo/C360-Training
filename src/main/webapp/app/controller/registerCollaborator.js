@@ -453,7 +453,6 @@ Vue.component('connexionForm', {
                 this.user.email=this.email;
                 this.user.password=this.password;
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
-                console.log( this.userToRegister);
                 this.VerifyUserByDatabase();
             }
         },
