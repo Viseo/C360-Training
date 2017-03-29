@@ -3,15 +3,42 @@
  */
 
 Vue.use(VueResource);
+Vue.component('error-messages',{
+    props:['height','colspan',
+           'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError'],
+    data: function(){
+        return {
+            styleTd: {
+                'height': this.height + 'px'
+            },
+        }
+    },
+    template: `            <td class="text-center" :style="styleTd" :colspan="colspan">
+                                <div>
+                                    <span v-show="emptyIdenticalError" 
+                                          class="text-center color-red">{{ identicalErrorMessage }}
+                                    </span>
+                                    <span v-show="emptyFillError" 
+                                          class="text-center color-red">{{ fillFieldErrorMessage }}
+                                    </span>
+                                    <span v-show="emptySuccess" 
+                                          class="text-center color-green"> {{ successMessage }}
+                                    </span>
+                                    <span v-show="emptyRegexError" 
+                                          class="color-red">{{ regexErrorMessage }}
+                                    </span>
+                                </div>
+                           </td>`
+});
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type','valueoptions', 'valuefor', 'icon'],
     data: function(){
       return{
           textValue: this.value,
-          classInputText: {
-              'has-error': this.isValid
-          }
+          optionsValue: this.valueoptions,
+          forValue: this.valuefor
       }
     },
     methods:{
@@ -23,20 +50,45 @@ Vue.component('input-text',{
         handleFocus(){
             console.log('handleFocus');
             this.$emit('focus');
+        },
+        handleClick(){
+            console.log('handleClick');
+            this.$emit('click');
         }
     },
-   template: `                        <td :width="width">
-                            <div class="form-group" :class="classInputText">
+   template: `<td :width="width">
+                            <div class="form-group has-feedback " 
+                                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
-                                <input type="text" class="form-control" 
+                                <input 
+                                    v-if="type==='input'" 
+                                    type="text" 
+                                    class="form-control"
                                     :value="textValue" 
                                     @input="updateValue($event.target.value)"
                                     :placeholder="placeholder" 
                                     :maxlength="maxlength"
+                                    @focus="handleFocus"/>
+                                <span v-if="typeof icon != 'undefined'" 
+                                      class="glyphicon form-control-feedback" 
+                                      :class="icon"
+                                      @click="handleClick"
+                                      >
+                                </span>
+
+                                <select 
+                                    v-else-if="type==='select'"
+                                    class="form-control" 
+                                    :value="textValue" 
+                                    @input="updateValue($event.target.value)"
                                     @focus="handleFocus">
+                                    <option v-for="n in forValue" >{{ n }}</option>
+                                </select>
+                         
                             </div>
-                        </td>`
+              </td>`
 });
+
 Vue.component('blue-header',{
     template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
 });
@@ -331,7 +383,6 @@ template:`
  <div class="container-fluid">
         <div class="row"><!-- row 1-->
             <div class="col-sm-12 col-md-10 col-lg-7">
-                <form class="" @submit.prevent="verifyTrainingFormBeforeSubmit">
                     <div class="row">
                         <div class="col-lg-7 col-md-7 text-center">
                             <legend>Ajouter une formation</legend>
@@ -345,18 +396,21 @@ template:`
                             placeholder="Formation"
                             maxlength="20"
                             @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
-                            isValid="isTrainingTitleValid">
+                            :isValid="isTrainingTitleValid"
+                            type='input'
+                        >
                         </input-text>
-
-                        <td width="15%">
-                            <div class="form-group">
-                                <label>1/2 journées</label><br/>
-                                <select class="form-control" v-model="numberHalfDays"
-                                        @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                                    <option v-for="n in 200">{{n}}</option>
-                                </select>
-                            </div>
-                        </td>
+                        <input-text
+                            width="15%"
+                            label="1/2 journées"
+                            v-model="numberHalfDays"
+                            @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
+                          
+                            :valuefor="200"
+                            type="select"
+                         >
+                         </input-text>
+                    
                         <td width="20%">
                             <div class="form-group">
                                 <label>Thèmes</label><br/>
@@ -369,41 +423,49 @@ template:`
                         </td>
                         <td class="text-center" width="20%">
                             <div class="form-group">
-                                <label>&nbsp</label><br/>
-                                <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
+                                 <label>&nbsp</label><br/>
+                                 <input type="submit" 
+                                       class="btn btn-default" 
+                                       value="Valider" 
+                                       @click="verifyTrainingFormBeforeSubmit" 
+                                       style="width:80%"/>
                             </div>
                         </td>
-                        <td width="30%" class="td-right">
-                            <form>
-                                <div class=" form-group has-feedback" :class="{'has-error':  !isNewTopicValid  } ">
-                                    <label class="label-control" for="topic">Nouveau thème</label><br/>
-                                    <input type="text" class="form-control" v-model="newTopic"
-                                           @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
-                                            placeholder="Thème" maxlength="50">
-                                    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"style="margin-top: 20px;"></span>
-                                </div>
-                            </form>
-                        </td>
+                            <input-text width="30%" 
+                                        label="Nouveau thème" 
+                                        v-model="newTopic" 
+                                        placeholder="Thème"
+                                        maxlength="50"
+                                        @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
+                                        :isValid="isNewTopicValid"
+                                        icon="glyphicon-plus"
+                                        type='input'
+                                        class="td-right"
+                                        @click="verifyTopicFormBeforeSubmit">
+                            </input-text>
                         </tr>
                         <tr>
-                            <td colspan="4" class="text-center">
-                                <div>
-                                    <span v-show="!isNewTrainingTitle" class="text-center color-red ">Une formation identique existe déjà.</span>
-                                    <span v-show="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                          class="text-center color-red ">Veuillez remplir tous les champs.</span>
-                                    <span v-show="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                          class="text-center color-green " >La formation a été créée avec succès.</span>
-                                    <span v-show=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"  class="color-red">{{trainingTitleRegexErrorMessage}}</span>
-                                </div>
-                            </td>
-                            <td class="text-center td-right" style="height: 60px;">
-                                <div>
-                                    <span v-show="newTopicErrorMessage" class="text-center color-red ">Veuillez remplir le champ.</span>
-                                    <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
-                                    <span v-show="confirmTopic && isNewTopic && !newTopicErrorMessage"class="text-center color-green ">Le nouveau thème a été ajouté avec succès.</span>
-                                    <span v-show="!isNewTopicValid" class="color-red">{{ newTopicRegexErrorMessage }}</span>
-                                </div>
-                            </td>
+                            <error-messages :colspan="4" 
+                                            identicalErrorMessage="Une formation identique existe déjà." 
+                                            fillFieldErrorMessage="Veuillez remplir tous les champs." 
+                                            successMessage="La formation a été créée avec succès." 
+                                            :regexErrorMessage="trainingTitleRegexErrorMessage"
+                                            :emptyIdenticalError="!isNewTrainingTitle"
+                                            :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                            :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                            :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
+                            </error-messages>
+                            <error-messages class="td-right"
+                                            :height="60" 
+                                            identicalErrorMessage="Un thème identique existe déjà." 
+                                            fillFieldErrorMessage="Veuillez remplir le champ." 
+                                            successMessage="Le nouveau thème a été ajouté avec succès." 
+                                            :regexErrorMessage="newTopicRegexErrorMessage"
+                                            :emptyIdenticalError="!isNewTopic"
+                                            :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                            :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
+                                            :emptyRegexError=" !isNewTopicValid">
+                            </error-messages>
                         </tr>
                     </table>
                 </form>
