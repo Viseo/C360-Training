@@ -165,37 +165,38 @@ let Formulaire = Vue.component('formulaire', {
     },
 
     watch: {
-        personnalIdNumber: function(value) {
-            this.verifyLogin(value, 'errorMessageLogin');
+        personnalIdNumber: function (value) {
+            this.verifyLogin(value);
+            console.log(personnalIdNumber);
         },
         lastName: function(value) {
-            this.verifyLastName(value, 'errorMessageLastName');
+            this.verifyLastName(value);
         },
         firstName: function(value) {
-            this.verifyFirstName(value, 'errorMessageFirstName');
+            this.verifyFirstName(value);
         },
         email: function(value) {
             this.verifyEmail(value);
         },
         password: function(value) {
-            this.verifyPassword(value, 'errorMessagePassword');
+            this.verifyPassword(value);
             if(this.confirmPassword!='')
-                this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
+                this.verifyConfirmPassword(value);
         },
         confirmPassword: function(value) {
-            this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
+            this.verifyConfirmPassword(value);
         }
     },
 
     methods: {
-        verifyLogin(personnalIdNumber, errorMessageLogin) {
+        verifyLogin(personnalIdNumber) {
             this.personalIdNumberAlreadyExist = true;
             this.loginEmpty = false;
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
-                this[errorMessageLogin] = '';
+                this.errorMessageLogin = '';
                 this.isLoginValid = true;
             } else {
-                this[errorMessageLogin] = 'Veuillez entrer  code de login valide';
+                this.errorMessageLogin = 'Veuillez entrer  code de login valide';
                 this.isLoginValid = false;
             }
         },
@@ -206,12 +207,12 @@ let Formulaire = Vue.component('formulaire', {
             }
         },
 
-        verifyLastName(lastName, errorMessageLastName) {
+        verifyLastName(lastName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
-                this[errorMessageLastName] = '';
+                this.errorMessageLastName = '';
                 this.isLastNameValid=true;
             } else {
-                this[errorMessageLastName] = 'Veuillez entrer un nom valide';
+                this.errorMessageLastName = 'Veuillez entrer un nom valide';
                 this.isLastNameValid=false;
             }
         },
@@ -222,12 +223,12 @@ let Formulaire = Vue.component('formulaire', {
             }
         },
 
-        verifyFirstName(firstName, errorMessageFirstName) {
+        verifyFirstName(firstName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/ .test(firstName)) {
-                this[errorMessageFirstName] = '';
+                this.errorMessageFirstName = '';
                 this.isFirstNameValid=true;
             } else {
-                this[errorMessageFirstName] = 'Veuillez entrer un Prénom valide';
+                this.errorMessageFirstName = 'Veuillez entrer un Prénom valide';
                 this.isFirstNameValid=false;
             }
         },
@@ -256,12 +257,12 @@ let Formulaire = Vue.component('formulaire', {
             }
         },
 
-        verifyPassword(password, errorMessagePassword) {
+        verifyPassword(password) {
             if (/^(.){6,125}$/.test(password)) {
-                this[errorMessagePassword] = '';
+                this.errorMessagePassword = '';
                 this.isPasswordValid=true;
             } else {
-                this[errorMessagePassword] = 'Le mot de passe doit avoir au minimum 6 caractères';
+                this.errorMessagePassword = 'Le mot de passe doit avoir au minimum 6 caractères';
                 this.isPasswordValid=false;
             }
         },
@@ -271,13 +272,13 @@ let Formulaire = Vue.component('formulaire', {
                 this.passwordEmpty = true;
             }
         },
-        verifyConfirmPassword(confirmPassword, errorMessageConfirmPassword) {
+        verifyConfirmPassword(confirmPassword) {
             if (this.confirmPassword === this.password) {
-                this[errorMessageConfirmPassword] = '';
-                this.isConfirmPasswordValid=true;
+                this.errorMessageConfirmPassword = '';
+                this.isConfirmPasswordValid = true;
             } else {
-                this[errorMessageConfirmPassword] = 'La confirmation du mot de passe n\'est pas valide';
-                this.isConfirmPasswordValid=false;
+                this.errorMessageConfirmPassword = 'La confirmation du mot de passe n\'est pas valide';
+                this.isConfirmPasswordValid = false;
             }
         },
 
