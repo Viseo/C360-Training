@@ -356,7 +356,7 @@ Vue.component('inscriptionForm', {
 
 Vue.component('connexionForm', {
     template: `
-             <form id="registr-form" @submit.prevent="verifyForm">
+             <form id="registr-form" @submit.prevent="VerifyForm">
                 <!-- EMAIL-->
                 <div class="form-group" :class="{'has-error':emailEmpty}">
                     <label for="email">Email</label>
@@ -366,7 +366,6 @@ Vue.component('connexionForm', {
                                v-model="email" @focus="emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
-                        <span v-show="!emailEmpty" class="color-red">{{ errorMessageEmail }}</span>
                     </div>
                 </div>
                 <!-- MOT DE PASSE -->
@@ -382,12 +381,13 @@ Vue.component('connexionForm', {
                         <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
                                @focus="passwordEmpty = false" @blur="isPasswordEmpty">
                         <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
-                        <span v-show="!passwordEmpty" class="color-red">{{ errorMessagePassword }}</span>
+                        
                     </div>
                 </div>
                 <div class="checkbox">
                      <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
                      <a href="#" @click="showPopup=true" class="forgotPassword">Mot de passe oublié</a>
+                     <br><span v-show="isErrorAuthentification" class="color-red">Connexion refusée: veuillez entrer une adresse e-mail et un mot de passe valide</span>
                      <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
                         <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
                      </div>
@@ -401,18 +401,20 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
-            </form>          
+                <pre>{{$data|json}}</pre>
+            </form>  
+            
             `,
     data: function () {
         return {
-            collaborator:{
+            user:{
                 email:'',
                 password:'',
             },
             email:'',
             password:'',
-            errorMessageEmail:'',
-            errorMessagePassword:'',
+            userToRegister:{},
+            isErrorAuthentification:false,
             verif: true,
             emailEmpty:false,
             passwordEmpty:false,
@@ -433,38 +435,27 @@ Vue.component('connexionForm', {
                 this.passwordEmpty = true;
             }
         },
-        saveAction() {
-            delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
-            //post the form to the server
-            this.$http.post("api/collaborateurs", this.collaboratorToRegister)
-                .then(
-                    function (response) {
-                        this.personalIdNumberAlreadyExist = true;
-                        window.location.pathname = '/pageblanche.html';
-                    },
-                    function (response) {
-                        console.log("Error: ",response);
-                        if (response.data.message == "personnalIdNumber") {
-                            this.personalIdNumberAlreadyExist = false;
-                        }
-                        else if(response.data.message == "email"){
-                            this.personalIdNumberAlreadyExist = true;
-                        }else{
-                            console.error(response);
-                        }
-                    }
-                );
-        },
-
-        verifyForm (){
+        VerifyForm(){
             this.isEmailEmpty(); this.isPasswordEmpty();
             if(!this.emailEmpty && !this.passwordEmpty){
-                this.collaborator.email=this.email;
-                this.collaborator.password=this.password;
-                this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
-               // this.saveAction();
+                this.user.email=this.email;
+                this.user.password=this.password;
+                this.userToRegister = JSON.parse(JSON.stringify(this.user));
+                this.VerifyUserByDatabase();
             }
         },
+        VerifyUserByDatabase(){
+            this.$http.post("api/user", this.userToRegister)
+                .then(
+                    function (response) {
+                        window.location.pathname = '/pageblanche.html';
+                    }
+                ).catch(function () {
+                    this.password = "";
+                    this.user.password = "";
+                    this.isErrorAuthentification = true;
+                });
+        }
     }
 })
 
