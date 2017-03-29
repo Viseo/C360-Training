@@ -1,10 +1,6 @@
 /**
  * Created by XME3612 on 27/03/2017.
  */
-
-
-
-
 new Vue({
     el: '#authentification',
     data:{
@@ -26,6 +22,7 @@ new Vue({
             this.userToRegister = JSON.parse(JSON.stringify(this.user));
             this.VerifyUserByDatabase();
         },
+
         VerifyUserByDatabase(){
             this.$http.post("api/user", this.userToRegister)
                 .then(
