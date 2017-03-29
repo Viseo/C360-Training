@@ -387,12 +387,16 @@ Vue.component('connexionForm', {
                 </div>
                 <div class="checkbox">
                      <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
+                     <a href="#" @click="showPopup=true" class="forgotPassword">Mot de passe oublié</a>
+                     <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
+                        <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
+                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
                             <button type="submit" name="register-submit" id="register-submit"
-                                    tabindex="4" class="form-control btn btn-primary">S'inscrire
+                                    tabindex="4" class="form-control btn btn-primary">Se connecter
                             </button>
                         </div>
                     </div>
@@ -413,36 +417,22 @@ Vue.component('connexionForm', {
             emailEmpty:false,
             passwordEmpty:false,
             showPass:false,
-            stayConnected:false,
+            stayConnected:true,
+            showPopup:false,
             border: 'color-red',
         }
     },
-
-    watch: {
-        email: function(value) {
-            this.verifyEmail(value, 'errorMessageEmail');
-        },
-        password: function(value) {
-            this.verifyPassword(value, 'errorMessagePassword');
-            if(this.confirmPassword!='')
-                this.verifyConfirmPassword(value, 'errorMessageConfirmPassword');
-        },
-    },
-
     methods: {
         isEmailEmpty(){
             if(this.email == ''){
                 this.emailEmpty = true;
             }
         },
-
-
         isPasswordEmpty(){
             if(this.password == ''){
                 this.passwordEmpty = true;
             }
         },
-
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
             //post the form to the server

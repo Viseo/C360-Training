@@ -105,3 +105,58 @@
 [v-cloak] {
     display: none;
 }
+
+.forgotPassword {
+    float:right;
+}
+
+/* Popup container */
+.popup {
+    position: relative;
+    display:inline-block;
+    cursor: pointer;
+
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+
+    background-color: #F0F0F0;
+    color: #2b2b29;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    padding:10px;
+    bottom: 400%;
+    left: 75%;
+    margin-left: -80px;
+}
+
+.slideInUp {
+    -webkit-animation-name: slideInUp;
+    animation-name: slideInUp;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+}
+
+/* Popup arrow */
+.popup .popuptext:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #F0F0F0 transparent transparent transparent;
+}
+
+
+/* this border color controlls the outside, thin border */
+.popup .popuptext:before {
+    top: 9px;
+    border-color: #a00 transparent transparent transparent;
+    border-width: 11px;
+}
