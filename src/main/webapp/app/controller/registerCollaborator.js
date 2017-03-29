@@ -424,11 +424,15 @@ Vue.component('connexionForm', {
     },
     methods: {
         showPopupFn() {
-            var self = this;
-            this.showPopup=true;
-            setTimeout(function(){
-                self.showPopup = false;
-            }, 10000);
+            if (this.email == '') {
+                this.emailEmpty = true;
+            } else {
+                var self = this;
+                this.showPopup = true;
+                setTimeout(function () {
+                    self.showPopup = false;
+                }, 10000);
+            }
         },
         isEmailEmpty(){
             if(this.email == ''){
@@ -446,6 +450,7 @@ Vue.component('connexionForm', {
                 this.user.email=this.email;
                 this.user.password=this.password;
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
+                console.log( this.userToRegister);
                 this.VerifyUserByDatabase();
             }
         },
