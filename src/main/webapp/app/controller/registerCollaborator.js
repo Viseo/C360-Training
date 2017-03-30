@@ -42,7 +42,7 @@ Vue.component('connect-user',{
             this.newCollab=false;
         }
     }
-})
+}),
 
 Vue.component('inscriptionForm', {
     template: `
@@ -351,7 +351,7 @@ Vue.component('inscriptionForm', {
             }
         },
     }
-})
+}),
 
 Vue.component('connexionForm', {
     template: `
@@ -401,7 +401,6 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
-                <pre>{{$data|json}}</pre>
             </form>          
             `,
     data: function () {
@@ -496,6 +495,7 @@ Vue.component('connexionForm', {
                     this.isNotNewEmail = true;
                     break;
                 }
+
             }
         }
     }
