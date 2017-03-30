@@ -5,7 +5,23 @@
 Vue.use(VueResource);
 
 Vue.component('blue-header',{
-    template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
+    template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
+                   <p style="float:right;">Bienvenue {{email}}</p> 
+              </div>`,
+    data: function(){
+        return {
+            email:''
+        }
+    },
+    mounted: function(){
+        this.getCookieEmail();
+    },
+    methods: {
+        getCookieEmail() {
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
+            this.email = regexCookie ? regexCookie.pop() : '';
+        },
+    }
 });
 
 Vue.component('add-formation-panel', {
@@ -37,14 +53,12 @@ Vue.component('add-formation-panel', {
             newTopicErrorMessage: false,
             isTrainingTitleValid: true,
             isNameTopicValid:true,
-
-
+            email:'',
             optionsTraining:[],
             optionsTopic: [],
             topicsChosen:[],
             test:undefined,
             trainingsOfTopic:[],
-
             state: training_store.state
         }
     },
@@ -57,7 +71,6 @@ Vue.component('add-formation-panel', {
             this.verifyNewTopicField(newTopicValue, 'newTopicRegexErrorMessage');
         },
     },
-
     mounted: function(){
         this.gatherTopicsFromDatabase();
         this.gatherTrainingsFromDatabase();

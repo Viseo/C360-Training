@@ -428,6 +428,21 @@ Vue.component('connexionForm', {
         }
     },
     methods: {
+
+        handleCookie() {
+            if(this.stayConnected) {
+                document.cookie = "mail="+this.user.email;
+                document.cookie = "password="+this.user.password;
+            }
+            else {
+                let getCookieMail = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
+                let getCookiePassword = document.cookie.match('(^|;)\\s*' + "password" + '\\s*=\\s*([^;]+)');
+                if(getCookieMail || getCookiePassword) {
+                    document.cookie = "mail="+ this.user.email + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                    document.cookie = "password="+this.user.password +"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                }
+            }
+        },
         showPopupFn() {
             if (this.email == '') {
                 this.emailEmpty = true;
@@ -455,9 +470,11 @@ Vue.component('connexionForm', {
             }
         },
         VerifyUserByDatabase(){
+
             this.$http.post("api/user", this.userToRegister)
                 .then(
                     function (response) {
+                        this.handleCookie();
                         window.location.pathname = '/pageblanche.html';
                     }
                 ).catch(function () {
