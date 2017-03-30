@@ -42,7 +42,7 @@ Vue.component('connect-user',{
             this.newCollab=false;
         }
     }
-})
+}),
 
 Vue.component('inscriptionForm', {
     template: `
@@ -351,7 +351,7 @@ Vue.component('inscriptionForm', {
             }
         },
     }
-})
+}),
 
 Vue.component('connexionForm', {
     template: `
@@ -422,6 +422,7 @@ Vue.component('connexionForm', {
             border: 'color-red',
             allUsers:undefined,
             isNotNewEmail:true
+
         }
     },
     methods: {
@@ -431,7 +432,7 @@ Vue.component('connexionForm', {
             } else {
                 this.VerifyEmailFromDatabase();
                 this.isErrorAuthentification = false;
-                if(this.isNotNewEmail == true){
+                if (this.isNotNewEmail == true) {
                     var self = this;
                     this.showPopup = true;
                     setTimeout(function () {
@@ -440,16 +441,19 @@ Vue.component('connexionForm', {
                 }
             }
         },
+
         isEmailEmpty(){
             if(this.email == ''){
                 this.emailEmpty = true;
             }
         },
+
         isPasswordEmpty(){
             if(this.password == ''){
                 this.passwordEmpty = true;
             }
         },
+
         VerifyForm(){
             this.isEmailEmpty(); this.isPasswordEmpty();
             if(!this.emailEmpty && !this.passwordEmpty){
@@ -459,6 +463,7 @@ Vue.component('connexionForm', {
                 this.VerifyUserByDatabase();
             }
         },
+
         VerifyUserByDatabase(){
             this.$http.post("api/user", this.userToRegister)
                 .then(
@@ -472,6 +477,7 @@ Vue.component('connexionForm', {
                     this.gatherUsersFromDatabase();
                 });
         },
+
         gatherUsersFromDatabase(){
             this.$http.get("api/collaborateurs").then(
                 function (response) {
@@ -484,14 +490,14 @@ Vue.component('connexionForm', {
                 }
             );
         },
+
         VerifyEmailFromDatabase(){
             this.isNotNewEmail = false;
             for (var tmp in this.allUsers) {
-                if (this.user.email == this.allUsers[tmp].email){
+                if (this.user.email == this.allUsers[tmp].email) {
                     this.isNotNewEmail = true;
                     break;
                 }
-
             }
         }
     }
