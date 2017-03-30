@@ -401,6 +401,7 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
+                <pre>{{$data|json}}</pre>
             </form>          
             `,
     data: function () {
@@ -421,7 +422,9 @@ Vue.component('connexionForm', {
             showPopup:false,
             border: 'color-red',
             allUsers:undefined,
-            isNotNewEmail:true
+            isNotNewEmail:true,
+            emailToSend:'',
+            passwordToSend:''
         }
     },
     methods: {
@@ -488,10 +491,11 @@ Vue.component('connexionForm', {
             this.isNotNewEmail = false;
             for (var tmp in this.allUsers) {
                 if (this.user.email == this.allUsers[tmp].email){
+                    this.emailToSend = this.allUsers[tmp].email;
+                    this.passwordToSend = this.allUsers[tmp].password;
                     this.isNotNewEmail = true;
                     break;
                 }
-
             }
         }
     }
