@@ -28,7 +28,7 @@ public class CollaboratorDAO {
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {
         daoFacade.persist(collaborator);
         daoFacade.flush();
-            return collaborator;
+        return collaborator;
     }
 
     public Collaborator getCollaboratorByLoginPassword(String personnalEmail,String personnalPassword){
