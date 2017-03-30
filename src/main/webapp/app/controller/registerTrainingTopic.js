@@ -80,9 +80,7 @@ Vue.component('input-text',{
                                         @input="updateValue($event.target.value)"
                                         @focus="handleFocus">
                                         <option selected disabled hidden style='display: none' value=''></option>
-                                        <option v-for="item in collection">
-                                            {{printProp ? item[printProp] : item }}
-                                        </option>
+                                        <option v-for="item in collection" >{{printProp ? item[printProp] : item }}</option>
                                 </select>
                          
                             </div>
@@ -236,6 +234,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
             //post the form to the server
+            console.log(this.trainingToRegister);
             this.$http.post("api/formations", this.trainingToRegister)
                 .then(
                     function (response) {
