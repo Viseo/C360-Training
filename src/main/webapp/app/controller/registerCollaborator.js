@@ -431,7 +431,8 @@ Vue.component('connexionForm', {
             if (this.email == '') {
                 this.emailEmpty = true;
             } else {
-                this.VerifyEmailFromDatabase();
+                this.gatherUsersFromDatabase();
+
                 this.isErrorAuthentification = false;
                 if(this.isNotNewEmail == true){
                     var self = this;
@@ -478,7 +479,7 @@ Vue.component('connexionForm', {
             this.$http.get("api/collaborateurs").then(
                 function (response) {
                     this.allUsers = response.data;
-
+                    this.VerifyEmailFromDatabase();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -489,13 +490,12 @@ Vue.component('connexionForm', {
         VerifyEmailFromDatabase(){
             this.isNotNewEmail = false;
             for (var tmp in this.allUsers) {
-                if (this.user.email == this.allUsers[tmp].email){
+                if (this.email == this.allUsers[tmp].email){
                     this.emailToSend = this.allUsers[tmp].email;
                     this.passwordToSend = this.allUsers[tmp].password;
                     this.isNotNewEmail = true;
                     break;
                 }
-
             }
         }
     }
