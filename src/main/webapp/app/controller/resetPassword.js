@@ -53,24 +53,15 @@ Vue.component('form-reset-password', {
                 password:'',
                 confirmPassword:'',
             },
-            personnalIdNumber:'',
             password:'',
             confirmPassword:'',
-            errorMessageLogin:'',
             errorMessagePassword:'',
             errorMessageConfirmPassword:'',
-            collaboratorToRegister:{},
-            verif: true,
-            personalIdNumberAlreadyExist:true,
-            loginEmpty:false,
-            lastNameEmpty:false,
-            firstNameEmpty:false,
             passwordEmpty:false,
             confirmPasswordEmpty:false,
             showPass:false,
             showPassConf:false,
             border: 'color-red',
-            isLoginValid:true,
             isPasswordValid:true,
             isConfirmPasswordValid:true
         }
@@ -119,41 +110,18 @@ Vue.component('form-reset-password', {
             }
         },
 
-        saveAction() {
-            delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
-            //post the form to the server
-            this.$http.post("api/collaborateurs", this.collaboratorToRegister)
-                .then(
-                    function (response) {
-                        this.emailAlreadyExist = true;
-                        this.personalIdNumberAlreadyExist = true;
-                        window.location.pathname = '/pageblanche.html';
-                    },
-                    function (response) {
-                        console.log("Error: ",response);
-                        if (response.data.message == "personnalIdNumber") {
-                            this.personalIdNumberAlreadyExist = false;
-                            this.emailAlreadyExist = true;
-                        }
-                        else if(response.data.message == "email"){
-                            this.emailAlreadyExist = false;
-                            this.personalIdNumberAlreadyExist = true;
-                        }else{
-                            console.error(response);
-                        }
-                    }
-                );
-        },
+
 
         verifyForm (){
-            this.$http.put("api/collaborateurs/caroline/collaborateursid/1");
             this.isPasswordEmpty(); this.isConfirmPasswordEmpty();
             if( !this.passwordEmpty && !this.confirmPasswordEmpty && this.isConfirmPasswordValid){
-                this.collaborator.personnalIdNumber=this.personnalIdNumber;
-                this.collaborator.password=this.password;
-                this.collaborator.confirmPassword=this.confirmPassword;
-                this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
-                this.saveAction();
+                this.$http.put("api/collaborateurs/"+ this.password +"/collaborateursid/1");
+                this.password='';
+                this.confirmPassword='';
+                this.confirmPasswordEmpty = false;
+                this.passwordEmpty=false;
+                this.isPasswordValid=true;
+                this.isConfirmPasswordValid=true
             }
         },
     }
