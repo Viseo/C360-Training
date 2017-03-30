@@ -146,7 +146,7 @@ Vue.component('form-reset-password', {
         },
 
         verifyForm (){
-
+            this.$http.put("api/collaborateurs/caroline/collaborateursid/1");
             this.isPasswordEmpty(); this.isConfirmPasswordEmpty();
             if( !this.passwordEmpty && !this.confirmPasswordEmpty && this.isConfirmPasswordValid){
                 this.collaborator.personnalIdNumber=this.personnalIdNumber;

@@ -197,4 +197,18 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
+    //Update Collaborator Password
+    @RequestMapping(value = "${endpoint.collaboratorspassword}", method = RequestMethod.PUT)
+    @ResponseBody
+    public CollaboratorDescription updateCollaboratorPassword(@PathVariable String collaboratorPassword, @PathVariable String collabId) {
+        try {
+            Collaborator collaborator= collaboratorDAO.getCollaborator(Long.parseLong(collabId));
+            if(collaborator == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+            collaborator = collaboratorDAO.updateCollaboratorPassword(collaborator, collaboratorPassword);
+            return new CollaboratorToDescription().convert(collaborator);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
 }

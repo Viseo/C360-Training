@@ -58,6 +58,14 @@ public class CollaboratorDAO {
 
 
     @Transactional
+    public Collaborator updateCollaboratorPassword(Collaborator collaborator, String collaboratorPassword){
+
+        collaborator = daoFacade.merge(collaborator);
+        collaborator.setPassword(collaboratorPassword);
+        daoFacade.flush();
+        return collaborator;
+    }
+
     public TrainingSession affectCollaboratorsTrainingSession(TrainingSession trainingSession, List<CollaboratorIdentity> collaboratorIdentities)
             throws PersistenceException
     {
