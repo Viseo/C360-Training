@@ -362,7 +362,7 @@ Vue.component('connexionForm', {
                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                         <i class="glyphicon glyphicon-envelope"></i>
                         <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
-                               v-model="email" @focus="emailEmpty = false; isNotNewEmail = true;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                               v-model="email" @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
                         <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Veuillez renseigner votre Email</span>
@@ -376,7 +376,7 @@ Vue.component('connexionForm', {
                         <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
                         <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
                         <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
-                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false"
+                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false; showPopup = false;"
                                @blur="isPasswordEmpty">
                         <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
                                @focus="passwordEmpty = false" @blur="isPasswordEmpty">
@@ -401,6 +401,7 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
+                <pre>{{$data|json}}</pre>
             </form>          
             `,
     data: function () {
@@ -431,16 +432,7 @@ Vue.component('connexionForm', {
             if (this.email == '') {
                 this.emailEmpty = true;
             } else {
-                this.gatherUsersFromDatabase();
-
-                this.isErrorAuthentification = false;
-                if(this.isNotNewEmail == true){
-                    var self = this;
-                    this.showPopup = true;
-                    setTimeout(function () {
-                        self.showPopup = false;
-                    }, 10000);
-                }
+                this.gatherUsersFromDatabaseToVerify();
             }
         },
         isEmailEmpty(){
@@ -472,20 +464,30 @@ Vue.component('connexionForm', {
                     this.password = "";
                     this.user.password = "";
                     this.isErrorAuthentification = true;
-                    this.gatherUsersFromDatabase();
                 });
         },
-        gatherUsersFromDatabase(){
+        gatherUsersFromDatabaseToVerify(){
             this.$http.get("api/collaborateurs").then(
                 function (response) {
                     this.allUsers = response.data;
-                    this.VerifyEmailFromDatabase();
                 },
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 }
-            );
+            ).then(
+                function () {
+                    this.VerifyEmailFromDatabase();
+                    this.isErrorAuthentification = false;
+                    if(this.isNotNewEmail == true){
+                        var self = this;
+                        this.showPopup = true;
+                        setTimeout(function () {
+                            self.showPopup = false;
+                        }, 10000);
+                    }
+                }
+            )
         },
         VerifyEmailFromDatabase(){
             this.isNotNewEmail = false;
