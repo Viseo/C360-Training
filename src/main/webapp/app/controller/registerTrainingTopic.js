@@ -80,7 +80,7 @@ Vue.component('input-text',{
                                         @input="updateValue($event.target.value)"
                                         @focus="handleFocus">
                                         <option selected disabled hidden style='display: none' value=''></option>
-                                        <option v-for="item in collection" >
+                                        <option v-for="item in collection">
                                             {{printProp ? item[printProp] : item }}
                                         </option>
                                 </select>
