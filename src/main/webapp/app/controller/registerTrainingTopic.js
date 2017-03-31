@@ -510,7 +510,7 @@ Vue.component('show-formation-panel', {
                             id="scroll-up" 
                             width="60" 
                             height="20" 
-                            style="position: absolute; left:50%; z-index:2;">
+                            style="position: absolute; left:50%; z-index:1;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
@@ -534,7 +534,7 @@ Vue.component('show-formation-panel', {
                                         <tbody>
                                             <tr v-for="trainings in topicTraining">
                                                 <td  v-for="training in trainings" width="25%">
-                                                    <button class="btn btn-toolbar btn-group">{{training.trainingTitle}}
+                                                    <button class="btn btn-toolbar btn-group" >{{training.trainingTitle}}
                                                     </button>
                                                 </td>
                                             </tr>
@@ -550,8 +550,9 @@ Vue.component('show-formation-panel', {
                             id="scroll-down" 
                             width="60" 
                             height="20" 
-                            style="position: absolute; left:50%; top:95%; z-index:2;">
+                            style="position: absolute; left:50%; top:95%; z-index:1;">
                    </div>
+                </div>
                </div>
            </div>
 </div>`
