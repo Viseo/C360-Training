@@ -308,6 +308,7 @@ Vue.component('inscriptionForm', {
             }
         },
 
+
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
             //post the form to the server
@@ -424,7 +425,8 @@ Vue.component('connexionForm', {
             allUsers:undefined,
             isNotNewEmail:true,
             emailToSend:'',
-            passwordToSend:''
+            passwordToSend:'',
+            idToSend:''
         }
     },
     methods: {
@@ -497,7 +499,8 @@ Vue.component('connexionForm', {
                     this.VerifyEmailFromDatabase();
                     this.isErrorAuthentification = false;
                     if(this.isNotNewEmail == true){
-                        var self = this;
+                        var self = this
+                        this.$http.post("api/sendemail/" + this.idToSend);
                         this.showPopup = true;
                         setTimeout(function () {
                             self.showPopup = false;
@@ -512,6 +515,7 @@ Vue.component('connexionForm', {
                 if (this.email == this.allUsers[tmp].email){
                     this.emailToSend = this.allUsers[tmp].email;
                     this.passwordToSend = this.allUsers[tmp].password;
+                    this.idToSend = this.allUsers[tmp].id;
                     this.isNotNewEmail = true;
                     break;
                 }

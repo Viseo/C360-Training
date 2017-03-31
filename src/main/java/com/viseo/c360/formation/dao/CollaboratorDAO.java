@@ -40,6 +40,15 @@ public class CollaboratorDAO {
         return registredUser;
     }
 
+    public Collaborator getCollaboratorByLogin(String personnalEmail){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        Collaborator registredUser =
+                (Collaborator) daoFacade.getSingle(
+                        "select c from Collaborator c where c.email = :personnalEmail",
+                        param("personnalEmail",personnalEmail));
+        return registredUser;
+    }
+
     public List<Collaborator> getAllCollaborators() {
         return daoFacade.getList("select c from Collaborator c");
     }

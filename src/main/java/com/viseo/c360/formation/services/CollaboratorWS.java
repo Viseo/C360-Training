@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
@@ -22,6 +23,7 @@ import com.viseo.c360.formation.converters.requestTraining.DescriptionToRequestT
 import com.viseo.c360.formation.converters.requestTraining.RequestTrainingToDescription;
 import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
+import com.viseo.c360.formation.email.sendMessage;
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
@@ -211,4 +213,25 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
+    //Send Collaborator Email
+    @RequestMapping(value = "${endpoint.collaboratorsemailpassword}", method = RequestMethod.POST)
+    @ResponseBody
+    public void sendCollaboratorEmail(@PathVariable String collaboratorId) {
+        try {
+            System.out.println("testestestest");
+            Collaborator collaborator= collaboratorDAO.getCollaborator(Long.parseLong(collaboratorId));
+            sendMessage sendmessage = new sendMessage();
+            try {
+                sendmessage.main(collaborator.getEmail());
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+            if(collaborator == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
+
 }
