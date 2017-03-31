@@ -23,7 +23,7 @@ Vue.component('connect-user',{
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
-                            <inscription-form v-if="newCollab"></inscription-form>
+                            <inscription-form @test="showConnexionForm()" v-if="newCollab"></inscription-form>
                             <connexion-form v-else></connexion-form>
                         </div>
                     </div>
@@ -316,7 +316,8 @@ Vue.component('inscriptionForm', {
                     function (response) {
                         this.emailAlreadyExist = true;
                         this.personalIdNumberAlreadyExist = true;
-                        window.location.pathname = '/pageblanche.html';
+                        this.$emit('test');
+                        //window.location.pathname = '/pageblanche.html';
                     },
                     function (response) {
                         if (response.data.message == "personnalIdNumber") {
@@ -474,7 +475,7 @@ Vue.component('connexionForm', {
                 .then(
                     function (response) {
                         this.handleCookie();
-                        window.location.pathname = '/pageblanche.html';
+                        window.location.pathname = '/addTrainingTopic.html';
                     }
                 ).catch(function () {
                     this.password = "";
