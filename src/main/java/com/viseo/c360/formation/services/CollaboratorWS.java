@@ -223,7 +223,7 @@ public class CollaboratorWS {
             Collaborator collaborator= collaboratorDAO.getCollaborator(Long.parseLong(collaboratorId));
             sendMessage sendmessage = new sendMessage();
             try {
-                sendmessage.main(collaborator.getEmail());
+                sendmessage.main(collaborator.getEmail(),collaborator.getId());
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

@@ -5,9 +5,9 @@ Vue.component('connect-user',{
         return{
             color_inscription: 'color-blue',
             color_connexion: 'color-blue',
-            tabconnexion: "tab",
-            tabinscription: "tab active",
-            newCollab: true
+            tabconnexion: "tab active",
+            tabinscription: "tab",
+            newCollab: false
         }
     },
     template:`

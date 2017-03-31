@@ -63,8 +63,13 @@ Vue.component('form-reset-password', {
             showPassConf:false,
             border: 'color-red',
             isPasswordValid:true,
-            isConfirmPasswordValid:true
+            isConfirmPasswordValid:true,
+            idParameter:''
         }
+    },
+
+    mounted: function(){
+        this.getParameterFromUrl();
     },
 
     watch: {
@@ -115,15 +120,27 @@ Vue.component('form-reset-password', {
         verifyForm (){
             this.isPasswordEmpty(); this.isConfirmPasswordEmpty();
             if( !this.passwordEmpty && !this.confirmPasswordEmpty && this.isConfirmPasswordValid){
-                this.$http.put("api/collaborateurs/"+ this.password +"/collaborateursid/1");
-                this.password='';
-                this.confirmPassword='';
-                this.confirmPasswordEmpty = false;
-                this.passwordEmpty=false;
-                this.isPasswordValid=true;
-                this.isConfirmPasswordValid=true
+                this.$http.put("api/collaborateurs/"+ this.password +"/collaborateursid/"+this.idParameter);
+                window.location.pathname = '/index.html';
             }
         },
+
+        getParameterFromUrl(){
+
+
+                var str = window.location.search;
+                var objURL = {};
+
+                str.replace(
+                    new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
+                    function( $0, $1, $2, $3 ){
+                        objURL[ $1 ] = $3;
+                    }
+                );
+
+                this.idParameter=objURL["id"];
+
+        }
     }
 })
 
