@@ -197,7 +197,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.training.topicDescription = this.selectOptionsOfTopic[tmp];
                 }
             }
-
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
@@ -490,81 +489,60 @@ Vue.component('show-formation-panel', {
             }
         }
     },
-    template: `
-<div class="container-fluid" id="addFormation">
+    template: ` <div class="container-fluid" id="addFormation">
            <div class="row" >
-               <div class="col-md-12 col-lg-12 col-sm-12" 
-                    style="padding:10px;">
-               </div>
+               <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                <div class="col-sm-12 col-md-10 col-lg-7">
+
                    <div class="row">
-                       <div class="col-lg-7 col-md-7 text-center" style="z-index:1;">
+
+                       <div class="col-lg-7 col-md-7 text-center">
                            <legend>Formation ajoutées</legend>
                        </div>
                    </div>
-                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" 
-                     id="test" 
-                     class="roundedCorner">
-                       <img v-show="showChevrons" 
-                            src="css/up.png" 
-                            id="scroll-up" 
-                            width="60" 
-                            height="20" 
-                            style="position: absolute; left:50%; z-index:1;">
+
+                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
                                <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
                                <td>
-                                  <template v-for="topicTraining in state.allTopicTraining">
-                                    <table class="table table-borderless tabnonborder fix">                  
-                                        <thead>
-                                            <tr>
-                                                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                                                <th width="25%"></th>
-                                                <th width="25%"></th>
-                                                <th class="deletetopic" 
-                                                    width="25%">
-                                                    <a href="#" class="changecolor">
-                                                        <span class="glyphicon glyphicon-trash"></span> Supprimer ce thème
-                                                    </a>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="trainings in topicTraining">
-                                                <td  v-for="training in trainings" width="25%">
-                                                    <button class="btn btn-toolbar btn-group" >{{training.trainingTitle}}
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                  </template>
+                                   <template v-for="topicTraining in state.allTopicTraining">
+                                       <table class="table table-borderless tabnonborder fix">
+                                          
+                                              
+            <thead>
+            <tr>
+                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                <th width="25%"></th>
+                <th width="25%"></th>
+                <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+            </tr>
+            </thead>
+                                           
+
+               <tbody>
+            <tr v-for="trainings in topicTraining">
+                <td  v-for="training in trainings" width="25%">
+                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
+                </td>
+            </tr>
+            </tbody>
+                                           </tr>
+                                       </table>
+                                   </template>
                                </td>
                            </tr>
                            </tbody>
                        </table>
-                       <img v-show="showChevrons" 
-                            src="css/down.png" 
-                            id="scroll-down" 
-                            width="60" 
-                            height="20" 
-                            style="position: absolute; left:50%; top:95%; z-index:1;">
+                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                    </div>
-                </div>
                </div>
            </div>
-</div>`
-
-
-
-
-
-
+       </div>`
 
 });
-
 class trainingStore {
     constructor () {
         this.state = {
