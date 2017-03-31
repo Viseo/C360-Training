@@ -80,7 +80,7 @@ Vue.component('input-text',{
                                         @input="updateValue($event.target.value)"
                                         @focus="handleFocus">
                                         <option selected disabled hidden style='display: none' value=''></option>
-                                        <option v-for="item in collection">
+                                        <option v-for="item in collection" >
                                             {{printProp ? item[printProp] : item }}
                                         </option>
                                 </select>
@@ -194,7 +194,12 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
             this.training.trainingTitle = this.trainingTitle;
             this.training.numberHalfDays = this.numberHalfDays;
-            this.training.topicDescription = this.topicDescription;
+            for (var tmp in this.selectOptionsOfTopic){
+                if(this.topicDescription == this.selectOptionsOfTopic[tmp].name){
+                    this.training.topicDescription = this.selectOptionsOfTopic[tmp];
+                }
+            }
+
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
@@ -242,7 +247,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                         this.isNewTrainingTitle = true;
                         this.confirmFormation = true;
                         this.gatherTrainingsFromDatabase();
-                        this.resetTrainingForm();
+                        //this.resetTrainingForm();
                         setTimeout(function(){ this.confirmFormation = false; }.bind(this), 2000);
                     },
                     function (response) {
@@ -285,7 +290,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.selectOptionsOfTopic.sort(function (a, b) {
                         return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
                     });
-                    this.resetTopicForm();
+                    //this.resetTopicForm();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -301,7 +306,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.selectOptionsOfTraining.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
-                    this.resetTrainingForm();
+                    //this.resetTrainingForm();
                     this.TopicwithTraining();
                     this.reorganizeAllTopicsAndTrainings();
                 },
