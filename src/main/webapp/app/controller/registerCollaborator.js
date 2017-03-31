@@ -401,7 +401,6 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
-                <pre>{{$data|json}}</pre>
             </form>          
             `,
     data: function () {
