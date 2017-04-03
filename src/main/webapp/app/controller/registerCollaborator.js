@@ -44,7 +44,7 @@ let NavigationMenu = Vue.component('connect-user',{
     }
 })
 
-let Formulaire = Vue.component('inscriptionForm', {
+let Formulaire = Vue.component('inscription-form', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
                 <customInput 
@@ -205,7 +205,6 @@ let Formulaire = Vue.component('inscriptionForm', {
     watch: {
         personnalIdNumber: function (value) {
             this.verifyLogin(value);
-            console.log(personnalIdNumber);
         },
         lastName: function(value) {
             this.verifyLastName(value);
