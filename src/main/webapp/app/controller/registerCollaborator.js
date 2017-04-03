@@ -334,7 +334,6 @@ let Formulaire = Vue.component('inscription-form', {
                         this.emailAlreadyExist = true;
                         this.personalIdNumberAlreadyExist = true;
                         this.$emit('test');
-                        //window.location.pathname = '/pageblanche.html';
                     },
                     function (response) {
                         console.log("Error: ",response);

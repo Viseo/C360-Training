@@ -454,8 +454,6 @@ template:`
                                        style="width:80%"/>
                             </div>
                         </td>
-                        
-               
                         <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
                             <input-text width="30%" 
                                         label="Nouveau thème" 
@@ -471,7 +469,6 @@ template:`
                                         @click="verifyTopicFormBeforeSubmit">
                             </input-text>
                         </form>
-                        
                         </tr>
                         <tr>
                             <error-messages :colspan="2" 
