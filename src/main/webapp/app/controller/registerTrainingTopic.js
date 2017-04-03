@@ -446,12 +446,13 @@ template:`
                             <div class="form-group">
                                  <label>&nbsp</label><br/>
                                  <input type="submit" 
-                                       class="btn btn-default" 
+                                       class="btn btn-primary" 
                                        value="Valider" 
                                        @click="verifyTrainingFormBeforeSubmit" 
                                        style="width:80%"/>
                             </div>
                         </td>
+                        <div>
                             <input-text width="30%" 
                                         label="Nouveau thème" 
                                         :value="newTopic"
@@ -460,11 +461,12 @@ template:`
                                         maxlength="50"
                                         @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
                                         :isValid="isNewTopicValid"
-                                        icon="glyphicon-plus"
+                                        icon="glyphicon-plus btn btn-link"
                                         type='input'
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
                             </input-text>
+                        </div>
                         </tr>
                         <tr>
                             <error-messages :colspan="4" 
