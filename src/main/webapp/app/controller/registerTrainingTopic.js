@@ -322,7 +322,7 @@ template:`
                     <table>
                         <td width="20%">
                             <div class="form-group" :class="{'has-error':!isTrainingTitleValid }">
-                                <label for="formation" class="label-control">Formation</label><br/><br/>
+                                <label for="formation" class="label-control">Formation</label><br/>
                                 <input type="text" class="form-control" v-model="trainingTitle"
                                        @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
                                         placeholder="Formation" maxlength="20">
@@ -330,18 +330,20 @@ template:`
                         </td>
                         <td width="15%">
                             <div class="form-group">
-                                <label>1/2 journées</label><br/><br/>
-                                <select class="form-control" v-model="numberHalfDays"
+                                <label>1/2 journées</label><br/>
+                                <select class="form-control required" v-model="numberHalfDays"
                                         @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                    <option value="" disabled selected hidden>---</option>
                                     <option v-for="n in 200">{{n}}</option>
                                 </select>
                             </div>
                         </td>
                         <td width="20%">
                             <div class="form-group">
-                                <label>Thèmes</label><br/><br/>
-                                <select class="form-control" v-model="topicDescription"
+                                <label>Thèmes</label><br/>
+                                <select class="form-control required" v-model="topicDescription"
                                         @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                                  <option value="" disabled selected hidden>---</option>
                                     <option v-for="option in optionsTopic" :value="option">{{ option.name }}
                                     </option>
                                 </select>
@@ -349,18 +351,18 @@ template:`
                         </td>
                         <td class="text-center" width="20%">
                             <div class="form-group">
-                                <label>&nbsp</label><br/><br/>
-                                <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
+                                <label>&nbsp</label><br/>
+                                <input type="submit" class="btn btn-primary" value="Ajouter" style="width:80%"/>
                             </div>
                         </td>
                         <td width="30%" class="td-right">
                             <form>
                                 <div class=" form-group has-feedback" :class="{'has-error':  !isNameTopicValid  } ">
-                                    <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
+                                    <label class="label-control" for="topic">Nouveau thème</label><br/>
                                     <input type="text" class="form-control" v-model="newTopic"
                                            @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
                                             placeholder="Thème" maxlength="50">
-                                    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"style="margin-top: 20px;"></span>
+                                    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"></span>
                                 </div>
                             </form>
                         </td>
@@ -376,7 +378,7 @@ template:`
                                     <span v-show=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"  class="color-red">{{trainingTitleRegexErrorMessage}}</span>
                                 </div>
                             </td>
-                            <td class="text-center td-right" style="height: 60px;">
+                            <td class="text-center td-right" style="height: 80px;">
                                 <div>
                                     <span v-show="newTopicErrorMessage" class="text-center color-red ">Veuillez remplir le champ.</span>
                                     <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
