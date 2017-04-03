@@ -1,7 +1,6 @@
 Vue.use(VueResource);
 
 let NavigationMenu = Vue.component('connect-user',{
-
     data:function(){
         return{
             color_inscription: 'color-blue',
@@ -43,7 +42,7 @@ let NavigationMenu = Vue.component('connect-user',{
             this.newCollab=false;
         }
     }
-}),
+})
 
 let Formulaire = Vue.component('inscriptionForm', {
     template: `
@@ -355,7 +354,7 @@ let Formulaire = Vue.component('inscriptionForm', {
             }
         },
     }
-}),
+})
 
 Vue.component('connexionForm', {
     template: `
