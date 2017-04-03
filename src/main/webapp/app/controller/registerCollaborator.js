@@ -47,88 +47,105 @@ let NavigationMenu = Vue.component('connect-user',{
 let Formulaire = Vue.component('inscriptionForm', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
-                <!-- MATRICULE-->
-                <div class="form-group">
-                    <label for="matricule">Code de login</label>
-                    <div class="inner-addon left-addon" :class="{'has-error': loginEmpty || !isLoginValid || !personalIdNumberAlreadyExist}">
-                        <i class="glyphicon glyphicon-th"></i>
-                        <input type="text" id="matricule" name="matricule" tabindex="1" class="form-control has-left-icon"
-                               placeholder="ABC1234" v-model="personnalIdNumber" @focus="loginEmpty = false" @blur="isLoginEmpty"
-                               onblur="this.placeholder = 'ABC1234' " maxlength="20" minlength="2">
-                        <span v-show="loginEmpty" class="color-red">Code de login est obligatoire.</span>
-                        <span v-show="!personalIdNumberAlreadyExist" class="color-red ">Ce code de login a déjà été enregistré.</span>
-                        <span v-show="!isLoginValid && !loginEmpty" class="color-red">{{ errorMessageLogin }}</span>
-                    </div>
-                </div>
+                <customInput 
+                    label="login" 
+                    labelText="Code de login" 
+                    icon="glyphicon-th" 
+                    type="text" 
+                    tab="1" 
+                    placeholder="ABC1234" 
+                    v-model="personnalIdNumber" 
+                    @focus="loginEmpty=false;" 
+                    @blur="isLoginEmpty" 
+                    maxlength="20" minlength="2" 
+                    :emptyField="loginEmpty"
+                    emptyMessage="Code de login obligatoire" 
+                    :existField="!personalIdNumberAlreadyExist"
+                    existMessage="Ce code de login a déjà été enregistré" 
+                    :errorField="!isLoginValid && !loginEmpty"
+                    :errorMessage="errorMessageLogin">
+                </customInput>
                 <!-- NOM -->
-                <div class="form-group" :class="{'has-error': lastNameEmpty || !isLastNameValid}">
-                    <label for="nom">Nom</label>
-                    <div class="inner-addon left-addon">
-                        <i class="glyphicon glyphicon-user"></i>
-                        <input type="text" name="nom" id="nom" tabindex="1" class="form-control " placeholder="DUPONT" v-model="lastName"
-                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'DUPONT'" @focus="lastNameEmpty = false" @blur="isLastNameEmpty"
-                               maxlength="125" minlength="2">
-                        <span v-show="lastNameEmpty" class="color-red">Nom est obligatoire.</span>
-                        <span v-show="!isLastNameValid && !lastNameEmpty" class="color-red">{{ errorMessageLastName }}</span>
-                    </div>
-                </div>
+                 <customInput 
+                    label="nom" 
+                    labelText="Nom" 
+                    icon="glyphicon-user" 
+                    type="text"
+                    tab="2" 
+                    placeholder="DUPONT" 
+                    v-model="lastName" 
+                    @focus="lastNameEmpty = false" 
+                    @blur="isLastNameEmpty" 
+                    maxlength="125" minlength="2" 
+                    :emptyField="lastNameEmpty"
+                    emptyMessage="Nom est obligatoire" 
+                    existField=""
+                    :errorField="!isLastNameValid && !lastNameEmpty"
+                    :errorMessage="errorMessageLastName">
+                </customInput>
                 <!-- PRENOM -->
-                <div class="form-group" :class="{'has-error': !isFirstNameValid || firstNameEmpty }">
-                    <label for="prenom">Prénom</label>
-                    <div class="inner-addon left-addon" :class="{ 'control': true }">
-                        <i class="glyphicon glyphicon-user"></i>
-                        <input type="text"  name="prenom" id="prenom" tabindex="2" class="form-control" placeholder="Eric" v-model="firstName"
-                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Eric'" @focus="firstNameEmpty = false" @blur="isFirstNameEmpty"
-                               maxlength="125" minlength="2">
-                        <span v-show="firstNameEmpty" class="color-red ">Prénom est obligatoire.</span>
-                        <span v-show="!isFirstNameValid && !firstNameEmpty" class="color-red">{{ errorMessageFirstName }}</span>
-                    </div>
-            
-                </div>
+                <customInput 
+                    label="prenom" 
+                    labelText="Prénom" 
+                    icon="glyphicon-user" 
+                    type="text"
+                    tab="2" 
+                    placeholder="Eric" 
+                    v-model="firstName" 
+                    @focus="firstNameEmpty = false" 
+                    @blur="isFirstNameEmpty" 
+                    maxlength="125" minlength="2" 
+                    :emptyField="firstNameEmpty"
+                    emptyMessage="Prénom est obligatoire" 
+                    existField=""
+                    :errorField="!isFirstNameValid && !firstNameEmpty"
+                    :errorMessage="errorMessageFirstName">
+                </customInput>          
                 <!-- EMAIL-->
-                <div class="form-group" :class="{'has-error':!isEmailValid || emailEmpty || !emailAlreadyExist}">
-                    <label for="email">Email</label>
-                    <div class="inner-addon left-addon" :class="{ 'control': true }">
-                        <i class="glyphicon glyphicon-envelope"></i>
-                        <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
-                               v-model="email" @focus="emailAlreadyExist = true; emailEmpty = false"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
-                               onblur="this.placeholder = 'eric.dupont@viseo.com'">
-                        <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
-                        <span v-show="!isEmailValid && !emailEmpty" class="color-red">{{ errorMessageEmail }}</span>
-                        <span v-show="!emailAlreadyExist" class="color-red ">Ce email a déjà été enregistré.</span>
-                    </div>
-                </div>
+                <customInput 
+                    label="email" 
+                    labelText="Email" 
+                    icon="glyphicon-envelope" 
+                    type="text"
+                    tab="2" 
+                    placeholder="eric.dupont@viseo.com" 
+                    v-model="email" 
+                    @focus="emailAlreadyExist = true; emailEmpty = false" 
+                    @blur="isEmailEmpty"
+                    :emptyField="emailEmpty"
+                    emptyMessage="Email est obligatoire" 
+                    :existField="!emailAlreadyExist"
+                    existMessage="Cet email a déjà été enregistré."
+                    :errorField="!isEmailValid && !emailEmpty"
+                    :errorMessage="errorMessageEmail">
+                </customInput>  
                 <!-- MOT DE PASSE -->
-                <div class="form-group" :class="{'has-error': !isPasswordValid || passwordEmpty }">
-                    <label for="mdp">Mot de passe</label>
-                    <div class="password" :class="{ 'control': true }">
-                        <i class="glyphicon glyphicon-lock"></i>
-                        <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
-                        <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
-                        <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
-                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false"
-                               @blur="isPasswordEmpty">
-                        <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
-                               @focus="passwordEmpty = false" @blur="isPasswordEmpty">
-                        <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
-                        <span v-show="!isPasswordValid && !passwordEmpty" class="color-red">{{ errorMessagePassword }}</span>
-                    </div>
-                </div>
+                <customPasswordInput
+                    label="mdp"
+                    labelText="Mot de passe"
+                    v-model="password"
+                    @focus="passwordEmpty = false" 
+                    @blur="isPasswordEmpty"
+                    :emptyField="passwordEmpty"
+                    :errorField="!isPasswordValid && !passwordEmpty"
+                    :errorMessage="errorMessagePassword"
+                    :show="showPass"
+                    @click="showPass = !showPass">
+                 </customPasswordInput>
+             
                 <!-- CONFIRMATION MOT DE PASSE -->
-                <div class="form-group"   :class="{'has-error': !isConfirmPasswordValid|| confirmPasswordEmpty }">
-                    <label for="mdpc">Confirmation mot de passe</label>
-                    <div class="password" :class="{ 'control': true }">
-                        <i class="glyphicon glyphicon-lock "></i>
-                        <span @click="showPassConf = !showPassConf" v-show="!showPassConf && confirmPassword" class="glyphicon glyphicon-eye-open "> </span>
-                        <span @click="showPassConf = false"  v-show="showPassConf && confirmPassword" class="glyphicon glyphicon-eye-close "> </span>
-                        <input type="password" v-model="confirmPassword"  v-show="!showPassConf" name="mdpc" id="mdpc" tabindex="2" class="form-control"
-                               placeholder="••••••"  onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="confirmPasswordEmpty = false"
-                               @blur="isConfirmPasswordEmpty">
-                        <input type="text" v-model="confirmPassword" v-show="showPassConf" name="mdpc" id="mdpc2" tabindex="2" class="form-control"
-                               @focus="confirmPasswordEmpty = false"  @blur="isConfirmPasswordEmpty">
-                        <span v-show="confirmPasswordEmpty" class="color-red ">Confirmation est obligatoire.</span>
-                        <span v-show="!isConfirmPasswordValid && !confirmPasswordEmpty" class="color-red">{{ errorMessageConfirmPassword }}</span>
-                    </div>
+                <customPasswordInput
+                    label="mdpc"
+                    labelText="Confirmation mot de passe"
+                    v-model="confirmPassword"
+                    @focus="confirmPasswordEmpty = false" 
+                    @blur="isConfirmPasswordEmpty"
+                    :emptyField="confirmPasswordEmpty"
+                    :errorField="!isConfirmPasswordValid && !confirmPasswordEmpty"
+                    :errorMessage="errorMessageConfirmPassword"
+                    :show="showPassConf"
+                    @click="showPassConf = !showPassConf">
+                 </customPasswordInput>
                 </div>
                 <div class="form-group">
                     <div class="row">
@@ -524,3 +541,111 @@ Vue.component('connexionForm', {
         }
     }
 })
+
+let customInput = Vue.component('customInput', {
+    props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
+            "minlength", 'emptyField', "emptyMessage", "existField", "existMessage", "errorField", "errorMessage" ],
+    template: `
+                <div class="form-group">
+                    <label for="label">{{labelText}}</label>
+                    <div class="inner-addon left-addon"   
+                        :class="{ 'has-error' : emptyField || existField || errorField }">      
+                        <i class="glyphicon" :class="icon"></i>
+                        <input v-if="type=='text'" 
+                               type="text" 
+                               :id="label" 
+                               :tabindex="tab" 
+                               class="form-control"
+                               :placeholder="placeholder" 
+                               @focus="handleFocus" @blur="handleBlur"
+                               @input="updateValue($event.target.value)"
+                               onblur="this.placeholder = placeholder " 
+                               maxlength="maxlength" 
+                               minlength="minlength">
+                        <input v-if="type=='email'" 
+                               type="email" 
+                               :id="label" 
+                               :tabindex="tab" 
+                               class="form-control"
+                               :placeholder="placeholder" 
+                               @focus="handleFocus" @blur="handleBlur"
+                               @input="updateValue($event.target.value)"
+                               onblur="this.placeholder = placeholder " >
+                        <span v-show="emptyField" class="color-red">{{labelText}} est obligatoire</span>
+                        <span v-show="existField" class="color-red ">{{existMessage}}</span>
+                        <span v-show="errorField" class="color-red">{{ errorMessage }}</span>
+                    </div>
+                </div>
+                `,
+    data: function() {
+            return {
+                show: false
+            }
+    },
+    methods: {
+        updateValue(value){
+            this.textValue = value;
+            this.$emit('input',value);
+        },
+        handleFocus(){
+            this.$emit('focus');
+        },
+        handleBlur(){
+            this.$emit('blur');
+        },
+
+    }
+} );
+
+let customPasswordInput = Vue.component('customPasswordInput', {
+    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show'],
+    template: `<div class="form-group"   :class="{'has-error': emptyField || errorField }">
+                    <label for="label">{{labelText}}</label>
+                    <div class="password" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-lock "></i>
+                        <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open "> </span>
+                        <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close "> </span> 
+                        <input type="password"  
+                                v-show="!show" 
+                                :value="textValue" 
+                                :id="label" 
+                                tabindex="2" 
+                                class="form-control"
+                                placeholder="••••••"  
+                                onfocus="this.placeholder = ''" 
+                                onblur="this.placeholder = '••••••'" 
+                                @focus="handleFocus" @blur="handleBlur"
+                                @input="updateValue($event.target.value)">
+                        <input type="text" 
+                                v-show="show"
+                                :value="textValue" 
+                                :id="label" 
+                                tabindex="2" 
+                                class="form-control"
+                                @focus="handleFocus" @blur="handleBlur"
+                                @input="updateValue($event.target.value)">
+                        <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
+                        <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>
+                    </div>
+    `, data: function(){
+        return{
+            textValue: this.value,
+        }
+    },
+
+    methods: {
+        updateValue(value){
+            this.textValue = value;
+            this.$emit('input',value);
+        },
+        handleFocus(){
+            this.$emit('focus');
+        },
+        handleBlur(){
+            this.$emit('blur');
+        },
+        handleClick(){
+            this.$emit('click');
+        }
+    }
+});
