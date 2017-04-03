@@ -4,6 +4,7 @@
 
 Vue.use(VueResource);
 
+
 Vue.component('blue-header',{
     template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
                    <p style="float:right;">Bienvenue {{email}}</p> 
