@@ -93,3 +93,14 @@ table.fix{
     border-radius: 10px;
 }
 [v-cloak] { display:none; }
+
+select:required:invalid {
+    color: gray;
+}
+option[value=""][disabled] {
+    color: gray;
+    display: none;
+}
+option {
+    color: black;
+}

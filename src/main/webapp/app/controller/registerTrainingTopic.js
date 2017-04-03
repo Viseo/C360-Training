@@ -5,7 +5,23 @@
 Vue.use(VueResource);
 
 Vue.component('blue-header',{
-    template:'<div style="padding:40px; background-color:#428bca; margin-bottom:30px;"></div>',
+    template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
+                   <p style="float:right;">Bienvenue {{email}}</p> 
+              </div>`,
+    data: function(){
+        return {
+            email:''
+        }
+    },
+    mounted: function(){
+        this.getCookieEmail();
+    },
+    methods: {
+        getCookieEmail() {
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
+            this.email = regexCookie ? regexCookie.pop() : '';
+        },
+    }
 });
 
 let AddFormationPanel = Vue.component('add-formation-panel', {
@@ -307,7 +323,7 @@ template:`
                     <table>
                         <td width="20%">
                             <div class="form-group" :class="{'has-error':!isTrainingTitleValid }">
-                                <label for="formation" class="label-control">Formation</label><br/><br/>
+                                <label for="formation" class="label-control">Formation</label><br/>
                                 <input type="text" class="form-control" v-model="trainingTitle"
                                        @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
                                         placeholder="Formation" maxlength="20">
@@ -315,18 +331,20 @@ template:`
                         </td>
                         <td width="15%">
                             <div class="form-group">
-                                <label>1/2 journées</label><br/><br/>
-                                <select class="form-control" v-model="numberHalfDays"
+                                <label>1/2 journées</label><br/>
+                                <select class="form-control required" v-model="numberHalfDays"
                                         @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                    <option value="" disabled selected hidden>---</option>
                                     <option v-for="n in 200">{{n}}</option>
                                 </select>
                             </div>
                         </td>
                         <td width="20%">
                             <div class="form-group">
-                                <label>Thèmes</label><br/><br/>
-                                <select class="form-control" v-model="topicDescription"
+                                <label>Thèmes</label><br/>
+                                <select class="form-control required" v-model="topicDescription"
                                         @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                                  <option value="" disabled selected hidden>---</option>
                                     <option v-for="option in selectOptionsOfTopic" :value="option">{{ option.name }}
                                     </option>
                                 </select>
@@ -334,18 +352,18 @@ template:`
                         </td>
                         <td class="text-center" width="20%">
                             <div class="form-group">
-                                <label>&nbsp</label><br/><br/>
-                                <input type="submit" class="btn btn-default" value="Valider" style="width:80%"/>
+                                <label>&nbsp</label><br/>
+                                <input type="submit" class="btn btn-primary" value="Ajouter" style="width:80%"/>
                             </div>
                         </td>
                         <td width="30%" class="td-right">
                             <form>
                                 <div class=" form-group has-feedback" :class="{'has-error':  !isNameTopicValid  } ">
-                                    <label class="label-control" for="topic">Nouveau thème</label><br/><br/>
+                                    <label class="label-control" for="topic">Nouveau thème</label><br/>
                                     <input type="text" class="form-control" v-model="newTopic"
                                            @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
                                             placeholder="Thème" maxlength="50">
-                                    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"style="margin-top: 20px;"></span>
+                                    <span class="glyphicon glyphicon-plus form-control-feedback" @click="verifyTopicFormBeforeSubmit"></span>
                                 </div>
                             </form>
                         </td>
@@ -361,7 +379,7 @@ template:`
                                     <span v-show=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"  class="color-red">{{trainingTitleRegexErrorMessage}}</span>
                                 </div>
                             </td>
-                            <td class="text-center td-right" style="height: 60px;">
+                            <td class="text-center td-right" style="height: 80px;">
                                 <div>
                                     <span v-show="newTopicErrorMessage" class="text-center color-red ">Veuillez remplir le champ.</span>
                                     <span v-show="!isNewTopic" class="text-center color-red ">Un thème identique existe déjà.</span>
@@ -378,13 +396,14 @@ template:`
 `
 });
 
-let ShowFormation = Vue.component('show-formation-panel', {
+Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,
+
         }
     },
-    methods: {
+    computed: {
         showChevrons(){
             if (this.state.trainingsChosen.length > 0) {
                 return true;
@@ -407,7 +426,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                    </div>
 
                 <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                       <img v-show="showChevrons()" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                        <table class="fix tabnonborder" >
                            <tbody>
                            <tr>
@@ -441,7 +460,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                            </tr>
                            </tbody>
                        </table>
-                       <img v-show="showChevrons()" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                    </div>
                </div>
            </div>
@@ -465,3 +484,7 @@ class trainingStore {
 }
 
 let training_store = new trainingStore();
+
+new Vue({
+    el: '#TrainingTopic'
+});

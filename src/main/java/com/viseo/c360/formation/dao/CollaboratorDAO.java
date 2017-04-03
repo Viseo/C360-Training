@@ -28,7 +28,7 @@ public class CollaboratorDAO {
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {
         daoFacade.persist(collaborator);
         daoFacade.flush();
-            return collaborator;
+        return collaborator;
     }
 
     public Collaborator getCollaboratorByLoginPassword(String personnalEmail,String personnalPassword){
@@ -37,6 +37,15 @@ public class CollaboratorDAO {
                 (Collaborator) daoFacade.getSingle(
                         "select c from Collaborator c where c.email = :personnalEmail and c.password = :personnalPassword",
                         param("personnalEmail",personnalEmail), param("personnalPassword",personnalPassword));
+        return registredUser;
+    }
+
+    public Collaborator getCollaboratorByLogin(String personnalEmail){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        Collaborator registredUser =
+                (Collaborator) daoFacade.getSingle(
+                        "select c from Collaborator c where c.email = :personnalEmail",
+                        param("personnalEmail",personnalEmail));
         return registredUser;
     }
 
@@ -58,6 +67,14 @@ public class CollaboratorDAO {
 
 
     @Transactional
+    public Collaborator updateCollaboratorPassword(Collaborator collaborator, String collaboratorPassword){
+
+        collaborator = daoFacade.merge(collaborator);
+        collaborator.setPassword(collaboratorPassword);
+        daoFacade.flush();
+        return collaborator;
+    }
+
     public TrainingSession affectCollaboratorsTrainingSession(TrainingSession trainingSession, List<CollaboratorIdentity> collaboratorIdentities)
             throws PersistenceException
     {

@@ -1,29 +1,51 @@
 Vue.use(VueResource);
 
-let NavigationMenu = Vue.component('navigation-menu',{
+let NavigationMenu = Vue.component('connect-user',{
 
     data:function(){
         return{
             color_inscription: 'color-blue',
             color_connexion: 'color-blue',
-            tabconnexion: "tab",
-            tabinscription: "tab active",
+            tabconnexion: "tab active",
+            tabinscription: "tab",
+            newCollab: false
         }
     },
     template:`
-             <ul class="tab-group">
-                <li :class="tabinscription">
-                    <a @click="tabinscription = 'tab active'; tabconnexion = 'tab';">Inscription</a>
-                </li>
-                <li :class="tabconnexion">
-                    <a @click="tabinscription = 'tab'; tabconnexion = 'tab active';">Connexion</a>
-                </li>
-            </ul>
+            <div class="panel panel-default">
+                <ul class="tab-group">
+                    <li :class="tabinscription">
+                        <a @click="showInscriptionForm()">Inscription</a>
+                    </li>
+                    <li :class="tabconnexion">
+                        <a @click="showConnexionForm()">Connexion</a>
+                    </li>
+                </ul>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
+                            <inscription-form @test="showConnexionForm()" v-if="newCollab"></inscription-form>
+                            <connexion-form v-else></connexion-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         `,
+    methods: {
+        showInscriptionForm() {
+            this.tabinscription = 'tab active';
+            this.tabconnexion = 'tab';
+            this.newCollab=true;
+        },
+        showConnexionForm() {
+            this.tabinscription = 'tab';
+            this.tabconnexion = 'tab active';
+            this.newCollab=false;
+        }
+    }
+}),
 
-})
-
-let Formulaire = Vue.component('formulaire', {
+let Formulaire = Vue.component('inscriptionForm', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
                 <!-- MATRICULE-->
@@ -296,7 +318,8 @@ let Formulaire = Vue.component('formulaire', {
                     function (response) {
                         this.emailAlreadyExist = true;
                         this.personalIdNumberAlreadyExist = true;
-                        window.location.pathname = '/pageblanche.html';
+                        this.$emit('test');
+                        //window.location.pathname = '/pageblanche.html';
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -331,5 +354,174 @@ let Formulaire = Vue.component('formulaire', {
                 this.saveAction();
             }
         },
+    }
+}),
+
+Vue.component('connexionForm', {
+    template: `
+             <form id="registr-form" @submit.prevent="VerifyForm">
+                <!-- EMAIL-->
+                <div class="form-group" :class="{'has-error':emailEmpty || !isNotNewEmail}">
+                    <label for="email">Email</label>
+                    <div class="inner-addon left-addon" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-envelope"></i>
+                        <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
+                               v-model="email" @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                               onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                        <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
+                        <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Veuillez renseigner votre Email</span>
+                    </div>
+                </div>
+                <!-- MOT DE PASSE -->
+                <div class="form-group" :class="{'has-error':passwordEmpty }">
+                    <label for="mdp">Mot de passe</label>
+                    <div class="password" :class="{ 'control': true }">
+                        <i class="glyphicon glyphicon-lock"></i>
+                        <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
+                        <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
+                        <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
+                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false; showPopup = false;"
+                               @blur="isPasswordEmpty">
+                        <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
+                               @focus="passwordEmpty = false" @blur="isPasswordEmpty">
+                        <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
+                        
+                    </div>
+                </div>
+                <div class="checkbox">
+                     <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
+                     <a href="#" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a>
+                     <br><span v-show="isErrorAuthentification" class="color-red">Connexion refusée: veuillez entrer une adresse e-mail et un mot de passe valide</span>
+                     <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
+                        <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
+                     </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
+                            <button type="submit" name="register-submit" id="register-submit"
+                                    tabindex="4" class="form-control btn btn-primary">Se connecter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>          
+            `,
+    data: function () {
+        return {
+            user:{
+                email:'',
+                password:'',
+            },
+            email:'',
+            password:'',
+            userToRegister:{},
+            isErrorAuthentification:false,
+            verif: true,
+            emailEmpty:false,
+            passwordEmpty:false,
+            showPass:false,
+            stayConnected:true,
+            showPopup:false,
+            border: 'color-red',
+            allUsers:undefined,
+            isNotNewEmail:true,
+            emailToSend:'',
+            passwordToSend:'',
+            idToSend:''
+        }
+    },
+    methods: {
+
+        handleCookie() {
+            if(this.stayConnected) {
+                document.cookie = "mail="+this.user.email;
+                document.cookie = "password="+this.user.password;
+            }
+            else {
+                let getCookieMail = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
+                let getCookiePassword = document.cookie.match('(^|;)\\s*' + "password" + '\\s*=\\s*([^;]+)');
+                if(getCookieMail || getCookiePassword) {
+                    document.cookie = "mail="+ this.user.email + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                    document.cookie = "password="+this.user.password +"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                }
+            }
+        },
+        showPopupFn() {
+            if (this.email == '') {
+                this.emailEmpty = true;
+            } else {
+                this.gatherUsersFromDatabaseToVerify();
+            }
+        },
+        isEmailEmpty(){
+            if(this.email == ''){
+                this.emailEmpty = true;
+            }
+        },
+        isPasswordEmpty(){
+            if(this.password == ''){
+                this.passwordEmpty = true;
+            }
+        },
+        VerifyForm(){
+            this.isEmailEmpty(); this.isPasswordEmpty();
+            if(!this.emailEmpty && !this.passwordEmpty){
+                this.user.email=this.email;
+                this.user.password=this.password;
+                this.userToRegister = JSON.parse(JSON.stringify(this.user));
+                this.VerifyUserByDatabase();
+            }
+        },
+        VerifyUserByDatabase(){
+
+            this.$http.post("api/user", this.userToRegister)
+                .then(
+                    function (response) {
+                        this.handleCookie();
+                        window.location.pathname = '/addTrainingTopic.html';
+                    }
+                ).catch(function () {
+                    this.password = "";
+                    this.user.password = "";
+                    this.isErrorAuthentification = true;
+                });
+        },
+        gatherUsersFromDatabaseToVerify(){
+            this.$http.get("api/collaborateurs").then(
+                function (response) {
+                    this.allUsers = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            ).then(
+                function () {
+                    this.VerifyEmailFromDatabase();
+                    this.isErrorAuthentification = false;
+                    if(this.isNotNewEmail == true){
+                        var self = this
+                        this.$http.post("api/sendemail/" + this.idToSend);
+                        this.showPopup = true;
+                        setTimeout(function () {
+                            self.showPopup = false;
+                        }, 10000);
+                    }
+                }
+            )
+        },
+        VerifyEmailFromDatabase(){
+            this.isNotNewEmail = false;
+            for (var tmp in this.allUsers) {
+                if (this.email == this.allUsers[tmp].email){
+                    this.emailToSend = this.allUsers[tmp].email;
+                    this.passwordToSend = this.allUsers[tmp].password;
+                    this.idToSend = this.allUsers[tmp].id;
+                    this.isNotNewEmail = true;
+                    break;
+                }
+            }
+        }
     }
 })
