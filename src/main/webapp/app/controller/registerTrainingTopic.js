@@ -32,11 +32,12 @@ Vue.component('error-messages',{
     data: function(){
         return {
             styleTd: {
-                'height': this.height + 'px'
+                'height': this.height + 'px',
+                'width':this.width + 'px'
             },
         }
     },
-    template: `            <td class="text-center" :style="styleTd" :colspan="colspan">
+    template: `            <td class="text-center" :style="styleTd" :colspan="colspan" :width="width">
                                 <div>
                                     <span v-show="emptyIdenticalError" 
                                           class="text-center color-red">{{ identicalErrorMessage }}
@@ -483,6 +484,7 @@ template:`
                             </error-messages>
                             <error-messages class="td-right"
                                             :height="80" 
+                                            :width="250"
                                             identicalErrorMessage="Un thème identique existe déjà." 
                                             fillFieldErrorMessage="Veuillez remplir le champ." 
                                             successMessage="Le nouveau thème a été ajouté avec succès." 
