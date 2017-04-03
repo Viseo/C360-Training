@@ -55,15 +55,9 @@ Vue.component('error-messages',{
 
 Vue.component('input-text',{
     props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
-    data: function(){
-      return{
-          textValue: this.value,
-      }
-    },
     methods:{
         updateValue(value){
-            this.textValue = value;
-            this.$emit('input',value);
+          this.$emit('input',value);
         },
         handleFocus(){
             this.$emit('focus');
@@ -79,7 +73,7 @@ Vue.component('input-text',{
                                 <input v-if="type==='input'" 
                                        type="text" 
                                        class="form-control"
-                                       :value="textValue" 
+                                       :value="value" 
                                        @input="updateValue($event.target.value)"
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
@@ -92,7 +86,7 @@ Vue.component('input-text',{
 
                                 <select v-else-if="type==='select'"
                                         class="form-control" 
-                                        :value="textValue" 
+                                        :value="value" 
                                         @input="updateValue($event.target.value)"
                                         @focus="handleFocus">
                                         <option selected disabled hidden style='display: none' value=''></option>
@@ -157,6 +151,18 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     },
 
     methods: {
+        updateV1 (v) {
+            this.trainingTitle = v
+        },
+        updateV2 (v) {
+            this.numberHalfDays = v
+        },
+        updateV3 (v) {
+            this.topicDescription = v
+        },
+        updateV4 (v) {
+            this.newTopic = v
+        },
         verifyTrainingField(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
                 this[errorMessage] = '';
@@ -406,7 +412,8 @@ template:`
                         <input-text 
                             width="20%" 
                             label="Formation" 
-                            v-model="trainingTitle" 
+                            :value="trainingTitle" 
+                            @input="updateV1"
                             placeholder="Formation"
                             maxlength="20"
                             @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
@@ -416,7 +423,8 @@ template:`
                         <input-text
                             width="15%"
                             label="1/2 journées"
-                            v-model="numberHalfDays"
+                            :value="numberHalfDays"
+                            @input="updateV2"
                             @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                             :collection="200"
                             type="select"
@@ -425,7 +433,8 @@ template:`
                          <input-text
                             width="20%"
                             label="Thèmes"
-                            v-model="topicDescription"
+                            :value="topicDescription"
+                            @input="updateV3"
                             @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                             :collection="selectOptionsOfTopic"
                             print-prop="name"
@@ -445,7 +454,8 @@ template:`
                         </td>
                             <input-text width="30%" 
                                         label="Nouveau thème" 
-                                        v-model="newTopic" 
+                                        :value="newTopic"
+                                         @input="updateV4"
                                         placeholder="Thème"
                                         maxlength="50"
                                         @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
