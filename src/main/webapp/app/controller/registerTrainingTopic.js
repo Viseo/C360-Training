@@ -27,7 +27,7 @@ Vue.component('blue-header',{
 Vue.component('error-messages',{
     props:['height','colspan',
            'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError'],
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
     data: function(){
         return {
             styleTd: {
@@ -409,6 +409,8 @@ template:`
                         </div>
                     </div>
                     <table>
+                    <tr>
+                    <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
                         <input-text 
                             width="20%" 
                             label="Formation" 
@@ -427,10 +429,9 @@ template:`
                             @input="updateV2"
                             @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                             :collection="200"
-                            type="select"
-                         >
+                            type="select">
                          </input-text>
-                         <input-text
+                        <input-text
                             width="20%"
                             label="Thèmes"
                             :value="topicDescription"
@@ -438,9 +439,9 @@ template:`
                             @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
                             :collection="selectOptionsOfTopic"
                             print-prop="name"
-                            type="select"
-                         >
-                         </input-text>
+                            type="select">
+                        </input-text>
+                        </form>
                         <td class="text-center" 
                             width="20%">
                             <div class="form-group">
@@ -452,7 +453,9 @@ template:`
                                        style="width:80%"/>
                             </div>
                         </td>
-                        <div>
+                        
+               
+                        <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
                             <input-text width="30%" 
                                         label="Nouveau thème" 
                                         :value="newTopic"
@@ -466,10 +469,11 @@ template:`
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
                             </input-text>
-                        </div>
+                        </form>
+                        
                         </tr>
                         <tr>
-                            <error-messages :colspan="4" 
+                            <error-messages :colspan="2" 
                                             identicalErrorMessage="Une formation identique existe déjà." 
                                             fillFieldErrorMessage="Veuillez remplir tous les champs." 
                                             successMessage="La formation a été créée avec succès." 
@@ -492,7 +496,6 @@ template:`
                             </error-messages>
                         </tr>
                     </table>
-                </form>
             </div>
         </div>
     </div>

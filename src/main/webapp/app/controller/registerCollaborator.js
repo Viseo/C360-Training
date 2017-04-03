@@ -375,22 +375,28 @@ let Formulaire = Vue.component('inscription-form', {
 Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
+             <table style="border-spacing: 0px">
                 <!-- EMAIL-->
                 <div class="form-group" :class="{'has-error':emailEmpty || !isNotNewEmail}">
                     <label for="email">Email</label>
                     <div class="inner-addon left-addon" :class="{ 'control': true }">
+                    <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-envelope"></i>
                         <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
                                v-model="email" @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                    </td></tr>
+                    <tr><td style="height: 20px;">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
                         <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Veuillez renseigner votre Email</span>
+                    </td></tr>
                     </div>
                 </div>
                 <!-- MOT DE PASSE -->
                 <div class="form-group" :class="{'has-error':passwordEmpty }">
                     <label for="mdp">Mot de passe</label>
                     <div class="password" :class="{ 'control': true }">
+                    <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-lock"></i>
                         <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
                         <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
@@ -399,8 +405,10 @@ Vue.component('connexionForm', {
                                @blur="isPasswordEmpty">
                         <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
                                @focus="passwordEmpty = false" @blur="isPasswordEmpty">
+                    </td></tr>
+                    <tr><td style="height: 20px;">
                         <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
-                        
+                    </td></tr>
                     </div>
                 </div>
                 <div class="checkbox">
@@ -420,6 +428,7 @@ Vue.component('connexionForm', {
                         </div>
                     </div>
                 </div>
+            </table>
             </form>          
             `,
     data: function () {
@@ -545,10 +554,12 @@ let customInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
             "minlength", 'emptyField', "emptyMessage", "existField", "existMessage", "errorField", "errorMessage" ],
     template: `
+                <table style="border-spacing: 0px">
                 <div class="form-group">
                     <label for="label">{{labelText}}</label>
                     <div class="inner-addon left-addon"   
-                        :class="{ 'has-error' : emptyField || existField || errorField }">      
+                        :class="{ 'has-error' : emptyField || existField || errorField }">
+                    <tr><td style="width: 500px;">
                         <i class="glyphicon" :class="icon"></i>
                         <input v-if="type=='text'" 
                                type="text" 
@@ -570,11 +581,15 @@ let customInput = Vue.component('customInput', {
                                @focus="handleFocus" @blur="handleBlur"
                                @input="updateValue($event.target.value)"
                                onblur="this.placeholder = placeholder " >
+                    </td></tr>
+                    <tr><td style="height: 20px;">
                         <span v-show="emptyField" class="color-red">{{labelText}} est obligatoire</span>
                         <span v-show="existField" class="color-red ">{{existMessage}}</span>
                         <span v-show="errorField" class="color-red">{{ errorMessage }}</span>
+                    </td></tr>
                     </div>
                 </div>
+                </table>
                 `,
     data: function() {
             return {
@@ -598,9 +613,11 @@ let customInput = Vue.component('customInput', {
 
 let customPasswordInput = Vue.component('customPasswordInput', {
     props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show'],
-    template: `<div class="form-group"   :class="{'has-error': emptyField || errorField }">
+    template: `<table style="border-spacing: 0px">
+                <div class="form-group"   :class="{'has-error': emptyField || errorField }">
                     <label for="label">{{labelText}}</label>
                     <div class="password" :class="{ 'control': true }">
+                    <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-lock "></i>
                         <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open "> </span>
                         <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close "> </span> 
@@ -623,9 +640,13 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                                 class="form-control"
                                 @focus="handleFocus" @blur="handleBlur"
                                 @input="updateValue($event.target.value)">
+                    </td></tr>
+                    <tr><td style="height: 20px;">
                         <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
                         <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>
+                    </td></tr>
                     </div>
+                </table>
     `, data: function(){
         return{
             textValue: this.value,
