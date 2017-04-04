@@ -11,6 +11,7 @@ let NavigationMenu = Vue.component('connect-user',{
         }
     },
     template:`
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
             <div class="panel panel-default">
                 <ul class="tab-group">
                     <li :class="tabinscription">
@@ -29,7 +30,7 @@ let NavigationMenu = Vue.component('connect-user',{
                     </div>
                 </div>
             </div>
-        `,
+        </div> `,
     methods: {
         showInscriptionForm() {
             this.tabinscription = 'tab active';

@@ -3,6 +3,10 @@
 
 }
 
+#connectUser {
+    margin-top: 100px;
+}
+
 .color-blue {color: #1E90FF;}
 .color-grey {color: #A9A9A9;}
 .color-red {color: #B22222;}
@@ -152,7 +156,6 @@
     border-style: solid;
     border-color: #F0F0F0 transparent transparent transparent;
 }
-
 
 /* this border color controlls the outside, thin border */
 .popup .popuptext:before {
