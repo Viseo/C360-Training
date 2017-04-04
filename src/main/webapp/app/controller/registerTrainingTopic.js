@@ -72,7 +72,7 @@ Vue.component('input-text',{
                             <div class="form-group has-feedback " 
                                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
-                                <input v-if="type==='input'" 
+                                <input v-if="type ==='input'" 
                                        type="text" 
                                        class="form-control"
                                        :value="value" 
@@ -519,59 +519,228 @@ Vue.component('show-formation-panel', {
             }
         }
     },
-    template: ` <div class="container-fluid" id="addFormation">
-           <div class="row" >
-               <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-               <div class="col-sm-12 col-md-10 col-lg-7">
-
-                   <div class="row">
-
-                       <div class="col-lg-7 col-md-7 text-center">
-                           <legend>Formation ajoutées</legend>
-                       </div>
-                   </div>
-
-                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                       <table class="fix tabnonborder" >
-                           <tbody>
-                           <tr>
-                               <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
-                               <td>
-                                   <template v-for="topicTraining in state.allTopicTraining">
-                                       <table class="table table-borderless tabnonborder fix">
-                                          
-                                              
-            <thead>
-            <tr>
-                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                <th width="25%"></th>
-                <th width="25%"></th>
-                <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-            </tr>
-            </thead>
-                                           
-
-               <tbody>
-            <tr v-for="trainings in topicTraining">
-                <td  v-for="training in trainings" width="25%">
-                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
-                </td>
-            </tr>
-            </tbody>
+    template: `
+             <div class="container-fluid" id="addFormation">
+                  <div class="row" >
+                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+                      <div class="col-sm-12 col-md-10 col-lg-7">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 text-center">
+                                     <legend>Formation ajoutées</legend>
+                                </div>
+                            </div>
+                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                              <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                <table class="fix tabnonborder" >
+                                    <tbody>
+                                          <tr>
+                                              <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                                               <td>
+                                                   <template v-for="topicTraining in state.allTopicTraining">
+                                                        <table class="table table-borderless tabnonborder fix">                               
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                                    <th width="25%"></th>
+                                                                    <th width="25%"></th>
+                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="trainings in topicTraining">
+                                                                    <td  v-for="training in trainings" width="25%">
+                                                                        <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                           </tr>
+                                                        </table>
+                                                   </template>
+                                               </td>
                                            </tr>
-                                       </table>
-                                   </template>
-                               </td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                   </div>
-               </div>
-           </div>
-       </div>`
+                                    </tbody>
+                                </table>
+                               <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                           </div>
+                       </div>
+                </div>
+             </div>`
+});
 
+Vue.component('show-formation-panel', {
+    data: function() {
+        return {
+            state: training_store.state,
+
+        }
+    },
+    computed: {
+        showChevrons(){
+            if (this.state.trainingsChosen.length > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    },
+    template: `
+             <div class="container-fluid" id="addFormation">
+                  <div class="row" >
+                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+                      <div class="col-sm-12 col-md-10 col-lg-7">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 text-center">
+                                     <legend>Formation ajoutées</legend>
+                                </div>
+                            </div>
+                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                              <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                <table class="fix tabnonborder" >
+                                    <tbody>
+                                          <tr>
+                                              <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                                               <td>
+                                                   <template v-for="topicTraining in state.allTopicTraining">
+                                                        <table class="table table-borderless tabnonborder fix">                               
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                                    <th width="25%"></th>
+                                                                    <th width="25%"></th>
+                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="trainings in topicTraining">
+                                                                    <td  v-for="training in trainings" width="25%">
+                                                                        <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                           </tr>
+                                                        </table>
+                                                   </template>
+                                               </td>
+                                           </tr>
+                                    </tbody>
+                                </table>
+                               <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                           </div>
+                       </div>
+                </div>
+             </div>`
+});
+
+Vue.component('add-session-panel', {
+    data: function() {
+        return {
+
+        }
+    },
+
+    template: `
+        <div class="container-fluid" id="addSession">
+            <div class="row" >
+                <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+                <div class="col-sm-12 col-md-10 col-lg-7">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7 text-center">
+                            <legend>Gérer une session</legend>
+                        </div>
+                    </div>
+                    <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                        <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
+                            <div class = "col-lg-4 col-lg-offset-4"> 
+                                 <form id = "registr-form" @submit.prevent="varSubmit">                                 
+                                    <input-text 
+                                        label = "" 
+                                        :value = "varValue" 
+                                        @input = ""
+                                        placeholder = "formation"
+                                        maxlength = "20"
+                                        @focus = ""
+                                        :isValid = "varIsValide"
+                                        icon = "glyphicon glyphicon-floppy-disk"
+                                        type = 'input'>
+                                    </input-text> 
+                                 </form>
+                            </div>
+                            <div class = "col-lg-4" style = "margin-top: 25px;">
+                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure 2 demies journées</p>
+                            </div>
+                        </div>
+                        
+                        <div class = "row">
+                            <div class = "col-lg-4">
+                                <p class = "text-center">Session disponibles : (0)</p>
+                            </div>                            
+                            <form id="registr-form" @submit.prevent="varSubmit" class = "col-lg-8">
+                                <div class = "row" style="margin-bottom: 30px;">
+                                    <div class = "col-lg-4">                                
+                                        <input-text 
+                                            label = "Date de début" 
+                                            :value = "varValue" 
+                                            @input = ""
+                                            placeholder = "--/--/----"
+                                            maxlength = "20"
+                                            @focus = ""
+                                            :isValid = "varIsValide"
+                                            icon = ""
+                                            type = 'input'>
+                                        </input-text> 
+                                    </div>
+                                    <div class = "col-lg-4 col-lg-offset-2">                                
+                                        <input-text 
+                                            label = "Salles" 
+                                            :value = "varValue" 
+                                            @input = ""
+                                            placeholder = "Salle"
+                                            maxlength = "20"
+                                            @focus = ""
+                                            :isValid = "varIsValide"
+                                            icon = ""
+                                            type = 'input'>
+                                        </input-text> 
+                                    </div> 
+                                </div>
+                                <div class = "row" style="margin-bottom: 30px;">
+                                    <div class = "col-lg-4 ">                                
+                                        <input-text 
+                                            label = "Date de fin" 
+                                            :value = "varValue" 
+                                            @input = ""
+                                            placeholder = "--/--/----"
+                                            maxlength = "20"
+                                            @focus = ""
+                                            :isValid = "varIsValide"
+                                            icon = ""
+                                            type = 'input'>
+                                        </input-text> 
+                                    </div>
+                                </div> 
+                                <div class = "row " style = "margin-bottom: 30px;">
+                                    <div class = "col-lg-4 col-lg-pull-1">                                
+                                        <input type = "submit" 
+                                               class = "btn btn-default" 
+                                               value = "Enregistrer" 
+                                               @click = "Enregistrer" 
+                                               style = "width:100%"/>                                                                         
+                                    </div>
+                                    <div class = "col-lg-4 col-lg-pull-1">                                
+                                        <input type = "submit" 
+                                               class = "btn btn-primary" 
+                                               value = "Supprimer" 
+                                               @click = "Supprimer" 
+                                               style = "width:100%"/>                                                                         
+                                    </div>
+                                </div>                                                      
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
 });
 
 class trainingStore {
