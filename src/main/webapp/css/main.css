@@ -1,26 +1,65 @@
-#custom-navbar {
+#custom-navbar{
     padding:10px 30px 10px 10px;
+}
+#wrap p, #wrap span {
+    color: white;
 }
 #custom-navbar p {
     margin:0px;
 }
 #navbar-title {
-    color:white;
     font-size:1.3em;
-}
-#navbar-subtitle {
-    color:#16334d;
 }
 #navbar-right-part {
     float:right;
     margin:20px 10px 20px 0px;
     padding:0px;
 }
+
 #navbar-user {
+    display: inline-block;
     text-align:right;
     padding-right:3em;
+    color: #6a6a6a;
+}
+.dropdown-menu {
+    min-width:130px;
+    left:-75%;
+    top: 150%;
+}
+#dropdown-app {
+    padding-top:15px;
+}
+.icon-app {
+    margin-bottom:15px;
+}
+.icon-app:hover {
+    filter: brightness(70%);
+}
+#btn-disconnect {
+    padding:1% 5%;
+    font-size:95%;
+    box-shadow: none;
+    background-color: #dcdcdc;
+    border: solid 1px #dcdcdc;
+    border-radius:15px;
 }
 #navbar-app {
     font-size:1.7em;
     line-height:75%;
+}
+i.glyphicon {
+    top:2.5px;
+}
+#dropdown-app {
+    text-align: justify;
+    width: 35px;
+}
+#dropdown-app img {
+    width:35px;
+    display: block;
+    margin: 0 auto;
+}
+#dropdown-app p {
+    color: black;
 }
