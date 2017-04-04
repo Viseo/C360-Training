@@ -101,6 +101,17 @@ public class CollaboratorWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.isconnected}", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean checkIsAlreadyConnected(@RequestBody String thisToken){
+        try {
+            return mapUserCache.get(thisToken) != null;
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
     @RequestMapping(value = "${endpoint.userdisconnect}", method = RequestMethod.POST)
     @ResponseBody
     public Boolean deleteDisconnectedUserFromCache(@RequestBody String token) {

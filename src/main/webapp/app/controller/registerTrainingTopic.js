@@ -7,20 +7,30 @@ Vue.use(VueResource);
 
 Vue.component('blue-header',{
     template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
-                   <p style="float:right;">Bienvenue {{email}}</p> 
+                   <p style="float:right;">Bienvenue {{nom}} {{prenom}}</p> 
               </div>`,
     data: function(){
         return {
-            email:''
+            nom:'',
+            prenom:'',
+            token:''
         }
     },
+
     mounted: function(){
-        this.getCookieEmail();
+        this.getCookieToken();
     },
     methods: {
-        getCookieEmail() {
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
-            this.email = regexCookie ? regexCookie.pop() : '';
+        getCookieToken() {
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(regexCookie){
+            this.token = String(regexCookie.pop());
+                this.nom = jwt_decode(this.token).lastName;
+                this.prenom = jwt_decode(this.token).sub;
+            }
+            else{
+                window.location.pathname = '/index.html';
+            }
         },
     }
 });

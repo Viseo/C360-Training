@@ -30,6 +30,27 @@ let NavigationMenu = Vue.component('connect-user',{
                 </div>
             </div>
         `,
+
+    beforeCreate: function(){
+        let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+        if(regexCookie) {
+            let token = String(regexCookie.pop());
+            this.$http.post('api/sendtoken', token)
+                .then(
+                    function (response) {
+                        if(response){
+                            console.log('token')
+                            window.location.pathname = '/addTrainingTopic.html';
+                        }
+                        else{
+                            console.log('pas token')
+                        }
+                    });
+        }
+
+
+    },
+
     methods: {
         showInscriptionForm() {
             this.tabinscription = 'tab active';
@@ -456,17 +477,15 @@ Vue.component('connexionForm', {
     },
     methods: {
 
-        handleCookie() {
+        handleCookie(token) {
+            console.log(token);
             if(this.stayConnected) {
-                document.cookie = "mail="+this.user.email;
-                document.cookie = "password="+this.user.password;
+                document.cookie = "token="+token;
             }
             else {
-                let getCookieMail = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
-                let getCookiePassword = document.cookie.match('(^|;)\\s*' + "password" + '\\s*=\\s*([^;]+)');
-                if(getCookieMail || getCookiePassword) {
-                    document.cookie = "mail="+ this.user.email + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                    document.cookie = "password="+this.user.password +"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                if(getCookieToken) {
+                    document.cookie = "token="+ token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                 }
             }
         },
@@ -496,13 +515,20 @@ Vue.component('connexionForm', {
                 this.VerifyUserByDatabase();
             }
         },
+        decodeThisToken(userToken) {
+            var tokenPayload = jwt_decode(userToken.data['userConnected']);
+            this.setUserData(userToken.data['userConnected'], tokenPayload['sub'], tokenPayload['lastName'], tokenPayload['roles'], tokenPayload['id']);
+            return userToken;
+        },
         VerifyUserByDatabase(){
-
             this.$http.post("api/user", this.userToRegister)
                 .then(
-                    function (response) {
-                        this.handleCookie();
-                        window.location.pathname = '/addTrainingTopic.html';
+                    function (userPersistedToken) {
+                        this.handleCookie(userPersistedToken.data['userConnected']);
+                      if(jwt_decode(userPersistedToken.data['userConnected']).roles)
+                          window.location.pathname = '/addTrainingTopic.html';
+                        else
+                          window.location.pathname = '/addTrainingTopic.html';
                     }
                 ).catch(function () {
                     this.password = "";
