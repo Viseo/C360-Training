@@ -117,7 +117,10 @@ public class CollaboratorWS {
     public Boolean deleteDisconnectedUserFromCache(@RequestBody String token) {
         try {
             mapUserCache.remove(token);
-            return true;
+            if (mapUserCache.get(token) == null)
+                return true;
+            else
+                return false;
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);

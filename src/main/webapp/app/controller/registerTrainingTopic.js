@@ -4,37 +4,6 @@
 
 Vue.use(VueResource);
 
-
-Vue.component('blue-header',{
-    template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
-                   <p style="float:right;">Bienvenue {{nom}} {{prenom}}</p> 
-              </div>`,
-    data: function(){
-        return {
-            nom:'',
-            prenom:'',
-            token:''
-        }
-    },
-
-    mounted: function(){
-        this.getCookieToken();
-    },
-    methods: {
-        getCookieToken() {
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookie){
-            this.token = String(regexCookie.pop());
-                this.nom = jwt_decode(this.token).lastName;
-                this.prenom = jwt_decode(this.token).sub;
-            }
-            else{
-                window.location.pathname = '/index.html';
-            }
-        },
-    }
-});
-
 Vue.component('error-messages',{
     props:['height','colspan',
         'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',

@@ -12,7 +12,7 @@ Vue.component('blue-header',{
                 <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
                          <span @mouseover="disconnect=true;" v-show="!disconnect">{{prenom}} {{nom}}</span>
-                         <button @mouseout="disconnect=false;" v-show="disconnect" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
+                         <button @click="disconnectUser" @mouseout="disconnect=false;" v-show="disconnect" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
                         <ul class="nav navbar-nav">
@@ -39,6 +39,7 @@ Vue.component('blue-header',{
         return {
             nom:'',
             prenom:'',
+            token:'',
             disconnect:false,
             app: {
                 training:true,
@@ -49,18 +50,36 @@ Vue.component('blue-header',{
         }
     },
     mounted: function(){
-        this.getCookieNom();
-        this.getCookiePrenom();
+        this.getCookieToken();
     },
     methods: {
-        getCookieNom(){
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "nom" + '\\s*=\\s*([^;]+)');
-            this.nom = regexCookie ? regexCookie.pop() : '';
-            console.log(document.cookie);
+        getCookieToken() {
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(regexCookie){
+                this.token = String(regexCookie.pop());
+                this.nom = jwt_decode(this.token).lastName;
+                this.prenom = jwt_decode(this.token).sub;
+            }
+            else{
+                if(window.location.pathname != '/index.html')
+                window.location.pathname = '/index.html';
+            }
         },
-        getCookiePrenom(){
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "prenom" + '\\s*=\\s*([^;]+)');
-            this.prenom = regexCookie ? regexCookie.pop() : '';
+        disconnectUser(){
+            this.$http.post("api/userdisconnect", this.token)
+                .then(
+                    function (response) {
+                        if(response) {
+                            console.log(response);
+                            let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                            if(getCookieToken) {
+                                document.cookie = "token="+ this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+
+                            }
+                            window.location.pathname = '/index.html';
+                        }
+
+                    });
         }
     }
 });
