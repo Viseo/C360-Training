@@ -555,7 +555,7 @@ Vue.component('show-formation-panel', {
             <tbody>
             <tr v-for="trainings in topicTraining">
                 <td  v-for="training in trainings" width="25%">
-                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
+                    <button class="btn btn-toolbar btn-group" style="z-index:0">{{training.trainingTitle}}</button>
                 </td>
             </tr>
             </tbody>
