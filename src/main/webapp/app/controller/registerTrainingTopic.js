@@ -27,8 +27,8 @@ Vue.component('blue-header',{
 
 Vue.component('error-messages',{
     props:['height','colspan',
-           'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
+        'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
+        'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
     data: function(){
         return {
             styleTd: {
@@ -59,7 +59,7 @@ Vue.component('input-text',{
     props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
     methods:{
         updateValue(value){
-          this.$emit('input',value);
+            this.$emit('input',value);
         },
         handleFocus(){
             this.$emit('focus');
@@ -68,7 +68,7 @@ Vue.component('input-text',{
             this.$emit('click');
         }
     },
-   template: `<td :width="width">
+    template: `<td :width="width">
                             <div class="form-group has-feedback " 
                                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
@@ -401,7 +401,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
     },
-template:`
+    template:`
  <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-7">
@@ -552,7 +552,7 @@ Vue.component('show-formation-panel', {
             </thead>
                                            
 
-               <tbody>
+            <tbody>
             <tr v-for="trainings in topicTraining">
                 <td  v-for="training in trainings" width="25%">
                     <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>

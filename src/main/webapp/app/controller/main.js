@@ -9,7 +9,7 @@ Vue.component('blue-header',{
                     <p style="color:#16334d; margin:0px;" >Gestion des formations</p>
                 </div>
                 <div class="col-lg-2 col-lg-offset-6" style="float:right; margin:20px 10px 20px 0px; padding:0px;">
-                <span class="col-lg-10" style="text-align:right; padding-right:3em;">Prénom Nom</span>
+                <span class="col-lg-10" style="text-align:right; padding-right:3em;">{{prenom}} {{nom}}</span>
                 <span class="col-lg-2 glyphicon glyphicon-th" style="font-size:1.7em; line-height:75%;" aria-hidden="true"></span>
                 </div>     
         </div>
@@ -18,17 +18,24 @@ Vue.component('blue-header',{
   `,
     data: function(){
         return {
-            email:''
+            nom:'',
+            prenom:''
         }
     },
     mounted: function(){
-        this.getCookieEmail();
+        this.getCookieNom();
+        this.getCookiePrenom();
     },
     methods: {
-        getCookieEmail() {
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
-            this.email = regexCookie ? regexCookie.pop() : '';
+        getCookieNom(){
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "nom" + '\\s*=\\s*([^;]+)');
+            this.nom = regexCookie ? regexCookie.pop() : '';
+            console.log(document.cookie);
         },
+        getCookiePrenom(){
+            let regexCookie = document.cookie.match('(^|;)\\s*' + "prenom" + '\\s*=\\s*([^;]+)');
+            this.prenom = regexCookie ? regexCookie.pop() : '';
+        }
     }
 });
 
