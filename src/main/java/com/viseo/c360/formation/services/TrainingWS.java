@@ -70,6 +70,20 @@ public class TrainingWS {
         return new TrainingToDescription().convert(trainingDAO.getAllTrainings());
     }
 
+    //update training topic
+    @RequestMapping(value = "${endpoint.trainingtopic}", method = RequestMethod.PUT)
+    @ResponseBody
+    public TrainingDescription updateTrainingTopic(@PathVariable String trainingTopic, @PathVariable String formationId) {
+        try {
+            Training training= trainingDAO.getTraining(Long.parseLong(formationId));
+            if(training == null) throw new PersistentObjectNotFoundException(15,Training.class);
+            training = trainingDAO.updateTrainingTopic(training, trainingTopic);
+            return new TrainingToDescription().convert(training);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
+
     /***
      * Topic
      ***/

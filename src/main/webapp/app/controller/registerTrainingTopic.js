@@ -4,7 +4,6 @@
 
 Vue.use(VueResource);
 
-
 Vue.component('blue-header',{
     template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
                    <p style="float:right;">Bienvenue {{email}}</p> 
@@ -572,6 +571,98 @@ Vue.component('show-formation-panel', {
            </div>
        </div>`
 
+});
+
+Vue.component('declaration-session',{
+    data: function() {
+        return {
+            session:{
+                trainingDescription:{},
+                beginning: '',
+                ending: '',
+                beginningTime: '',
+                endingTime: '',
+                location: ''
+            },
+            sessionToRegister:{},
+            idFormation:'2',
+            trainingDescription:{},
+            beginningDate:'01/06/2017',
+            endingDate:'01/06/2017',
+            beginningTime:'09:00',
+            endingTime:'18:00',
+            location:'salle',
+            allTrainings:{},
+            trainingChosen:{},
+            isSessionAlreadyPlanned:false
+
+        }
+    },
+    methods: {
+        GatherTrainingFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.CollectInformationOfTrainingChosen();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        CollectInformationOfTrainingChosen(){
+            this.trainingChosen = {};
+            for (var tmp in this.allTrainings) {
+                if (this.allTrainings[tmp].id == this.idFormation) {
+                    this.trainingChosen = this.allTrainings[tmp];
+                }
+            }
+            this.trainingDescription = this.trainingChosen;
+        },
+        VerifyFormBeforeSaveSession(){
+            /*this.isEmailEmpty(); this.isPasswordEmpty();
+            if(!this.emailEmpty && !this.passwordEmpty){
+                this.user.email=this.email;
+                this.user.password=this.password;
+                this.userToRegister = JSON.parse(JSON.stringify(this.user));
+                this.VerifyUserByDatabase();
+            }*/
+            this.session.trainingDescription=this.trainingDescription;
+            this.session.beginning=this.beginningDate;
+            this.session.ending=this.endingDate;
+            this.session.beginningTime=this.beginningTime;
+            this.session.endingTime=this.endingTime;
+            this.session.location=this.location;
+            this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+            this.SaveSessionIntoDatabase();
+        },
+        ModifyTrainingTopic(){
+            this.$http.put("api/formations/"+ this.trainingDescription.trainingTitle +"/formationid/"+ this.idFormation);
+        },
+        SaveSessionIntoDatabase(){
+            this.$http.post("api/sessions", this.sessionToRegister)
+                .then(
+                    function (response) {
+                        this.isSessionAlreadyPlanned = false;
+                    },
+                    function (response) {
+                        console.log("Error: ",response);
+                        if (response.data.message === "TrainingSession already planned") {
+                            this.isSessionAlreadyPlanned = true;
+                        } else {
+                            console.error(response);
+                        }
+                    }
+                );
+        }
+    },
+    template:`<div>
+                  <button @click="GatherTrainingFromDatabase()">Collect Training Information</button><br>
+                  <button @click="ModifyTrainingTopic()">Modify Training Topic</button><br>
+                  <button @click="VerifyFormBeforeSaveSession()">Save Session To Database</button><br>
+                  <pre>{{$data|json}}</pre>
+              </div>`
 });
 
 class trainingStore {

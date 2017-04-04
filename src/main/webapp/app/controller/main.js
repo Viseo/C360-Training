@@ -30,7 +30,6 @@ Vue.component('blue-header',{
         getCookieNom(){
             let regexCookie = document.cookie.match('(^|;)\\s*' + "nom" + '\\s*=\\s*([^;]+)');
             this.nom = regexCookie ? regexCookie.pop() : '';
-            console.log(document.cookie);
         },
         getCookiePrenom(){
             let regexCookie = document.cookie.match('(^|;)\\s*' + "prenom" + '\\s*=\\s*([^;]+)');
