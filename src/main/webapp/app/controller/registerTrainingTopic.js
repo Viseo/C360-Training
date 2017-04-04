@@ -722,14 +722,14 @@ Vue.component('add-session-panel', {
                                 <div class = "row " style = "margin-bottom: 30px;">
                                     <div class = "col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
-                                               class = "btn btn-default" 
+                                               class = "btn btn-primary" 
                                                value = "Enregistrer" 
                                                @click = "Enregistrer" 
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
-                                               class = "btn btn-primary" 
+                                               class = "btn btn-danger" 
                                                value = "Supprimer" 
                                                @click = "Supprimer" 
                                                style = "width:100%"/>                                                                         
