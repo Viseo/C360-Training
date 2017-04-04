@@ -9,10 +9,9 @@ Vue.component('blue-header',{
                     <p id="navbar-title" href="#">Collaborateur 360</p>
                     <p id="navbar-subtitle">Gestion des formations</p>
                 </div>
-                <span class="col-lg-10" style="text-align:right; padding-right:3em;">{{prenom}} {{nom}}</span>
                 <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
-                         <span @mouseover="disconnect=true;" v-show="!disconnect">Prénom Nom</span>
+                         <span @mouseover="disconnect=true;" v-show="!disconnect">{{prenom}} {{nom}}</span>
                          <button @mouseout="disconnect=false;" v-show="disconnect" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
@@ -39,7 +38,7 @@ Vue.component('blue-header',{
     data: function(){
         return {
             nom:'',
-            prenom:''
+            prenom:'',
             disconnect:false,
             app: {
                 training:true,
