@@ -1,6 +1,5 @@
 .panel .panel-default{
     margin-top: 20%;
-
 }
 
 .color-blue {color: #1E90FF;}
@@ -152,7 +151,6 @@
     border-style: solid;
     border-color: #F0F0F0 transparent transparent transparent;
 }
-
 
 /* this border color controlls the outside, thin border */
 .popup .popuptext:before {
