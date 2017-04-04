@@ -1,0 +1,26 @@
+#custom-navbar {
+    padding:10px 30px 10px 10px;
+}
+#custom-navbar p {
+    margin:0px;
+}
+#navbar-title {
+    color:white;
+    font-size:1.3em;
+}
+#navbar-subtitle {
+    color:#16334d;
+}
+#navbar-right-part {
+    float:right;
+    margin:20px 10px 20px 0px;
+    padding:0px;
+}
+#navbar-user {
+    text-align:right;
+    padding-right:3em;
+}
+#navbar-app {
+    font-size:1.7em;
+    line-height:75%;
+}
