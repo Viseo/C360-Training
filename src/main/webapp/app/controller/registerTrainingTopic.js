@@ -670,7 +670,7 @@ Vue.component('add-session-panel', {
                         <!--<button @click="ReturnToPageTraining()">Retour</button>-->
                         <img @click="" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
-                            <div class = "col-lg-3 col-lg-offset-4"> 
+                            <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
                                     <span class = "glyphicon glyphicon-pencil icon"></span>                                                                                            
                                     <input-text 
@@ -685,18 +685,18 @@ Vue.component('add-session-panel', {
                                     </input-text> 
                                  </form>
                             </div>
-                            <div class = "col-lg-4" style = "margin-top: 25px;">
+                            <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
                         </div>
                         
                         <div class = "row">
-                            <div class = "col-lg-4">
+                            <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
                                 <p class = "text-center">Session disponibles : (0)</p>
                             </div>                            
-                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-lg-8">
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = " col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class = "row" style="margin-bottom: 30px;">
-                                    <div class = "col-lg-4">                                
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">                                
                                         <input-text 
                                             label = "Date de début" 
                                             :value = "beginningDate" 
@@ -708,7 +708,7 @@ Vue.component('add-session-panel', {
                                             type = 'input'>
                                         </input-text>
                                     </div>
-                                    <div class = "col-lg-4 col-lg-offset-2">                                
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
                                         <input-text 
                                             label = "Salles" 
                                             :value = "location" 
@@ -721,7 +721,7 @@ Vue.component('add-session-panel', {
                                     </div> 
                                 </div>
                                 <div class = "row" style="margin-bottom: 30px;">
-                                    <div class = "col-lg-4 ">                                
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
                                         <input-text 
                                             label = "Date de fin" 
                                             :value = "endingDate" 
@@ -735,13 +735,13 @@ Vue.component('add-session-panel', {
                                     </div>
                                 </div> 
                                 <div class = "row " style = "margin-bottom: 30px;">
-                                    <div class = "col-lg-4 col-lg-pull-1">                                
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
                                                value = "Enregistrer" 
                                                style = "width:100%"/>                                                                         
                                     </div>
-                                    <div class = "col-lg-4 col-lg-pull-1">                                
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-danger" 
                                                value = "Supprimer" 
