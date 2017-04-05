@@ -35,7 +35,7 @@ describe('test-show-formation', function () {
         expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
         expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
         expect(vmAddFormationPanel.isTrainingTitleValid).toBe(true);
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(true);
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
         expect(vmAddFormationPanel.selectOptionsOfTraining).toEqual([]);
         expect(vmAddFormationPanel.selectOptionsOfTopic).toEqual([]);
         expect(vmAddFormationPanel.topicsChosen).toEqual([]);
@@ -63,11 +63,11 @@ describe('test-show-formation', function () {
     //verifyNewTopicField
     it('should check verify field new Topic', function () {
         vmAddFormationPanel.verifyNewTopicField('Java','newTopicRegexErrorMessage');
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(true);
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
         expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe('');
         vmAddFormationPanel.verifyNewTopicField('/Java','newTopicRegexErrorMessage');
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(false);
-        expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)");
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(false);
+        expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de thème valide (-.'_@:+#% autorisés)");
     });
 
     //isTrainingTitleEmpty

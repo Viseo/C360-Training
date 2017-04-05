@@ -15,10 +15,12 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'src/main/webapp/lib/jquery.min.js',
             'src/main/webapp/lib/vue.js',
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-resource-mock.min.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
+            'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/test/javaScript/spec/*.js'
         ],
