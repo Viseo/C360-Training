@@ -11,6 +11,7 @@ let NavigationMenu = Vue.component('connect-user',{
         }
     },
     template:`
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
             <div class="panel panel-default">
                 <ul class="tab-group">
                     <li :class="tabinscription">
@@ -29,7 +30,7 @@ let NavigationMenu = Vue.component('connect-user',{
                     </div>
                 </div>
             </div>
-        `,
+        </div> `,
     methods: {
         showInscriptionForm() {
             this.tabinscription = 'tab active';
@@ -422,7 +423,7 @@ Vue.component('connexionForm', {
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
                             <button type="submit" name="register-submit" id="register-submit"
-                                    tabindex="4" class="form-control btn btn-primary">Se connecter
+                                    tabindex="4" class="form-control btn btn-primary" @click="sendInformationToCookie()">Se connecter
                             </button>
                         </div>
                     </div>
@@ -451,7 +452,9 @@ Vue.component('connexionForm', {
             isNotNewEmail:true,
             emailToSend:'',
             passwordToSend:'',
-            idToSend:''
+            idToSend:'',
+            nomToSend:'',
+            prenomToSend:''
         }
     },
     methods: {
@@ -460,13 +463,19 @@ Vue.component('connexionForm', {
             if(this.stayConnected) {
                 document.cookie = "mail="+this.user.email;
                 document.cookie = "password="+this.user.password;
+                document.cookie = "nom="+this.nomToSend;
+                document.cookie = "prenom="+this.prenomToSend;
             }
             else {
                 let getCookieMail = document.cookie.match('(^|;)\\s*' + "mail" + '\\s*=\\s*([^;]+)');
                 let getCookiePassword = document.cookie.match('(^|;)\\s*' + "password" + '\\s*=\\s*([^;]+)');
-                if(getCookieMail || getCookiePassword) {
+                let getCookieNom = document.cookie.match('(^|;)\\s*' + "nom" + '\\s*=\\s*([^;]+)');
+                let getCookiePrenom = document.cookie.match('(^|;)\\s*' + "prenom" + '\\s*=\\s*([^;]+)');
+                if(getCookieMail || getCookiePassword || getCookieNom || getCookiePrenom) {
                     document.cookie = "mail="+ this.user.email + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                     document.cookie = "password="+this.user.password +"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                    document.cookie = "nom"+ this.nomToSend + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                    document.cookie = "prenom="+this.prenomToSend +"; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                 }
             }
         },
@@ -534,6 +543,31 @@ Vue.component('connexionForm', {
                 }
             )
         },
+        sendInformationToCookie(){
+            this.$http.get("api/collaborateurs").then(
+                function (response) {
+                    this.allUsers = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            ).then(
+                function () {
+                    for (var tmp in this.allUsers) {
+                        if (this.email == this.allUsers[tmp].email){
+                            this.emailToSend = this.allUsers[tmp].email;
+                            this.passwordToSend = this.allUsers[tmp].password;
+                            this.idToSend = this.allUsers[tmp].id;
+                            this.nomToSend = this.allUsers[tmp].lastName;
+                            this.prenomToSend = this.allUsers[tmp].firstName;
+                            this.isNotNewEmail = true;
+                            break;
+                        }
+                    }
+                }
+            )
+        },
         VerifyEmailFromDatabase(){
             this.isNotNewEmail = false;
             for (var tmp in this.allUsers) {
@@ -541,6 +575,8 @@ Vue.component('connexionForm', {
                     this.emailToSend = this.allUsers[tmp].email;
                     this.passwordToSend = this.allUsers[tmp].password;
                     this.idToSend = this.allUsers[tmp].id;
+                    this.nomToSend = this.allUsers[tmp].lastName;
+                    this.prenomToSend = this.allUsers[tmp].firstName;
                     this.isNotNewEmail = true;
                     break;
                 }

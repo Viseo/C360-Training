@@ -45,6 +45,15 @@ public class TrainingDAO {
         return daoFacade.getList("select a from Training a");
     }
 
+    @Transactional
+    public Training updateTrainingTopic(Training training, String trainingTopic){
+
+        training = daoFacade.merge(training);
+        training.setTrainingTitle(trainingTopic);
+        daoFacade.flush();
+        return training;
+    }
+
     /***
      * Topic
      ***/
