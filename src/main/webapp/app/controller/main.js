@@ -79,8 +79,10 @@ Vue.component('blue-header',{
         },
         checkIfUserInactive(){
             if(this.timeconnected != 0)
-            if((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1)
+            if((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1) {
+                this.dialog = true
                 this.disconnectUser();
+            }
             document.onclick = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
