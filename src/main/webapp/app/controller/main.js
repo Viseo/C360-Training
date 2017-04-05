@@ -92,7 +92,7 @@ Vue.component('blue-header',{
             }.bind(this);
 
             window.onbeforeunload = function(){
-                if(!this.disconnect)
+                if(!this.disconnect && !this.dialog)
                 document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
 
@@ -108,6 +108,7 @@ Vue.component('blue-header',{
             if (oPanel) {
                 if (this.idleSecondsCounter >= this.IDLE_TIMEOUT) {
                     window.clearInterval(this.myInterval)
+                    this.dialog = true;
                     this.disconnectUser();
                 }
             }
