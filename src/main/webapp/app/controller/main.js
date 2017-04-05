@@ -11,8 +11,8 @@ Vue.component('blue-header',{
                 </div>
                 <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
-                         <span @mouseover="disconnect=true;" v-show="!disconnect">{{prenom}} {{nom}}</span>
-                         <button @click="disconnectUser" @mouseout="disconnect=false;" v-show="disconnect" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
+                         <span @mouseover="disconnect=true;" v-show="!disconnect && !dialog">{{prenom}} {{nom}}</span>
+                         <button @click="disconnectUser" @mouseout="disconnect=false;" v-show="disconnect && !dialog" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
                         <ul class="nav navbar-nav">
@@ -33,6 +33,17 @@ Vue.component('blue-header',{
         </div>
         </div>
     </div>
+    <div v-if="dialog" class="dialog">
+	<div class="dialog-bg">
+       	<div class="dialog-title">Oups....</div>
+           <div class="dialog-description">{{ prenom }} {{ nom }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
+
+			<!-- Buttons, both options close the window in this demo -->
+           <div class="dialog-buttons">
+           <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
+		</div>
+	</div>	
+</div>
 </div>
   `,
     data: function(){
@@ -46,17 +57,71 @@ Vue.component('blue-header',{
                 skills:false,
                 mission:false,
                 leave:false
-            }
+            },
+            IDLE_TIMEOUT: 20, //seconds
+            idleSecondsCounter: 0,
+            myInterval:'',
+            test: 50,
+            stayConnected: true,
+            dialog: false,
+            timeconnected: 0
         }
     },
     mounted: function(){
-        this.getCookieToken();
+        this.getCookieInfos();
+        if(this.stayConnected===false) {
+            this.checkIfUserInactive();
+        }
     },
     methods: {
-        getCookieToken() {
-            let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookie){
-                this.token = String(regexCookie.pop());
+        setIdleSecondsCounter(value){
+          this.idleSecondsCounter = value;
+        },
+        checkIfUserInactive(){
+            if(this.timeconnected != 0)
+            if((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1)
+                this.disconnectUser();
+            document.onclick = function() {
+                this.idleSecondsCounter = 0;
+            }.bind(this);
+            document.onmousemove = function() {
+                this.idleSecondsCounter = 0;
+            }.bind(this);
+            document.onkeypress = function() {
+                this.idleSecondsCounter = 0;
+            }.bind(this);
+
+            window.onbeforeunload = function(){
+                if(!this.disconnect)
+                document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
+            }.bind(this);
+
+            this.myInterval = window.setInterval(this.checkIdleTime, 1000);
+
+
+
+        },
+
+        checkIdleTime() {
+            this.idleSecondsCounter++;
+            var oPanel = document.getElementById("newVue");
+            if (oPanel) {
+                if (this.idleSecondsCounter >= this.IDLE_TIMEOUT) {
+                    window.clearInterval(this.myInterval)
+                    this.disconnectUser();
+                }
+            }
+        },
+
+        getCookieInfos() {
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+            let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
+            if(regexCookieToken && regexCookieStayConnected){
+                this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                this.token = String(regexCookieToken.pop());
+                if(regexCookieTimeConnected)
+                this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 this.nom = jwt_decode(this.token).lastName;
                 this.prenom = jwt_decode(this.token).sub;
             }
@@ -72,10 +137,16 @@ Vue.component('blue-header',{
                         if(response) {
                             console.log(response);
                             let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-                            if(getCookieToken) {
+                            let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+                            let getCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
+                            if(getCookieToken && getCookieStayConnected) {
                                 document.cookie = "token="+ this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                                document.cookie = "stayconnected="+ this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                                if(getCookieTimeConnected)
+                                document.cookie = "timeconnected="+ "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
 
                             }
+                            if(!this.dialog)
                             window.location.pathname = '/index.html';
                         }
 

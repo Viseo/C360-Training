@@ -40,11 +40,9 @@ let NavigationMenu = Vue.component('connect-user',{
                 .then(
                     function (response) {
                         if(response){
-                            console.log('token')
                             window.location.pathname = '/addTrainingTopic.html';
                         }
                         else{
-                            console.log('pas token')
                         }
                     });
         }
@@ -481,16 +479,14 @@ Vue.component('connexionForm', {
     methods: {
 
         handleCookie(token) {
-            console.log(token);
-            if(this.stayConnected) {
-                document.cookie = "token="+token;
-            }
-            else {
-                let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-                if(getCookieToken) {
-                    document.cookie = "token="+ token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                if(this.stayConnected) {
+                    document.cookie = "token=" + token + ";expires=Fri, 31 Dec 9999 23:59:59 GMT";
+                    document.cookie = "stayconnected=" + this.stayConnected + ";expires=Fri, 31 Dec 9999 23:59:59 GMT";
                 }
-            }
+                else{
+                    document.cookie = "token=" + token;
+                    document.cookie = "stayconnected=" + this.stayConnected;
+                }
         },
         showPopupFn() {
             if (this.email == '') {
