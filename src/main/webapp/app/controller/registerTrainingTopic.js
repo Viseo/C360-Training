@@ -464,7 +464,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                         maxlength="50"
                                         @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
                                         :isValid="isNewTopicValid"
-                                        icon="glyphicon-plus btn btn-link"
+                                        icon="glyphicon-plus btn btn-primary"
                                         type='input'
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
