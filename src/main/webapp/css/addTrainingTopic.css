@@ -104,3 +104,21 @@ option[value=""][disabled] {
 option {
     color: black;
 }
+
+.glyphicon-pencil{
+    position: absolute;
+    right: 97%;
+    top: 56%;
+    z-index:1;
+}
+
+.glyphicon-calendar{
+    background: #DDDDDD;
+    width: 35px;
+}
+
+.glyphicon-floppy-disk{
+    width: 31px;
+    line-height: 28px;
+
+}

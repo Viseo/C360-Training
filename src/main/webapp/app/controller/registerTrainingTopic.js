@@ -668,10 +668,11 @@ Vue.component('add-session-panel', {
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
                         <!--<button @click="ReturnToPageTraining()">Retour</button>-->
-                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
+                        <img @click="" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
-                            <div class = "col-lg-4 col-lg-offset-4"> 
-                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">                                 
+                            <div class = "col-lg-3 col-lg-offset-4"> 
+                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
+                                    <span class = "glyphicon glyphicon-pencil icon"></span>                                                                                            
                                     <input-text 
                                         :value = "state.trainingTitle" 
                                         @input = "updateV1"
@@ -703,6 +704,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "--/--/----"
                                             maxlength = "20"
                                             :isValid = "true"
+                                            icon = "glyphicon glyphicon-calendar"
                                             type = 'input'>
                                         </input-text>
                                     </div>
@@ -727,6 +729,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "--/--/----"
                                             maxlength = "20"
                                             :isValid = "true"
+                                            icon = "glyphicon glyphicon-calendar"
                                             type = 'input'>
                                         </input-text>
                                     </div>
