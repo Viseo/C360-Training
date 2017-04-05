@@ -481,7 +481,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
 `
 });
 
-Vue.component('show-formation-panel', {
+let ShowFormation = Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,

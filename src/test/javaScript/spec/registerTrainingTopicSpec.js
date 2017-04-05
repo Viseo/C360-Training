@@ -35,7 +35,7 @@ describe('test-show-formation', function () {
         expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
         expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
         expect(vmAddFormationPanel.isTrainingTitleValid).toBe(true);
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(true);
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
         expect(vmAddFormationPanel.selectOptionsOfTraining).toEqual([]);
         expect(vmAddFormationPanel.selectOptionsOfTopic).toEqual([]);
         expect(vmAddFormationPanel.topicsChosen).toEqual([]);
@@ -63,11 +63,11 @@ describe('test-show-formation', function () {
     //verifyNewTopicField
     it('should check verify field new Topic', function () {
         vmAddFormationPanel.verifyNewTopicField('Java','newTopicRegexErrorMessage');
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(true);
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
         expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe('');
         vmAddFormationPanel.verifyNewTopicField('/Java','newTopicRegexErrorMessage');
-        expect(vmAddFormationPanel.isNameTopicValid).toBe(false);
-        expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de topic valide (-.'_@:+#% autorisés)");
+        expect(vmAddFormationPanel.isNewTopicValid).toBe(false);
+        expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de thème valide (-.'_@:+#% autorisés)");
     });
 
     //isTrainingTitleEmpty
@@ -244,7 +244,7 @@ describe('test-show-formation', function () {
     //showChevrons
     it('should check whether the chevrons can be hidden', function () {
         vmAddFormationPanel.state.trainingsChosen=[];
-        expect(vmShowFormation.showChevrons()).toBe(false);
+        expect(vmShowFormation.showChevrons).toBe(false);
     });
 
     it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
@@ -252,7 +252,7 @@ describe('test-show-formation', function () {
             {"id":3,"version":0,"name":"C"},
             {"id":4,"version":0,"name":"C++"}
         ];
-        expect(vmShowFormation.showChevrons()).toBe(true);
+        expect(vmShowFormation.showChevrons).toBe(true);
     });
 
 });

@@ -15,9 +15,9 @@ describe('test registerCollaborator.js', function () {
     it('should check variable initialization from navigation-menu component', function () {
         expect(vmNavigationMenu.color_connexion).toBe('color-blue');
         expect(vmNavigationMenu.color_inscription).toBe('color-blue');
-        expect(vmNavigationMenu.tabconnexion).toBe('tab');
-        expect(vmNavigationMenu.tabinscription).toBe('tab active');
-        expect(vmNavigationMenu.$el.textContent).toBe('Inscription Connexion');
+        expect(vmNavigationMenu.tabconnexion).toBe('tab active');
+        expect(vmNavigationMenu.tabinscription).toBe('tab');
+        //expect(vmNavigationMenu.$el.textContent).toBe('Inscription Connexion');
 
         //console.log('text:'+vm.$el.textContent);
     });
