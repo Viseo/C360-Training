@@ -585,7 +585,7 @@ Vue.component('declaration-session',{
                 location: ''
             },
             sessionToRegister:{},
-            idFormation:'2',
+            idFormation:'3',
             trainingDescription:{},
             beginningDate:'01/06/2017',
             endingDate:'01/06/2017',
@@ -623,17 +623,17 @@ Vue.component('declaration-session',{
         VerifyFormBeforeSaveSession(){
             /*this.isEmailEmpty(); this.isPasswordEmpty();
             if(!this.emailEmpty && !this.passwordEmpty){
-                this.user.email=this.email;
-                this.user.password=this.password;
+                this.user.email = this.email;
+                this.user.password = this.password;
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
                 this.VerifyUserByDatabase();
             }*/
-            this.session.trainingDescription=this.trainingDescription;
-            this.session.beginning=this.beginningDate;
-            this.session.ending=this.endingDate;
-            this.session.beginningTime=this.beginningTime;
-            this.session.endingTime=this.endingTime;
-            this.session.location=this.location;
+            this.session.trainingDescription = this.trainingDescription;
+            this.session.beginning = this.beginningDate;
+            this.session.ending = this.endingDate;
+            this.session.beginningTime = this.beginningTime;
+            this.session.endingTime = this.endingTime;
+            this.session.location = this.location;
             this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
             this.SaveSessionIntoDatabase();
         },
@@ -648,7 +648,7 @@ Vue.component('declaration-session',{
                     },
                     function (response) {
                         console.log("Error: ",response);
-                        if (response.data.message === "TrainingSession already planned") {
+                        if (response.data.message == "TrainingSession already planned") {
                             this.isSessionAlreadyPlanned = true;
                         } else {
                             console.error(response);
