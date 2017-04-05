@@ -327,6 +327,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.selectOptionsOfTraining.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
+                    this.state.allTrainings = this.selectOptionsOfTraining;
                     this.resetTrainingForm();
                     this.TopicwithTraining();
                     this.reorganizeAllTopicsAndTrainings();
@@ -519,8 +520,16 @@ Vue.component('show-formation-panel', {
             }
         }
     },
+    methods:{
+        CreateSession(id){
+            this.state.changePageToSession = true;
+            this.state.changePageToTraining = false;
+            this.state.idTraining = id;
+            training_store.CollectInformationOfTrainingChosen();
+        }
+    },
     template: `
-             <div class="container-fluid" id="addFormation">
+             <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation">
                   <div class="row" >
                       <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                       <div class="col-sm-12 col-md-10 col-lg-7">
@@ -549,72 +558,7 @@ Vue.component('show-formation-panel', {
                                                             <tbody>
                                                                 <tr v-for="trainings in topicTraining">
                                                                     <td  v-for="training in trainings" width="25%">
-                                                                        <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                           </tr>
-                                                        </table>
-                                                   </template>
-                                               </td>
-                                           </tr>
-                                    </tbody>
-                                </table>
-                               <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                           </div>
-                       </div>
-                </div>
-             </div>`
-});
-
-Vue.component('show-formation-panel', {
-    data: function() {
-        return {
-            state: training_store.state,
-
-        }
-    },
-    computed: {
-        showChevrons(){
-            if (this.state.trainingsChosen.length > 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-    },
-    template: `
-             <div class="container-fluid" id="addFormation">
-                  <div class="row" >
-                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-                      <div class="col-sm-12 col-md-10 col-lg-7">
-                            <div class="row">
-                                <div class="col-lg-7 col-md-7 text-center">
-                                     <legend>Formation ajoutées</legend>
-                                </div>
-                            </div>
-                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                              <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                                <table class="fix tabnonborder" >
-                                    <tbody>
-                                          <tr>
-                                              <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
-                                               <td>
-                                                   <template v-for="topicTraining in state.allTopicTraining">
-                                                        <table class="table table-borderless tabnonborder fix">                               
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                                                                    <th width="25%"></th>
-                                                                    <th width="25%"></th>
-                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr v-for="trainings in topicTraining">
-                                                                    <td  v-for="training in trainings" width="25%">
-                                                                        <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
+                                                                        <button class="btn btn-toolbar btn-group" style="z-index:0" @click="CreateSession(training.id)">{{training.trainingTitle}}</button>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -644,24 +588,19 @@ Vue.component('add-session-panel', {
                 location: ''
             },
             sessionToRegister:{},
-            idFormation:'10',
-            trainingTitle:'',
             beginningDate:'',
             endingDate:'',
             beginningTime:'09:00',
             endingTime:'18:00',
             location:'',
-            allTrainings:{},
-            trainingChosen:{},
-            isSessionAlreadyPlanned:false
+            isSessionAlreadyPlanned:false,
+
+            state: training_store.state,
         }
-    },
-    mounted: function(){
-        this.GatherTrainingFromDatabase();
     },
     methods: {
         updateV1 (v) {
-            this.trainingTitle = v
+            this.state.trainingTitle = v
         },
         updateV2 (v) {
             this.beginningDate = v
@@ -672,26 +611,12 @@ Vue.component('add-session-panel', {
         updateV4 (v) {
             this.endingDate = v
         },
-        GatherTrainingFromDatabase(){
-            this.$http.get("api/formations").then(
-                function (response) {
-                    this.allTrainings = response.data;
-                    this.CollectInformationOfTrainingChosen();
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
-        CollectInformationOfTrainingChosen(){
-            this.trainingChosen = {};
-            for (var tmp in this.allTrainings) {
-                if (this.allTrainings[tmp].id == this.idFormation) {
-                    this.trainingChosen = this.allTrainings[tmp];
-                }
-            }
-            this.trainingTitle = this.trainingChosen.trainingTitle;
+        ReturnToPageTraining(){
+            this.state.changePageToTraining = true;
+            this.state.changePageToSession = false;
+            this.state.idTraining = '';
+            this.state.trainingChosen = {};
+            this.state.trainingTitle = '';
         },
         VerifyFormBeforeSaveSession(){
             /*this.isEmailEmpty(); this.isPasswordEmpty();
@@ -701,8 +626,8 @@ Vue.component('add-session-panel', {
              this.userToRegister = JSON.parse(JSON.stringify(this.user));
              this.VerifyUserByDatabase();
              }*/
-            this.session.trainingDescription = this.trainingChosen;
-            this.session.trainingDescription.trainingTitle = this.trainingTitle;
+            this.session.trainingDescription = this.state.trainingChosen;
+            this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
             this.session.beginning = this.beginningDate;
             this.session.ending = this.endingDate;
             this.session.beginningTime = this.beginningTime;
@@ -712,7 +637,7 @@ Vue.component('add-session-panel', {
             this.SaveSessionIntoDatabase();
         },
         ModifyTrainingTopic(){
-            this.$http.put("api/formations/"+ this.trainingTitle +"/formationid/"+ this.idFormation);
+            this.$http.put("api/formations/"+ this.state.trainingTitle +"/formationid/"+ this.state.idTraining);
         },
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
@@ -732,8 +657,8 @@ Vue.component('add-session-panel', {
         }
     },
     template: `
-        <div class="container-fluid" id="addSession">
-            <div class="row" >
+        <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
+            <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                 <div class="col-sm-12 col-md-10 col-lg-7">
                     <div class="row">
@@ -742,11 +667,13 @@ Vue.component('add-session-panel', {
                         </div>
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                        <!--<button @click="ReturnToPageTraining()">Retour</button>-->
+                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
                             <div class = "col-lg-4 col-lg-offset-4"> 
                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">                                 
                                     <input-text 
-                                        :value = "trainingTitle" 
+                                        :value = "state.trainingTitle" 
                                         @input = "updateV1"
                                         placeholder = "formation"
                                         maxlength = "20"
@@ -758,7 +685,7 @@ Vue.component('add-session-panel', {
                                  </form>
                             </div>
                             <div class = "col-lg-4" style = "margin-top: 25px;">
-                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{trainingChosen.numberHalfDays}} demies journées</p>
+                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
                         </div>
                         
@@ -809,7 +736,6 @@ Vue.component('add-session-panel', {
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
                                                value = "Enregistrer" 
-                                               @click = "VerifyFormBeforeSaveSession()" 
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-lg-4 col-lg-pull-1">                                
@@ -833,7 +759,22 @@ class trainingStore {
         this.state = {
             trainingsChosen:[],
             allTopicTraining:[],
+            changePageToTraining:true,
+            changePageToSession:false,
+            idTraining:'',
+            trainingChosen:{},
+            allTrainings:[],
+            trainingTitle:''
         }
+    }
+    CollectInformationOfTrainingChosen(){
+        this.state.trainingChosen = {};
+        for (var tmp in this.state.allTrainings) {
+            if (this.state.allTrainings[tmp].id == this.state.idTraining) {
+                this.state.trainingChosen = this.state.allTrainings[tmp];
+            }
+        }
+        this.state.trainingTitle = this.state.trainingChosen.trainingTitle;
     }
 }
 
