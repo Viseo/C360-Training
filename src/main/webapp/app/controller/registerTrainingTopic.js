@@ -655,7 +655,7 @@ Vue.component('add-session-panel', {
                                  <form id = "registr-form" @submit.prevent="varSubmit">                                 
                                     <input-text 
                                         label = "" 
-                                        :value = "varValue" 
+                                        :value = "trainingDescription.name" 
                                         @input = ""
                                         placeholder = "formation"
                                         maxlength = "20"
@@ -680,7 +680,7 @@ Vue.component('add-session-panel', {
                                     <div class = "col-lg-4">                                
                                         <input-text 
                                             label = "Date de début" 
-                                            :value = "varValue" 
+                                            :value = "beginningDate" 
                                             @input = ""
                                             placeholder = "--/--/----"
                                             maxlength = "20"
@@ -693,7 +693,7 @@ Vue.component('add-session-panel', {
                                     <div class = "col-lg-4 col-lg-offset-2">                                
                                         <input-text 
                                             label = "Salles" 
-                                            :value = "varValue" 
+                                            :value = "location" 
                                             @input = ""
                                             placeholder = "Salle"
                                             maxlength = "20"
@@ -708,7 +708,7 @@ Vue.component('add-session-panel', {
                                     <div class = "col-lg-4 ">                                
                                         <input-text 
                                             label = "Date de fin" 
-                                            :value = "varValue" 
+                                            :value = "endingDate" 
                                             @input = ""
                                             placeholder = "--/--/----"
                                             maxlength = "20"
