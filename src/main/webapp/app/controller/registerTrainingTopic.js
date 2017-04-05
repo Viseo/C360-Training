@@ -635,10 +635,102 @@ Vue.component('show-formation-panel', {
 Vue.component('add-session-panel', {
     data: function() {
         return {
-
+            session:{
+                trainingDescription:{},
+                beginning: '',
+                ending: '',
+                beginningTime: '',
+                endingTime: '',
+                location: ''
+            },
+            sessionToRegister:{},
+            idFormation:'10',
+            trainingTitle:'',
+            beginningDate:'',
+            endingDate:'',
+            beginningTime:'09:00',
+            endingTime:'18:00',
+            location:'',
+            allTrainings:{},
+            trainingChosen:{},
+            isSessionAlreadyPlanned:false
         }
     },
-
+    mounted: function(){
+        this.GatherTrainingFromDatabase();
+    },
+    methods: {
+        updateV1 (v) {
+            this.trainingTitle = v
+        },
+        updateV2 (v) {
+            this.beginningDate = v
+        },
+        updateV3 (v) {
+            this.location = v
+        },
+        updateV4 (v) {
+            this.endingDate = v
+        },
+        GatherTrainingFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.CollectInformationOfTrainingChosen();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        CollectInformationOfTrainingChosen(){
+            this.trainingChosen = {};
+            for (var tmp in this.allTrainings) {
+                if (this.allTrainings[tmp].id == this.idFormation) {
+                    this.trainingChosen = this.allTrainings[tmp];
+                }
+            }
+            this.trainingTitle = this.trainingChosen.trainingTitle;
+        },
+        VerifyFormBeforeSaveSession(){
+            /*this.isEmailEmpty(); this.isPasswordEmpty();
+             if(!this.emailEmpty && !this.passwordEmpty){
+             this.user.email=this.email;
+             this.user.password=this.password;
+             this.userToRegister = JSON.parse(JSON.stringify(this.user));
+             this.VerifyUserByDatabase();
+             }*/
+            this.session.trainingDescription = this.trainingChosen;
+            this.session.trainingDescription.trainingTitle = this.trainingTitle;
+            this.session.beginning = this.beginningDate;
+            this.session.ending = this.endingDate;
+            this.session.beginningTime = this.beginningTime;
+            this.session.endingTime = this.endingTime;
+            this.session.location = this.location;
+            this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+            this.SaveSessionIntoDatabase();
+        },
+        ModifyTrainingTopic(){
+            this.$http.put("api/formations/"+ this.trainingTitle +"/formationid/"+ this.idFormation);
+        },
+        SaveSessionIntoDatabase(){
+            this.$http.post("api/sessions", this.sessionToRegister)
+                .then(
+                    function (response) {
+                        this.isSessionAlreadyPlanned = false;
+                    },
+                    function (response) {
+                        console.log("Error: ",response);
+                        if (response.data.message === "TrainingSession already planned") {
+                            this.isSessionAlreadyPlanned = true;
+                        } else {
+                            console.error(response);
+                        }
+                    }
+                );
+        }
+    },
     template: `
         <div class="container-fluid" id="addSession">
             <div class="row" >
@@ -652,22 +744,21 @@ Vue.component('add-session-panel', {
                     <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
                             <div class = "col-lg-4 col-lg-offset-4"> 
-                                 <form id = "registr-form" @submit.prevent="varSubmit">                                 
+                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">                                 
                                     <input-text 
-                                        label = "" 
-                                        :value = "varValue" 
-                                        @input = ""
+                                        :value = "trainingTitle" 
+                                        @input = "updateV1"
                                         placeholder = "formation"
                                         maxlength = "20"
-                                        @focus = ""
-                                        :isValid = "varIsValide"
+                                        :isValid = "true"
                                         icon = "glyphicon glyphicon-floppy-disk"
-                                        type = 'input'>
+                                        type = 'input'
+                                        @click="ModifyTrainingTopic()">
                                     </input-text> 
                                  </form>
                             </div>
                             <div class = "col-lg-4" style = "margin-top: 25px;">
-                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure 2 demies journées</p>
+                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
                         </div>
                         
@@ -675,31 +766,27 @@ Vue.component('add-session-panel', {
                             <div class = "col-lg-4">
                                 <p class = "text-center">Session disponibles : (0)</p>
                             </div>                            
-                            <form id="registr-form" @submit.prevent="varSubmit" class = "col-lg-8">
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-lg-8">
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-lg-4">                                
                                         <input-text 
                                             label = "Date de début" 
-                                            :value = "varValue" 
-                                            @input = ""
+                                            :value = "beginningDate" 
+                                            @input = "updateV2"
                                             placeholder = "--/--/----"
                                             maxlength = "20"
-                                            @focus = ""
-                                            :isValid = "varIsValide"
-                                            icon = ""
+                                            :isValid = "true"
                                             type = 'input'>
-                                        </input-text> 
+                                        </input-text>
                                     </div>
                                     <div class = "col-lg-4 col-lg-offset-2">                                
                                         <input-text 
                                             label = "Salles" 
-                                            :value = "varValue" 
-                                            @input = ""
+                                            :value = "location" 
+                                            @input = "updateV3"
                                             placeholder = "Salle"
                                             maxlength = "20"
-                                            @focus = ""
-                                            :isValid = "varIsValide"
-                                            icon = ""
+                                            :isValid = "true"
                                             type = 'input'>
                                         </input-text> 
                                     </div> 
@@ -708,15 +795,13 @@ Vue.component('add-session-panel', {
                                     <div class = "col-lg-4 ">                                
                                         <input-text 
                                             label = "Date de fin" 
-                                            :value = "varValue" 
-                                            @input = ""
+                                            :value = "endingDate" 
+                                            @input = "updateV4"
                                             placeholder = "--/--/----"
                                             maxlength = "20"
-                                            @focus = ""
-                                            :isValid = "varIsValide"
-                                            icon = ""
+                                            :isValid = "true"
                                             type = 'input'>
-                                        </input-text> 
+                                        </input-text>
                                     </div>
                                 </div> 
                                 <div class = "row " style = "margin-bottom: 30px;">
@@ -724,17 +809,17 @@ Vue.component('add-session-panel', {
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
                                                value = "Enregistrer" 
-                                               @click = "Enregistrer" 
+                                               @click = "VerifyFormBeforeSaveSession()" 
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-danger" 
                                                value = "Supprimer" 
-                                               @click = "Supprimer" 
-                                               style = "width:100%"/>                                                                         
+                                               @click = "VerifyFormBeforeSaveSession()" 
+                                               style = "width:100%"/>                                                                        
                                     </div>
-                                </div>                                                      
+                                </div>                                                     
                             </form>
                         </div>
                     </div>
