@@ -121,10 +121,13 @@ Vue.component('blue-header',{
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken && regexCookieStayConnected){
+                if(window.location.pathname != '/index.html')
                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
                 this.token = String(regexCookieToken.pop());
-                if(regexCookieTimeConnected)
-                this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                if(regexCookieTimeConnected) {
+                    if(window.location.pathname != '/index.html')
+                    this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                }
                 this.nom = jwt_decode(this.token).lastName;
                 this.prenom = jwt_decode(this.token).sub;
             }
