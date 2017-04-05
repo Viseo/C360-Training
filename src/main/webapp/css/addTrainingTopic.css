@@ -115,6 +115,7 @@ option {
 .glyphicon-calendar{
     background: #DDDDDD;
     width: 35px;
+    border-radius: 0 4px 4px 0;
 }
 
 .glyphicon-floppy-disk{
