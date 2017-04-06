@@ -56,7 +56,7 @@ Vue.component('error-messages',{
 });
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp','disabled'],
     methods:{
         updateValue(value){
           this.$emit('input',value);
@@ -77,9 +77,10 @@ Vue.component('input-text',{
                                        class="form-control"
                                        :value="value" 
                                        @input="updateValue($event.target.value)"
-                                       :placeholder="placeholder" 
+                                       :placeholder="placeholder"
                                        :maxlength="maxlength"
-                                       @focus="handleFocus"/>
+                                       @focus="handleFocus"
+                                       :disabled = "disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
                                       :class="icon"
@@ -594,11 +595,21 @@ Vue.component('add-session-panel', {
             endingTime:'18:00',
             location:'',
             isSessionAlreadyPlanned:false,
+            isDisabledTrainingTitle: true,
 
             state: training_store.state,
         }
     },
     methods: {
+
+        activeInputTrainingTitle(){
+            if (this.isDisabledTrainingTitle == true) {
+                this.isDisabledTrainingTitle = false;
+            } else {
+                this.isDisabledTrainingTitle = true;
+            }
+        },
+
         updateV1 (v) {
             this.state.trainingTitle = v
         },
@@ -672,7 +683,7 @@ Vue.component('add-session-panel', {
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
-                                    <span class = "glyphicon glyphicon-pencil icon" onclick = "activer()"></span>                                                                                            
+                                    <span class = "glyphicon glyphicon-pencil icon"  @click = "activeInputTrainingTitle()"></span>                                                                                            
                                     <input-text 
                                         :value = "state.trainingTitle" 
                                         @input = "updateV1"
@@ -681,6 +692,7 @@ Vue.component('add-session-panel', {
                                         :isValid = "true"
                                         icon = "glyphicon glyphicon-floppy-disk"
                                         type = 'input'
+                                        :disabled = "isDisabledTrainingTitle" 
                                         @click="ModifyTrainingTopic()">
                                     </input-text> 
                                  </form>
