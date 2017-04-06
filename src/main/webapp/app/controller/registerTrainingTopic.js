@@ -526,6 +526,15 @@ Vue.component('add-session-panel', {
                 location: ''
             },
             sessionToRegister:{},
+            sessionToModify:{
+                id:'',
+                trainingDescription:{},
+                beginning: '',
+                ending: '',
+                beginningTime: '',
+                endingTime: '',
+                location: ''
+            },
             beginningDate:'',
             endingDate:'',
             beginningTime:'09:00',
@@ -533,6 +542,8 @@ Vue.component('add-session-panel', {
             location:'',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
+            listTrainingSession:[],
+            isNoSession:false,
 
             state: training_store.state,
         }
@@ -620,6 +631,39 @@ Vue.component('add-session-panel', {
                 }
             );
         },
+
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
+                function (response) {
+                    this.listTrainingSession = response.data;
+                    if (this.listTrainingSession.length === 0) {
+                        this.isNoSession = true;
+                    }
+            });
+        },
+
+        /*ModifyTrainingSession(){
+            this.sessionToModify.id = this.state.idSession;
+            this.sessionToModify.trainingDescription = this.state.trainingChosen;
+            this.sessionToModify.trainingDescription.trainingTitle = this.state.trainingTitle;
+            this.sessionToModify.beginning = this.beginningDate;
+            this.sessionToModify.ending = this.endingDate;
+            this.sessionToModify.beginningTime = this.beginningTime;
+            this.sessionToModify.endingTime = this.endingTime;
+            this.sessionToModify.location = this.location;
+            this.sessionToModify = JSON.parse(JSON.stringify(this.sessionToModify));
+            this.$http.put("api/sessions", this.sessionToModify).then(
+                function (response) {
+                    this.isSessionAlreadyPlanned = false;
+                },
+                function (response) {
+                    if (response.data.message === "TrainingSession already planned") {
+                        this.isSessionAlreadyPlanned = true;
+                    } else {
+                        console.error(response);
+                    }
+                });
+        }*/
 
     },
     template: `
@@ -734,6 +778,7 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
+            <button @click="GatherSessionsByTrainingFromDatabase()">Collect All Sessions Of the Training Chosen</button><br>
         </div>`,
 });
 
@@ -750,7 +795,8 @@ class trainingStore {
             allTrainings:[],
             trainingTitle:'',
             arrangeTrainings:[],
-            allTrainingsOfATopicChosen:[]
+            allTrainingsOfATopicChosen:[],
+            idSession:'7'
         }
     }
 
