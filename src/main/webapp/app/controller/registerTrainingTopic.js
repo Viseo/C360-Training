@@ -661,6 +661,13 @@ Vue.component('add-session-panel', {
                         console.error(response);
                     }
                 });
+        },
+
+        showSession(session){
+            console.log(session);
+            this.beginningDate = session.beginning;
+            this.endingDate = session.ending;
+            this.location = session.location;
         }
 
     },
@@ -704,13 +711,9 @@ Vue.component('add-session-panel', {
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
 		<nav>
 			<ul>
-				<li id="dropdown"><a href="#">Simple philosophies<div id="down-triangle"></div></a>
-					<ul class="scrollbar" id="style-5">
-						<li><a href="#">Make it simple but significant.<div class="circle"></div></a></li>
-						<li><a href="#">Stay focused and keep shipping.<div class="circle"></div></a></li>
-						<li><a href="#">Done is better than perfect.<div class="circle"></div></a></li>
-						<li><a href="#">Design is how it works.<div class="circle"></div></a></li>
-						<li><a href="#">Think big, start small, learn fast.<div class="circle"></div></a></li>
+				<li id="dropdown"><a href="#">Sessions disponibles<div id="down-triangle"></div></a>
+					<ul v-show="state.isNoSession" class="scrollbar" id="style-5">
+						<li v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -777,7 +780,6 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
-            <pre>{{$data|json}}</pre>
         </div>`,
 });
 
@@ -796,7 +798,7 @@ class trainingStore {
             arrangeTrainings:[],
             allTrainingsOfATopicChosen:[],
             listTrainingSession:[],
-            isNoSession:false,
+            isNoSession:true,
             idSession:'7'
         }
     }
