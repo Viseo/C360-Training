@@ -329,76 +329,14 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     });
                     this.state.allTrainings = this.selectOptionsOfTraining;
                     this.resetTrainingForm();
-                    this.TopicwithTraining();
-                    this.reorganizeAllTopicsAndTrainings();
+                    training_store.TopicwithTraining();
+                    training_store.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 }
             );
-        },
-
-        TopicwithTraining(){
-            this.state.trainingsChosen = [];
-            for (var tmp in this.selectOptionsOfTraining) {
-                this.state.trainingsChosen.push(this.selectOptionsOfTraining[tmp].topicDescription);
-            }
-            this.state.trainingsChosen = this.removeDuplicates(this.state.trainingsChosen, "id");
-            this.state.trainingsChosen.sort(function (a, b) {
-                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-            });
-        },
-        removeDuplicates(arr, prop) {
-            var new_arr = [];
-            var lookup = {};
-
-            for (var i in arr) {
-                lookup[arr[i][prop]] = arr[i];
-            }
-
-            for (i in lookup) {
-                new_arr.push(lookup[i]);
-            }
-
-            return new_arr;
-        },
-        reorganizeTrainings(value){
-            this.arrangeTrainings = [];
-            var tmp = [];
-            var longueur = value.length;
-            var compteur = 0;
-            for (var element in value) {
-                longueur--;
-                compteur++;
-                if (compteur >= 1 && compteur < 4) {
-                    tmp.push(value[element]);
-                    if (longueur == 0) {
-                        this.arrangeTrainings.push(tmp);
-                    }
-                } else if (compteur == 4) {
-                    tmp.push(value[element]);
-                    this.arrangeTrainings.push(tmp);
-                    tmp = [];
-                    compteur = 0;
-                }
-            }
-            return this.arrangeTrainings;
-        },
-        chooseAllTrainingsOfATopic(value){
-            this.allTrainingsOfATopicChosen = [];
-            for (var tmp in this.selectOptionsOfTraining) {
-                if (this.selectOptionsOfTraining[tmp].topicDescription.name == value) {
-                    this.allTrainingsOfATopicChosen.push(this.selectOptionsOfTraining[tmp]);
-                }
-            }
-            return this.allTrainingsOfATopicChosen;
-        },
-        reorganizeAllTopicsAndTrainings(){
-            this.state.allTopicTraining = [];
-            for (var tmp in this.state.trainingsChosen) {
-                this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
-            }
         },
 
     },
@@ -594,10 +532,14 @@ Vue.component('add-session-panel', {
             endingTime:'18:00',
             location:'',
             isSessionAlreadyPlanned:false,
+            allTrainings:[],
+            arrangeTrainings:[],
+            allTrainingsOfATopicChosen:[],
 
             state: training_store.state,
         }
     },
+
     methods: {
         updateV1 (v) {
             this.state.trainingTitle = v
@@ -617,6 +559,7 @@ Vue.component('add-session-panel', {
             this.state.idTraining = '';
             this.state.trainingChosen = {};
             this.state.trainingTitle = '';
+            this.GatherTrainingsFromDatabase();
         },
         VerifyFormBeforeSaveSession(){
             /*this.isEmailEmpty(); this.isPasswordEmpty();
@@ -637,6 +580,7 @@ Vue.component('add-session-panel', {
             this.SaveSessionIntoDatabase();
         },
         ModifyTrainingTopic(){
+            this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
             this.$http.put("api/formations/"+ this.state.trainingTitle +"/formationid/"+ this.state.idTraining);
         },
         SaveSessionIntoDatabase(){
@@ -654,7 +598,22 @@ Vue.component('add-session-panel', {
                         }
                     }
                 );
-        }
+        },
+
+        GatherTrainingsFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.allTrainings.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    this.state.allTrainings = this.allTrainings;
+                    training_store.TopicwithTraining();
+                    training_store.reorganizeAllTopicsAndTrainings();
+                }
+            );
+        },
+
     },
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
@@ -769,7 +728,9 @@ class trainingStore {
             idTraining:'',
             trainingChosen:{},
             allTrainings:[],
-            trainingTitle:''
+            trainingTitle:'',
+            arrangeTrainings:[],
+            allTrainingsOfATopicChosen:[]
         }
     }
 
@@ -782,6 +743,73 @@ class trainingStore {
         }
         this.state.trainingTitle = this.state.trainingChosen.trainingTitle;
     }
+
+    removeDuplicates(arr, prop) {
+        var new_arr = [];
+        var lookup = {};
+
+        for (var i in arr) {
+            lookup[arr[i][prop]] = arr[i];
+        }
+
+        for (i in lookup) {
+            new_arr.push(lookup[i]);
+        }
+
+        return new_arr;
+    }
+
+    TopicwithTraining(){
+        this.state.trainingsChosen = [];
+        for (var tmp in this.state.allTrainings) {
+            this.state.trainingsChosen.push(this.state.allTrainings[tmp].topicDescription);
+        }
+        this.state.trainingsChosen = training_store.removeDuplicates(this.state.trainingsChosen, "id");
+        this.state.trainingsChosen.sort(function (a, b) {
+            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+        });
+    }
+
+    reorganizeTrainings(value){
+        this.state.arrangeTrainings = [];
+        var tmp = [];
+        var longueur = value.length;
+        var compteur = 0;
+        for (var element in value) {
+            longueur--;
+            compteur++;
+            if (compteur >= 1 && compteur < 4) {
+                tmp.push(value[element]);
+                if (longueur == 0) {
+                    this.state.arrangeTrainings.push(tmp);
+                }
+            } else if (compteur == 4) {
+                tmp.push(value[element]);
+                this.state.arrangeTrainings.push(tmp);
+                tmp = [];
+                compteur = 0;
+            }
+        }
+        return this.state.arrangeTrainings;
+    }
+
+    chooseAllTrainingsOfATopic(value){
+        this.state.allTrainingsOfATopicChosen = [];
+        for (var tmp in this.state.allTrainings) {
+            if (this.state.allTrainings[tmp].topicDescription.name == value) {
+                this.state.allTrainingsOfATopicChosen.push(this.state.allTrainings[tmp]);
+            }
+        }
+        return this.state.allTrainingsOfATopicChosen;
+    }
+
+    reorganizeAllTopicsAndTrainings(){
+        this.state.allTopicTraining = [];
+        for (var tmp in this.state.trainingsChosen) {
+            this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
+        }
+    }
+
 }
 
 let training_store = new trainingStore();
