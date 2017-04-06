@@ -464,7 +464,17 @@ Vue.component('show-formation-panel', {
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
             training_store.CollectInformationOfTrainingChosen();
-        }
+            this.GatherSessionsByTrainingFromDatabase();
+        },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
+                function (response) {
+                    this.state.listTrainingSession = response.data;
+                    if (this.state.listTrainingSession.length === 0) {
+                        this.state.isNoSession = true;
+                    }
+                });
+        },
     },
     template: `
              <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation">
@@ -542,8 +552,6 @@ Vue.component('add-session-panel', {
             location:'',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
-            listTrainingSession:[],
-            isNoSession:false,
 
             state: training_store.state,
         }
@@ -632,17 +640,7 @@ Vue.component('add-session-panel', {
             );
         },
 
-        GatherSessionsByTrainingFromDatabase(){
-            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
-                function (response) {
-                    this.listTrainingSession = response.data;
-                    if (this.listTrainingSession.length === 0) {
-                        this.isNoSession = true;
-                    }
-            });
-        },
-
-        /*ModifyTrainingSession(){
+        ModifyTrainingSession(){
             this.sessionToModify.id = this.state.idSession;
             this.sessionToModify.trainingDescription = this.state.trainingChosen;
             this.sessionToModify.trainingDescription.trainingTitle = this.state.trainingTitle;
@@ -663,7 +661,7 @@ Vue.component('add-session-panel', {
                         console.error(response);
                     }
                 });
-        }*/
+        }
 
     },
     template: `
@@ -778,7 +776,7 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
-            <button @click="GatherSessionsByTrainingFromDatabase()">Collect All Sessions Of the Training Chosen</button><br>
+            <pre>{{$data|json}}</pre>
         </div>`,
 });
 
@@ -796,6 +794,8 @@ class trainingStore {
             trainingTitle:'',
             arrangeTrainings:[],
             allTrainingsOfATopicChosen:[],
+            listTrainingSession:[],
+            isNoSession:false,
             idSession:'7'
         }
     }
