@@ -56,7 +56,7 @@ Vue.component('error-messages',{
 });
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp','disabled'],
     methods:{
         updateValue(value){
           this.$emit('input',value);
@@ -79,7 +79,8 @@ Vue.component('input-text',{
                                        @input="updateValue($event.target.value)"
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
-                                       @focus="handleFocus"/>
+                                       @focus="handleFocus"
+                                       :disabled = "disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
                                       :class="icon"
