@@ -129,6 +129,21 @@ public class TrainingWS {
         }
     }
 
+    //remove Training Session
+    @RequestMapping(value = "${endpoint.sessiontoremove}", method = RequestMethod.POST)
+    @ResponseBody
+    public TrainingSessionDescription removeTrainingSession(@RequestBody TrainingSessionDescription trainingSessionDescription) {
+        try {
+            TrainingSession trainingSession = trainingDAO.getSessionTraining(trainingSessionDescription.getId());
+            if (trainingSession == null)
+                throw new PersistentObjectNotFoundException(trainingSessionDescription.getTrainingDescription().getId(), Training.class);
+            trainingSession = trainingDAO.removeTrainingSession(trainingSession);
+            return new TrainingSessionToDescription().convert(trainingSession);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
+
     //Update Training Session
     @RequestMapping(value = "${endpoint.sessions}", method = RequestMethod.PUT)
     @ResponseBody

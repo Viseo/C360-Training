@@ -52,7 +52,7 @@ public class JPAFacade implements DAOFacade {
 
 	@Override
 	public <T> void remove(T entity) {
-		entityManager.remove(entity);		
+		entityManager.remove(entityManager.contains(entity)?entity:entityManager.merge(entity));
 	}
 
 	@Override

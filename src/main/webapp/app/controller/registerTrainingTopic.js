@@ -552,6 +552,7 @@ Vue.component('add-session-panel', {
             location:'',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
+            sessionToRemove:{},
 
             state: training_store.state,
         }
@@ -661,6 +662,21 @@ Vue.component('add-session-panel', {
                         console.error(response);
                     }
                 });
+        },
+
+        RemoveSession(){
+            for (var tmp in this.state.listTrainingSession) {
+                if (this.state.listTrainingSession[tmp].id == this.state.idSession) {
+                    this.sessionToRemove = this.state.listTrainingSession[tmp];
+                }
+            }
+            this.$http.post("api/sessionstoremove", this.sessionToRemove).then(
+                function (response) {
+                    console.log("success");
+                },
+                function (response) {
+                    console.error(response);
+                });
         }
 
     },
@@ -764,10 +780,10 @@ Vue.component('add-session-panel', {
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                        <input type = "submit" 
+                                        <input type = "button" 
                                                class = "btn btn-danger" 
                                                value = "Supprimer" 
-                                               @click = "VerifyFormBeforeSaveSession()" 
+                                               @click = "RemoveSession()" 
                                                style = "width:100%"/>                                                                        
                                     </div>
                                 </div>                                                     
@@ -795,8 +811,8 @@ class trainingStore {
             arrangeTrainings:[],
             allTrainingsOfATopicChosen:[],
             listTrainingSession:[],
-            isNoSession:false,
-            idSession:'7'
+            isNoSession:true,
+            idSession:'3'
         }
     }
 
