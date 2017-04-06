@@ -659,7 +659,19 @@ Vue.component('add-session-panel', {
                         
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
-                                <p class = "text-center">Session disponibles : (0)</p>
+ 		<nav>
+			<ul>
+				<li><a href="#">Sessions disponibles<div id="down-triangle"></div></a>
+					<ul>
+						<li><a href="#">Make it simple but significant.<div class="circle"></div></a></li>
+						<li><a href="#">Stay focused and keep shipping.<div class="circle"></div></a></li>
+						<li><a href="#">Done is better than perfect.<div class="circle"></div></a></li>
+						<li><a href="#">Design is how it works.<div class="circle"></div></a></li>
+						<li><a href="#">Think big, start small, learn fast.<div class="circle"></div></a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
                             </div>                            
                             <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                 <div class = "row" style="margin-bottom: 30px;">
@@ -687,7 +699,7 @@ Vue.component('add-session-panel', {
                                             type = 'select'>
                                         </input-text> 
                                     </div> 
-                                </div>
+                                </div> 
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
                                         <input-text 
