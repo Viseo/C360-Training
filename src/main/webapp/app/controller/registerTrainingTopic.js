@@ -552,7 +552,8 @@ Vue.component('add-session-panel', {
             location:'',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
-
+            modifySessionButton: false,
+            valueButtonSaveModify: "Enregistrer",
             state: training_store.state,
         }
     },
@@ -595,15 +596,21 @@ Vue.component('add-session-panel', {
              this.userToRegister = JSON.parse(JSON.stringify(this.user));
              this.VerifyUserByDatabase();
              }*/
-            this.session.trainingDescription = this.state.trainingChosen;
-            this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
-            this.session.beginning = this.beginningDate;
-            this.session.ending = this.endingDate;
-            this.session.beginningTime = this.beginningTime;
-            this.session.endingTime = this.endingTime;
-            this.session.location = this.location;
-            this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
-            this.SaveSessionIntoDatabase();
+            if(this.modifySessionButton){
+                this.ModifyTrainingSession();
+
+            }
+            else {
+                this.session.trainingDescription = this.state.trainingChosen;
+                this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
+                this.session.beginning = this.beginningDate;
+                this.session.ending = this.endingDate;
+                this.session.beginningTime = this.beginningTime;
+                this.session.endingTime = this.endingTime;
+                this.session.location = this.location;
+                this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+                this.SaveSessionIntoDatabase();
+            }
         },
         ModifyTrainingTopic(){
             this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
@@ -614,6 +621,7 @@ Vue.component('add-session-panel', {
                 .then(
                     function (response) {
                         this.isSessionAlreadyPlanned = false;
+                        this.GatherSessionsByTrainingFromDatabase();
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -639,6 +647,15 @@ Vue.component('add-session-panel', {
                 }
             );
         },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
+                function (response) {
+                    this.state.listTrainingSession = response.data;
+                    if (this.state.listTrainingSession.length === 0) {
+                        this.state.isNoSession = true;
+                    }
+                });
+        },
 
         ModifyTrainingSession(){
             this.sessionToModify.id = this.state.idSession;
@@ -653,6 +670,7 @@ Vue.component('add-session-panel', {
             this.$http.put("api/sessions", this.sessionToModify).then(
                 function (response) {
                     this.isSessionAlreadyPlanned = false;
+                    this.GatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
                     if (response.data.message === "TrainingSession already planned") {
@@ -665,9 +683,12 @@ Vue.component('add-session-panel', {
 
         showSession(session){
             console.log(session);
+            this.valueButtonSaveModify = "Modifier";
+            this.modifySessionButton=true;
             this.beginningDate = session.beginning;
             this.endingDate = session.ending;
             this.location = session.location;
+            this.state.idSession = session.id;
         }
 
     },
@@ -711,15 +732,15 @@ Vue.component('add-session-panel', {
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
 		<nav>
 			<ul>
-				<li id="dropdown"><a href="#">Sessions disponibles<div id="down-triangle"></div></a>
+				<li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
 					<ul v-show="state.isNoSession" class="scrollbar" id="style-5">
 						<li v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
 					</ul>
 				</li>
 			</ul>
 		</nav>
-                            </div>                            
-                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            </div>     
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">                                
                                         <input-text 
@@ -764,7 +785,7 @@ Vue.component('add-session-panel', {
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
-                                               value = "Enregistrer" 
+                                               :value = "valueButtonSaveModify" 
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                

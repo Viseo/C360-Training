@@ -125,12 +125,12 @@ option {
 }
 
 nav {
-
-    font-size: 1em;
     font-family: 'Raleway', sans-serif;
     text-align: center;
 }
-
+#sessionavailable {
+    font-size: 1em;
+}
 nav ul {
     margin-left: 0;
     padding-left: 0;
@@ -148,6 +148,9 @@ nav ul li:hover > ul {
     display: block;
 }
 
+ul {
+    font-size: 0.8em;
+}
 nav ul li {
     float: left;
     text-align: left;
