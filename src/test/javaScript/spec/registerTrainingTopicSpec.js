@@ -1,11 +1,35 @@
 /**
  * Created by XME3612 on 28/03/2017.
  */
+Vue.use(VueResource);
+
+let args = [{id:"5", value:10, name:"java"}];
+
+Vue.http.interceptors.unshift((request, next) => {
+    let route = routes.find((item) => {
+        return (request.method === item.method && request.url === item.url);
+    });
+    if (!route) {
+        // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
+        next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
+    } else {
+
+        //  getRoute(route,args);
+       // console.log(route.response);
+        next(
+           // getRoute(route, args),
+            // console.log(route.response),
+            request.respondWith(
+                route.response,
+                {status: 200}
+            )
+        );
+    }
+});
 
 describe('test-show-formation', function () {
-
+    let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
     let vm;
-
     beforeEach(function () {
         vmAddFormationPanel = new AddFormationPanel().$mount();
         vmShowFormation = new ShowFormation().$mount();
@@ -46,8 +70,6 @@ describe('test-show-formation', function () {
 
         expect(vmShowFormation.state.trainingsChosen).toEqual([]);
         expect(vmShowFormation.state.allTopicTraining).toEqual([]);
-
-
     });
 
     //verifyTrainingField
@@ -136,6 +158,13 @@ describe('test-show-formation', function () {
         vmAddFormationPanel.resetTrainingForm();
         expect(vmAddFormationPanel.newTopic).toBe('');
         expect(vmAddFormationPanel.topicToRegister).toEqual({});
+        vmAddFormationPanel.numberHalfDays=2;
+    });
+
+    it('should add a topic', function() {
+        var sessionDescription = TRAINING;
+        vmAddFormationPanel.newTopic = 'PROGRAMMATION';
+        let resp = vmAddFormationPanel.saveTopicIntoDatabase();
     });
 
     //removeDuplicates

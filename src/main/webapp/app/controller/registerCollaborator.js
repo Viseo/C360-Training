@@ -15,17 +15,17 @@ let NavigationMenu = Vue.component('connect-user',{
             <div class="panel panel-default">
                 <ul class="tab-group">
                     <li :class="tabinscription">
-                        <a @click="showInscriptionForm()">Inscription</a>
+                        <a ref='inscriptionButton' @click="showInscriptionForm()">Inscription</a> 
                     </li>
                     <li :class="tabconnexion">
-                        <a @click="showConnexionForm()">Connexion</a>
+                        <a ref="connexionButton" @click="showConnexionForm()">Connexion</a>
                     </li>
                 </ul>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
-                            <inscription-form @test="showConnexionForm()" v-if="newCollab"></inscription-form>
-                            <connexion-form v-else></connexion-form>
+                            <inscription-form ref="insc" @test="showConnexionForm()" v-if="newCollab"></inscription-form>
+                            <connexion-form ref="conn" v-else></connexion-form>
                         </div>
                     </div>
                 </div>
@@ -358,10 +358,12 @@ let Formulaire = Vue.component('inscription-form', {
                     function (response) {
                         console.log("Error: ",response);
                         if (response.data.message == "personnalIdNumber") {
+                            console.log("PID already exist");
                             this.personalIdNumberAlreadyExist = false;
                             this.emailAlreadyExist = true;
                         }
                         else if(response.data.message == "email"){
+                            console.log("email already exist");
                             this.emailAlreadyExist = false;
                             this.personalIdNumberAlreadyExist = true;
                         }else{
@@ -391,7 +393,7 @@ let Formulaire = Vue.component('inscription-form', {
     }
 })
 
-Vue.component('connexionForm', {
+let ConnexionForm = Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
              <table style="border-spacing: 0px">
@@ -401,7 +403,7 @@ Vue.component('connexionForm', {
                     <div class="inner-addon left-addon" :class="{ 'control': true }">
                     <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-envelope"></i>
-                        <input type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
+                        <input ref="inputMail" type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
                                v-model="email" @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
                                onblur="this.placeholder = 'eric.dupont@viseo.com'">
                     </td></tr>
@@ -419,10 +421,10 @@ Vue.component('connexionForm', {
                         <i class="glyphicon glyphicon-lock"></i>
                         <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
                         <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
-                        <input type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
+                        <input ref="inputPassword" type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
                                placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false; showPopup = false;"
                                @blur="isPasswordEmpty">
-                        <input type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
+                        <input ref="inputPasswordVisible" type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
                                @focus="passwordEmpty = false" @blur="isPasswordEmpty">
                     </td></tr>
                     <tr><td style="height: 20px;">
@@ -615,6 +617,7 @@ let customInput = Vue.component('customInput', {
                         <input v-if="type=='text'" 
                                type="text" 
                                :id="label" 
+                               :v-el="label"
                                :tabindex="tab" 
                                class="form-control"
                                :placeholder="placeholder" 
