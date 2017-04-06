@@ -26,8 +26,7 @@ Vue.component('blue-header',{
 });
 
 Vue.component('error-messages',{
-    props:['height','colspan',
-           'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
+    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
            'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
     data: function(){
         return {
