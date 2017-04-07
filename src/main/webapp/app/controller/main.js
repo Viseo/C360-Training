@@ -1,6 +1,6 @@
 Vue.use(VueResource);
 
-Vue.component('blue-header',{
+let Header = Vue.component('blue-header',{
     template: `<div id="wrap">
     <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
         <div class="container-fluid">
