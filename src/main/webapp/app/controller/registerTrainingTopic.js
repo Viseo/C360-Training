@@ -474,6 +474,9 @@ Vue.component('show-formation-panel', {
                     if (this.state.listTrainingSession.length === 0) {
                         this.state.isNoSession = true;
                     }
+                    else{
+                        this.state.isNoSession = false;
+                    }
                 });
         },
     },
@@ -598,6 +601,7 @@ Vue.component('add-session-panel', {
             this.beginningDate = '';
             this.endingDate = '';
             this.location = '';
+            this.valueButtonSaveModify = 'Enregistrer';
         },
 
         VerifyFormBeforeSaveSession(){
@@ -665,6 +669,9 @@ Vue.component('add-session-panel', {
                     this.state.listTrainingSession = response.data;
                     if (this.state.listTrainingSession.length === 0) {
                         this.state.isNoSession = true;
+                    }
+                    else{
+                        this.state.isNoSession = false;
                     }
                 });
         },
@@ -771,9 +778,11 @@ Vue.component('add-session-panel', {
                         <nav>
                             <ul>
                                 <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
-                                    <ul v-show="state.isNoSession" class="scrollbar" id="style-5">
-                                        <li v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
+                                    <ul class="scrollbar" id="style-5">
+                                        <li v-show="state.isNoSession"><a>Aucune session</a></li>
+                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
                                     </ul>
+                      
                                 </li>
                             </ul>
                         </nav>
