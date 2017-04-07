@@ -873,7 +873,6 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
-            <button @click="CalculateEndingDate()">Calculate Ending Date</button>
         </div>`,
 });
 
