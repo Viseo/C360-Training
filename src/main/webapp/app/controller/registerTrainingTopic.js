@@ -564,7 +564,6 @@ Vue.component('add-session-panel', {
             sessionToRemove:{},
             AllSalles:['Salle Bali','Salle de la Fontaine','Salle Bora Bora','Salle Bastille','Salle Saint-Germain','Salle Escale','Salle Cafet-Terrasse'],
             isDisabledSupprimer:true,
-            AllSalles:['salle1','salle2','salle3','salle4'],
             numberOfSessionSelected:0,
             canNotRegisterForm: false,
             listTrainingSessionSelected:[],
