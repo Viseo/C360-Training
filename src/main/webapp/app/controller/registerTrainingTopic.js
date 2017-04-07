@@ -464,6 +464,7 @@ Vue.component('show-formation-panel', {
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
+            this.state.idSession = '';
             training_store.CollectInformationOfTrainingChosen();
             this.GatherSessionsByTrainingFromDatabase();
         },
@@ -587,11 +588,13 @@ Vue.component('add-session-panel', {
         },
 
         ReturnToPageTraining(){
+            this.isDisabledTrainingTitle = true;
             this.state.changePageToTraining = true;
             this.state.changePageToSession = false;
             this.state.idTraining = '';
             this.state.trainingChosen = {};
             this.state.trainingTitle = '';
+            this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },
 
