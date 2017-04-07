@@ -562,7 +562,7 @@ Vue.component('add-session-panel', {
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle:true,
             sessionToRemove:{},
-            AllSalles:['salle1','salle2','salle3','salle4'],
+            AllSalles:['Salle Bali','Salle de la Fontaine','Salle Bora Bora','Salle Bastille','Salle Saint-Germain','Salle Escale','Salle Cafet-Terrasse'],
 
             modifySessionButton: false,
             valueButtonSaveModify: "Enregistrer",
@@ -747,7 +747,7 @@ Vue.component('add-session-panel', {
 
         CalculateEndingDate(){
             var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
-            var beginningDate = this.beginningDate; // Oct 23
+            var beginningDate = this.beginningDate;
             var dateParts = beginningDate.split("/");
             var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
             var dayOfMonth = dateObject.getDate();
