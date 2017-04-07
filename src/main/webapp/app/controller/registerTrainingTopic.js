@@ -66,6 +66,9 @@ Vue.component('input-text',{
         },
         handleClick(){
             this.$emit('click');
+        },
+        handleBlur(){
+            this.$emit('blur');
         }
     },
    template: `<td :width="width">
@@ -80,6 +83,7 @@ Vue.component('input-text',{
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
                                        @focus="handleFocus"
+                                       @blur="handleBlur"
                                        :disabled="disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
@@ -558,6 +562,7 @@ Vue.component('add-session-panel', {
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle:true,
             sessionToRemove:{},
+            AllSalles:['Salle Bali','Salle de la Fontaine','Salle Bora Bora','Salle Bastille','Salle Saint-Germain','Salle Escale','Salle Cafet-Terrasse'],
             isDisabledSupprimer:true,
             AllSalles:['salle1','salle2','salle3','salle4'],
             numberOfSessionSelected:0,
@@ -773,6 +778,18 @@ Vue.component('add-session-panel', {
             }else{
                 return true;
             }
+        },
+
+        CalculateEndingDate(){
+            var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+            var beginningDate = this.beginningDate;
+            var dateParts = beginningDate.split("/");
+            var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+            var dayOfMonth = dateObject.getDate();
+            dateObject.setDate(dayOfMonth + nbDays);
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+
         }
 
     },
@@ -839,6 +856,7 @@ Vue.component('add-session-panel', {
                                             :isValid = "true"
                                             :disabled = "canNotRegisterForm"
                                             icon = "glyphicon glyphicon-calendar"
+                                            @blur = "CalculateEndingDate()"
                                             type = 'input'>
                                         </input-text>
                                     </div>
@@ -865,8 +883,8 @@ Vue.component('add-session-panel', {
                                             placeholder = "--/--/----"
                                             maxlength = "10"
                                             :isValid = "true"
-                                            :disabled = "canNotRegisterForm" 
                                             icon = "glyphicon glyphicon-calendar"
+                                            :disabled = "true" 
                                             type = 'input'>
                                         </input-text>
                                     </div>
