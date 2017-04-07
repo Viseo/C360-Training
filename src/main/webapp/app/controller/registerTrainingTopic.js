@@ -555,6 +555,7 @@ Vue.component('add-session-panel', {
             isDisabledTrainingTitle:true,
             sessionToRemove:{},
             isDisabledSupprimer:true,
+            AllSalles:['salle1','salle2','salle3','salle4'],
 
             modifySessionButton: false,
             valueButtonSaveModify: "Enregistrer",
@@ -801,7 +802,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "Salle"
                                             maxlength = "10"
                                             :isValid = "true"
-                                            :collection="4"
+                                            :collection="AllSalles"
                                             type = 'select'>
                                         </input-text> 
                                     </div> 
