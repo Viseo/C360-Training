@@ -129,7 +129,7 @@ nav {
     text-align: center;
 }
 #sessionavailable {
-    font-size: 1em;
+    font-size: 1.2em;
 }
 nav ul {
     margin-left: 0;
@@ -212,13 +212,23 @@ nav ul ul li a:hover {
     display: inline;
     width: 10px;
     height: 10px;
-    margin-top: 5px;
+    margin-top: 2px;
     border: 3px solid #4ba3eb;
     -moz-border-radius: 70px;
     -webkit-border-radius: 70px;
     border-radius: 70px;
 }
 
+.full-circle {
+    float: right;
+    display: inline;
+    background-color: #4ba3eb;
+    width: 10px;
+    height: 10px;
+    margin-top: 2px;
+    -moz-border-radius:70px;
+    -webkit-border-radius: 70px;
+}
 .scrollbar
 {
     float: left;

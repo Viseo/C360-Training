@@ -560,9 +560,12 @@ Vue.component('add-session-panel', {
             sessionToRemove:{},
             isDisabledSupprimer:true,
             AllSalles:['salle1','salle2','salle3','salle4'],
+            numberOfSessionSelected:0,
+            canNotRegisterForm: false,
+            listTrainingSessionSelected:[],
 
             modifySessionButton: false,
-            valueButtonSaveModify: "Enregistrer",
+            valueButtonSaveModify: "Ajouter",
             state: training_store.state,
         }
     },
@@ -607,7 +610,8 @@ Vue.component('add-session-panel', {
             this.location = '';
             this.modifySessionButton = false;
             this.isDisabledSupprimer = true;
-            this.valueButtonSaveModify = 'Enregistrer';
+            this.valueButtonSaveModify = 'Ajouter';
+            this.state.idSession='';
         },
 
         VerifyFormBeforeSaveSession(){
@@ -707,15 +711,19 @@ Vue.component('add-session-panel', {
                 });
         },
 
-        RemoveSession(){
-            for (var tmp in this.state.listTrainingSession) {
-                if (this.state.listTrainingSession[tmp].id == this.state.idSession) {
-                    this.sessionToRemove = this.state.listTrainingSession[tmp];
+        chooseSessionsToRemove(){
+                for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
+                    this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
+                  this.numberOfSessionSelected--;
                 }
-            }
-            this.$http.post("api/sessionstoremove", this.sessionToRemove).then(
+
+        },
+
+        RemoveSession(sessionToRemove){
+            this.$http.post("api/sessionstoremove", sessionToRemove).then(
                 function (response) {
                     console.log("success");
+                    this.canNotRegisterForm = false;
                     this.ResetSessionForm();
                     this.GatherSessionsByTrainingFromDatabase();
                 },
@@ -725,20 +733,45 @@ Vue.component('add-session-panel', {
         },
 
         showSession(session){
-            console.log(session);
-            this.valueButtonSaveModify = "Modifier";
-            this.modifySessionButton=true;
-            this.beginningDate = session.beginning;
-            this.endingDate = session.ending;
-            this.location = session.location;
-            this.state.idSession = session.id;
+            if( document.getElementById('circle'+session.id).className === 'circle') {
+                document.getElementById('circle' + session.id).className = 'full-circle';
+                this.numberOfSessionSelected++;
+                this.listTrainingSessionSelected.push(session);
+            }
+            else {
+                document.getElementById('circle' + session.id).className = 'circle';
+                this.numberOfSessionSelected--;
+                for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
+                    if (this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id === session.id) {
+                        this.listTrainingSessionSelected.splice(indexOfListTrainingSessionSelected,1);
+                    }
+                }
+            }
+            if(this.numberOfSessionSelected>=2){
+                this.canNotRegisterForm = true;
+            }
+            else{
+                this.canNotRegisterForm = false;
+            }
+
+            if(this.numberOfSessionSelected === 1){
+                this.valueButtonSaveModify = "Modifier";
+                this.modifySessionButton = true;
+                this.beginningDate = session.beginning;
+                this.endingDate = session.ending;
+                this.location = session.location;
+                this.state.idSession = session.id;
+            }
+            else{
+                this.ResetSessionForm();
+            }
         },
 
         CanNotUseButtonSupprimer(){
-            if(this.state.idSession==''){
-                return true;
-            }else{
+            if(this.numberOfSessionSelected>=1){
                 return false;
+            }else{
+                return true;
             }
         }
 
@@ -786,7 +819,7 @@ Vue.component('add-session-panel', {
                                 <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
                                     <ul class="scrollbar" id="style-5">
                                         <li v-show="state.isNoSession"><a>Aucune session</a></li>
-                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
+                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
                                     </ul>
                       
                                 </li>
@@ -804,6 +837,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "--/--/----"
                                             maxlength = "10"
                                             :isValid = "true"
+                                            :disabled = "canNotRegisterForm"
                                             icon = "glyphicon glyphicon-calendar"
                                             type = 'input'>
                                         </input-text>
@@ -816,6 +850,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "Salle"
                                             maxlength = "10"
                                             :isValid = "true"
+                                            :disabled = "canNotRegisterForm" 
                                             :collection="AllSalles"
                                             type = 'select'>
                                         </input-text> 
@@ -830,6 +865,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "--/--/----"
                                             maxlength = "10"
                                             :isValid = "true"
+                                            :disabled = "canNotRegisterForm" 
                                             icon = "glyphicon glyphicon-calendar"
                                             type = 'input'>
                                         </input-text>
@@ -840,13 +876,14 @@ Vue.component('add-session-panel', {
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
                                                :value = "valueButtonSaveModify" 
+                                               :disabled = "canNotRegisterForm" 
                                                style = "width:100%"/>                                                                         
                                     </div>
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "button" 
                                                class = "btn btn-danger" 
                                                value = "Supprimer" 
-                                               @click = "RemoveSession()" 
+                                               @click = "chooseSessionsToRemove()" 
                                                :disabled = "CanNotUseButtonSupprimer()" 
                                                style = "width:100%"/>                                                                        
                                     </div>
