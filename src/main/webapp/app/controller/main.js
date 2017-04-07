@@ -20,10 +20,10 @@ let Header = Vue.component('blue-header',{
                                 <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
                                 <ul id="dropdown-app" class="dropdown-menu">
                                     <li>
-                                        <span class="col-lg-5" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
-                                        <span class="col-lg-5" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
-                                        <span class="col-lg-5" v-show="!app.training"><img src="/img/icon_formation.png" href="#" class="text-center icon-app"><p>GF</p></span>
-                                        <span class="col-lg-5" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
+                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
+                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
+                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.training"><img src="/img/icon_formation.png" href="#" class="text-center icon-app"><p>GF</p></span>
+                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
                                     </li>
                                 </ul>
                             </li>

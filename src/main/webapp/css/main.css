@@ -33,6 +33,9 @@
 #dropdown-app {
     padding-top:15px;
 }
+#dropdown-app p{
+    text-align:center;
+}
 .icon-app {
     margin-bottom:15px;
 }
@@ -55,7 +58,7 @@ i.glyphicon {
     top:2.5px;
 }
 #dropdown-app {
-    text-align: justify;
+
     width: 35px;
 }
 #dropdown-app img {
