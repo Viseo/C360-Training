@@ -56,7 +56,7 @@ Vue.component('error-messages',{
 });
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp','disabled'],
     methods:{
         updateValue(value){
           this.$emit('input',value);
@@ -79,7 +79,8 @@ Vue.component('input-text',{
                                        @input="updateValue($event.target.value)"
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
-                                       @focus="handleFocus"/>
+                                       @focus="handleFocus"
+                                       :disabled="disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
                                       :class="icon"
@@ -551,8 +552,9 @@ Vue.component('add-session-panel', {
             endingTime:'18:00',
             location:'',
             isSessionAlreadyPlanned:false,
-            isDisabledTrainingTitle: true,
+            isDisabledTrainingTitle:true,
             sessionToRemove:{},
+            isDisabledSupprimer:true,
 
             modifySessionButton: false,
             valueButtonSaveModify: "Enregistrer",
@@ -582,6 +584,7 @@ Vue.component('add-session-panel', {
         updateV4 (v) {
             this.endingDate = v
         },
+
         ReturnToPageTraining(){
             this.state.changePageToTraining = true;
             this.state.changePageToSession = false;
@@ -590,6 +593,13 @@ Vue.component('add-session-panel', {
             this.state.trainingTitle = '';
             this.GatherTrainingsFromDatabase();
         },
+
+        ResetSessionForm(){
+            this.beginningDate = '';
+            this.endingDate = '';
+            this.location = '';
+        },
+
         VerifyFormBeforeSaveSession(){
             /*this.isEmailEmpty(); this.isPasswordEmpty();
              if(!this.emailEmpty && !this.passwordEmpty){
@@ -600,7 +610,6 @@ Vue.component('add-session-panel', {
              }*/
             if(this.modifySessionButton){
                 this.ModifyTrainingSession();
-
             }
             else {
                 this.session.trainingDescription = this.state.trainingChosen;
@@ -623,6 +632,7 @@ Vue.component('add-session-panel', {
                 .then(
                     function (response) {
                         this.isSessionAlreadyPlanned = false;
+                        this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
                     },
                     function (response) {
@@ -672,6 +682,7 @@ Vue.component('add-session-panel', {
             this.$http.put("api/sessions", this.sessionToModify).then(
                 function (response) {
                     this.isSessionAlreadyPlanned = false;
+                    this.ResetSessionForm();
                     this.GatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
@@ -692,6 +703,8 @@ Vue.component('add-session-panel', {
             this.$http.post("api/sessionstoremove", this.sessionToRemove).then(
                 function (response) {
                     console.log("success");
+                    this.ResetSessionForm();
+                    this.GatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
                     console.error(response);
@@ -706,6 +719,14 @@ Vue.component('add-session-panel', {
             this.endingDate = session.ending;
             this.location = session.location;
             this.state.idSession = session.id;
+        },
+
+        CanNotUseButtonSupprimer(){
+            if(this.state.idSession==''){
+                return true;
+            }else{
+                return false;
+            }
         }
 
     },
@@ -720,7 +741,6 @@ Vue.component('add-session-panel', {
                         </div>
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                        <!--<button @click="ReturnToPageTraining()">Retour</button>-->
                         <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
@@ -747,15 +767,17 @@ Vue.component('add-session-panel', {
                             <hr>
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
-		<nav>
-			<ul>
-				<li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
-					<ul v-show="state.isNoSession" class="scrollbar" id="style-5">
-						<li v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
-					</ul>
-				</li>
-			</ul>
-		</nav>
+                            
+                        <nav>
+                            <ul>
+                                <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
+                                    <ul v-show="state.isNoSession" class="scrollbar" id="style-5">
+                                        <li v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                        
                             </div>     
                             <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
                                 <div class = "row" style="margin-bottom: 30px;">
@@ -810,6 +832,7 @@ Vue.component('add-session-panel', {
                                                class = "btn btn-danger" 
                                                value = "Supprimer" 
                                                @click = "RemoveSession()" 
+                                               :disabled = "CanNotUseButtonSupprimer()" 
                                                style = "width:100%"/>                                                                        
                                     </div>
                                 </div>                                                     
@@ -818,7 +841,6 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
-            <pre>{{$data|json}}</pre>
         </div>`,
 });
 
@@ -838,7 +860,7 @@ class trainingStore {
             allTrainingsOfATopicChosen:[],
             listTrainingSession:[],
             isNoSession:true,
-            idSession:'3'
+            idSession:''
         }
     }
 
