@@ -605,6 +605,8 @@ Vue.component('add-session-panel', {
             this.beginningDate = '';
             this.endingDate = '';
             this.location = '';
+            this.modifySessionButton = false;
+            this.isDisabledSupprimer = true;
             this.valueButtonSaveModify = 'Enregistrer';
         },
 
