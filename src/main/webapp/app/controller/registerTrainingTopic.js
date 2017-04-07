@@ -703,6 +703,9 @@ Vue.component('add-session-panel', {
             this.$http.put("api/sessions", this.sessionToModify).then(
                 function (response) {
                     this.isSessionAlreadyPlanned = false;
+                    document.getElementById('circle' + this.sessionToModify.id).className = 'circle';
+                    this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
+                    this.numberOfSessionSelected--;
                     this.ResetSessionForm();
                     this.GatherSessionsByTrainingFromDatabase();
                 },
@@ -718,8 +721,10 @@ Vue.component('add-session-panel', {
         chooseSessionsToRemove(){
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
-                  this.numberOfSessionSelected--;
+                    document.getElementById('circle' + this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id).className = 'circle';
+                    this.numberOfSessionSelected--;
                 }
+            this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
 
         },
 
