@@ -434,7 +434,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 </div>
                 <div class="checkbox">
                      <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
-                     <a href="#" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a>
+                     <a href="#" ref="forgotPassword" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a>
                      <br><span v-show="isErrorAuthentification" class="color-red">Connexion refusée: veuillez entrer une adresse e-mail et un mot de passe valide</span>
                      <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
                         <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
@@ -443,7 +443,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
-                            <button type="submit" name="register-submit" id="register-submit"
+                            <button ref="submitConnexion" type="submit" name="register-submit" id="register-submit"
                                     tabindex="4" class="form-control btn btn-primary" @click="sendInformationToCookie()">Se connecter
                             </button>
                         </div>
@@ -603,7 +603,7 @@ let ConnexionForm = Vue.component('connexionForm', {
     }
 })
 
-let customInput = Vue.component('customInput', {
+let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
             "minlength", 'emptyField', "emptyMessage", "existField", "existMessage", "errorField", "errorMessage" ],
     template: `
@@ -615,6 +615,7 @@ let customInput = Vue.component('customInput', {
                     <tr><td style="width: 500px;">
                         <i class="glyphicon" :class="icon"></i>
                         <input v-if="type=='text'" 
+                               :ref="label"
                                type="text" 
                                :id="label" 
                                :v-el="label"

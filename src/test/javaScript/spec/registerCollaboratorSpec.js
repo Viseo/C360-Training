@@ -1,9 +1,11 @@
 describe('test registerCollaborator.js', function () {
 let args;
+
     beforeEach(function () {
         vmNavigationMenu = new NavigationMenu().$mount();
         vmFormulaire = new Formulaire().$mount();
         vmConnexionForm = new ConnexionForm().$mount();
+        vmCustomInput = new CustomInput().$mount();
     });
     let vm;
 
@@ -179,12 +181,26 @@ let args;
             expect(vmConnexionForm.passwordEmpty).toBe(true);
         });
 
-        it('Should check fields and connect', function() {
+        it('should check fields and stay connected', function() {
             vmConnexionForm.email = 'eric.dupont@viseo.com';
-            vmConnexionForm.password = '123456'
+            vmConnexionForm.password = '123456';
             vmConnexionForm.VerifyForm();
             expect(JSON.stringify(vmConnexionForm.userToRegister)).toEqual(JSON.stringify({"email":"eric.dupont@viseo.com","password":"123456"}));
-        })
+        });
+
+        it('should connect without staying connected', function() {
+            vmConnexionForm.email = 'eric.dupont@viseo.com';
+            vmConnexionForm.password = '123456';
+            vmConnexionForm.stayConnected = false;
+            vmConnexionForm.VerifyForm();
+        });
+
+        it('should display popup for forgotten password', function() {
+            vmConnexionForm.$refs.forgotPassword.click();
+            expect(vmConnexionForm.emailEmpty).toBe(true);
+            // To continue
+        });
+
     })
 
 });

@@ -18,6 +18,13 @@ let routes = [
             {status:"200"}
         ]
     },
+    /*{
+     method: 'POST',
+     url: 'api/sendtoken',
+     response: [
+     {status:"200"}
+     ]
+     },*/
     {
         method: 'POST',
         url: "api/user",
@@ -31,6 +38,28 @@ let routes = [
         response: [
             {}
         ]
+    }, {
+        method: 'GET',
+        url: 'api/collaborateurs',
+        response:
+            [
+                {
+                    id: 1,
+                    version: 0,
+                    lastName: "DUPONT",
+                    firstName: "ERIC",
+                    email: "eric.dupont@viseo.com",
+                    password: "123456"
+                },
+                {
+                    id: 2,
+                    version: 0,
+                    lastName: "Cot",
+                    firstName: "Harry",
+                    email: "harrycot@viseo.com",
+                    password: "123456"
+                }
+            ]
     },
     {
         method: 'POST',
@@ -49,3 +78,15 @@ let routes = [
     },
 
 ];
+
+var mock = {
+    value_: '',
+
+    get cookie() {
+        return this.value_;
+    },
+
+    set cookie(value) {
+        this.value_ += value + ';';
+    }
+};
