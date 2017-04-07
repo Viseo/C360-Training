@@ -66,6 +66,9 @@ Vue.component('input-text',{
         },
         handleClick(){
             this.$emit('click');
+        },
+        handleBlur(){
+            this.$emit('blur');
         }
     },
    template: `<td :width="width">
@@ -80,6 +83,7 @@ Vue.component('input-text',{
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
                                        @focus="handleFocus"
+                                       @blur="handleBlur"
                                        :disabled="disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
@@ -558,7 +562,6 @@ Vue.component('add-session-panel', {
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle:true,
             sessionToRemove:{},
-            isDisabledSupprimer:true,
             AllSalles:['salle1','salle2','salle3','salle4'],
 
             modifySessionButton: false,
@@ -606,7 +609,7 @@ Vue.component('add-session-panel', {
             this.endingDate = '';
             this.location = '';
             this.modifySessionButton = false;
-            this.isDisabledSupprimer = true;
+            this.state.idSession = '';
             this.valueButtonSaveModify = 'Enregistrer';
         },
 
@@ -740,6 +743,18 @@ Vue.component('add-session-panel', {
             }else{
                 return false;
             }
+        },
+
+        CalculateEndingDate(){
+            var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+            var beginningDate = this.beginningDate; // Oct 23
+            var dateParts = beginningDate.split("/");
+            var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+            var dayOfMonth = dateObject.getDate();
+            dateObject.setDate(dayOfMonth + nbDays);
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+
         }
 
     },
@@ -786,7 +801,7 @@ Vue.component('add-session-panel', {
                                 <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
                                     <ul class="scrollbar" id="style-5">
                                         <li v-show="state.isNoSession"><a>Aucune session</a></li>
-                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}}<div class="circle"></div></a></li>
+                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div class="circle"></div></a></li>
                                     </ul>
                       
                                 </li>
@@ -805,6 +820,7 @@ Vue.component('add-session-panel', {
                                             maxlength = "10"
                                             :isValid = "true"
                                             icon = "glyphicon glyphicon-calendar"
+                                            @blur = "CalculateEndingDate()"
                                             type = 'input'>
                                         </input-text>
                                     </div>
@@ -831,6 +847,7 @@ Vue.component('add-session-panel', {
                                             maxlength = "10"
                                             :isValid = "true"
                                             icon = "glyphicon glyphicon-calendar"
+                                            :disabled = "true" 
                                             type = 'input'>
                                         </input-text>
                                     </div>
@@ -850,12 +867,13 @@ Vue.component('add-session-panel', {
                                                :disabled = "CanNotUseButtonSupprimer()" 
                                                style = "width:100%"/>                                                                        
                                     </div>
-                                </div>                                                     
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <button @click="CalculateEndingDate()">Calculate Ending Date</button>
         </div>`,
 });
 
