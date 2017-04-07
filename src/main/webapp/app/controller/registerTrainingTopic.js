@@ -404,7 +404,7 @@ template:`
                                         maxlength="50"
                                         @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
                                         :isValid="isNewTopicValid"
-                                        icon="glyphicon-plus btn btn-link"
+                                        icon="glyphicon-plus btn btn-primary"
                                         type='input'
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
@@ -464,6 +464,7 @@ Vue.component('show-formation-panel', {
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
+            this.state.idSession = '';
             training_store.CollectInformationOfTrainingChosen();
             this.GatherSessionsByTrainingFromDatabase();
         },
@@ -558,6 +559,7 @@ Vue.component('add-session-panel', {
             isDisabledTrainingTitle:true,
             sessionToRemove:{},
             isDisabledSupprimer:true,
+            AllSalles:['salle1','salle2','salle3','salle4'],
 
             modifySessionButton: false,
             valueButtonSaveModify: "Enregistrer",
@@ -589,11 +591,13 @@ Vue.component('add-session-panel', {
         },
 
         ReturnToPageTraining(){
+            this.isDisabledTrainingTitle = true;
             this.state.changePageToTraining = true;
             this.state.changePageToSession = false;
             this.state.idTraining = '';
             this.state.trainingChosen = {};
             this.state.trainingTitle = '';
+            this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },
 
@@ -810,7 +814,7 @@ Vue.component('add-session-panel', {
                                             placeholder = "Salle"
                                             maxlength = "10"
                                             :isValid = "true"
-                                            :collection="4"
+                                            :collection="AllSalles"
                                             type = 'select'>
                                         </input-text> 
                                     </div> 

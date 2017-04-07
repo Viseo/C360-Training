@@ -58,4 +58,3 @@ $('#test').bind('mousewheel DOMMouseScroll', function(event){
         $('#test').animate({scrollTop: "+=100"}, 80);
     }
 });
-
