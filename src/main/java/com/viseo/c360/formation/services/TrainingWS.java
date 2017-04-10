@@ -70,6 +70,20 @@ public class TrainingWS {
         return new TrainingToDescription().convert(trainingDAO.getAllTrainings());
     }
 
+    //update training topic
+    @RequestMapping(value = "${endpoint.trainingtopic}", method = RequestMethod.PUT)
+    @ResponseBody
+    public TrainingDescription updateTrainingTopic(@PathVariable String trainingTopic, @PathVariable String formationId) {
+        try {
+            Training training= trainingDAO.getTraining(Long.parseLong(formationId));
+            if(training == null) throw new PersistentObjectNotFoundException(15,Training.class);
+            training = trainingDAO.updateTrainingTopic(training, trainingTopic);
+            return new TrainingToDescription().convert(training);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
+
     /***
      * Topic
      ***/
@@ -109,6 +123,21 @@ public class TrainingWS {
                 throw new PersistentObjectNotFoundException(trainingSessionDescription.getTrainingDescription().getId(), Training.class);
             TrainingSession trainingSession = new DescriptionToTrainingSession().convert(trainingSessionDescription, training);
             trainingSession = trainingDAO.addSessionTraining(trainingSession);
+            return new TrainingSessionToDescription().convert(trainingSession);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
+
+    //remove Training Session
+    @RequestMapping(value = "${endpoint.sessiontoremove}", method = RequestMethod.POST)
+    @ResponseBody
+    public TrainingSessionDescription removeTrainingSession(@RequestBody TrainingSessionDescription trainingSessionDescription) {
+        try {
+            TrainingSession trainingSession = trainingDAO.getSessionTraining(trainingSessionDescription.getId());
+            if (trainingSession == null)
+                throw new PersistentObjectNotFoundException(trainingSessionDescription.getTrainingDescription().getId(), Training.class);
+            trainingSession = trainingDAO.removeTrainingSession(trainingSession);
             return new TrainingSessionToDescription().convert(trainingSession);
         } catch (PersistentObjectNotFoundException e) {
             throw new C360Exception(e);

@@ -45,6 +45,14 @@ public class TrainingDAO {
         return daoFacade.getList("select a from Training a");
     }
 
+    @Transactional
+    public Training updateTrainingTopic(Training training, String trainingTopic){
+        training = daoFacade.merge(training);
+        training.setTrainingTitle(trainingTopic);
+        daoFacade.flush();
+        return training;
+    }
+
     /***
      * Topic
      ***/
@@ -104,6 +112,13 @@ public class TrainingDAO {
             throw new TrainingSessionException(TrainingSessionErrors.TRAINING_SESSION_INCORRECT_DATES.getMessage());
         }
         daoFacade.persist(trainingSession);
+        daoFacade.flush();
+        return trainingSession;
+    }
+
+    @Transactional
+    public TrainingSession removeTrainingSession(TrainingSession trainingSession){
+        daoFacade.remove(trainingSession);
         daoFacade.flush();
         return trainingSession;
     }

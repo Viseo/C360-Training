@@ -6,8 +6,8 @@ Vue.use(VueResource);
 
 Vue.component('error-messages',{
     props:['height','colspan',
-        'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
-        'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
+           'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
     data: function(){
         return {
             styleTd: {
@@ -35,30 +35,35 @@ Vue.component('error-messages',{
 });
 
 Vue.component('input-text',{
-    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp'],
+    props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp','disabled'],
     methods:{
         updateValue(value){
-            this.$emit('input',value);
+          this.$emit('input',value);
         },
         handleFocus(){
             this.$emit('focus');
         },
         handleClick(){
             this.$emit('click');
+        },
+        handleBlur(){
+            this.$emit('blur');
         }
     },
-    template: `<td :width="width">
+   template: `<td :width="width">
                             <div class="form-group has-feedback " 
                                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
-                                <input v-if="type==='input'" 
+                                <input v-if="type ==='input'" 
                                        type="text" 
                                        class="form-control"
                                        :value="value" 
                                        @input="updateValue($event.target.value)"
                                        :placeholder="placeholder" 
                                        :maxlength="maxlength"
-                                       @focus="handleFocus"/>
+                                       @focus="handleFocus"
+                                       @blur="handleBlur"
+                                       :disabled="disabled"/>
                                 <span v-if="typeof icon != 'undefined'" 
                                       class="glyphicon form-control-feedback" 
                                       :class="icon"
@@ -306,9 +311,10 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.selectOptionsOfTraining.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
+                    this.state.allTrainings = this.selectOptionsOfTraining;
                     this.resetTrainingForm();
-                    this.TopicwithTraining();
-                    this.reorganizeAllTopicsAndTrainings();
+                    training_store.TopicwithTraining();
+                    training_store.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -317,70 +323,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             );
         },
 
-        TopicwithTraining(){
-            this.state.trainingsChosen = [];
-            for (var tmp in this.selectOptionsOfTraining) {
-                this.state.trainingsChosen.push(this.selectOptionsOfTraining[tmp].topicDescription);
-            }
-            this.state.trainingsChosen = this.removeDuplicates(this.state.trainingsChosen, "id");
-            this.state.trainingsChosen.sort(function (a, b) {
-                return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-            });
-        },
-        removeDuplicates(arr, prop) {
-            var new_arr = [];
-            var lookup = {};
-
-            for (var i in arr) {
-                lookup[arr[i][prop]] = arr[i];
-            }
-
-            for (i in lookup) {
-                new_arr.push(lookup[i]);
-            }
-
-            return new_arr;
-        },
-        reorganizeTrainings(value){
-            this.arrangeTrainings = [];
-            var tmp = [];
-            var longueur = value.length;
-            var compteur = 0;
-            for (var element in value) {
-                longueur--;
-                compteur++;
-                if (compteur >= 1 && compteur < 4) {
-                    tmp.push(value[element]);
-                    if (longueur == 0) {
-                        this.arrangeTrainings.push(tmp);
-                    }
-                } else if (compteur == 4) {
-                    tmp.push(value[element]);
-                    this.arrangeTrainings.push(tmp);
-                    tmp = [];
-                    compteur = 0;
-                }
-            }
-            return this.arrangeTrainings;
-        },
-        chooseAllTrainingsOfATopic(value){
-            this.allTrainingsOfATopicChosen = [];
-            for (var tmp in this.selectOptionsOfTraining) {
-                if (this.selectOptionsOfTraining[tmp].topicDescription.name == value) {
-                    this.allTrainingsOfATopicChosen.push(this.selectOptionsOfTraining[tmp]);
-                }
-            }
-            return this.allTrainingsOfATopicChosen;
-        },
-        reorganizeAllTopicsAndTrainings(){
-            this.state.allTopicTraining = [];
-            for (var tmp in this.state.trainingsChosen) {
-                this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
-            }
-        },
-
     },
-    template:`
+template:`
  <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-7">
@@ -498,68 +442,559 @@ let ShowFormation = Vue.component('show-formation-panel', {
             }
         }
     },
-    template: ` <div class="container-fluid" id="addFormation">
-           <div class="row" >
-               <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-               <div class="col-sm-12 col-md-10 col-lg-7">
-
-                   <div class="row">
-
-                       <div class="col-lg-7 col-md-7 text-center">
-                           <legend>Formation ajoutées</legend>
-                       </div>
-                   </div>
-
-                <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                       <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                       <table class="fix tabnonborder" >
-                           <tbody>
-                           <tr>
-                               <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
-                               <td>
-                                   <template v-for="topicTraining in state.allTopicTraining">
-                                       <table class="table table-borderless tabnonborder fix">
-                                          
-                                              
-            <thead>
-            <tr>
-                <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                <th width="25%"></th>
-                <th width="25%"></th>
-                <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-            </tr>
-            </thead>
-                                           
-
-            <tbody>
-            <tr v-for="trainings in topicTraining">
-                <td  v-for="training in trainings" width="25%">
-                    <button class="btn btn-toolbar btn-group" style="z-index:-1">{{training.trainingTitle}}</button>
-                </td>
-            </tr>
-            </tbody>
+    methods:{
+        CreateSession(id){
+            this.state.changePageToSession = true;
+            this.state.changePageToTraining = false;
+            this.state.idTraining = id;
+            this.state.idSession = '';
+            training_store.CollectInformationOfTrainingChosen();
+            this.GatherSessionsByTrainingFromDatabase();
+        },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
+                function (response) {
+                    this.state.listTrainingSession = response.data;
+                    if (this.state.listTrainingSession.length === 0) {
+                        this.state.isNoSession = true;
+                    }
+                    else{
+                        this.state.isNoSession = false;
+                    }
+                });
+        },
+    },
+    template: `
+             <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation">
+                  <div class="row" >
+                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+                      <div class="col-sm-12 col-md-10 col-lg-7">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-7 text-center">
+                                     <legend>Formation ajoutées</legend>
+                                </div>
+                            </div>
+                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                              <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                <table class="fix tabnonborder" >
+                                    <tbody>
+                                          <tr>
+                                              <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                                               <td>
+                                                   <template v-for="topicTraining in state.allTopicTraining">
+                                                        <table class="table table-borderless tabnonborder fix">                               
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                                    <th width="25%"></th>
+                                                                    <th width="25%"></th>
+                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for="trainings in topicTraining">
+                                                                    <td  v-for="training in trainings" width="25%">
+                                                                        <button class="btn btn-toolbar btn-group" style="z-index:0" @click="CreateSession(training.id)">{{training.trainingTitle}}</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                           </tr>
+                                                        </table>
+                                                   </template>
+                                               </td>
                                            </tr>
-                                       </table>
-                                   </template>
-                               </td>
-                           </tr>
-                           </tbody>
-                       </table>
-                       <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                   </div>
-               </div>
-           </div>
-       </div>`
+                                    </tbody>
+                                </table>
+                               <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                           </div>
+                       </div>
+                </div>
+             </div>`
+});
 
+Vue.component('add-session-panel', {
+    data: function() {
+        return {
+            session:{
+                trainingDescription:{},
+                beginning: '',
+                ending: '',
+                beginningTime: '',
+                endingTime: '',
+                location: ''
+            },
+            sessionToRegister:{},
+            sessionToModify:{
+                id:'',
+                trainingDescription:{},
+                beginning: '',
+                ending: '',
+                beginningTime: '',
+                endingTime: '',
+                location: ''
+            },
+            beginningDate:'',
+            endingDate:'',
+            beginningTime:'09:00',
+            endingTime:'18:00',
+            location:'',
+            isSessionAlreadyPlanned:false,
+            isDisabledTrainingTitle:true,
+            sessionToRemove:{},
+            AllSalles:['Salle Bali','Salle de la Fontaine','Salle Bora Bora','Salle Bastille','Salle Saint-Germain','Salle Escale','Salle Cafet-Terrasse'],
+            isDisabledSupprimer:true,
+            numberOfSessionSelected:0,
+            canNotRegisterForm: false,
+            listTrainingSessionSelected:[],
+
+            modifySessionButton: false,
+            valueButtonSaveModify: "Ajouter",
+            state: training_store.state,
+        }
+    },
+
+    methods: {
+
+        activeInputTrainingTitle(){
+            if (this.isDisabledTrainingTitle == true) {
+                this.isDisabledTrainingTitle = false;
+            } else {
+                this.isDisabledTrainingTitle = true;
+            }
+        },
+
+        updateV1 (v) {
+            this.state.trainingTitle = v
+        },
+        updateV2 (v) {
+            this.beginningDate = v
+        },
+        updateV3 (v) {
+            this.location = v
+        },
+        updateV4 (v) {
+            this.endingDate = v
+        },
+
+        ReturnToPageTraining(){
+            this.isDisabledTrainingTitle = true;
+            this.state.changePageToTraining = true;
+            this.state.changePageToSession = false;
+            this.state.idTraining = '';
+            this.state.trainingChosen = {};
+            this.state.trainingTitle = '';
+            this.ResetSessionForm();
+            this.GatherTrainingsFromDatabase();
+        },
+
+        ResetSessionForm(){
+            this.beginningDate = '';
+            this.endingDate = '';
+            this.location = '';
+            this.modifySessionButton = false;
+            this.isDisabledSupprimer = true;
+            this.valueButtonSaveModify = 'Ajouter';
+            this.state.idSession='';
+        },
+
+        VerifyFormBeforeSaveSession(){
+            /*this.isEmailEmpty(); this.isPasswordEmpty();
+             if(!this.emailEmpty && !this.passwordEmpty){
+             this.user.email=this.email;
+             this.user.password=this.password;
+             this.userToRegister = JSON.parse(JSON.stringify(this.user));
+             this.VerifyUserByDatabase();
+             }*/
+            if(this.modifySessionButton){
+                this.ModifyTrainingSession();
+            }
+            else {
+                this.session.trainingDescription = this.state.trainingChosen;
+                this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
+                this.session.beginning = this.beginningDate;
+                this.session.ending = this.endingDate;
+                this.session.beginningTime = this.beginningTime;
+                this.session.endingTime = this.endingTime;
+                this.session.location = this.location;
+                this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+                this.SaveSessionIntoDatabase();
+            }
+        },
+        ModifyTrainingTopic(){
+            this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
+            this.$http.put("api/formations/"+ this.state.trainingTitle +"/formationid/"+ this.state.idTraining);
+        },
+        SaveSessionIntoDatabase(){
+            this.$http.post("api/sessions", this.sessionToRegister)
+                .then(
+                    function (response) {
+                        this.isSessionAlreadyPlanned = false;
+                        this.ResetSessionForm();
+                        this.GatherSessionsByTrainingFromDatabase();
+                    },
+                    function (response) {
+                        console.log("Error: ",response);
+                        if (response.data.message === "TrainingSession already planned") {
+                            this.isSessionAlreadyPlanned = true;
+                        } else {
+                            console.error(response);
+                        }
+                    }
+                );
+        },
+
+        GatherTrainingsFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.allTrainings.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    this.state.allTrainings = this.allTrainings;
+                    training_store.TopicwithTraining();
+                    training_store.reorganizeAllTopicsAndTrainings();
+                }
+            );
+        },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
+                function (response) {
+                    this.state.listTrainingSession = response.data;
+                    if (this.state.listTrainingSession.length === 0) {
+                        this.state.isNoSession = true;
+                    }
+                    else{
+                        this.state.isNoSession = false;
+                    }
+                });
+        },
+
+        ModifyTrainingSession(){
+            this.sessionToModify.id = this.state.idSession;
+            this.sessionToModify.trainingDescription = this.state.trainingChosen;
+            this.sessionToModify.trainingDescription.trainingTitle = this.state.trainingTitle;
+            this.sessionToModify.beginning = this.beginningDate;
+            this.sessionToModify.ending = this.endingDate;
+            this.sessionToModify.beginningTime = this.beginningTime;
+            this.sessionToModify.endingTime = this.endingTime;
+            this.sessionToModify.location = this.location;
+            this.sessionToModify = JSON.parse(JSON.stringify(this.sessionToModify));
+            this.$http.put("api/sessions", this.sessionToModify).then(
+                function (response) {
+                    this.isSessionAlreadyPlanned = false;
+                    document.getElementById('circle' + this.sessionToModify.id).className = 'circle';
+                    this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
+                    this.numberOfSessionSelected--;
+                    this.ResetSessionForm();
+                    this.GatherSessionsByTrainingFromDatabase();
+                },
+                function (response) {
+                    if (response.data.message === "TrainingSession already planned") {
+                        this.isSessionAlreadyPlanned = true;
+                    } else {
+                        console.error(response);
+                    }
+                });
+        },
+
+        chooseSessionsToRemove(){
+                for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
+                    this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
+                    document.getElementById('circle' + this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id).className = 'circle';
+                    this.numberOfSessionSelected--;
+                }
+            this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
+
+        },
+
+        RemoveSession(sessionToRemove){
+            this.$http.post("api/sessionstoremove", sessionToRemove).then(
+                function (response) {
+                    console.log("success");
+                    this.canNotRegisterForm = false;
+                    this.ResetSessionForm();
+                    this.GatherSessionsByTrainingFromDatabase();
+                },
+                function (response) {
+                    console.error(response);
+                });
+        },
+
+        showSession(session){
+            if( document.getElementById('circle'+session.id).className === 'circle') {
+                document.getElementById('circle' + session.id).className = 'full-circle';
+                this.numberOfSessionSelected++;
+                this.listTrainingSessionSelected.push(session);
+            }
+            else {
+                document.getElementById('circle' + session.id).className = 'circle';
+                this.numberOfSessionSelected--;
+                for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
+                    if (this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id === session.id) {
+                        this.listTrainingSessionSelected.splice(indexOfListTrainingSessionSelected,1);
+                    }
+                }
+            }
+            if(this.numberOfSessionSelected>=2){
+                this.canNotRegisterForm = true;
+            }
+            else{
+                this.canNotRegisterForm = false;
+            }
+
+            if(this.numberOfSessionSelected === 1){
+                this.valueButtonSaveModify = "Modifier";
+                this.modifySessionButton = true;
+                this.beginningDate = session.beginning;
+                this.endingDate = session.ending;
+                this.location = session.location;
+                this.state.idSession = session.id;
+            }
+            else{
+                this.ResetSessionForm();
+            }
+        },
+
+        CanNotUseButtonSupprimer(){
+            if(this.numberOfSessionSelected>=1){
+                return false;
+            }else{
+                return true;
+            }
+        },
+
+        CalculateEndingDate(){
+            var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+            var beginningDate = this.beginningDate;
+            var dateParts = beginningDate.split("/");
+            var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+            var dayOfMonth = dateObject.getDate();
+            dateObject.setDate(dayOfMonth + nbDays);
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+
+        }
+
+    },
+    template: `
+        <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+                <div class="col-sm-12 col-md-10 col-lg-7">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7 text-center">
+                            <legend>Gérer une session</legend>
+                        </div>
+                    </div>
+                    <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
+                        <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
+                            <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
+                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
+                                    <span class = "glyphicon glyphicon-pencil icon"  @click = "activeInputTrainingTitle()"></span>                                                                                            
+                                    <input-text 
+                                        :value = "state.trainingTitle" 
+                                        @input = "updateV1"
+                                        placeholder = "formation"
+                                        maxlength = "20"
+                                        :isValid = "true"
+                                        icon = "glyphicon glyphicon-floppy-disk"
+                                        type = 'input'
+                                        :disabled = "isDisabledTrainingTitle" 
+                                        @click="ModifyTrainingTopic()">
+                                    </input-text> 
+                                 </form>
+                            </div>
+                            <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
+                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
+                            </div>
+                        </div>
+                        
+                            <hr>
+                        <div class = "row">
+                            <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
+                            
+                        <nav>
+                            <ul>
+                                <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
+                                    <ul class="scrollbar" id="style-5">
+                                        <li v-show="state.isNoSession"><a>Aucune session</a></li>
+                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
+                                    </ul>
+                      
+                                </li>
+                            </ul>
+                        </nav>
+                        
+                            </div>     
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
+                                <div class = "row" style="margin-bottom: 30px;">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">                                
+                                        <input-text 
+                                            label = "Date de début" 
+                                            :value = "beginningDate" 
+                                            @input = "updateV2"
+                                            placeholder = "--/--/----"
+                                            maxlength = "10"
+                                            :isValid = "true"
+                                            :disabled = "canNotRegisterForm"
+                                            icon = "glyphicon glyphicon-calendar"
+                                            @blur = "CalculateEndingDate()"
+                                            type = 'input'>
+                                        </input-text>
+                                    </div>
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
+                                        <input-text 
+                                            label = "Salles" 
+                                            :value = "location" 
+                                            @input = "updateV3"
+                                            placeholder = "Salle"
+                                            maxlength = "10"
+                                            :isValid = "true"
+                                            :disabled = "canNotRegisterForm" 
+                                            :collection="AllSalles"
+                                            type = 'select'>
+                                        </input-text> 
+                                    </div> 
+                                </div> 
+                                <div class = "row" style="margin-bottom: 30px;">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
+                                        <input-text 
+                                            label = "Date de fin" 
+                                            :value = "endingDate" 
+                                            @input = "updateV4"
+                                            placeholder = "--/--/----"
+                                            maxlength = "10"
+                                            :isValid = "true"
+                                            icon = "glyphicon glyphicon-calendar"
+                                            :disabled = "true" 
+                                            type = 'input'>
+                                        </input-text>
+                                    </div>
+                                </div> 
+                                <div class = "row " style = "margin-bottom: 30px;">
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                        <input type = "submit" 
+                                               class = "btn btn-primary" 
+                                               :value = "valueButtonSaveModify" 
+                                               :disabled = "canNotRegisterForm" 
+                                               style = "width:100%"/>                                                                         
+                                    </div>
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                        <input type = "button" 
+                                               class = "btn btn-danger" 
+                                               value = "Supprimer" 
+                                               @click = "chooseSessionsToRemove()" 
+                                               :disabled = "CanNotUseButtonSupprimer()" 
+                                               style = "width:100%"/>                                                                        
+                                    </div>
+                                </div>                                                     
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`,
 });
 
 class trainingStore {
+
     constructor () {
         this.state = {
             trainingsChosen:[],
             allTopicTraining:[],
+            changePageToTraining:true,
+            changePageToSession:false,
+            idTraining:'',
+            trainingChosen:{},
+            allTrainings:[],
+            trainingTitle:'',
+            arrangeTrainings:[],
+            allTrainingsOfATopicChosen:[],
+            listTrainingSession:[],
+            isNoSession:true,
+            idSession:''
         }
     }
+
+    CollectInformationOfTrainingChosen(){
+        this.state.trainingChosen = {};
+        for (var tmp in this.state.allTrainings) {
+            if (this.state.allTrainings[tmp].id == this.state.idTraining) {
+                this.state.trainingChosen = this.state.allTrainings[tmp];
+            }
+        }
+        this.state.trainingTitle = this.state.trainingChosen.trainingTitle;
+    }
+
+    removeDuplicates(arr, prop) {
+        var new_arr = [];
+        var lookup = {};
+
+        for (var i in arr) {
+            lookup[arr[i][prop]] = arr[i];
+        }
+
+        for (i in lookup) {
+            new_arr.push(lookup[i]);
+        }
+
+        return new_arr;
+    }
+
+    TopicwithTraining(){
+        this.state.trainingsChosen = [];
+        for (var tmp in this.state.allTrainings) {
+            this.state.trainingsChosen.push(this.state.allTrainings[tmp].topicDescription);
+        }
+        this.state.trainingsChosen = training_store.removeDuplicates(this.state.trainingsChosen, "id");
+        this.state.trainingsChosen.sort(function (a, b) {
+            return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+        });
+    }
+
+    reorganizeTrainings(value){
+        this.state.arrangeTrainings = [];
+        var tmp = [];
+        var longueur = value.length;
+        var compteur = 0;
+        for (var element in value) {
+            longueur--;
+            compteur++;
+            if (compteur >= 1 && compteur < 4) {
+                tmp.push(value[element]);
+                if (longueur == 0) {
+                    this.state.arrangeTrainings.push(tmp);
+                }
+            } else if (compteur == 4) {
+                tmp.push(value[element]);
+                this.state.arrangeTrainings.push(tmp);
+                tmp = [];
+                compteur = 0;
+            }
+        }
+        return this.state.arrangeTrainings;
+    }
+
+    chooseAllTrainingsOfATopic(value){
+        this.state.allTrainingsOfATopicChosen = [];
+        for (var tmp in this.state.allTrainings) {
+            if (this.state.allTrainings[tmp].topicDescription.name == value) {
+                this.state.allTrainingsOfATopicChosen.push(this.state.allTrainings[tmp]);
+            }
+        }
+        return this.state.allTrainingsOfATopicChosen;
+    }
+
+    reorganizeAllTopicsAndTrainings(){
+        this.state.allTopicTraining = [];
+        for (var tmp in this.state.trainingsChosen) {
+            this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
+        }
+    }
+
 }
 
 let training_store = new trainingStore();
+
+

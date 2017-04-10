@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 
 import javax.persistence.ManyToMany;
@@ -21,7 +22,7 @@ public class TrainingSession extends BaseEntity {
 
 	@NotNull
 	@Valid
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	Training training;
 
 	@NotNull
