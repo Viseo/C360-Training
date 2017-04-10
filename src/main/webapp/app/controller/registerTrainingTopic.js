@@ -745,10 +745,10 @@ Vue.component('add-session-panel', {
             if(this.numberOfSessionSelected === 1){
                 this.valueButtonSaveModify = "Modifier";
                 this.modifySessionButton = true;
-                this.beginningDate = session.beginning;
-                this.endingDate = session.ending;
-                this.location = session.location;
-                this.state.idSession = session.id;
+                this.beginningDate = this.listTrainingSessionSelected[0].beginning;
+                this.endingDate = this.listTrainingSessionSelected[0].ending;
+                this.location = this.listTrainingSessionSelected[0].location;
+                this.state.idSession = this.listTrainingSessionSelected[0].id;
             }
             else{
                 this.ResetSessionForm();
