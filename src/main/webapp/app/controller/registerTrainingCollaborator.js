@@ -4,7 +4,8 @@
 Vue.component('collaborator-formation', {
     data: function(){
         return {
-            allTrainings: []
+            allTrainings: [],
+            selected: ''
         }
     },
     template: `<div class="container-fluid">
@@ -19,13 +20,13 @@ Vue.component('collaborator-formation', {
                                 <div class="row">
                                     <div id="trainingContainer">
                                         <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <select class="form-control">
+                                            <select class="form-control" v-model="selected">
                                                 <option selected disabled>Formations disponibles</option>
-                                                <option v-for="training in allTrainings" :value="training.trainingTitle">{{training.trainingTitle}}</option>s
+                                                <option v-for="training in allTrainings" :value="training.trainingTitle">{{training.trainingTitle}}</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-2 col-md-2 col-sm-12">
-                                            <input type = "submit" class="btn btn-primary" value="Valider"/>   
+                                            <input type = "submit" class="btn btn-primary" value="Valider"/>
                                         </div>
                                         <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span class="glyphicon glyphicon-search"></span>
@@ -55,7 +56,5 @@ Vue.component('collaborator-formation', {
                 }
             );
         },
-
     }
-
 })
