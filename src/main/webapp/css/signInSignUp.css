@@ -33,14 +33,12 @@
 }
 
 .password .glyphicon-eye-open,#password2 .glyphicon-eye-open {
-
     right: 10px;
     position: absolute;
     top: 12px;
     cursor:pointer;
 }
 .password .glyphicon-eye-close,#password2 .glyphicon-eye-close {
-
     right: 10px;
     position: absolute;
     top: 12px;
