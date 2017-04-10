@@ -4,7 +4,6 @@
 
 Vue.use(VueResource);
 
-
 Vue.component('blue-header',{
     template:`<div style="padding:40px; background-color:#428bca; margin-bottom:30px;">
                    <p style="float:right;">Bienvenue {{email}}</p> 
@@ -101,6 +100,7 @@ Vue.component('input-text',{
 });
 
 let AddFormationPanel = Vue.component('add-formation-panel', {
+
     data: function(){
         return {
             training: {
@@ -138,6 +138,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             state: training_store.state
         }
     },
+
     watch: {
         trainingTitle: function (trainingTitleValue) {
             this.verifyTrainingField(trainingTitleValue, 'trainingTitleRegexErrorMessage');
@@ -148,10 +149,10 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
     },
 
-    mounted: function(){
-        this.gatherTopicsFromDatabase();
-        this.gatherTrainingsFromDatabase();
-    },
+        mounted: function(){
+            this.gatherTopicsFromDatabase();
+            this.gatherTrainingsFromDatabase();
+        },
 
     methods: {
         updateV1 (v) {
@@ -166,6 +167,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         updateV4 (v) {
             this.newTopic = v
         },
+
         verifyTrainingField(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
                 this[errorMessage] = '';
@@ -204,7 +206,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.topicErrorMessage = true;
             }
         },
-
 
         isNewTopicEmpty(){
             if (this.newTopic == '' || this.newTopic == undefined) {
@@ -341,106 +342,107 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
     },
-template:`
- <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-10 col-lg-7">
+
+
+    template:`
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-md-10 col-lg-7">
                     <div class="row">
                         <div class="col-lg-7 col-md-7 text-center">
                             <legend>Ajouter une formation</legend>
                         </div>
                     </div>
                     <table>
-                    <tr>
-                    <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
-                        <input-text 
-                            width="20%" 
-                            label="Formation" 
-                            :value="trainingTitle" 
-                            @input="updateV1"
-                            placeholder="Formation"
-                            maxlength="20"
-                            @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
-                            :isValid="isTrainingTitleValid"
-                            type='input'>
-                        </input-text>
-                        <input-text
-                            width="15%"
-                            label="1/2 journées"
-                            :value="numberHalfDays"
-                            @input="updateV2"
-                            @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
-                            :collection="200"
-                            type="select">
-                         </input-text>
-                        <input-text
-                            width="20%"
-                            label="Thèmes"
-                            :value="topicDescription"
-                            @input="updateV3"
-                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
-                            :collection="selectOptionsOfTopic"
-                            print-prop="name"
-                            type="select">
-                        </input-text>
-                        </form>
-                        <td class="text-center" 
-                            width="20%">
-                            <div class="form-group">
-                                 <label>&nbsp</label><br/>
-                                 <input type="submit" 
-                                       class="btn btn-primary" 
-                                       value="Valider" 
-                                       @click="verifyTrainingFormBeforeSubmit" 
-                                       style="width:80%"/>
-                            </div>
-                        </td>
-                        <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
-                            <input-text width="30%" 
-                                        label="Nouveau thème" 
-                                        :value="newTopic"
-                                         @input="updateV4"
-                                        placeholder="Thème"
-                                        maxlength="50"
-                                        @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
-                                        :isValid="isNewTopicValid"
-                                        icon="glyphicon-plus btn btn-link"
-                                        type='input'
-                                        class="td-right"
-                                        @click="verifyTopicFormBeforeSubmit">
-                            </input-text>
-                        </form>
-                        </tr>
                         <tr>
-                            <error-messages :colspan="2" 
-                                            identicalErrorMessage="Une formation identique existe déjà." 
-                                            fillFieldErrorMessage="Veuillez remplir tous les champs." 
-                                            successMessage="La formation a été créée avec succès." 
-                                            :regexErrorMessage="trainingTitleRegexErrorMessage"
-                                            :emptyIdenticalError="!isNewTrainingTitle"
-                                            :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                            :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                            :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
-                            </error-messages>
-                            <error-messages class="td-right"
-                                            :height="80" 
-                                            :width="250"
-                                            identicalErrorMessage="Un thème identique existe déjà." 
-                                            fillFieldErrorMessage="Veuillez remplir le champ." 
-                                            successMessage="Le nouveau thème a été ajouté avec succès." 
-                                            :regexErrorMessage="newTopicRegexErrorMessage"
-                                            :emptyIdenticalError="!isNewTopic"
-                                            :emptyFillError="newTopicErrorMessage"
-                                            :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
-                                            :emptyRegexError=" !isNewTopicValid">
-                            </error-messages>
-                        </tr>
+                        <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
+                            <input-text 
+                                width="20%" 
+                                label="Formation" 
+                                :value="trainingTitle" 
+                                @input="updateV1"
+                                placeholder="Formation"
+                                maxlength="20"
+                                @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
+                                :isValid="isTrainingTitleValid"
+                                type='input'>
+                            </input-text>
+                            <input-text
+                                width="15%"
+                                label="1/2 journées"
+                                :value="numberHalfDays"
+                                @input="updateV2"
+                                @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
+                                :collection="200"
+                                type="select">
+                             </input-text>
+                            <input-text
+                                width="20%"
+                                label="Thèmes"
+                                :value="topicDescription"
+                                @input="updateV3"
+                                @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
+                                :collection="selectOptionsOfTopic"
+                                print-prop="name"
+                                type="select">
+                            </input-text>
+                            </form>
+                                <td class="text-center" 
+                                    width="20%">
+                                    <div class="form-group">
+                                         <label>&nbsp</label><br/>
+                                         <input type="submit" 
+                                               class="btn btn-primary" 
+                                               value="Valider" 
+                                               @click="verifyTrainingFormBeforeSubmit" 
+                                               style="width:80%"/>
+                                    </div>
+                                </td>
+                            <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
+                                <input-text width="30%" 
+                                            label="Nouveau thème" 
+                                            :value="newTopic"
+                                             @input="updateV4"
+                                            placeholder="Thème"
+                                            maxlength="50"
+                                            @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
+                                            :isValid="isNewTopicValid"
+                                            icon="glyphicon-plus btn btn-link"
+                                            type='input'
+                                            class="td-right"
+                                            @click="verifyTopicFormBeforeSubmit">
+                                </input-text>
+                            </form>
+                            </tr>
+                            <tr>
+                                <error-messages :colspan="2" 
+                                                identicalErrorMessage="Une formation identique existe déjà." 
+                                                fillFieldErrorMessage="Veuillez remplir tous les champs." 
+                                                successMessage="La formation a été créée avec succès." 
+                                                :regexErrorMessage="trainingTitleRegexErrorMessage"
+                                                :emptyIdenticalError="!isNewTrainingTitle"
+                                                :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
+                                </error-messages>
+                                <error-messages class="td-right"
+                                                :height="80" 
+                                                :width="250"
+                                                identicalErrorMessage="Un thème identique existe déjà." 
+                                                fillFieldErrorMessage="Veuillez remplir le champ." 
+                                                successMessage="Le nouveau thème a été ajouté avec succès." 
+                                                :regexErrorMessage="newTopicRegexErrorMessage"
+                                                :emptyIdenticalError="!isNewTopic"
+                                                :emptyFillError="newTopicErrorMessage"
+                                                :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
+                                                :emptyRegexError=" !isNewTopicValid">
+                                </error-messages>
+                           </tr>
                     </table>
+                </div>
             </div>
-        </div>
-    </div>
-`
-});
+        </div>`
+    });
 
 Vue.component('show-formation-panel', {
     data: function() {
@@ -516,6 +518,7 @@ Vue.component('show-formation-panel', {
 });
 
 Vue.component('add-session-panel', {
+
     data: function() {
         return {
             session:{
@@ -536,13 +539,46 @@ Vue.component('add-session-panel', {
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
 
+            isBeginningDateValid:true,
+            beginningDateRegexErrorMessage:'',
+            locationRegexErrorMessage:'',
+            locationErrorMessage:false,
+            beginningDateErrorMessage:false,
+            beginningDate : this.date,
             state: training_store.state,
         }
     },
 
-    methods: {
+    watch:{
+        beginningDate: function (beginningDateValue) {
+            this.verifyBeginningDate(beginningDateValue, 'beginningDateRegexErrorMessage');
+        },
+    },
 
-        activeInputTrainingTitle(){
+    methods: {
+        verifyBeginningDate(beginningDate, errorMessage) {
+            if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
+                this[errorMessage] = '';
+                this.isBeginningDateValid = true;
+            } else {
+                this[errorMessage] = "Veuillez entrer une date valide (JJ / mm / AAAA)";
+                this.isBeginningDateValid = false;
+            }
+        },
+
+        isBeginningDateEmpty(){
+            if (this.beginningDate == '' || this.beginningDate == undefined) {
+                this.beginningDateErrorMessage = true;
+            }
+        },
+
+        isLocationEmpty(){
+            if (this.location == '' || this.location == undefined) {
+                this.locationErrorMessage = true;
+            }
+        },
+
+        activeFieldTrainingTitle(){
             if (this.isDisabledTrainingTitle == true) {
                 this.isDisabledTrainingTitle = false;
             } else {
@@ -553,15 +589,19 @@ Vue.component('add-session-panel', {
         updateV1 (v) {
             this.state.trainingTitle = v
         },
+
         updateV2 (v) {
             this.beginningDate = v
         },
+
         updateV3 (v) {
             this.location = v
         },
+
         updateV4 (v) {
             this.endingDate = v
         },
+
         ReturnToPageTraining(){
             this.state.changePageToTraining = true;
             this.state.changePageToSession = false;
@@ -570,6 +610,7 @@ Vue.component('add-session-panel', {
             this.state.trainingTitle = '';
             this.GatherTrainingsFromDatabase();
         },
+
         VerifyFormBeforeSaveSession(){
             /*this.isEmailEmpty(); this.isPasswordEmpty();
              if(!this.emailEmpty && !this.passwordEmpty){
@@ -578,6 +619,7 @@ Vue.component('add-session-panel', {
              this.userToRegister = JSON.parse(JSON.stringify(this.user));
              this.VerifyUserByDatabase();
              }*/
+
             this.session.trainingDescription = this.state.trainingChosen;
             this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
             this.session.beginning = this.beginningDate;
@@ -585,12 +627,20 @@ Vue.component('add-session-panel', {
             this.session.beginningTime = this.beginningTime;
             this.session.endingTime = this.endingTime;
             this.session.location = this.location;
-            this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
-            this.SaveSessionIntoDatabase();
+
+            this.isBeginningDateEmpty();
+            this.isLocationEmpty();
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+            if (!this.beginningDateErrorMessage && !this.locationErrorMessage) {
+                this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+                this.SaveSessionIntoDatabase();
+            }
         },
+
         ModifyTrainingTopic(){
             this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
-            this.$http.put("api/formations/"+ this.state.trainingTitle +"/formationid/"+ this.state.idTraining);
+            this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
         },
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
@@ -624,6 +674,7 @@ Vue.component('add-session-panel', {
         },
 
     },
+
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
             <div class="row">
@@ -639,37 +690,64 @@ Vue.component('add-session-panel', {
                         <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
-                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
-                                    <span class = "glyphicon glyphicon-pencil icon"  @click = "activeInputTrainingTitle()"></span>                                                                                            
-                                    
-                                    <input-text 
-                                        :value = "state.trainingTitle" 
-                                        @input = "updateV1"
-                                        placeholder = "formation"
-                                        maxlength = "20"
-                                        :isValid = "true"
-                                        icon = "glyphicon glyphicon-floppy-disk"
-                                        type = 'input'
-                                        :disabled = "isDisabledTrainingTitle" 
-                                        @click="ModifyTrainingTopic()">
-                                    </input-text> 
-                                 </form>
+                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
+                                        <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
+                                        <input-text 
+                                            :value = "state.trainingTitle" 
+                                            @input = "updateV1"
+                                            placeholder = "Formation"
+                                            maxlength = "20"
+                                            :isValid = "true"
+                                            icon = "glyphicon glyphicon-floppy-disk"
+                                            type = 'input'
+                                            :disabled = "isDisabledTrainingTitle" 
+                                            @click="ModifyTrainingTopic()">
+                                        </input-text>
+                                        <!--
+                                        <table>
+                                            <tr>
+                                                <error-messages
+                                                    identicalErrorMessage="Une formation identique existe déjà." 
+                                                    fillFieldErrorMessage="Veuillez remplir le champs." 
+                                                    successMessage="La formation a été créée avec succès." 
+                                                    :regexErrorMessage="trainingTitleRegexErrorMessage"
+                                                    :emptyIdenticalError="!isNewTrainingTitle"
+                                                    :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                    :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                    :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">                                             
+                                                </error-messages>
+                                            </tr>
+                                        </table>
+                                        -->
+                                  </form>                                      
                             </div>
                             <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
-                        </div>
-                        
+                        </div>                        
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
                                 <p class = "text-center">Session disponibles : (0)</p>
                             </div>                            
-                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                                
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                             
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
-                                        <datepicker v-model="date">
+                                        <datepicker v-model ="date"
+                                                    @focus = " beginningdateErrorMessage = false"
+                                                    @blur = " isBeginningDateValid"
+                                                    @input = "updateV2"
+                                                    :isValid = "isBeginningDateValid">                                                                                       
                                         </datepicker>
+                                        <table>
+                                            <tr>
+                                                <error-messages                                                      
+                                                    fillFieldErrorMessage = "Veuillez remplir tous les champs." 
+                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                    :emptyFillError = "beginningdateErrorMessage"
+                                                    :emptyRegexError = "isBeginningDateValid ">                                              
+                                                </error-messages>                                                                        
+                                            </tr>
+                                        </table>           
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
                                         <input-text 
@@ -677,11 +755,24 @@ Vue.component('add-session-panel', {
                                             :value = "location" 
                                             @input = "updateV3"
                                             placeholder = "Salle"
+                                            @focus="locationErrorMessage = false;"
                                             maxlength = "10"
                                             :isValid = "true"
                                             :collection="4"
                                             type = 'select'>
-                                        </input-text> 
+                                        </input-text>
+                                        <!--
+                                        <table>
+                                            <tr>
+                                                <error-messages                                                      
+                                                    fillFieldErrorMessage = "Veuillez remplir tous les champs." 
+                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                    :emptyFillError = "beginningdateErrorMessage"
+                                                    :emptyRegexError = " !isBeginningDateValid ">                                              
+                                                </error-messages>
+                                            </tr>
+                                        </table>
+                                       -->
                                     </div> 
                                 </div>
                                 <div class = "row" style="margin-bottom: 30px;">
@@ -732,7 +823,7 @@ Vue.component('datepicker',{
                        placeholder="--/--/----"
                        :value="range ? value[0] + ' -- ' + value[1] : value" 
                        @mouseenter="showCancel = true" 
-                       @mouseleave="showCancel = false" />         
+                       @mouseleave="showCancel = false"/>                     
                 <span class ="glyphicon form-control-feedback glyphicon-calendar"></span>
             </div>            
             <transition name="toggle">
@@ -757,8 +848,7 @@ Vue.component('datepicker',{
                             <li v-for="item in yearList"
                                 v-text="item"
                                 :class="{selected: isSelected('year', item), invalid: validateYear(item)}" 
-                                @click="selectYear(item)"
-                            >
+                                @click="selectYear(item)">
                             </li>
                         </ul>
                     </div>
@@ -778,7 +868,7 @@ Vue.component('datepicker',{
                         <ul class="date-list">
                             <li v-for="(item, index) in dateList"
                                 :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth,
-                                    invalid: validateDate(item), firstItem: (index % 7) === 0}"
+                                         invalid: validateDate(item), firstItem: (index % 7) === 0}"
                                 @click="selectDate(item)">
                                 <div class="message" :class="{selected: isSelected('date', item)}">
                                     <div class="bg"></div><span v-text="item.value"></span>
@@ -820,10 +910,11 @@ Vue.component('datepicker',{
             rangeStart: false
         }
     },
+
     props: {
         language: {default: 'en'},
-        min: {default: '1970-01-01'},
-        max: {default: '3016-01-01'},
+        min: {default: '2017-04-10'},
+        max: {default: '2020-01-01'},
         value: {
             type: [String, Array],
             default: ''
@@ -833,11 +924,14 @@ Vue.component('datepicker',{
             default: false
         }
     },
+
     methods: {
+
         togglePanel () {
             this.panelState = !this.panelState
             this.rangeStart = false
         },
+
         isSelected (type, item) {
             switch (type){
                 case 'year':
@@ -857,9 +951,11 @@ Vue.component('datepicker',{
                     && new Date(this.tmpYear, month, item.value).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime())
             }
         },
+
         chType (type) {
             this.panelType = type
         },
+
         chYearRange (next) {
             if(next){
                 this.yearList = this.yearList.map((i) => i + 12)
@@ -867,22 +963,27 @@ Vue.component('datepicker',{
                 this.yearList = this.yearList.map((i) => i - 12)
             }
         },
+
         prevMonthPreview () {
             this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
         },
+
         nextMonthPreview () {
             this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
         },
+
         selectYear (year) {
             if(this.validateYear(year)) return
             this.tmpYear = year
             this.panelType = 'month'
         },
+
         selectMonth (month) {
             if(this.validateMonth(month)) return
             this.tmpMonth = month
             this.panelType = 'date'
         },
+
         selectDate (date) {
             setTimeout(() => {
                 if(this.validateDate(date)) return
@@ -945,9 +1046,11 @@ Vue.component('datepicker',{
                 }
             }, 0)
         },
+
         validateYear (year) {
             return (year > this.maxYear || year < this.minYear) ? true : false
         },
+
         validateMonth (month) {
             if(new Date(this.tmpYear, month).getTime() >= new Date(this.minYear, this.minMonth - 1).getTime()
                 && new Date(this.tmpYear, month).getTime() <= new Date(this.maxYear, this.maxMonth - 1).getTime()){
@@ -955,6 +1058,7 @@ Vue.component('datepicker',{
             }
             return true
         },
+
         validateDate (date) {
             let mon = this.tmpMonth
             if(date.previousMonth){
@@ -968,6 +1072,7 @@ Vue.component('datepicker',{
             }
             return true
         },
+
         close (e) {
             if(!this.$el.contains(e.target)){
                 this.panelState = false
@@ -978,6 +1083,7 @@ Vue.component('datepicker',{
             this.$emit('input', this.range ? ['', ''] : '')
         }
     },
+
     watch: {
         min (v) {
             let minArr = v.split('-')
@@ -1001,6 +1107,7 @@ Vue.component('datepicker',{
             }
         }
     },
+
     computed: {
         dateList () {
             let currentMonthLength = new Date(this.tmpYear, this.tmpMonth + 1, 0).getDate()
@@ -1021,6 +1128,7 @@ Vue.component('datepicker',{
             return dateList
         }
     },
+
     filters: {
         week: (item, lang) => {
             switch (lang) {
@@ -1032,6 +1140,7 @@ Vue.component('datepicker',{
                     return item
             }
         },
+
         month: (item, lang) => {
             switch (lang) {
                 case 'en':
@@ -1045,6 +1154,7 @@ Vue.component('datepicker',{
             }
         }
     },
+
     mounted () {
         this.$nextTick(() => {
             if(this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300){
@@ -1104,7 +1214,11 @@ class trainingStore {
             allTrainings:[],
             trainingTitle:'',
             arrangeTrainings:[],
-            allTrainingsOfATopicChosen:[]
+            allTrainingsOfATopicChosen:[],
+
+            trainingTitle:'',
+            isTrainingTitleValid :true
+
         }
     }
 
