@@ -3,8 +3,6 @@
  */
 Vue.use(VueResource);
 
-let args = [{id:"5", value:10, name:"java"}];
-
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
         return (request.method === item.method && request.url === item.url);
@@ -15,9 +13,9 @@ Vue.http.interceptors.unshift((request, next) => {
     } else {
 
         //  getRoute(route,args);
-       // console.log(route.response);
+        // console.log(route.response);
         next(
-           // getRoute(route, args),
+            // getRoute(route, args),
             // console.log(route.response),
             request.respondWith(
                 route.response,
@@ -36,7 +34,7 @@ describe('test-show-formation', function () {
         vmAddSessionPanel = new addSessionPanel().$mount();
     });
 
-    afterEach(function () {
+    afterEach(function() {
 
     });
 
@@ -284,20 +282,31 @@ describe('test-show-formation', function () {
         ];
         expect(vmShowFormation.showChevrons).toBe(true);
     });
+
     it('should check if the panel change from session panel to training panel when click on a training button', function () {
-        vmAddSessionPanel.ReturnToPageTraining();
-        expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
-        expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
-        expect(vmAddSessionPanel.state.idTraining).toEqual('');
-        expect(vmAddSessionPanel.state.trainingsChosen).toEqual({});
-        expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
-        expect(vmAddSessionPanel.beginningDate).toEqual('');
-        expect(vmAddSessionPanel.endingDate).toEqual('');
-        expect(vmAddSessionPanel.location).toEqual('');
-        expect(vmAddSessionPanel.modifySessionButton).toBe(false);
-        expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
-        expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
-        expect(vmAddSessionPanel.state.idSession).toEqual('');
+
+            vmAddSessionPanel.ReturnToPageTraining();
+
+            expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
+            expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
+            expect(vmAddSessionPanel.state.idTraining).toEqual('');
+            expect(vmAddSessionPanel.state.trainingChosen).toEqual({});
+            expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
+            expect(vmAddSessionPanel.beginningDate).toEqual('');
+            expect(vmAddSessionPanel.endingDate).toEqual('');
+            expect(vmAddSessionPanel.location).toEqual('');
+            expect(vmAddSessionPanel.modifySessionButton).toBe(false);
+            expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
+            expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
+            expect(vmAddSessionPanel.state.idSession).toEqual('');
+        console.log(vmAddSessionPanel.state.allTrainings)
+            var resultApiFormations = [
+                {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
+                {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
+                {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
+            ];
+            expect(vmAddSessionPanel.state.allTrainings).toEqual(resultApiFormations);
+        
     });
 
     it('should check if the panel change from training panel to session panel when click on a training button', function () {
