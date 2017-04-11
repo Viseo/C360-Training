@@ -9,6 +9,7 @@ Vue.component('collaborator-formation', {
             allTrainingTitles:[],
             value:'',
             selectedTraining: '',
+            selectedTrainingTitle: [],
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
@@ -74,13 +75,11 @@ Vue.component('collaborator-formation', {
             if (!this.emptyTraining) {
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
-                        console.log(this.allTrainings);
                         this.listTrainingSession = response.data;
                         for (key in this.allTrainings) {
-                            if ( this.allTrainings[key] == this.selectedTraining) {
-                                console.log(training.trainingTitle);
+                            if ( this.allTrainings[key].id == this.selectedTraining) {
+                                this.selectedTrainingTitle.push(this.allTrainings[key].trainingTitle);
                             }
-                            else console.log(this.allTrainings[key]);
                         }
                         if (this.listTrainingSession.length === 0) {
                             this.isNoSession = true;
