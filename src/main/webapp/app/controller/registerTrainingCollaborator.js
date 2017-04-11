@@ -4,9 +4,10 @@
 Vue.component('collaborator-formation', {
     data: function(){
         return {
+            trainingsFound:[],
             allTrainings: [],
             allTrainingTitles:[],
-            value:''
+            value:'',
             selectedTraining: '',
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
@@ -38,7 +39,7 @@ Vue.component('collaborator-formation', {
                                                 <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
                                         <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span class="glyphicon glyphicon-search"></span>
+                                                <span class="glyphicon glyphicon-search" @click="storeTrainingsFound"></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
                                                     </typeahead>                                        
                                         </div>
@@ -104,6 +105,17 @@ Vue.component('collaborator-formation', {
             }
             console.log(this.allTrainingTitles);
         },
+        storeTrainingsFound(){
+            this.trainingsFound.splice(0,this.trainingsFound.length);
+            for(index in this.allTrainings){
+                if(this.allTrainings[index].trainingTitle.indexOf(this.value) != -1){
+                this.trainingsFound.push(this.allTrainings[index])
+                }
+            }
+            this.value=null;
+            console.log(this.trainingsFound.length);
+        }
+
 
     }
 
