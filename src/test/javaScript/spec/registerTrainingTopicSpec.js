@@ -182,7 +182,7 @@ describe('test-show-formation', function () {
                       {"id":"2","mame":"java"},
                       {"id":"3","mame":"javascript"},];
 
-        expect(vmAddFormationPanel.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
+        expect(training_store.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
     });
 
     //verifyTrainingFormBeforeSubmit
