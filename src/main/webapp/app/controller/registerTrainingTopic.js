@@ -402,7 +402,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                 <input-text width="30%" 
                                             label="Nouveau thème" 
                                             :value="newTopic"
-                                             @input="updateV4"
+                                            @input="updateV4"
                                             placeholder="Thème"
                                             maxlength="50"
                                             @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
@@ -416,9 +416,9 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                             </tr>
                             <tr>
                                 <error-messages :colspan="2" 
-                                                identicalErrorMessage="Une formation identique existe déjà." 
-                                                fillFieldErrorMessage="Veuillez remplir tous les champs." 
-                                                successMessage="La formation a été créée avec succès." 
+                                                identicalErrorMessage = "Une formation identique existe déjà." 
+                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                successMessage =" La formation a été créée avec succès." 
                                                 :regexErrorMessage="trainingTitleRegexErrorMessage"
                                                 :emptyIdenticalError="!isNewTrainingTitle"
                                                 :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
@@ -531,31 +531,61 @@ Vue.component('add-session-panel', {
             },
             date:'',
             sessionToRegister:{},
-            beginningDate:'',
             endingDate:'',
             beginningTime:'09:00',
             endingTime:'18:00',
-            location:'',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
 
+            trainingTitleInAddSession:'',
+            beginningDate:'',
+            location:'',
+
+            isTrainingTitleInAddSessionValid:true,
             isBeginningDateValid:true,
+
+            trainingTitleInAddSessionRegexErrorMessage:'',
             beginningDateRegexErrorMessage:'',
             locationRegexErrorMessage:'',
-            locationErrorMessage:false,
+
+            trainingTitleInAddSessionErrorMessage:false,
             beginningDateErrorMessage:false,
-            beginningDate : this.date,
+            locationErrorMessage:false,
+
+
             state: training_store.state,
         }
     },
 
     watch:{
+        trainingTitleInAddSession: function (trainingTitleValue) {
+            this.verifyTrainingTitleInAddSession(trainingTitleValue, 'trainingTitleInAddSessionRegexErrorMessage');
+        },
+
         beginningDate: function (beginningDateValue) {
             this.verifyBeginningDate(beginningDateValue, 'beginningDateRegexErrorMessage');
         },
     },
 
     methods: {
+
+        verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
+            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
+                this[errorMessage] = '';
+                this.isTrainingTitleInAddSessionValid = true;
+            } else {
+                this[errorMessage] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
+                this.isTrainingTitleInAddSessionValid = false;
+                console.log(this.isTrainingTitleInAddSessionValid);
+            }
+        },
+
+        isTrainingTitleInAddSessionEmpty(){
+            if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
+                this.trainingTitleInAddSessionErrorMessage = true;
+            }
+        },
+
         verifyBeginningDate(beginningDate, errorMessage) {
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
                 this[errorMessage] = '';
@@ -579,6 +609,7 @@ Vue.component('add-session-panel', {
         },
 
         activeFieldTrainingTitle(){
+
             if (this.isDisabledTrainingTitle == true) {
                 this.isDisabledTrainingTitle = false;
             } else {
@@ -587,7 +618,7 @@ Vue.component('add-session-panel', {
         },
 
         updateV1 (v) {
-            this.state.trainingTitle = v
+            this.trainingTitleInAddSession = v
         },
 
         updateV2 (v) {
@@ -693,37 +724,22 @@ Vue.component('add-session-panel', {
                                   <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
                                         <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
                                         <input-text 
-                                            :value = "state.trainingTitle" 
+                                            :value = "trainingTitleInAddSession" 
                                             @input = "updateV1"
+                                            :isValid = "isTrainingTitleInAddSessionValid" 
                                             placeholder = "Formation"
                                             maxlength = "20"
-                                            :isValid = "true"
                                             icon = "glyphicon glyphicon-floppy-disk"
                                             type = 'input'
                                             :disabled = "isDisabledTrainingTitle" 
                                             @click="ModifyTrainingTopic()">
                                         </input-text>
-                                        <!--
-                                        <table>
-                                            <tr>
-                                                <error-messages
-                                                    identicalErrorMessage="Une formation identique existe déjà." 
-                                                    fillFieldErrorMessage="Veuillez remplir le champs." 
-                                                    successMessage="La formation a été créée avec succès." 
-                                                    :regexErrorMessage="trainingTitleRegexErrorMessage"
-                                                    :emptyIdenticalError="!isNewTrainingTitle"
-                                                    :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                                    :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                                    :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">                                             
-                                                </error-messages>
-                                            </tr>
-                                        </table>
-                                        -->
+                                        
                                   </form>                                      
                             </div>
-                            <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
+                            <!--<div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
-                            </div>
+                            </div>-->
                         </div>                        
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
@@ -734,20 +750,21 @@ Vue.component('add-session-panel', {
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
                                         <datepicker v-model ="date"
                                                     @focus = " beginningdateErrorMessage = false"
-                                                    @blur = " isBeginningDateValid"
                                                     @input = "updateV2"
                                                     :isValid = "isBeginningDateValid">                                                                                       
                                         </datepicker>
+                                        <!--
                                         <table>
                                             <tr>
                                                 <error-messages                                                      
                                                     fillFieldErrorMessage = "Veuillez remplir tous les champs." 
                                                     :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                     :emptyFillError = "beginningdateErrorMessage"
-                                                    :emptyRegexError = "isBeginningDateValid ">                                              
+                                                    :emptyRegexError = "isBeginningDateValid">                                              
                                                 </error-messages>                                                                        
                                             </tr>
-                                        </table>           
+                                        </table> 
+                                        -->          
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
                                         <input-text 
