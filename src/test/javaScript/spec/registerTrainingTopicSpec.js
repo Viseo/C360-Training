@@ -33,6 +33,7 @@ describe('test-show-formation', function () {
     beforeEach(function () {
         vmAddFormationPanel = new AddFormationPanel().$mount();
         vmShowFormation = new ShowFormation().$mount();
+        vmAddSessionPanel = new addSessionPanel().$mount();
     });
 
     afterEach(function () {
@@ -283,7 +284,21 @@ describe('test-show-formation', function () {
         ];
         expect(vmShowFormation.showChevrons).toBe(true);
     });
-
+    it('should check if the panel change from session panel to training panel when click on a training button', function () {
+        vmAddSessionPanel.ReturnToPageTraining();
+        expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
+        expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
+        expect(vmAddSessionPanel.state.idTraining).toEqual('');
+        expect(vmAddSessionPanel.state.trainingsChosen).toEqual({});
+        expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
+        expect(vmAddSessionPanel.beginningDate).toEqual('');
+        expect(vmAddSessionPanel.endingDate).toEqual('');
+        expect(vmAddSessionPanel.location).toEqual('');
+        expect(vmAddSessionPanel.modifySessionButton).toBe(false);
+        expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
+        expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
+        expect(vmAddSessionPanel.state.idSession).toEqual('');
+    });
 
     it('should check if the panel change from training panel to session panel when click on a training button', function () {
 
@@ -318,19 +333,5 @@ describe('test-show-formation', function () {
 
     });
 
-    it('should check if the panel change from session panel to training panel when click on a training button', function () {
-        vmShowFormation.ReturnToPageTraining;
-        expect(vmShowFormation.isDisabledTrainingTitle).toBe(true);
-        expect(vmShowFormation.state.changePageToTraining).toBe(true);
-        expect(vmShowFormation.state.idTraining).toEqual('');
-        expect(vmShowFormation.state.trainingsChosen).toEqual({});
-        expect(vmShowFormation.state.trainingTitle).toEqual('');
-        expect(vmShowFormation.beginningDate).toEqual('');
-        expect(vmShowFormation.endingDate).toEqual('');
-        expect(vmShowFormation.location).toEqual('');
-        expect(vmShowFormation.modifySessionButton).toBe(false);
-        expect(vmShowFormation.isDisabledSupprimer).toBe = true;
-        this.valueButtonSaveModify = 'Ajouter';
-        this.state.idSession='';
-    });
+
 });
