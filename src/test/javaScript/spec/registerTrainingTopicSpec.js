@@ -1,9 +1,7 @@
 /**
  * Created by XME3612 on 28/03/2017.
  */
-Vue.use(VueResource);
 
-let args = [{id:"5", value:10, name:"java"}];
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
@@ -12,13 +10,8 @@ Vue.http.interceptors.unshift((request, next) => {
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
         next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    } else {
-
-        //  getRoute(route,args);
-       // console.log(route.response);
+    }else {
         next(
-           // getRoute(route, args),
-            // console.log(route.response),
             request.respondWith(
                 route.response,
                 {status: 200}
@@ -33,10 +26,10 @@ describe('test-show-formation', function () {
     beforeEach(function () {
         vmAddFormationPanel = new AddFormationPanel().$mount();
         vmShowFormation = new ShowFormation().$mount();
+        vmAddSessionPanel = new addSessionPanel().$mount();
     });
 
     afterEach(function () {
-
     });
 
     it('should check variable initialization from AddFormationPanel component and ShowFormation component', function () {
@@ -67,7 +60,6 @@ describe('test-show-formation', function () {
         expect(vmAddFormationPanel.allTrainingsOfATopicChosen).toEqual([]);
         expect(vmAddFormationPanel.state.trainingsChosen).toEqual([]);
         expect(vmAddFormationPanel.state.allTopicTraining).toEqual([]);
-
         expect(vmShowFormation.state.trainingsChosen).toEqual([]);
         expect(vmShowFormation.state.allTopicTraining).toEqual([]);
     });
@@ -182,7 +174,7 @@ describe('test-show-formation', function () {
                       {"id":"2","mame":"java"},
                       {"id":"3","mame":"javascript"},];
 
-        expect(vmAddFormationPanel.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
+        expect(training_store.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
     });
 
     //verifyTrainingFormBeforeSubmit
@@ -195,7 +187,7 @@ describe('test-show-formation', function () {
 
     //TopicwithTraining
     it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
+        vmAddFormationPanel.state.allTrainings= [
             {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
@@ -205,7 +197,7 @@ describe('test-show-formation', function () {
             {"id":3,"version":0,"name":"C"},
             {"id":4,"version":0,"name":"C++"}
         ];
-        vmAddFormationPanel.TopicwithTraining();
+        vmAddFormationPanel.trainingStore.TopicwithTraining();
         expect(vmAddFormationPanel.state.trainingsChosen).toEqual(result);
     });
 
@@ -219,12 +211,12 @@ describe('test-show-formation', function () {
             [9,10]
         ];
 
-        expect(vmAddFormationPanel.reorganizeTrainings(arrayToTest)).toEqual(result);
+        expect(vmAddFormationPanel.trainingStore.reorganizeTrainings(arrayToTest)).toEqual(result);
     });
 
     //chooseAllTrainingsOfATopic
     it('should check whether the function chooseAllTrainingsOfATopic can choose all the trainings attached to the topic chosen', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
+        vmAddFormationPanel.state.allTrainings = [
             {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
@@ -235,12 +227,12 @@ describe('test-show-formation', function () {
             {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
         ];
 
-        expect(vmAddFormationPanel.chooseAllTrainingsOfATopic("C")).toEqual(result);
+        expect(vmAddFormationPanel.trainingStore.chooseAllTrainingsOfATopic("C")).toEqual(result);
     });
 
     //reorganizeAllTopicsAndTrainings
     it('should check whether the function reorganizeAllTopicsAndTrainings can reorganize all topics and trainings into an array', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
+        vmAddFormationPanel.state.allTrainings = [
             {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
             {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
@@ -260,7 +252,7 @@ describe('test-show-formation', function () {
             ]
         ];
 
-        vmAddFormationPanel.reorganizeAllTopicsAndTrainings();
+        vmAddFormationPanel.trainingStore.reorganizeAllTopicsAndTrainings();
         expect(vmAddFormationPanel.state.allTopicTraining).toEqual(result);
     });
 
@@ -284,4 +276,53 @@ describe('test-show-formation', function () {
         expect(vmShowFormation.showChevrons).toBe(true);
     });
 
+
+    it('should check if the panel change from training panel to session panel when click on a training button', function () {
+
+        vmAddFormationPanel.state.allTopicTraining = [
+            [
+                [{"id": 5, "version": 0, "trainingTitle": "FORMATION1", "numberHalfDays": 1, "topicDescription": {"id": 3, "version": 0, "name": "C"}}, {"id": 6, "version": 0, "trainingTitle": "FORMATION2", "numberHalfDays": 2, "topicDescription": {"id": 3, "version": 0, "name": "C"}}]
+            ],
+            [
+                [{"id": 7, "version": 0, "trainingTitle": "FORMATION3", "numberHalfDays": 3, "topicDescription": {"id": 4, "version": 0, "name": "C++"}}]
+            ]
+        ];
+        var reponseFormation1 =             [
+            {"id":7,"version":0,"trainingDescription":
+                {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":
+                    {"id":3,"version":0,"name":"C"}
+                },"beginning":"15/04/2017","ending":"15/04/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Escale"}
+            ,
+            {"id":8,"version":0,"trainingDescription":
+                {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":
+                    {"id":3,"version":0,"name":"C"}
+                },"beginning":"18/05/2017","ending":"18/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bali"}
+
+        ]
+        //Click on FORMATION1 button (FORMATION1 got 2 sessions)
+        vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
+        expect(vmShowFormation.state.changePageToSession).toBe(true);
+        expect(vmShowFormation.state.changePageToTraining).toBe(false);
+        expect(vmShowFormation.state.idTraining).toEqual(5);
+        expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
+        expect(vmShowFormation.state.isNoSession).toBe(false);
+        expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
+
+    });
+
+    it('should check if the panel change from session panel to training panel when click on a training button', function () {
+        vmShowFormation.ReturnToPageTraining;
+        expect(vmShowFormation.isDisabledTrainingTitle).toBe(true);
+        expect(vmShowFormation.state.changePageToTraining).toBe(true);
+        expect(vmShowFormation.state.idTraining).toEqual('');
+        expect(vmShowFormation.state.trainingsChosen).toEqual({});
+        expect(vmShowFormation.state.trainingTitle).toEqual('');
+        expect(vmShowFormation.beginningDate).toEqual('');
+        expect(vmShowFormation.endingDate).toEqual('');
+        expect(vmShowFormation.location).toEqual('');
+        expect(vmShowFormation.modifySessionButton).toBe(false);
+        expect(vmShowFormation.isDisabledSupprimer).toBe = true;
+        this.valueButtonSaveModify = 'Ajouter';
+        this.state.idSession='';
+    });
 });

@@ -118,7 +118,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             arrangeTrainings:undefined,
             allTrainingsOfATopicChosen:[],
 
-            state: training_store.state
+            state: training_store.state,
+            trainingStore: training_store
         }
     },
     watch: {
@@ -429,6 +430,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,
+            trainingStore: training_store
 
         }
     },
@@ -512,7 +514,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
              </div>`
 });
 
-Vue.component('add-session-panel', {
+let addSessionPanel = Vue.component('add-session-panel', {
     data: function() {
         return {
             session:{
@@ -550,6 +552,7 @@ Vue.component('add-session-panel', {
             modifySessionButton: false,
             valueButtonSaveModify: "Ajouter",
             state: training_store.state,
+            trainingStore: training_store
         }
     },
 
