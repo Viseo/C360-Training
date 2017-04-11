@@ -546,6 +546,7 @@ Vue.component('add-session-panel', {
 
             trainingTitleInAddSessionRegexErrorMessage:'',
             beginningDateRegexErrorMessage:'',
+
             locationRegexErrorMessage:'',
 
             trainingTitleInAddSessionErrorMessage:false,
@@ -576,7 +577,6 @@ Vue.component('add-session-panel', {
             } else {
                 this[errorMessage] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
                 this.isTrainingTitleInAddSessionValid = false;
-                console.log(this.isTrainingTitleInAddSessionValid);
             }
         },
 
@@ -609,10 +609,10 @@ Vue.component('add-session-panel', {
         },
 
         activeFieldTrainingTitle(){
-
+            console.log(this.isDisabledTrainingTitle+" "+this.isTrainingTitleInAddSessionValid);
             if (this.isDisabledTrainingTitle == true) {
                 this.isDisabledTrainingTitle = false;
-            } else {
+            } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
                 this.isDisabledTrainingTitle = true;
             }
         },
@@ -737,9 +737,9 @@ Vue.component('add-session-panel', {
                                         
                                   </form>                                      
                             </div>
-                            <!--<div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
+                            <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
-                            </div>-->
+                            </div>
                         </div>                        
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
@@ -749,11 +749,11 @@ Vue.component('add-session-panel', {
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
                                         <datepicker v-model ="date"
-                                                    @focus = " beginningdateErrorMessage = false"
+                                                    
                                                     @input = "updateV2"
                                                     :isValid = "isBeginningDateValid">                                                                                       
                                         </datepicker>
-                                        <!--
+                                       <!-- 
                                         <table>
                                             <tr>
                                                 <error-messages                                                      
@@ -764,7 +764,7 @@ Vue.component('add-session-panel', {
                                                 </error-messages>                                                                        
                                             </tr>
                                         </table> 
-                                        -->          
+                                        -->
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
                                         <input-text 
@@ -778,6 +778,7 @@ Vue.component('add-session-panel', {
                                             :collection="4"
                                             type = 'select'>
                                         </input-text>
+                                       
                                         <!--
                                         <table>
                                             <tr>
@@ -785,11 +786,11 @@ Vue.component('add-session-panel', {
                                                     fillFieldErrorMessage = "Veuillez remplir tous les champs." 
                                                     :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                     :emptyFillError = "beginningdateErrorMessage"
-                                                    :emptyRegexError = " !isBeginningDateValid ">                                              
+                                                    :emptyRegexError = " !isBeginningDateValid">                                              
                                                 </error-messages>
                                             </tr>
                                         </table>
-                                       -->
+                                        -->
                                     </div> 
                                 </div>
                                 <div class = "row" style="margin-bottom: 30px;">
@@ -942,6 +943,8 @@ Vue.component('datepicker',{
         }
     },
 
+
+
     methods: {
 
         togglePanel () {
@@ -952,7 +955,7 @@ Vue.component('datepicker',{
         isSelected (type, item) {
             switch (type){
                 case 'year':
-                    if(!this.range) return item === this.tmpYear
+                    if(!this.range)return item === this.tmpYear
                     return (new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
                     && new Date(item, 0).getTime() <= new Date(this.tmpEndYear, 0).getTime())
                 case 'month':
@@ -1103,7 +1106,7 @@ Vue.component('datepicker',{
 
     watch: {
         min (v) {
-            let minArr = v.split('-')
+            let minArr = v.split('**')
             this.minYear = Number(minArr[0])
             this.minMonth = Number(minArr[1])
             this.minDate = Number(minArr[2])
