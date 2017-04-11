@@ -1,54 +1,25 @@
 /**
  * Created by CLH3623 on 10/04/2017.
  */
+
+
 Vue.component('collaborator-formation', {
     data: function(){
         return {
             allTrainings: [],
             selected: '',
+            idTraining:'3',
+            listTrainingSessions:[],
             collaboratorIdentity:{
-                id:3,
-                lastName:'meng',
-                firstName:'xiangzhe'
+                id:'',
+                lastName:'',
+                firstName:''
             },
-            trainingDescription:{
-                id: 4,
-                version: 0,
-                trainingTitle: 'formation',
-                numberHalfDays: 3,
-                topicDescription: {
-                    id: 3,
-                    version: 0,
-                    name: 'c'
-                }
-            },
-            trainingSessionsDescriptions:[
-                {
-                    id: 8,
-                    version:0,
-                    trainingDescription: {
-                        id: 4,
-                        version: 0,
-                        trainingTitle: 'formation',
-                        numberHalfDays: 3,
-                        topicDescription: {
-                            id: 3,
-                            version: 0,
-                            name: 'c'
-                        }
-                    },
-                    beginning: "19/04/2017",
-                    ending: "20/04/2017",
-                    beginningTime: "08:00",
-                    endingTime: "18:00",
-                    location: "Salle Bali"
-                }
-            ],
             RequestToRegister:{
                 trainingDescription:{},
                 collaboratorIdentity:{},
                 trainingSessionsDescriptions:[]
-            }
+            },
         }
     },
     template: `<div class="container-fluid">
@@ -84,6 +55,8 @@ Vue.component('collaborator-formation', {
                 </div>`,
     mounted: function(){
         this.gatherTrainingsFromDatabase();
+        this.GatherSessionsByTrainingFromDatabase();
+        this.GetCookies();
     },
     methods: {
         gatherTrainingsFromDatabase(){
@@ -100,10 +73,24 @@ Vue.component('collaborator-formation', {
                 }
             );
         },
+        GetCookies(){
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            this.token = String(regexCookieToken.pop());
+            this.collaboratorIdentity.id = jwt_decode(this.token).id;
+            this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+            this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+        },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.idTraining + "/sessions").then(
+                function (response) {
+                    this.listTrainingSessions = response.data;
+                });
+        },
         VerifyTrainingSessionCollaborator(){
-            this.RequestToRegister.trainingDescription = this.trainingDescription;
+            //à changer
+            this.RequestToRegister.trainingDescription = this.allTrainings.pop();
             this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
-            this.RequestToRegister.trainingSessionsDescriptions = this.trainingSessionsDescriptions;
+            this.RequestToRegister.trainingSessionsDescriptions = this.listTrainingSessions;
             this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
             console.log(this.RequestToRegister);
             this.SaveTrainingSessionCollaborator();
