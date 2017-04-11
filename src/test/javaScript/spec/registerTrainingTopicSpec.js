@@ -167,23 +167,6 @@ describe('test-show-formation', function () {
         let resp = vmAddFormationPanel.saveTopicIntoDatabase();
     });
 
-    //removeDuplicates
-    it('should check whether the function removeDuplicates can remove those duplicates', function () {
-
-        var arrayWithDuplicates = [
-            {"id":"1","mame":"c"},
-            {"id":"2","mame":"java"},
-            {"id":"3","mame":"javascript"},
-            {"id":"1","mame":"c++"},
-            {"id":"1","mame":"c#"}
-        ];
-
-        var result = [{"id":"1","mame":"c#"},
-                      {"id":"2","mame":"java"},
-                      {"id":"3","mame":"javascript"},];
-
-        expect(vmAddFormationPanel.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
-    });
 
     //verifyTrainingFormBeforeSubmit
     //verifyTopicFormBeforeSubmit
@@ -193,82 +176,11 @@ describe('test-show-formation', function () {
     //gatherTrainingsFromDatabase
 
 
-    //TopicwithTraining
-    it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
-            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
-        ];
-
-        var result = [
-            {"id":3,"version":0,"name":"C"},
-            {"id":4,"version":0,"name":"C++"}
-        ];
-        vmAddFormationPanel.TopicwithTraining();
-        expect(vmAddFormationPanel.state.trainingsChosen).toEqual(result);
-    });
-
-    //reorganizeTrainings
-    it('should check whether the function reorganizeTrainings can reorganize an array of trainings', function () {
-
-        var arrayToTest = [1,2,3,4,5,6,7,8,9,10];
-        var result = [
-            [1,2,3,4],
-            [5,6,7,8],
-            [9,10]
-        ];
-
-        expect(vmAddFormationPanel.reorganizeTrainings(arrayToTest)).toEqual(result);
-    });
-
-    //chooseAllTrainingsOfATopic
-    it('should check whether the function chooseAllTrainingsOfATopic can choose all the trainings attached to the topic chosen', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
-            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
-        ];
-
-        var result = [
-            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
-        ];
-
-        expect(vmAddFormationPanel.chooseAllTrainingsOfATopic("C")).toEqual(result);
-    });
-
-    //reorganizeAllTopicsAndTrainings
-    it('should check whether the function reorganizeAllTopicsAndTrainings can reorganize all topics and trainings into an array', function () {
-        vmAddFormationPanel.selectOptionsOfTraining = [
-            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
-            {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
-        ];
-
-        vmAddFormationPanel.state.trainingsChosen = [
-            {"id":3,"version":0,"name":"C"},
-            {"id":4,"version":0,"name":"C++"}
-        ];
-
-        var result = [
-            [
-                [{"id": 5, "version": 0, "trainingTitle": "FORMATION1", "numberHalfDays": 1, "topicDescription": {"id": 3, "version": 0, "name": "C"}}, {"id": 6, "version": 0, "trainingTitle": "FORMATION2", "numberHalfDays": 2, "topicDescription": {"id": 3, "version": 0, "name": "C"}}]
-            ],
-            [
-                [{"id": 7, "version": 0, "trainingTitle": "FORMATION3", "numberHalfDays": 3, "topicDescription": {"id": 4, "version": 0, "name": "C++"}}]
-            ]
-        ];
-
-        vmAddFormationPanel.reorganizeAllTopicsAndTrainings();
-        expect(vmAddFormationPanel.state.allTopicTraining).toEqual(result);
-    });
-
-    /*it('should check variable initialization from show-formation-panel component', function () {
+    it('should check variable initialization from show-formation-panel component', function () {
         expect(vmShowFormation.state.trainingsChosen).not.toBeNull();
         expect(vmShowFormation.state.allTopicTraining).not.toBeNull();
 
-    });*/
+    });
 
     //showChevrons
     it('should check whether the chevrons can be hidden', function () {
