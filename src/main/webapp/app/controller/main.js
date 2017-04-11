@@ -160,7 +160,7 @@ let Header = Vue.component('blue-header',{
     }
 });
 
-/*
+
 new Vue({
     el: '#newVue'
 });
@@ -187,4 +187,4 @@ $('ul.nav li.dropdown').hover(function() {http://www.bootply.com/PZIuAAmHST#
 }, function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
 });
-*/
+
