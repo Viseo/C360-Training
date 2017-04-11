@@ -42,6 +42,13 @@ let routes = [
     },
     {
         method: 'POST',
+        url: "api/userdisconnect",
+        response: [
+            { userConnected:"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg"}
+        ]
+    },
+    {
+        method: 'POST',
         url: 'api/collaborateurs',
         response: [
             {}

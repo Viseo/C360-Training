@@ -1,7 +1,9 @@
 /**
  * Created by XME3612 on 28/03/2017.
  */
+Vue.use(VueResource);
 
+let args = [{id:"5", value:10, name:"java"}];
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
@@ -10,8 +12,13 @@ Vue.http.interceptors.unshift((request, next) => {
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
         next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    }else {
+    } else {
+
+        //  getRoute(route,args);
+       // console.log(route.response);
         next(
+           // getRoute(route, args),
+            // console.log(route.response),
             request.respondWith(
                 route.response,
                 {status: 200}
@@ -26,10 +33,10 @@ describe('test-show-formation', function () {
     beforeEach(function () {
         vmAddFormationPanel = new AddFormationPanel().$mount();
         vmShowFormation = new ShowFormation().$mount();
-        vmAddSessionPanel = new addSessionPanel().$mount();
     });
 
     afterEach(function () {
+
     });
 
     it('should check variable initialization from AddFormationPanel component and ShowFormation component', function () {
@@ -60,6 +67,7 @@ describe('test-show-formation', function () {
         expect(vmAddFormationPanel.allTrainingsOfATopicChosen).toEqual([]);
         expect(vmAddFormationPanel.state.trainingsChosen).toEqual([]);
         expect(vmAddFormationPanel.state.allTopicTraining).toEqual([]);
+
         expect(vmShowFormation.state.trainingsChosen).toEqual([]);
         expect(vmShowFormation.state.allTopicTraining).toEqual([]);
     });
@@ -174,7 +182,7 @@ describe('test-show-formation', function () {
                       {"id":"2","mame":"java"},
                       {"id":"3","mame":"javascript"},];
 
-        expect(training_store.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
+        expect(vmAddFormationPanel.removeDuplicates(arrayWithDuplicates,"id")).toEqual(result);
     });
 
     //verifyTrainingFormBeforeSubmit

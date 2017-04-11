@@ -155,7 +155,7 @@ let args;
             expect(JSON.stringify(vmFormulaire.collaborator)).toEqual(JSON.stringify({"personnalIdNumber":"AZE1234","lastName":"Dupont","firstName":"Eric","email":"eric.dupont@viseo.com","password":"123456","confirmPassword":"123456"}));
             expect(vmFormulaire.collaboratorToRegister['confirmPassword']).toBe(undefined);
         });
-        /*it('Test verifyForm',function () {
+        it('Test verifyForm',function () {
          vmFormulaire.personnalIdNumber = 'AZE1234';
          vmFormulaire.lastName = 'dupon';
          vmFormulaire.firstName = 'erica';
@@ -164,7 +164,7 @@ let args;
          vmFormulaire.confirmPassword = '123456';
          vmFormulaire.verifyForm ();
          console.log(vmFormulaire.collaborator.email);
-         });*/
+         });
 
     });
 
