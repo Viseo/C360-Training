@@ -21,7 +21,10 @@ legend{
     background-color: #428bca;
     color: white;
 }
-
+#trainingErrorMessage {
+    margin: 6px 0px 5px 3px;
+}
+.color-red {color: #B22222;}
 .searchField .glyphicon-search {
     right: 25px;
     position: absolute;

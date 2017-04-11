@@ -46,8 +46,6 @@ let NavigationMenu = Vue.component('connect-user',{
                         }
                     });
         }
-
-
     },
 
     methods: {

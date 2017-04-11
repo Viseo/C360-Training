@@ -5,7 +5,13 @@ Vue.component('collaborator-formation', {
     data: function(){
         return {
             allTrainings: [],
-            selected: ''
+            selectedTraining: '',
+            emptyTraining: false,
+            emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
+            listTrainingSession: [],
+            isNoSession: true,
+            displayTrainings: false
+
         }
     },
     template: `<div class="container-fluid">
@@ -19,18 +25,27 @@ Vue.component('collaborator-formation', {
                                 </div>
                                 <div class="row">
                                     <div id="trainingContainer">
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <select class="form-control" v-model="selected">
-                                                <option selected disabled>Formations disponibles</option>
-                                                <option v-for="training in allTrainings" :value="training.trainingTitle">{{training.trainingTitle}}</option>
-                                            </select>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                                <select required class="form-control" v-model="selectedTraining">
+                                                    <option  value="" disabled hidden>Formations disponibles</option>
+                                                    <option v-for="training in allTrainings" :value="training.id">{{training.trainingTitle}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2 col-md-2 col-sm-12">
+                                                <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
+                                            </div>
+                                            <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                                    <span class="glyphicon glyphicon-search"></span>
+                                                    <input type="search" class="form-control" placeholder="Entrer une formation">
+                                            </div>
                                         </div>
-                                        <div class="col-lg-2 col-md-2 col-sm-12">
-                                            <input type = "submit" class="btn btn-primary" value="Valider"/>
+                                        <div class="row">
+                                            <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
-                                        <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span class="glyphicon glyphicon-search"></span>
-                                                <input type="search" class="form-control" placeholder="Entrer une formation">
+                                        <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+                                            <p style="margin-top:50px;">{{selectedTraining}}</p>
+                                            <hr style="margin:0px">
                                         </div>
                                     </div>
                                 </div>
@@ -42,6 +57,29 @@ Vue.component('collaborator-formation', {
         this.gatherTrainingsFromDatabase();
     },
     methods: {
+        displayTrainingsFn(){
+            this.emptyTraining = this.selectedTraining ? false: true;
+            if (!this.emptyTraining) {
+                this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
+                    function (response) {
+                        console.log(this.allTrainings);
+                        this.listTrainingSession = response.data;
+                        for (key in this.allTrainings) {
+                            if ( this.allTrainings[key] == this.selectedTraining) {
+                                console.log(training.trainingTitle);
+                            }
+                            else console.log(this.allTrainings[key]);
+                        }
+                        if (this.listTrainingSession.length === 0) {
+                            this.isNoSession = true;
+                        }
+                        else{
+                            this.displayTrainings=true;
+                            this.isNoSession = false;
+                        }
+                    });
+            }
+        },
         gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
