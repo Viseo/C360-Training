@@ -5,11 +5,55 @@ Vue.component('collaborator-formation', {
     data: function(){
         return {
             allTrainings: [],
-            selected: ''
+            selected: '',
+            collaboratorIdentity:{
+                id:3,
+                lastName:'meng',
+                firstName:'xiangzhe'
+            },
+            trainingDescription:{
+                id: 4,
+                version: 0,
+                trainingTitle: 'formation',
+                numberHalfDays: 3,
+                topicDescription: {
+                    id: 3,
+                    version: 0,
+                    name: 'c'
+                }
+            },
+            trainingSessionsDescriptions:[
+                {
+                    id: 8,
+                    version:0,
+                    trainingDescription: {
+                        id: 4,
+                        version: 0,
+                        trainingTitle: 'formation',
+                        numberHalfDays: 3,
+                        topicDescription: {
+                            id: 3,
+                            version: 0,
+                            name: 'c'
+                        }
+                    },
+                    beginning: "19/04/2017",
+                    ending: "20/04/2017",
+                    beginningTime: "08:00",
+                    endingTime: "18:00",
+                    location: "Salle Bali"
+                }
+            ],
+            RequestToRegister:{
+                trainingDescription:{},
+                collaboratorIdentity:{},
+                trainingSessionsDescriptions:[]
+            }
         }
     },
     template: `<div class="container-fluid">
                     <div class="row">
+                    <button @click="VerifyTrainingSessionCollaborator()">Test</button>
                         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
                             <div class="col-sm-12 col-md-10 col-lg-7">
                                 <div class="row">
@@ -56,5 +100,24 @@ Vue.component('collaborator-formation', {
                 }
             );
         },
+        VerifyTrainingSessionCollaborator(){
+            this.RequestToRegister.trainingDescription = this.trainingDescription;
+            this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
+            this.RequestToRegister.trainingSessionsDescriptions = this.trainingSessionsDescriptions;
+            this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
+            console.log(this.RequestToRegister);
+            this.SaveTrainingSessionCollaborator();
+        },
+        SaveTrainingSessionCollaborator(){
+            this.$http.post("api/requests", this.RequestToRegister).then(
+                function (response) {
+                    console.log("success");
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        }
     }
 })
