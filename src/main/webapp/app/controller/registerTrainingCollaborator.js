@@ -5,6 +5,8 @@ Vue.component('collaborator-formation', {
     data: function(){
         return {
             allTrainings: [],
+            allTrainingTitles:[],
+            value:''
             selectedTraining: '',
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
@@ -25,7 +27,7 @@ Vue.component('collaborator-formation', {
                                 </div>
                                 <div class="row">
                                     <div id="trainingContainer">
-                                        <div class="row">
+                                                      <div class="row">
                                             <div class="col-lg-4 col-md-4 col-sm-12">
                                                 <select required class="form-control" v-model="selectedTraining">
                                                     <option  value="" disabled hidden>Formations disponibles</option>
@@ -35,12 +37,13 @@ Vue.component('collaborator-formation', {
                                             <div class="col-lg-2 col-md-2 col-sm-12">
                                                 <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
-                                            <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                    <span class="glyphicon glyphicon-search"></span>
-                                                    <input type="search" class="form-control" placeholder="Entrer une formation">
-                                            </div>
+                                        <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
+                                                    </typeahead>                                        
                                         </div>
-                                        <div class="row">
+                                    </div>
+                                                   <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
@@ -87,6 +90,7 @@ Vue.component('collaborator-formation', {
                     this.allTrainings.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
+                    this.selectTrainingTitles();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -94,5 +98,14 @@ Vue.component('collaborator-formation', {
                 }
             );
         },
+        selectTrainingTitles(){
+            for(index in this.allTrainings){
+                this.allTrainingTitles.push(this.allTrainings[index].trainingTitle)
+            }
+            console.log(this.allTrainingTitles);
+        },
+
     }
+
 })
+Vue.component('typeahead',VueStrap.typeahead);
