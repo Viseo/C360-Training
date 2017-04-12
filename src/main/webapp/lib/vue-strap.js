@@ -6601,6 +6601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    toggle: function toggle() {
 	      this.open = !this.open;
 	      if (this.inAccordion) {
+	      	this.$emit('openPanel');
 	        this.$parent.openChild(this);
 	      }
 	    },

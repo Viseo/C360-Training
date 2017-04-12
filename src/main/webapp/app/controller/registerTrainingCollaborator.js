@@ -7,7 +7,9 @@ Vue.component('collaborator-formation', {
             trainingsFound:[],
             noTrainingFound:false,
             allTrainings: [],
+            checkedSessions:[],
             selected: '',
+            check:false,
             idTraining:'3',
             listTrainingSessions:[],
             collaboratorIdentity:{
@@ -23,6 +25,7 @@ Vue.component('collaborator-formation', {
             allTrainingTitles:[],
             value:'',
             selectedTraining: '',
+            trainingSelected:{},
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
@@ -67,18 +70,20 @@ Vue.component('collaborator-formation', {
                                             <accordion :one-at-atime="true" type="info">
                                             
                                             <div v-for="training in trainingsFound">
-                                            <panel type="primary">
+                                            <panel @openPanel="renitialize(training)"type="primary">
                                                 <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
                                                 <h4 class="col-lg-8"><u>Sessions disponibles</u></h4>
-                                                <div class="col-lg-4"><input type="checkbox">Indifférent</div>
-                                                <div class="col-lg-12" v-for="i in listTrainingSession">
-                                                <div v-if="i.trainingDescription.id == training.id">
+                                                <div class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
+                                                <div :id="training.id">
+                                                <div  class="col-lg-12"  v-for="i in listTrainingSession">
+                                                <div v-if="i.trainingDescription.id == training.id" >
                                        
-                                                <input type="checkbox" :value="i.id"> {{i.beginning}} - {{i.ending}} - {{i.location}}
-                                                
+                                                <input type="checkbox" v-model="checkedSessions" :value="i"> {{i.beginning}} - {{i.ending}} - {{i.location}}
                                                 
                                                 
                                                 </div>
+                                                </div>
+                                                <button class="btn btn-primary" value="Envoyer une demande" @click="VerifyTrainingSessionCollaborator">Envoyer une demande</button>
                                                 </div>
 
                                             </panel>
@@ -100,7 +105,25 @@ Vue.component('collaborator-formation', {
             return this.value.toUpperCase();
         }
     },
+
     methods: {
+        renitialize(training){
+            this.trainingSelected = training;
+            this.check = false;
+        },
+        disabling(id){
+            this.check = !this.check;
+            var nodes = document.getElementById(id).getElementsByTagName("*");
+            if(this.check === true){
+            for(var i = 0; i < nodes.length; i++){
+                nodes[i].disabled = true;
+            }}
+            else{
+                for(var i = 0; i < nodes.length; i++){
+                    nodes[i].disabled = false;
+                }
+            }
+        },
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false : true;
             this.trainingsFound.splice(0,this.trainingsFound.length);
@@ -154,9 +177,9 @@ Vue.component('collaborator-formation', {
         },
         VerifyTrainingSessionCollaborator(){
             //à changer
-            this.RequestToRegister.trainingDescription = this.allTrainings.pop();
+            this.RequestToRegister.trainingDescription = this.trainingSelected;
             this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
-            this.RequestToRegister.trainingSessionsDescriptions = this.listTrainingSessions;
+            this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
             this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
             console.log(this.RequestToRegister);
             this.SaveTrainingSessionCollaborator();
@@ -189,7 +212,8 @@ Vue.component('collaborator-formation', {
             }
             this.noTrainingFound = (this.trainingsFound.length==0) ? true : false;
             this.value = null;
-            console.log(this.trainingsFound.length);
+            for(i in this.trainingsFound){
+            }
         },
         storeTrainingSessions(){
             this.$http.get("api/sessions").then(
