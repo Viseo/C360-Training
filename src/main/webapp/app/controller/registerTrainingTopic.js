@@ -588,7 +588,7 @@ Vue.component('add-session-panel', {
             }
         },
 
-        isTrainingTitleAddSessionEmpty(){
+        isTrainingTitleInAddSessionEmpty(){
             if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
