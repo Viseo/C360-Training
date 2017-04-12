@@ -21,11 +21,27 @@ legend{
     background-color: #428bca;
     color: white;
 }
-
+#trainingErrorMessage {
+    margin: 6px 0px 5px 3px;
+}
+.color-red {color: #B22222;}
 .searchField .glyphicon-search {
     right: 25px;
     position: absolute;
     top: 12px;
     cursor:pointer;
     z-index: 1000;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+    left: 0%;
+    top: 100%;
+}
+
+.panel-primary{
+    border-color: rgb(210, 210, 210);
+}
+.panel-heading{
+    background-color: rgba(66, 139, 202,0.8) !important;
 }
