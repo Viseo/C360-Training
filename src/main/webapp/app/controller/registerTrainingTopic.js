@@ -659,6 +659,7 @@ Vue.component('add-session-panel', {
             this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
             this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
         },
+
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
                 .then(
@@ -794,15 +795,17 @@ Vue.component('add-session-panel', {
                                 <div class = "row " style = "margin-bottom: 30px;">
                                     <table>
                                         <tr>
-                                        <!--
-                                            fillFieldErrorMessage =" Veuillez remplir tous les champs." 
-                                            successMessage = "La session a été créée avec succès." 
-                                            :regexErrorMessage = ""
-                                            :emptyIdenticalError = ""
-                                            :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
-                                            :emptySuccess = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
-                                            :emptyRegexError = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage )">                                                                       
-                                        -->
+                                            <!--
+                                            <error-messages  
+                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                successMessage = "La session a été créée avec succès." 
+                                                :regexErrorMessage = ""
+                                                :emptyIdenticalError = ""
+                                                :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
+                                                :emptySuccess = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
+                                                :emptyRegexError = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage )">                                                                       
+                                            <error-messages>
+                                            -->
                                         </tr>
                                     </table> 
                                 </div>                                                       
