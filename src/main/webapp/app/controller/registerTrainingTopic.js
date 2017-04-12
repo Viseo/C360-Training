@@ -530,14 +530,14 @@ Vue.component('add-session-panel', {
             },
             date:'',
             sessionToRegister:{},
-            endingDate:'',
+            beginningDate:'',
+            endingDate:'30/04/2017',
             beginningTime:'09:00',
             endingTime:'18:00',
             isSessionAlreadyPlanned:false,
             isDisabledTrainingTitle: true,
 
             trainingTitleInAddSession:'',
-            beginningDate:'',
             location:'',
             isTrainingTitleInAddSessionValid:true,
             isBeginningDateValid:true,
@@ -547,7 +547,7 @@ Vue.component('add-session-panel', {
             trainingTitleInAddSessionErrorMessage:false,
             beginningDateErrorMessage:false,
             locationErrorMessage:false,
-
+            confirmSession:false,
             state: training_store.state,
         }
     },
@@ -561,7 +561,6 @@ Vue.component('add-session-panel', {
             this.verifyBeginningDate(beginningDateValue, 'beginningDateRegexErrorMessage');
         },
     },
-
     methods: {
         verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
@@ -574,7 +573,7 @@ Vue.component('add-session-panel', {
         },
 
         isTrainingTitleInAddSessionEmpty(){
-            if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
+            if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
         },
@@ -603,8 +602,10 @@ Vue.component('add-session-panel', {
 
         activeFieldTrainingTitle(){
             if (this.isDisabledTrainingTitle == true) {
+                this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = false;
             } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
+                this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = true;
             }
         },
@@ -635,6 +636,7 @@ Vue.component('add-session-panel', {
         },
 
         VerifyFormBeforeSaveSession(){
+            this.confirmSession = true;
             this.session.trainingDescription = this.state.trainingChosen;
             this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
             this.session.beginning = this.beginningDate;
@@ -646,17 +648,15 @@ Vue.component('add-session-panel', {
             this.isTrainingTitleInAddSessionEmpty();
             this.isBeginningDateEmpty();
             this.isLocationEmpty();
-            this.trainingTitleInAddSessionErrorMessage = false;
-            this.beginningDateErrorMessage = false;
-            this.locationErrorMessage = false;
-            if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
+            if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                 this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                 this.SaveSessionIntoDatabase();
             }
         },
 
         ModifyTrainingTopic(){
-            this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
+            this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
+            this.state.trainingTitle = this.trainingTitleInAddSession;
             this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
         },
 
@@ -735,21 +735,11 @@ Vue.component('add-session-panel', {
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
                                         <datepicker  
-                                                    v-model = "beginningDate" 
+                                                    v-model = "beginningDate"
+                                                    :isValid = "isBeginningDateValid" 
+                                                    @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
                                                     @input = "updateV2">                                                                                       
                                         </datepicker>
-                                        <table>
-                                            <tr>
-                                            <!--
-                                                <error-messages                                                      
-                                                    fillFieldErrorMessage = "Veuillez remplir tous les champs." 
-                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
-                                                    :emptyFillError = "beginningdateErrorMessage"
-                                                    :emptyRegexError = "isBeginningDateValid">                                              
-                                                </error-messages>                                                                        
-                                            -->
-                                            </tr>
-                                        </table> 
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
                                         <input-text 
@@ -757,6 +747,7 @@ Vue.component('add-session-panel', {
                                             :value = "location" 
                                             @input = "updateV3"
                                             placeholder = "Salle"
+                                            @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
                                             maxlength = "10"
                                             :collection="4"
                                             type = 'select'>
@@ -777,12 +768,27 @@ Vue.component('add-session-panel', {
                                             :disabled = "true">
                                         </input-text>
                                     </div>
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
+                                        <table>
+                                        <tr>
+                                            <error-messages  
+                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                successMessage =" La session a été créée avec succès."
+                                                :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                :emptyRegexError = "!isBeginningDateValid"
+                                                :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
+                                            <error-messages>
+                                        </tr>
+                                        </table> 
+                                    </div> 
                                 </div> 
                                 <div class = "row " style = "margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
                                                value = "Enregistrer"
+                                               @click="VerifyFormBeforeSaveSession()"
                                                style = "width:100%"/>                                                                         
                                     </div>
                                         <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
@@ -793,21 +799,7 @@ Vue.component('add-session-panel', {
                                         </div>
                                 </div>
                                 <div class = "row " style = "margin-bottom: 30px;">
-                                    <table>
-                                        <tr>
-                                            <!--
-                                            <error-messages  
-                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
-                                                successMessage = "La session a été créée avec succès." 
-                                                :regexErrorMessage = ""
-                                                :emptyIdenticalError = ""
-                                                :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
-                                                :emptySuccess = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
-                                                :emptyRegexError = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage )">                                                                       
-                                            <error-messages>
-                                            -->
-                                        </tr>
-                                    </table> 
+                                    
                                 </div>                                                       
                             </form>
                         </div>
@@ -821,13 +813,16 @@ Vue.component('datepicker', {
 
     template: `
          <div class="date-picker">
-            <div class = "form-group has-feedback" @click="togglePanel">
+            <div class = "form-group has-feedback" @click="togglePanel"
+                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                 <label class = "label-control">Date de début</label>
                 <input class="form-control"
                        placeholder="--/--/----"
                        :value="range ? value[0] + ' -- ' + value[1] : value" 
                        @mouseenter="showCancel = true" 
-                       @mouseleave="showCancel = false"/>                     
+                       @mouseleave="showCancel = false"
+                       @input="updateValue($event.target.value)"
+                       @focus="handleFocus"/>                     
                 <span class ="glyphicon form-control-feedback glyphicon-calendar"></span>
             </div>            
             <transition name="toggle">
@@ -927,10 +922,22 @@ Vue.component('datepicker', {
         range: {
             type: Boolean,
             default: false
+        },
+        isValid: {
+            type: [String, Array],
+            default: ''
         }
     },
 
     methods: {
+
+        handleFocus(){
+            this.$emit('focus');
+        },
+
+        updateValue(value){
+            this.$emit('input',value);
+        },
 
         togglePanel () {
             this.panelState = !this.panelState
