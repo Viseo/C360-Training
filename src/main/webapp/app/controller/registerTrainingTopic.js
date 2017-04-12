@@ -539,19 +539,14 @@ Vue.component('add-session-panel', {
             trainingTitleInAddSession:'',
             beginningDate:'',
             location:'',
-
             isTrainingTitleInAddSessionValid:true,
             isBeginningDateValid:true,
-
             trainingTitleInAddSessionRegexErrorMessage:'',
             beginningDateRegexErrorMessage:'',
-
             locationRegexErrorMessage:'',
-
             trainingTitleInAddSessionErrorMessage:false,
             beginningDateErrorMessage:false,
             locationErrorMessage:false,
-
 
             state: training_store.state,
         }
@@ -568,7 +563,6 @@ Vue.component('add-session-panel', {
     },
 
     methods: {
-
         verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
                 this[errorMessage] = '';
@@ -615,7 +609,6 @@ Vue.component('add-session-panel', {
             }
         },
 
-
         updateV1 (v) {
             this.trainingTitleInAddSession = v
         },
@@ -650,6 +643,7 @@ Vue.component('add-session-panel', {
             this.session.endingTime = this.endingTime;
             this.session.location = this.location;
 
+            this.isTrainingTitleInAddSessionEmpty();
             this.isBeginningDateEmpty();
             this.isLocationEmpty();
             this.trainingTitleInAddSessionErrorMessage = false;
