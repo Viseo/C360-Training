@@ -26,50 +26,7 @@ describe('test registerTrainingTopic.js', function () {
     afterEach(function () {
 
     });
-    describe('vmAddSessionPanel', function () {
-        it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
-            vmAddSessionPanel.state.allTrainings = [];
-            vmAddSessionPanel.ReturnToPageTraining();
-            done();
-            expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
-            expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
-            expect(vmAddSessionPanel.state.idTraining).toEqual('');
-            expect(vmAddSessionPanel.state.trainingChosen).toEqual({});
-            expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
-            expect(vmAddSessionPanel.beginningDate).toEqual('');
-            expect(vmAddSessionPanel.endingDate).toEqual('');
-            expect(vmAddSessionPanel.location).toEqual('');
-            expect(vmAddSessionPanel.modifySessionButton).toBe(false);
-            expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
-            expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
-            expect(vmAddSessionPanel.state.idSession).toEqual('');
-            var resultApiFormations = [
-                {
-                    "id": 5,
-                    "version": 0,
-                    "trainingTitle": "FORMATION1",
-                    "numberHalfDays": 1,
-                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
-                },
-                {
-                    "id": 6,
-                    "version": 0,
-                    "trainingTitle": "FORMATION2",
-                    "numberHalfDays": 2,
-                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
-                },
-                {
-                    "id": 7,
-                    "version": 0,
-                    "trainingTitle": "FORMATION3",
-                    "numberHalfDays": 3,
-                    "topicDescription": {"id": 4, "version": 0, "name": "C++"}
-                }
-            ];
-            expect(vmAddSessionPanel.state.allTrainings).toEqual(resultApiFormations);
 
-        });
-    });
     describe('vmAddFormationPanel', function () {
         let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
 
@@ -107,90 +64,74 @@ describe('test registerTrainingTopic.js', function () {
         });
 
         //verifyTrainingField
-        it('should check verify field Training', function (done) {
+        it('should check verify field Training', function () {
             vmAddFormationPanel.verifyTrainingField('Formation', 'trainingTitleRegexErrorMessage');
-            done();
             expect(vmAddFormationPanel.isTrainingTitleValid).toBe(true);
             expect(vmAddFormationPanel.trainingTitleRegexErrorMessage).toBe('');
             vmAddFormationPanel.verifyTrainingField('/Formation', 'trainingTitleRegexErrorMessage');
-            done();
             expect(vmAddFormationPanel.isTrainingTitleValid).toBe(false);
             expect(vmAddFormationPanel.trainingTitleRegexErrorMessage).toBe("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)");
         });
 
         //verifyNewTopicField
-        it('should check verify field new Topic', function (done) {
+        it('should check verify field new Topic', function () {
             vmAddFormationPanel.verifyNewTopicField('Java', 'newTopicRegexErrorMessage');
-            done();
             expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
             expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe('');
             vmAddFormationPanel.verifyNewTopicField('/Java', 'newTopicRegexErrorMessage');
-            done();
             expect(vmAddFormationPanel.isNewTopicValid).toBe(false);
             expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de thème valide (-.'_@:+#% autorisés)");
         });
 
         //isTrainingTitleEmpty
-        it('should check whether the field training title is empty', function (done) {
+        it('should check whether the field training title is empty', function () {
             vmAddFormationPanel.trainingTitle = 'JAVA';
             vmAddFormationPanel.isTrainingTitleEmpty();
-            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(false);
             vmAddFormationPanel.trainingTitle = '';
             vmAddFormationPanel.isTrainingTitleEmpty();
-            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(true);
             vmAddFormationPanel.trainingTitle = undefined;
             vmAddFormationPanel.isTrainingTitleEmpty();
-            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(true);
         });
 
         //isNumberHalfDaysEmpty
-        it('should check whether the field numberhalfdays is empty', function (done) {
+        it('should check whether the field numberhalfdays is empty', function () {
             vmAddFormationPanel.numberHalfDays = 2;
             vmAddFormationPanel.isNumberHalfDaysEmpty();
-            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
             vmAddFormationPanel.numberHalfDays = '';
             vmAddFormationPanel.isNumberHalfDaysEmpty();
-            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(true);
             vmAddFormationPanel.numberHalfDays = undefined;
             vmAddFormationPanel.isNumberHalfDaysEmpty();
-            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(true);
         });
 
         //isTopicEmpty
-        it('should check whether the field topic is empty', function (done) {
+        it('should check whether the field topic is empty', function () {
             vmAddFormationPanel.topicDescription = 'WEB';
             vmAddFormationPanel.isTopicEmpty();
-            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
             vmAddFormationPanel.topicDescription = '';
             vmAddFormationPanel.isTopicEmpty();
-            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(true);
             vmAddFormationPanel.topicDescription = undefined;
             vmAddFormationPanel.isTopicEmpty();
-            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(true);
         });
 
         //isNewTopicEmpty
-        it('should check whether the field name of topic is empty', function (done) {
+        it('should check whether the field name of topic is empty', function () {
             vmAddFormationPanel.newTopic = 'WEB';
             vmAddFormationPanel.isNewTopicEmpty();
-            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
             vmAddFormationPanel.newTopic = '';
             vmAddFormationPanel.isNewTopicEmpty();
-            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(true);
             vmAddFormationPanel.newTopic = undefined;
             vmAddFormationPanel.isNewTopicEmpty();
-            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(true);
         });
 
@@ -204,19 +145,17 @@ describe('test registerTrainingTopic.js', function () {
         });
 
         //resetTopicForm
-        it('should check whether the topic form is reset', function (done) {
+        it('should check whether the topic form is reset', function () {
             vmAddFormationPanel.resetTrainingForm();
-            done();
             expect(vmAddFormationPanel.newTopic).toBe('');
             expect(vmAddFormationPanel.topicToRegister).toEqual({});
             vmAddFormationPanel.numberHalfDays = 2;
         });
 
-        it('should add a topic', function (done) {
+        it('should add a topic', function () {
             var sessionDescription = TRAINING;
             vmAddFormationPanel.newTopic = 'PROGRAMMATION';
             let resp = vmAddFormationPanel.saveTopicIntoDatabase();
-            done();
         });
 
         //removeDuplicates
@@ -246,7 +185,7 @@ describe('test registerTrainingTopic.js', function () {
 
 
         //TopicwithTraining
-        it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function () {
+        it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function (done) {
             vmAddFormationPanel.state.allTrainings = [
                 {
                     "id": 5,
@@ -275,8 +214,11 @@ describe('test registerTrainingTopic.js', function () {
                 {"id": 3, "version": 0, "name": "C"},
                 {"id": 4, "version": 0, "name": "C++"}
             ];
+
+            console.log("test"+vmAddFormationPanel.state.trainingsChosen);
             vmAddFormationPanel.trainingStore.TopicwithTraining();
-            expect(vmAddFormationPanel.state.trainingsChosen).toEqual(result);
+            done();
+            expect(JSON.stringify(vmAddFormationPanel.state.trainingsChosen)).toEqual(JSON.stringify(result));
         });
 
         //reorganizeTrainings
@@ -402,26 +344,25 @@ describe('test registerTrainingTopic.js', function () {
 
     });
 
-    describe('vmShowFormationPanel', function () {
-        //showChevrons
+        describe('vmShowFormationPanel', function () {
+            //showChevrons
+            it('should check whether the chevrons can be hidden', function () {
+                vmShowFormation.state.trainingsChosen = [];
+                expect(vmShowFormation.showChevrons).toBe(false);
+            });
 
-        it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
-            vmShowFormation.state.trainingsChosen = [
-                {"id": 3, "version": 0, "name": "C"},
-                {"id": 4, "version": 0, "name": "C++"}
-            ];
-            expect(vmShowFormation.showChevrons).toBe(true);
+            it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
+                vmShowFormation.state.trainingsChosen = [
+                    {"id": 3, "version": 0, "name": "C"},
+                    {"id": 4, "version": 0, "name": "C++"}
+                ];
+                expect(vmShowFormation.showChevrons).toBe(true);
+            });
+
         });
 
-        it('should check whether the chevrons can be hidden', function () {
-            vmShowFormation.state.trainingsChosen = [];
-            expect(vmShowFormation.showChevrons).toBe(false);
-        });
 
-    });
-
-
-    describe('vmShowFormation', function () {
+        describe('vmShowFormation', function () {
         it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
 
             vmShowFormation.state.allTopicTraining = [
@@ -499,5 +440,93 @@ describe('test registerTrainingTopic.js', function () {
         });
 
 
+    });
+    describe('vmAddSessionPanel', function () {
+        it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
+            vmAddSessionPanel.state.allTrainings = [];
+            vmAddSessionPanel.ReturnToPageTraining();
+            done();
+            expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
+            expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
+            expect(vmAddSessionPanel.state.idTraining).toEqual('');
+            expect(vmAddSessionPanel.state.trainingChosen).toEqual({});
+            expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
+            expect(vmAddSessionPanel.beginningDate).toEqual('');
+            expect(vmAddSessionPanel.endingDate).toEqual('');
+            expect(vmAddSessionPanel.location).toEqual('');
+            expect(vmAddSessionPanel.modifySessionButton).toBe(false);
+            expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
+            expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
+            expect(vmAddSessionPanel.state.idSession).toEqual('');
+            console.log(vmAddSessionPanel.state.allTrainings)
+            var resultApiFormations = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 6,
+                    "version": 0,
+                    "trainingTitle": "FORMATION2",
+                    "numberHalfDays": 2,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 7,
+                    "version": 0,
+                    "trainingTitle": "FORMATION3",
+                    "numberHalfDays": 3,
+                    "topicDescription": {"id": 4, "version": 0, "name": "C++"}
+                }
+            ];
+            expect(vmAddSessionPanel.state.allTrainings).toEqual(resultApiFormations);
+
+        });
+
+        it('should check if ending date is calculated when user choose beginning date', function(done){
+            vmAddSessionPanel.state.trainingChosen.numberHalfDays = '1';
+            vmAddSessionPanel.beginningDate = '12/04/2017';
+            vmAddSessionPanel.CalculateEndingDate();
+            done();
+            expect(vmAddSessionPanel.endingDate).toEqual('12/04/2017');
+
+            vmAddSessionPanel.state.trainingChosen.numberHalfDays = '4';
+            vmAddSessionPanel.beginningDate = '12/04/2017';
+            vmAddSessionPanel.CalculateEndingDate();
+            done();
+            expect(vmAddSessionPanel.endingDate).toEqual('13/04/2017');
+        });
+
+        it('should check if selected session is display in the panel', function(done){
+            var sessionSelected = {
+                    "id": 8,
+                    "version": 0,
+                    "trainingDescription": {
+                        "id": 5,
+                        "version": 0,
+                        "trainingTitle": "FORMATION1",
+                        "numberHalfDays": 1,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    },
+                    "beginning": "18/05/2017",
+                    "ending": "18/05/2017",
+                    "beginningTime": "09:00",
+                    "endingTime": "18:00",
+                    "location": "Salle Bali"
+        };
+            vmAddSessionPanel.showSession(sessionSelected);
+            done();
+            //expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(1);
+        });
+
+        it('should check if selected session to remove is deleted', function(done){
+
+            vmAddSessionPanel.chooseSessionsToRemove();
+            done();
+            expect(vmAddSessionPanel.listTrainingSessionSelected.length).toEqual(0);
+        });
     });
 });

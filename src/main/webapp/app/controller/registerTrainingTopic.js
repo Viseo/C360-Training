@@ -654,10 +654,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.state.allTrainings = this.allTrainings;
-                    console.log(this.state.allTrainings);
                     this.trainingStore.TopicwithTraining();
                     this.trainingStore.reorganizeAllTopicsAndTrainings();
-                    console.log(this.state.allTrainings);
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -707,6 +705,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         chooseSessionsToRemove(){
+            console.log(JSON.stringify(this.listTrainingSessionSelected));
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
                     document.getElementById('circle' + this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id).className = 'circle';
@@ -960,6 +959,7 @@ class trainingStore {
         this.state.trainingsChosen.sort(function (a, b) {
             return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
         });
+
     }
 
     reorganizeTrainings(value){
