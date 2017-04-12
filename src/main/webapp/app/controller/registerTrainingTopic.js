@@ -601,6 +601,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         VerifyFormBeforeSaveSession(){
+
             /*this.isEmailEmpty(); this.isPasswordEmpty();
              if(!this.emailEmpty && !this.passwordEmpty){
              this.user.email=this.email;
