@@ -573,7 +573,7 @@ Vue.component('add-session-panel', {
         },
 
         isTrainingTitleInAddSessionEmpty(){
-            if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
+            if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
         },
@@ -611,7 +611,8 @@ Vue.component('add-session-panel', {
         },
 
         updateV1 (v) {
-            this.trainingTitleInAddSession = v
+            //this.state.trainingTitle = v;
+            this.trainingTitleInAddSession = v;
         },
 
         updateV2 (v) {
@@ -711,7 +712,7 @@ Vue.component('add-session-panel', {
                                   <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
                                         <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
                                         <input-text 
-                                            :value = "trainingTitleInAddSession" 
+                                            :value = "state.trainingTitle" 
                                             @input = "updateV1"
                                             :isValid = "isTrainingTitleInAddSessionValid" 
                                             placeholder = "Formation"
