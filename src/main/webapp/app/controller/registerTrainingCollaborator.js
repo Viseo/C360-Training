@@ -78,7 +78,6 @@ Vue.component('collaborator-formation', {
     methods: {
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false : true;
-            this.emptyTraining = this.selectedTraining ? false: true;
             this.trainingsFound.splice(0,this.trainingsFound.length);
             if (!this.emptyTraining) {
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
