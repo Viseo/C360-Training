@@ -70,6 +70,11 @@ Vue.component('collaborator-formation', {
     mounted: function(){
         this.gatherTrainingsFromDatabase();
     },
+    computed: {
+        searchFormatted: function() {
+            return this.value.toUpperCase();
+        }
+    },
     methods: {
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false: true;
@@ -120,7 +125,7 @@ Vue.component('collaborator-formation', {
             this.displayTrainings=true;
             this.trainingsFound.splice(0,this.trainingsFound.length);
             for(index in this.allTrainings){
-                if(this.allTrainings[index].trainingTitle.indexOf(this.value) != -1){
+                if(this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1){
                 this.trainingsFound.push(this.allTrainings[index]);
                 }else{}
             }

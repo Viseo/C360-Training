@@ -43,5 +43,5 @@ legend{
     border-color: rgb(210, 210, 210);
 }
 .panel-heading{
-    background-color: rgb(66, 139, 202) !important;
+    background-color: rgba(66, 139, 202,0.8) !important;
 }
