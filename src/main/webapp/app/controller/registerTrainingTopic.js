@@ -568,14 +568,6 @@ Vue.component('add-session-panel', {
     },
 
     methods: {
-        getDateTooday(){
-            var maintenant = new Date();
-            var jour = maintenant.getDate();
-            var mois = maintenant.getMonth() + 1;
-            var an = maintenant.getFullYear();
-            var toDay = ('jour, "/", mois, "/", an');
-            console.log(this.toDay);
-        },
 
         verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
@@ -658,10 +650,9 @@ Vue.component('add-session-panel', {
             this.session.endingTime = this.endingTime;
             this.session.location = this.location;
 
-            this.isTrainingTitleInAddSessionEmpty();
             this.isBeginningDateEmpty();
             this.isLocationEmpty();
-            this.trainingTitleInAddSession = false;
+            this.trainingTitleInAddSessionErrorMessage = false;
             this.beginningDateErrorMessage = false;
             this.locationErrorMessage = false;
             if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
