@@ -226,7 +226,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
-            this.newTopicErrorMessage=false;
+            this.newTopicErrorMessage = false;
             if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
                 this.saveTrainingIntoDatabase();
@@ -569,6 +569,14 @@ Vue.component('add-session-panel', {
     },
 
     methods: {
+        getDateTooday(){
+            var maintenant = new Date();
+            var jour = maintenant.getDate();
+            var mois = maintenant.getMonth() + 1;
+            var an = maintenant.getFullYear();
+            var toDay = ('jour, "/", mois, "/", an');
+            console.log(this.toDay);
+        },
 
         verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
@@ -580,7 +588,7 @@ Vue.component('add-session-panel', {
             }
         },
 
-        isTrainingTitleInAddSessionEmpty(){
+        isTrainingTitleAddSessionEmpty(){
             if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
@@ -609,13 +617,13 @@ Vue.component('add-session-panel', {
         },
 
         activeFieldTrainingTitle(){
-            console.log(this.isDisabledTrainingTitle+" "+this.isTrainingTitleInAddSessionValid);
             if (this.isDisabledTrainingTitle == true) {
                 this.isDisabledTrainingTitle = false;
             } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
                 this.isDisabledTrainingTitle = true;
             }
         },
+
 
         updateV1 (v) {
             this.trainingTitleInAddSession = v
@@ -643,14 +651,6 @@ Vue.component('add-session-panel', {
         },
 
         VerifyFormBeforeSaveSession(){
-            /*this.isEmailEmpty(); this.isPasswordEmpty();
-             if(!this.emailEmpty && !this.passwordEmpty){
-             this.user.email=this.email;
-             this.user.password=this.password;
-             this.userToRegister = JSON.parse(JSON.stringify(this.user));
-             this.VerifyUserByDatabase();
-             }*/
-
             this.session.trainingDescription = this.state.trainingChosen;
             this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
             this.session.beginning = this.beginningDate;
@@ -707,7 +707,7 @@ Vue.component('add-session-panel', {
     },
 
     template: `
-        <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
+         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                 <div class="col-sm-12 col-md-10 col-lg-7">
@@ -734,7 +734,6 @@ Vue.component('add-session-panel', {
                                             :disabled = "isDisabledTrainingTitle" 
                                             @click="ModifyTrainingTopic()">
                                         </input-text>
-                                        
                                   </form>                                      
                             </div>
                             <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
@@ -748,23 +747,22 @@ Vue.component('add-session-panel', {
                             <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                             
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
-                                        <datepicker v-model ="date"
-                                                    
-                                                    @input = "updateV2"
-                                                    :isValid = "isBeginningDateValid">                                                                                       
+                                        <datepicker  
+                                                    v-model = "beginningDate" 
+                                                    @input = "updateV2">                                                                                       
                                         </datepicker>
-                                       <!-- 
                                         <table>
                                             <tr>
+                                            <!--
                                                 <error-messages                                                      
                                                     fillFieldErrorMessage = "Veuillez remplir tous les champs." 
                                                     :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                     :emptyFillError = "beginningdateErrorMessage"
                                                     :emptyRegexError = "isBeginningDateValid">                                              
                                                 </error-messages>                                                                        
+                                            -->
                                             </tr>
                                         </table> 
-                                        -->
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
                                         <input-text 
@@ -772,25 +770,10 @@ Vue.component('add-session-panel', {
                                             :value = "location" 
                                             @input = "updateV3"
                                             placeholder = "Salle"
-                                            @focus="locationErrorMessage = false;"
                                             maxlength = "10"
-                                            :isValid = "true"
                                             :collection="4"
                                             type = 'select'>
                                         </input-text>
-                                       
-                                        <!--
-                                        <table>
-                                            <tr>
-                                                <error-messages                                                      
-                                                    fillFieldErrorMessage = "Veuillez remplir tous les champs." 
-                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
-                                                    :emptyFillError = "beginningdateErrorMessage"
-                                                    :emptyRegexError = " !isBeginningDateValid">                                              
-                                                </error-messages>
-                                            </tr>
-                                        </table>
-                                        -->
                                     </div> 
                                 </div>
                                 <div class = "row" style="margin-bottom: 30px;">
@@ -812,16 +795,15 @@ Vue.component('add-session-panel', {
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
                                         <input type = "submit" 
                                                class = "btn btn-primary" 
-                                               value = "Enregistrer" 
+                                               value = "Enregistrer"
                                                style = "width:100%"/>                                                                         
                                     </div>
-                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                        <input type = "submit" 
-                                               class = "btn btn-danger" 
-                                               value = "Supprimer" 
-                                               @click = "VerifyFormBeforeSaveSession()" 
-                                               style = "width:100%"/>                                                                        
-                                    </div>
+                                        <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                            <input type = "submit" 
+                                                   class = "btn btn-danger" 
+                                                   value = "Supprimer" 
+                                                   style = "width:100%"/>                                                                        
+                                        </div>
                                 </div>                                                     
                             </form>
                         </div>
@@ -831,11 +813,13 @@ Vue.component('add-session-panel', {
         </div>`,
 });
 
-Vue.component('datepicker',{
+Vue.component('datepicker', {
 
-    template:`
+    template: `
          <div class="date-picker">
-            <div class = "form-group has-feedback" @click="togglePanel">
+            <div class = "form-group has-feedback"  
+                 
+                 @click="togglePanel">
                 <label class = "label-control">Date de début</label>
                 <input class="form-control"
                        placeholder="--/--/----"
@@ -923,15 +907,16 @@ Vue.component('datepicker',{
             maxMonth: Number,
             maxDate: Number,
             yearList: Array.from({length: 12}, (value, index) => new Date().getFullYear() + index),
-            monthList: [1, 2, 3 ,4 ,5, 6, 7 ,8, 9, 10, 11, 12],
+            monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             weekList: [0, 1, 2, 3, 4, 5, 6],
-            rangeStart: false
+            rangeStart: false,
+            toDay:''
         }
     },
 
     props: {
         language: {default: 'en'},
-        min: {default: '2017-04-10'},
+        min: {default: '2017-04-11'},
         max: {default: '2020-01-01'},
         value: {
             type: [String, Array],
@@ -943,8 +928,6 @@ Vue.component('datepicker',{
         }
     },
 
-
-
     methods: {
 
         togglePanel () {
@@ -953,17 +936,18 @@ Vue.component('datepicker',{
         },
 
         isSelected (type, item) {
-            switch (type){
+            switch (type) {
                 case 'year':
-                    if(!this.range)return item === this.tmpYear
+                    if (!this.range)
+                        return item === this.tmpYear
                     return (new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
                     && new Date(item, 0).getTime() <= new Date(this.tmpEndYear, 0).getTime())
                 case 'month':
-                    if(!this.range) return item === this.tmpMonth && this.year === this.tmpYear
+                    if (!this.range) return item === this.tmpMonth && this.year === this.tmpYear
                     return (new Date(this.tmpYear, item).getTime() >= new Date(this.tmpStartYear, this.tmpStartMonth).getTime()
                     && new Date(this.tmpYear, item).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth).getTime())
                 case 'date':
-                    if(!this.range) return this.date === item.value && this.month === this.tmpMonth && item.currentMonth
+                    if (!this.range) return this.date === item.value && this.month === this.tmpMonth && item.currentMonth
                     let month = this.tmpMonth
                     item.previousMonth && month--
                     item.nextMonth && month++
@@ -977,9 +961,9 @@ Vue.component('datepicker',{
         },
 
         chYearRange (next) {
-            if(next){
+            if (next) {
                 this.yearList = this.yearList.map((i) => i + 12)
-            }else{
+            } else {
                 this.yearList = this.yearList.map((i) => i - 12)
             }
         },
@@ -993,59 +977,59 @@ Vue.component('datepicker',{
         },
 
         selectYear (year) {
-            if(this.validateYear(year)) return
+            if (this.validateYear(year)) return
             this.tmpYear = year
             this.panelType = 'month'
         },
 
         selectMonth (month) {
-            if(this.validateMonth(month)) return
+            if (this.validateMonth(month)) return
             this.tmpMonth = month
             this.panelType = 'date'
         },
 
         selectDate (date) {
             setTimeout(() => {
-                if(this.validateDate(date)) return
-                if(date.previousMonth){
-                    if(this.tmpMonth === 0){
+                if (this.validateDate(date)) return
+                if (date.previousMonth) {
+                    if (this.tmpMonth === 0) {
                         this.year -= 1
                         this.tmpYear -= 1
                         this.month = this.tmpMonth = 11
-                    }else{
+                    } else {
                         this.month = this.tmpMonth - 1
                         this.tmpMonth -= 1
                     }
-                }else if(date.nextMonth){
-                    if(this.tmpMonth === 11){
+                } else if (date.nextMonth) {
+                    if (this.tmpMonth === 11) {
                         this.year += 1
                         this.tmpYear += 1
                         this.month = this.tmpMonth = 0
-                    }else{
+                    } else {
                         this.month = this.tmpMonth + 1
                         this.tmpMonth += 1
                     }
                 }
-                if(!this.range){
+                if (!this.range) {
                     this.year = this.tmpYear
                     this.month = this.tmpMonth
                     this.date = date.value
-                    let value = `${this.tmpYear}-${('0' + (this.month + 1)).slice(-2)}-${('0' + this.date).slice(-2)}`
+                    let value = `${('0' + this.date).slice(-2)}/${('0' + (this.month + 1)).slice(-2)}/${this.tmpYear}`
                     this.$emit('input', value)
                     this.panelState = false
-                }else if(this.range && !this.rangeStart){
+                } else if (this.range && !this.rangeStart) {
                     this.tmpEndYear = this.tmpStartYear = this.tmpYear
                     this.tmpEndMonth = this.tmpStartMonth = this.tmpMonth
                     this.tmpEndDate = this.tmpStartDate = date.value
                     this.rangeStart = true
-                }else if(this.range && this.rangeStart){
+                } else if (this.range && this.rangeStart) {
 
                     this.tmpEndYear = this.tmpYear
                     this.tmpEndMonth = this.tmpMonth
                     this.tmpEndDate = date.value
                     let d1 = new Date(this.tmpStartYear, this.tmpStartMonth, this.tmpStartDate).getTime(),
                         d2 = new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime()
-                    if(d1 > d2){
+                    if (d1 > d2) {
                         let tmpY, tmpM, tmpD
                         tmpY = this.tmpEndYear
                         tmpM = this.tmpEndMonth
@@ -1072,8 +1056,8 @@ Vue.component('datepicker',{
         },
 
         validateMonth (month) {
-            if(new Date(this.tmpYear, month).getTime() >= new Date(this.minYear, this.minMonth - 1).getTime()
-                && new Date(this.tmpYear, month).getTime() <= new Date(this.maxYear, this.maxMonth - 1).getTime()){
+            if (new Date(this.tmpYear, month).getTime() >= new Date(this.minYear, this.minMonth - 1).getTime()
+                && new Date(this.tmpYear, month).getTime() <= new Date(this.maxYear, this.maxMonth - 1).getTime()) {
                 return false
             }
             return true
@@ -1081,20 +1065,20 @@ Vue.component('datepicker',{
 
         validateDate (date) {
             let mon = this.tmpMonth
-            if(date.previousMonth){
+            if (date.previousMonth) {
                 mon -= 1
-            }else if(date.nextMonth){
+            } else if (date.nextMonth) {
                 mon += 1
             }
-            if(new Date(this.tmpYear, mon, date.value).getTime() >= new Date(this.minYear, this.minMonth - 1, this.minDate).getTime()
-                && new Date(this.tmpYear, mon, date.value).getTime() <= new Date(this.maxYear, this.maxMonth - 1, this.maxDate).getTime()){
+            if (new Date(this.tmpYear, mon, date.value).getTime() >= new Date(this.minYear, this.minMonth - 1, this.minDate).getTime()
+                && new Date(this.tmpYear, mon, date.value).getTime() <= new Date(this.maxYear, this.maxMonth - 1, this.maxDate).getTime()) {
                 return false
             }
             return true
         },
 
         close (e) {
-            if(!this.$el.contains(e.target)){
+            if (!this.$el.contains(e.target)) {
                 this.panelState = false
                 this.rangeStart = false
             }
@@ -1106,23 +1090,23 @@ Vue.component('datepicker',{
 
     watch: {
         min (v) {
-            let minArr = v.split('**')
+            let minArr = v.split('/')
             this.minYear = Number(minArr[0])
             this.minMonth = Number(minArr[1])
             this.minDate = Number(minArr[2])
         },
         max (v) {
-            let maxArr = v.split('-')
+            let maxArr = v.split('/')
             this.maxYear = Number(maxArr[0])
             this.maxMonth = Number(maxArr[1])
             this.maxDate = Number(maxArr[2])
         },
         range (newVal, oldVal) {
-            if(newVal === oldVal) return
-            if(newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'String'){
+            if (newVal === oldVal) return
+            if (newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'String') {
                 this.$emit('input', ['', ''])
             }
-            if(!newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'Array'){
+            if (!newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'Array') {
                 this.$emit('input', '')
             }
         }
@@ -1138,11 +1122,12 @@ Vue.component('datepicker',{
                 }
             })
             let startDay = new Date(this.tmpYear, this.tmpMonth, 1).getDay()
+
             let previousMongthLength = new Date(this.tmpYear, this.tmpMonth, 0).getDate()
-            for(let i = 0, len = startDay; i < len; i++){
+            for (let i = 0, len = startDay; i < len; i++) {
                 dateList = [{previousMonth: true, value: previousMongthLength - i}].concat(dateList)
             }
-            for(let i = dateList.length, item = 1; i < 42; i++, item++){
+            for (let i = dateList.length, item = 1; i < 2; i++, item++) {
                 dateList[dateList.length] = {nextMonth: true, value: item}
             }
             return dateList
@@ -1164,11 +1149,15 @@ Vue.component('datepicker',{
         month: (item, lang) => {
             switch (lang) {
                 case 'en':
-                    return {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
-                        7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}[item]
+                    return {
+                        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+                        7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+                    }[item]
                 case 'ch':
-                    return {1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六',
-                        7: '七', 8: '八', 9: '九', 10: '十', 11: '十一', 12: '十二'}[item]
+                    return {
+                        1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六',
+                        7: '七', 8: '八', 9: '九', 10: '十', 11: '十一', 12: '十二'
+                    }[item]
                 default:
                     return item
             }
@@ -1176,11 +1165,18 @@ Vue.component('datepicker',{
     },
 
     mounted () {
+
         this.$nextTick(() => {
-            if(this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300){
-                this.coordinates = {right: '0', top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`}
-            }else{
-                this.coordinates = {left: '0', top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`}
+            if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
+                this.coordinates = {
+                    right: '0',
+                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                }
+            } else {
+                this.coordinates = {
+                    left: '0',
+                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                }
             }
             let minArr = this.min.split('-')
             this.minYear = Number(minArr[0])
@@ -1190,11 +1186,11 @@ Vue.component('datepicker',{
             this.maxYear = Number(maxArr[0])
             this.maxMonth = Number(maxArr[1])
             this.maxDate = Number(maxArr[2])
-            if(this.range){
-                if(Object.prototype.toString.call(this.value).slice(8, -1) !== 'Array'){
+            if (this.range) {
+                if (Object.prototype.toString.call(this.value).slice(8, -1) !== 'Array') {
                     throw new Error('Binding value must be an array in range mode.')
                 }
-                if(this.value.length){
+                if (this.value.length) {
                     let rangeStart = this.value[0].split('-')
                     let rangeEnd = this.value[1].split('-')
                     this.tmpStartYear = Number(rangeStart[0])
@@ -1203,12 +1199,12 @@ Vue.component('datepicker',{
                     this.tmpEndYear = Number(rangeEnd[0])
                     this.tmpEndMonth = Number(rangeEnd[1]) - 1
                     this.tmpEndDate = Number(rangeEnd[2])
-                }else{
+                } else {
                     this.$emit('input', ['', ''])
                 }
 
             }
-            if(!this.value){
+            if (!this.value) {
                 this.$emit('input', '')
             }
             window.addEventListener('click', this.close)
@@ -1217,7 +1213,6 @@ Vue.component('datepicker',{
     beforeDestroy () {
         window.removeEventListener('click', this.close)
     }
-
 
 })
 

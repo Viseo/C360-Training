@@ -278,8 +278,17 @@ ul {
     cursor: not-allowed;
     color: #ccc;
 }
+
+.date-list li.invalid{
+    cursor: not-allowed;
+    color: #ccc;
+}
 .month-list li.invalid {
     cursor: not-allowed;
+    color: #ccc;
+}
+
+.invalid{
     color: #ccc;
 }
 .date-list {
@@ -345,7 +354,6 @@ ul {
 }
 .date-list li.message.invalid {
     cursor: not-allowed;
-    color: #ccc;
 }
 .weeks {
     display: flex;
@@ -373,11 +381,7 @@ ul {
 .weeks.nextMonth {
     color: #ccc;
 }
-.date-list .preMonth{
-    color: #ccc;}
-.date-list.nextMonth {
-    color: #ccc;
-}
+
 .weeks li{
     font-family: Roboto;
     width: 30px;
