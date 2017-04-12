@@ -5,6 +5,7 @@ Vue.component('collaborator-formation', {
     data: function(){
         return {
             trainingsFound:[],
+            noTrainingFound:false,
             allTrainings: [],
             allTrainingTitles:[],
             value:'',
@@ -40,7 +41,8 @@ Vue.component('collaborator-formation', {
                                         <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeTrainingsFound"></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
-                                                    </typeahead>                                        
+                                                    </typeahead>  
+                                                     <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
                                         </div>
                                     </div>
                                                    <div class="row">
@@ -54,8 +56,16 @@ Vue.component('collaborator-formation', {
                                             <div v-for="training in trainingsFound">
                                             <panel type="primary">
                                                 <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
-                                                <div v-for="i in listTrainingSession">
-                                                <h5 v-if="i.trainingDescription.id == training.id">{{i.beginning}} {{i.ending}} {{i.location}}</h5>
+                                                <h4 class="col-lg-8"><u>Sessions disponibles</u></h4>
+                                                <div class="col-lg-4"><input type="checkbox">Indifférent</div>
+                                                <div class="col-lg-12" v-for="i in listTrainingSession">
+                                                <div v-if="i.trainingDescription.id == training.id">
+                                       
+                                                <input type="checkbox" :value="i.id"> {{i.beginning}} - {{i.ending}} - {{i.location}}
+                                                
+                                                
+                                                
+                                                </div>
                                                 </div>
 
                                             </panel>
@@ -129,6 +139,7 @@ Vue.component('collaborator-formation', {
                     this.trainingsFound.push(this.allTrainings[index])
                 }
             }
+            this.noTrainingFound = (this.trainingsFound.length==0) ? true : false;
             this.value = null;
             console.log(this.trainingsFound.length);
         },
