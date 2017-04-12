@@ -15,6 +15,24 @@ let routes = [
     },
     {
         method: 'GET',
+        url: 'api/formations',
+        response:[
+            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
+            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
+            {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
+        ]
+    },
+    {
+        method: 'GET',
+        url: 'api/formations',
+        response:[
+            {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
+            {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
+            {"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}
+        ]
+    },
+    {
+        method: 'GET',
         url: 'api/themes',
         response: [
             {id:"2",version:"0",name:"PROGRAMMATION"}

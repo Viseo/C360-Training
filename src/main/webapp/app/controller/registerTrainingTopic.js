@@ -314,8 +314,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     });
                     this.state.allTrainings = this.selectOptionsOfTraining;
                     this.resetTrainingForm();
-                    training_store.TopicwithTraining();
-                    training_store.reorganizeAllTopicsAndTrainings();
+                    this.trainingStore.TopicwithTraining();
+                    this.trainingStore.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -450,7 +450,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
             this.state.idSession = '';
-            training_store.CollectInformationOfTrainingChosen();
+            this.trainingStore.CollectInformationOfTrainingChosen();
             this.GatherSessionsByTrainingFromDatabase();
         },
         GatherSessionsByTrainingFromDatabase(){
@@ -514,7 +514,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
              </div>`
 });
 
-let addSessionPanel = Vue.component('add-session-panel', {
+let AddSessionPanel = Vue.component('add-session-panel', {
     data: function() {
         return {
             session:{
@@ -654,8 +654,12 @@ let addSessionPanel = Vue.component('add-session-panel', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.state.allTrainings = this.allTrainings;
-                    training_store.TopicwithTraining();
-                    training_store.reorganizeAllTopicsAndTrainings();
+                    this.trainingStore.TopicwithTraining();
+                    this.trainingStore.reorganizeAllTopicsAndTrainings();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
                 }
             );
         },
@@ -950,7 +954,7 @@ class trainingStore {
         for (var tmp in this.state.allTrainings) {
             this.state.trainingsChosen.push(this.state.allTrainings[tmp].topicDescription);
         }
-        this.state.trainingsChosen = training_store.removeDuplicates(this.state.trainingsChosen, "id");
+        this.state.trainingsChosen = this.trainingStore.removeDuplicates(this.state.trainingsChosen, "id");
         this.state.trainingsChosen.sort(function (a, b) {
             return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
         });
