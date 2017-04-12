@@ -654,8 +654,10 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.state.allTrainings = this.allTrainings;
+                    console.log(this.state.allTrainings);
                     this.trainingStore.TopicwithTraining();
                     this.trainingStore.reorganizeAllTopicsAndTrainings();
+                    console.log(this.state.allTrainings);
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -954,7 +956,7 @@ class trainingStore {
         for (var tmp in this.state.allTrainings) {
             this.state.trainingsChosen.push(this.state.allTrainings[tmp].topicDescription);
         }
-        this.state.trainingsChosen = this.trainingStore.removeDuplicates(this.state.trainingsChosen, "id");
+        this.state.trainingsChosen = this.removeDuplicates(this.state.trainingsChosen, "id");
         this.state.trainingsChosen.sort(function (a, b) {
             return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
         });
