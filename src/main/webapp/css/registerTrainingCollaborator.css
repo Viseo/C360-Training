@@ -38,3 +38,10 @@ legend{
     left: 0%;
     top: 100%;
 }
+
+.panel-primary{
+    border-color: rgb(210, 210, 210);
+}
+.panel-heading{
+    background-color: rgb(66, 139, 202) !important;
+}

@@ -9,13 +9,11 @@ Vue.component('collaborator-formation', {
             allTrainingTitles:[],
             value:'',
             selectedTraining: '',
-            selectedTrainingTitle: [],
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
             isNoSession: true,
             displayTrainings: false
-
         }
     },
     template: `<div class="container-fluid">
@@ -49,14 +47,17 @@ Vue.component('collaborator-formation', {
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
-                                            <p style="margin-top:50px;">{{selectedTraining}}</p>
+                                            <p style="margin-top:50px;"></p>
                                             <hr style="margin:0px">
                                             <accordion :one-at-atime="true" type="info">
-                                            
                                             <div v-for="training in trainingsFound">
-                                            <panel>
-                                                <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
-
+                                            <panel type="primary">
+                                                <div slot="header">
+                                                <u style="text-decoration:none;">{{training.trainingTitle}}</u></div>
+                                                <p>Sessions disponibles</p>
+                                                <ul v-for="session in listTrainingSession">
+                                                    <li></li>
+                                                </ul>
                                             </panel>
                                             </accordion>
                                         </div>
@@ -72,16 +73,18 @@ Vue.component('collaborator-formation', {
     methods: {
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false: true;
+            this.trainingsFound.splice(0,this.trainingsFound.length);
             if (!this.emptyTraining) {
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
                         this.listTrainingSession = response.data;
                         for (key in this.allTrainings) {
                             if ( this.allTrainings[key].id == this.selectedTraining) {
-                                this.selectedTrainingTitle.push(this.allTrainings[key].trainingTitle);
+                                this.trainingsFound.push(this.allTrainings[key]);
                             }
                         }
                         if (this.listTrainingSession.length === 0) {
+                            this.displayTrainings=true;
                             this.isNoSession = true;
                         }
                         else{
@@ -113,14 +116,15 @@ Vue.component('collaborator-formation', {
             console.log(this.allTrainingTitles);
         },
         storeTrainingsFound(){
+            let i=0, j=0;
+            this.displayTrainings=true;
             this.trainingsFound.splice(0,this.trainingsFound.length);
             for(index in this.allTrainings){
                 if(this.allTrainings[index].trainingTitle.indexOf(this.value) != -1){
-                this.trainingsFound.push(this.allTrainings[index])
-                }
+                this.trainingsFound.push(this.allTrainings[index]);
+                }else{}
             }
             this.value=null;
-            console.log(this.trainingsFound.length);
         }
 
 
