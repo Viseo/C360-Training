@@ -343,7 +343,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
 
     },
 
-
     template:`
         <div class="container-fluid">
             <div class="row">
@@ -659,11 +658,13 @@ Vue.component('add-session-panel', {
             this.session.endingTime = this.endingTime;
             this.session.location = this.location;
 
+            this.isTrainingTitleInAddSessionEmpty();
             this.isBeginningDateEmpty();
             this.isLocationEmpty();
+            this.trainingTitleInAddSession = false;
             this.beginningDateErrorMessage = false;
             this.locationErrorMessage = false;
-            if (!this.beginningDateErrorMessage && !this.locationErrorMessage) {
+            if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                 this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                 this.SaveSessionIntoDatabase();
             }
@@ -804,7 +805,22 @@ Vue.component('add-session-panel', {
                                                    value = "Supprimer" 
                                                    style = "width:100%"/>                                                                        
                                         </div>
-                                </div>                                                     
+                                </div>
+                                <div class = "row " style = "margin-bottom: 30px;">
+                                    <table>
+                                        <tr>
+                                        <!--
+                                            fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                            successMessage = "La session a été créée avec succès." 
+                                            :regexErrorMessage = ""
+                                            :emptyIdenticalError = ""
+                                            :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
+                                            :emptySuccess = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage)"
+                                            :emptyRegexError = "!(trainingTitleInAddSessionErrorMessage || beginningdateErrorMessage || locationErrorMessage )">                                                                       
+                                        -->
+                                        </tr>
+                                    </table> 
+                                </div>                                                       
                             </form>
                         </div>
                     </div>
