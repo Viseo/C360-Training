@@ -7,6 +7,19 @@ Vue.component('collaborator-formation', {
             trainingsFound:[],
             noTrainingFound:false,
             allTrainings: [],
+            selected: '',
+            idTraining:'3',
+            listTrainingSessions:[],
+            collaboratorIdentity:{
+                id:'',
+                lastName:'',
+                firstName:''
+            },
+            RequestToRegister:{
+                trainingDescription:{},
+                collaboratorIdentity:{},
+                trainingSessionsDescriptions:[]
+            },
             allTrainingTitles:[],
             value:'',
             selectedTraining: '',
@@ -79,6 +92,8 @@ Vue.component('collaborator-formation', {
                 </div>`,
     mounted: function(){
         this.gatherTrainingsFromDatabase();
+        this.GatherSessionsByTrainingFromDatabase();
+        this.GetCookies();
     },
     computed: {
         searchFormatted: function() {
@@ -117,6 +132,39 @@ Vue.component('collaborator-formation', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.selectTrainingTitles();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        GetCookies(){
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            this.token = String(regexCookieToken.pop());
+            this.collaboratorIdentity.id = jwt_decode(this.token).id;
+            this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+            this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+        },
+        GatherSessionsByTrainingFromDatabase(){
+            this.$http.get("api/formations/" + this.idTraining + "/sessions").then(
+                function (response) {
+                    this.listTrainingSessions = response.data;
+                });
+        },
+        VerifyTrainingSessionCollaborator(){
+            //à changer
+            this.RequestToRegister.trainingDescription = this.allTrainings.pop();
+            this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
+            this.RequestToRegister.trainingSessionsDescriptions = this.listTrainingSessions;
+            this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
+            console.log(this.RequestToRegister);
+            this.SaveTrainingSessionCollaborator();
+        },
+        SaveTrainingSessionCollaborator(){
+            this.$http.post("api/requests", this.RequestToRegister).then(
+                function (response) {
+                    console.log("success");
                 },
                 function (response) {
                     console.log("Error: ", response);

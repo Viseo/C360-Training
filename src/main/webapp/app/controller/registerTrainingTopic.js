@@ -894,6 +894,7 @@ Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
+            <pre>{{$data|json}}</pre>
         </div>`,
 });
 
@@ -913,7 +914,9 @@ class trainingStore {
             allTrainingsOfATopicChosen:[],
             listTrainingSession:[],
             isNoSession:true,
-            idSession:''
+            idSession:'',
+            nomUser:'',
+            prenomUser:''
         }
     }
 

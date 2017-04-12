@@ -8,7 +8,7 @@ let Header = Vue.component('blue-header',{
                 <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                     <p id="navbar-title" href="#">Collaborateur 360</p>
                     <p id="navbar-subtitle">Gestion des formations</p>
-                </div>
+                </div>+
                 <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
                          <span @mouseover="disconnect=true;" v-show="!disconnect && !dialog">{{prenom}} {{nom}}</span>
@@ -64,7 +64,7 @@ let Header = Vue.component('blue-header',{
             test: 50,
             stayConnected: true,
             dialog: false,
-            timeconnected: 0
+            timeconnected: 0,
         }
     },
     mounted: function(){
@@ -150,7 +150,6 @@ let Header = Vue.component('blue-header',{
                                 document.cookie = "stayconnected="+ this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                                 if(getCookieTimeConnected)
                                 document.cookie = "timeconnected="+ "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-
                             }
                             if(!this.dialog)
                             window.location.pathname = '/index.html';
@@ -160,6 +159,7 @@ let Header = Vue.component('blue-header',{
         }
     }
 });
+
 
 new Vue({
     el: '#newVue'
