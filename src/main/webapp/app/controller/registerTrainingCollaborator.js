@@ -50,6 +50,14 @@ Vue.component('collaborator-formation', {
                                         <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                                             <p style="margin-top:50px;">{{selectedTraining}}</p>
                                             <hr style="margin:0px">
+                                            <accordion :one-at-atime="true" type="info">
+                                            
+                                            <div v-for="training in trainingsFound">
+                                            <panel>
+                                                <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
+
+                                            </panel>
+                                            </accordion>
                                         </div>
                                     </div>
                                 </div>
@@ -121,3 +129,5 @@ Vue.component('collaborator-formation', {
 
 })
 Vue.component('typeahead',VueStrap.typeahead);
+Vue.component('accordion',VueStrap.accordion);
+Vue.component('panel',VueStrap.panel);
