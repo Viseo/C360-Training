@@ -821,9 +821,7 @@ Vue.component('datepicker', {
 
     template: `
          <div class="date-picker">
-            <div class = "form-group has-feedback"  
-                 
-                 @click="togglePanel">
+            <div class = "form-group has-feedback" @click="togglePanel">
                 <label class = "label-control">Date de début</label>
                 <input class="form-control"
                        placeholder="--/--/----"

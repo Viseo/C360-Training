@@ -161,6 +161,7 @@ ul {
     height: 14px;
     width: 14px;
 }
+
 .date-panel {
     position: absolute;
     z-index: 5;
@@ -294,7 +295,7 @@ ul {
 .date-list {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 .date-list.valid:hover {
     background-color: rgb(66, 139, 202);
@@ -383,7 +384,7 @@ ul {
 }
 
 .weeks li{
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     width: 30px;
     height: 30px;
     text-align: center;
@@ -391,7 +392,7 @@ ul {
     color: #333;
 }
 .date-list li {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     width: 30px;
     height: 30px;
     text-align: center;
