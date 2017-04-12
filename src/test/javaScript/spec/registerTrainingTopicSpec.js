@@ -27,10 +27,10 @@ describe('test registerTrainingTopic.js', function () {
 
     });
     describe('vmAddSessionPanel', function () {
-        it('should check if the panel change from session panel to training panel when click on a training button', function () {
+        it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
             vmAddSessionPanel.state.allTrainings = [];
             vmAddSessionPanel.ReturnToPageTraining();
-
+            done();
             expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
             expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
             expect(vmAddSessionPanel.state.idTraining).toEqual('');
