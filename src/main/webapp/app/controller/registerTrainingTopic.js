@@ -649,7 +649,8 @@ Vue.component('add-session-panel', {
             this.isTrainingTitleInAddSessionEmpty();
             this.isBeginningDateEmpty();
             this.isLocationEmpty();
-            if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
+
+            if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                 this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                 this.SaveSessionIntoDatabase();
             }
