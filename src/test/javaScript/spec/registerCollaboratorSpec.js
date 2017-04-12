@@ -201,6 +201,11 @@ let args;
             // To continue
         });
 
+        it('should function sendInformationToCookie', function() {
+            vmConnexionForm.email = 'eric.dupont@viseo.com';
+            vmConnexionForm.sendInformationToCookie();
+        });
+
     })
 
 });

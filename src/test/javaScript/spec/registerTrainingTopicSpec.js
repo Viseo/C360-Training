@@ -3,27 +3,7 @@
  */
 Vue.use(VueResource);
 
-Vue.http.interceptors.unshift((request, next) => {
-    let route = routes.find((item) => {
-        return (request.method === item.method && request.url === item.url);
-    });
-    if (!route) {
-        // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
-        next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    } else {
 
-        //  getRoute(route,args);
-        // console.log(route.response);
-        next(
-            // getRoute(route, args),
-            // console.log(route.response),
-            request.respondWith(
-                route.response,
-                {status: 200}
-            )
-        );
-    }
-});
 
 describe('test-show-formation', function () {
     let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
@@ -32,6 +12,28 @@ describe('test-show-formation', function () {
         vmAddFormationPanel = new AddFormationPanel().$mount();
         vmShowFormation = new ShowFormation().$mount();
         vmAddSessionPanel = new addSessionPanel().$mount();
+
+        Vue.http.interceptors.unshift((request, next) => {
+            let route = routes.find((item) => {
+                return (request.method === item.method && request.url === item.url);
+            });
+            if (!route) {
+                // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
+                next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
+            } else {
+
+                //  getRoute(route,args);
+                // console.log(route.response);
+                next(
+                    // getRoute(route, args),
+                    // console.log(route.response),
+                    request.respondWith(
+                        route.response,
+                        {status: 200}
+                    )
+                );
+            }
+        });
     });
 
     afterEach(function() {
@@ -284,7 +286,7 @@ describe('test-show-formation', function () {
     });
 
     it('should check if the panel change from session panel to training panel when click on a training button', function () {
-
+            vmAddSessionPanel.state.allTrainings = [];
             vmAddSessionPanel.ReturnToPageTraining();
 
             expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
@@ -299,7 +301,7 @@ describe('test-show-formation', function () {
             expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
             expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
             expect(vmAddSessionPanel.state.idSession).toEqual('');
-        console.log(vmAddSessionPanel.state.allTrainings)
+            console.log(vmAddSessionPanel.state.allTrainings);
             var resultApiFormations = [
                 {"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},
                 {"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}},
@@ -330,7 +332,7 @@ describe('test-show-formation', function () {
                     {"id":3,"version":0,"name":"C"}
                 },"beginning":"18/05/2017","ending":"18/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bali"}
 
-        ]
+        ];
         //Click on FORMATION1 button (FORMATION1 got 2 sessions)
         vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
         expect(vmShowFormation.state.changePageToSession).toBe(true);
@@ -339,7 +341,6 @@ describe('test-show-formation', function () {
         expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
         expect(vmShowFormation.state.isNoSession).toBe(false);
         expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
-
     });
 
 
