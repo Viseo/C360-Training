@@ -50,14 +50,14 @@ Vue.component('collaborator-formation', {
                                             <p style="margin-top:50px;"></p>
                                             <hr style="margin:0px">
                                             <accordion :one-at-atime="true" type="info">
+                                            
                                             <div v-for="training in trainingsFound">
                                             <panel type="primary">
-                                                <div slot="header">
-                                                <u style="text-decoration:none;">{{training.trainingTitle}}</u></div>
-                                                <p>Sessions disponibles</p>
-                                                <ul v-for="session in listTrainingSession">
-                                                    <li></li>
-                                                </ul>
+                                                <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
+                                                <div v-for="i in listTrainingSession">
+                                                <h5 v-if="i.trainingDescription.id == training.id">{{i.beginning}} {{i.ending}} {{i.location}}</h5>
+                                                </div>
+
                                             </panel>
                                             </accordion>
                                         </div>
@@ -77,6 +77,7 @@ Vue.component('collaborator-formation', {
     },
     methods: {
         displayTrainingsFn(){
+            this.emptyTraining = this.selectedTraining ? false : true;
             this.emptyTraining = this.selectedTraining ? false: true;
             this.trainingsFound.splice(0,this.trainingsFound.length);
             if (!this.emptyTraining) {
@@ -121,15 +122,29 @@ Vue.component('collaborator-formation', {
             console.log(this.allTrainingTitles);
         },
         storeTrainingsFound(){
-            let i=0, j=0;
-            this.displayTrainings=true;
-            this.trainingsFound.splice(0,this.trainingsFound.length);
-            for(index in this.allTrainings){
-                if(this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1){
-                this.trainingsFound.push(this.allTrainings[index]);
-                }else{}
+            this.storeTrainingSessions();
+            this.displayTrainings = true;
+            this.trainingsFound.splice(0, this.trainingsFound.length);
+            for (index in this.allTrainings) {
+                if (this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1) {
+                    this.trainingsFound.push(this.allTrainings[index])
+                }
             }
-            this.value=null;
+            this.value = null;
+            console.log(this.trainingsFound.length);
+        },
+        storeTrainingSessions(){
+            this.$http.get("api/sessions").then(
+                function (response) {
+                    this.listTrainingSession = response.data;
+                    if (this.listTrainingSession.length === 0) {
+                        this.isNoSession = true;
+                    }
+                    else {
+                        this.isNoSession = false;
+                    }
+                    console.log(this.listTrainingSession);
+                });
         }
 
 
