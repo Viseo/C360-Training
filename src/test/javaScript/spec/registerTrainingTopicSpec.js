@@ -43,7 +43,6 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
             expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
             expect(vmAddSessionPanel.state.idSession).toEqual('');
-            console.log(vmAddSessionPanel.state.allTrainings)
             var resultApiFormations = [
                 {
                     "id": 5,
@@ -108,74 +107,90 @@ describe('test registerTrainingTopic.js', function () {
         });
 
         //verifyTrainingField
-        it('should check verify field Training', function () {
+        it('should check verify field Training', function (done) {
             vmAddFormationPanel.verifyTrainingField('Formation', 'trainingTitleRegexErrorMessage');
+            done();
             expect(vmAddFormationPanel.isTrainingTitleValid).toBe(true);
             expect(vmAddFormationPanel.trainingTitleRegexErrorMessage).toBe('');
             vmAddFormationPanel.verifyTrainingField('/Formation', 'trainingTitleRegexErrorMessage');
+            done();
             expect(vmAddFormationPanel.isTrainingTitleValid).toBe(false);
             expect(vmAddFormationPanel.trainingTitleRegexErrorMessage).toBe("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)");
         });
 
         //verifyNewTopicField
-        it('should check verify field new Topic', function () {
+        it('should check verify field new Topic', function (done) {
             vmAddFormationPanel.verifyNewTopicField('Java', 'newTopicRegexErrorMessage');
+            done();
             expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
             expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe('');
             vmAddFormationPanel.verifyNewTopicField('/Java', 'newTopicRegexErrorMessage');
+            done();
             expect(vmAddFormationPanel.isNewTopicValid).toBe(false);
             expect(vmAddFormationPanel.newTopicRegexErrorMessage).toBe("Veuillez entrer un nom de thème valide (-.'_@:+#% autorisés)");
         });
 
         //isTrainingTitleEmpty
-        it('should check whether the field training title is empty', function () {
+        it('should check whether the field training title is empty', function (done) {
             vmAddFormationPanel.trainingTitle = 'JAVA';
             vmAddFormationPanel.isTrainingTitleEmpty();
+            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(false);
             vmAddFormationPanel.trainingTitle = '';
             vmAddFormationPanel.isTrainingTitleEmpty();
+            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(true);
             vmAddFormationPanel.trainingTitle = undefined;
             vmAddFormationPanel.isTrainingTitleEmpty();
+            done();
             expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(true);
         });
 
         //isNumberHalfDaysEmpty
-        it('should check whether the field numberhalfdays is empty', function () {
+        it('should check whether the field numberhalfdays is empty', function (done) {
             vmAddFormationPanel.numberHalfDays = 2;
             vmAddFormationPanel.isNumberHalfDaysEmpty();
+            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
             vmAddFormationPanel.numberHalfDays = '';
             vmAddFormationPanel.isNumberHalfDaysEmpty();
+            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(true);
             vmAddFormationPanel.numberHalfDays = undefined;
             vmAddFormationPanel.isNumberHalfDaysEmpty();
+            done();
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(true);
         });
 
         //isTopicEmpty
-        it('should check whether the field topic is empty', function () {
+        it('should check whether the field topic is empty', function (done) {
             vmAddFormationPanel.topicDescription = 'WEB';
             vmAddFormationPanel.isTopicEmpty();
+            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
             vmAddFormationPanel.topicDescription = '';
             vmAddFormationPanel.isTopicEmpty();
+            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(true);
             vmAddFormationPanel.topicDescription = undefined;
             vmAddFormationPanel.isTopicEmpty();
+            done();
             expect(vmAddFormationPanel.topicErrorMessage).toBe(true);
         });
 
         //isNewTopicEmpty
-        it('should check whether the field name of topic is empty', function () {
+        it('should check whether the field name of topic is empty', function (done) {
             vmAddFormationPanel.newTopic = 'WEB';
             vmAddFormationPanel.isNewTopicEmpty();
+            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
             vmAddFormationPanel.newTopic = '';
             vmAddFormationPanel.isNewTopicEmpty();
+            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(true);
             vmAddFormationPanel.newTopic = undefined;
             vmAddFormationPanel.isNewTopicEmpty();
+            done();
             expect(vmAddFormationPanel.newTopicErrorMessage).toBe(true);
         });
 
@@ -189,17 +204,19 @@ describe('test registerTrainingTopic.js', function () {
         });
 
         //resetTopicForm
-        it('should check whether the topic form is reset', function () {
+        it('should check whether the topic form is reset', function (done) {
             vmAddFormationPanel.resetTrainingForm();
+            done();
             expect(vmAddFormationPanel.newTopic).toBe('');
             expect(vmAddFormationPanel.topicToRegister).toEqual({});
             vmAddFormationPanel.numberHalfDays = 2;
         });
 
-        it('should add a topic', function () {
+        it('should add a topic', function (done) {
             var sessionDescription = TRAINING;
             vmAddFormationPanel.newTopic = 'PROGRAMMATION';
             let resp = vmAddFormationPanel.saveTopicIntoDatabase();
+            done();
         });
 
         //removeDuplicates
@@ -385,26 +402,27 @@ describe('test registerTrainingTopic.js', function () {
 
     });
 
-        describe('vmShowFormationPanel', function () {
-            //showChevrons
-            it('should check whether the chevrons can be hidden', function () {
-                vmShowFormation.state.trainingsChosen = [];
-                expect(vmShowFormation.showChevrons).toBe(false);
-            });
+    describe('vmShowFormationPanel', function () {
+        //showChevrons
 
-            it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
-                vmShowFormation.state.trainingsChosen = [
-                    {"id": 3, "version": 0, "name": "C"},
-                    {"id": 4, "version": 0, "name": "C++"}
-                ];
-                expect(vmShowFormation.showChevrons).toBe(true);
-            });
-
+        it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
+            vmShowFormation.state.trainingsChosen = [
+                {"id": 3, "version": 0, "name": "C"},
+                {"id": 4, "version": 0, "name": "C++"}
+            ];
+            expect(vmShowFormation.showChevrons).toBe(true);
         });
 
+        it('should check whether the chevrons can be hidden', function () {
+            vmShowFormation.state.trainingsChosen = [];
+            expect(vmShowFormation.showChevrons).toBe(false);
+        });
 
-        describe('vmShowFormation', function () {
-        it('should check if the panel change from training panel to session panel when click on a training button', function () {
+    });
+
+
+    describe('vmShowFormation', function () {
+        it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
 
             vmShowFormation.state.allTopicTraining = [
                 [
@@ -470,6 +488,7 @@ describe('test registerTrainingTopic.js', function () {
             ]
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
             vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
+            done();
             expect(vmShowFormation.state.changePageToSession).toBe(true);
             expect(vmShowFormation.state.changePageToTraining).toBe(false);
             expect(vmShowFormation.state.idTraining).toEqual(5);

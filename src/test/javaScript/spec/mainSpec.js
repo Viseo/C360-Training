@@ -51,18 +51,21 @@ describe('Header test', function () {
         expect(vmHeader.timeconnected).toBe(0);
     });
 
-    it('should set an value to the variable idleSecondsCounter', function () {
+    it('should set an value to the variable idleSecondsCounter', function (done) {
         vmHeader.setIdleSecondsCounter(10);
+        done();
         expect(vmHeader.idleSecondsCounter).toEqual(10);
 
     });
 
-    it('should check whether the user disconnect', function () {
+    it('should check whether the user disconnect', function (done) {
         vmHeader.token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
         vmHeader.disconnectUser();
+        done();
     });
 
-    it('should get the Cookie information', function () {
+    //to continue
+    it('should get the Cookie information', function (done) {
         var document = {
             value_: '',
 
@@ -76,17 +79,20 @@ describe('Header test', function () {
         };
         document.cookie = "token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg; stayconnected=true";
         vmHeader.getCookieInfos();
+        done();
         expect(vmHeader.stayConnected).toBe(true);
     });
 
-    it('should checkIfUserInactive', function () {
+    it('should checkIfUserInactive', function (done) {
         vmHeader.stayConnected = false;
         vmHeader.checkIfUserInactive();
+        done();
     });
 
 
-    it('should checkIdleTime', function () {
+    it('should checkIdleTime', function (done) {
         vmHeader.checkIdleTime();
+        done();
     });
 
 

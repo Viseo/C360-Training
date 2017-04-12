@@ -78,7 +78,24 @@ let routes = [
         method: 'POST',
         url: 'api/collaborateurs',
         response: [
-            {}
+            {
+                id: 1,
+                version: 0,
+                personnalIdNumber:"AAA1234",
+                lastName: "DUPONT",
+                firstName: "ERIC",
+                email: "eric.dupont@viseo.com",
+                password: "123456"
+            },
+            {
+                id: 2,
+                version: 0,
+                personnalIdNumber:"BBB1234",
+                lastName: "Cot",
+                firstName: "Harry",
+                email: "harrycot@viseo.com",
+                password: "123456"
+            }
         ]
     }, {
         method: 'GET',

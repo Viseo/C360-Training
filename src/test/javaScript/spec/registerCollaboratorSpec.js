@@ -6,6 +6,7 @@ let args;
         vmFormulaire = new Formulaire().$mount();
         vmConnexionForm = new ConnexionForm().$mount();
         vmCustomInput = new CustomInput().$mount();
+        vmCustomPasswordInput = new customPasswordInput().$mount();
     });
     let vm;
 
@@ -168,6 +169,7 @@ let args;
 
     });
 
+
     describe("Test connexion of a collaborator", function() {
         it('Check empty fields', function() {
             vmConnexionForm.email = "";
@@ -198,7 +200,8 @@ let args;
         it('should display popup for forgotten password', function() {
             vmConnexionForm.$refs.forgotPassword.click();
             expect(vmConnexionForm.emailEmpty).toBe(true);
-            // To continue
+            vmConnexionForm.email = 'eric.dupont@viseo.com';
+            vmConnexionForm.showPopupFn();
         });
 
         it('should function sendInformationToCookie', function() {
@@ -206,6 +209,47 @@ let args;
             vmConnexionForm.sendInformationToCookie();
         });
 
+
     })
 
+    describe("Test customInput", function() {
+        it('should check function updateValue', function(done) {
+            vmCustomInput.updateValue('HELLO');
+            done();
+            expect(vmCustomInput.textValue).toBe('HELLO');
+        });
+
+        it('should check function handleFocus', function(done) {
+            vmCustomInput.handleFocus();
+            done();
+        });
+
+        it('should check function handleBlur', function(done) {
+            vmCustomInput.handleBlur();
+            done();
+        });
+    })
+
+    describe("Test CustomPasswordInput", function() {
+        it('should check function updateValue', function(done) {
+            vmCustomPasswordInput.updateValue('HELLO');
+            done();
+            expect(vmCustomPasswordInput.textValue).toBe('HELLO');
+        });
+
+        it('should check function handleFocus', function(done) {
+            vmCustomPasswordInput.handleFocus();
+            done();
+        });
+
+        it('should check function handleBlur', function(done) {
+            vmCustomPasswordInput.handleBlur();
+            done();
+        });
+
+        it('should check function handleClick', function(done) {
+            vmCustomPasswordInput.handleClick();
+            done();
+        });
+    })
 });
