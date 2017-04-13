@@ -994,7 +994,8 @@ Vue.component('datepicker', {
                        @mouseenter="showCancel = true" 
                        @mouseleave="showCancel = false"
                        @input="updateValue($event.target.value)"
-                       @focus="handleFocus"/>                     
+                       @focus="handleFocus"
+                       @blur="handleBlur"/>                     
                 <span class ="glyphicon form-control-feedback glyphicon-calendar"></span>
             </div>            
             <transition name="toggle">
@@ -1105,6 +1106,10 @@ Vue.component('datepicker', {
 
         handleFocus(){
             this.$emit('focus');
+        },
+
+        handleBlur(){
+            this.$emit('blur');
         },
 
         updateValue(value){
