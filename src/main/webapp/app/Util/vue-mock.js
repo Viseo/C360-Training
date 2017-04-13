@@ -5,6 +5,13 @@ Vue.use(VueResource);
 
 let routes = [
     {
+      method: 'POST',
+        url: 'api/sessionstoremove',
+        response: [
+
+        ]
+    },
+    {
         method: 'GET',
         url: 'api/formations',
         response: [

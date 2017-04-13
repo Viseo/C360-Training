@@ -8,24 +8,6 @@ let args;
         vmCustomInput = new CustomInput().$mount();
         vmCustomPasswordInput = new customPasswordInput().$mount();
     });
-    let vm;
-
-    Vue.http.interceptors.unshift((request, next) => {
-        let route = routes.find((item) => {
-            return (request.method === item.method && request.url === item.url);
-        });
-        if (!route) {
-            // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
-            next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-        }else {
-            next(
-                request.respondWith(
-                    route.response,
-                    {status: 200}
-                )
-            );
-        }
-    });
 
     afterEach(function () {
 
@@ -213,43 +195,36 @@ let args;
     })
 
     describe("Test customInput", function() {
-        it('should check function updateValue', function(done) {
+        it('should check function updateValue', function() {
             vmCustomInput.updateValue('HELLO');
-            done();
             expect(vmCustomInput.textValue).toBe('HELLO');
         });
 
-        it('should check function handleFocus', function(done) {
+        it('should check function handleFocus', function() {
             vmCustomInput.handleFocus();
-            done();
         });
 
-        it('should check function handleBlur', function(done) {
+        it('should check function handleBlur', function() {
             vmCustomInput.handleBlur();
-            done();
         });
     })
 
     describe("Test CustomPasswordInput", function() {
-        it('should check function updateValue', function(done) {
+        it('should check function updateValue', function() {
             vmCustomPasswordInput.updateValue('HELLO');
-            done();
             expect(vmCustomPasswordInput.textValue).toBe('HELLO');
         });
 
-        it('should check function handleFocus', function(done) {
+        it('should check function handleFocus', function() {
             vmCustomPasswordInput.handleFocus();
-            done();
         });
 
-        it('should check function handleBlur', function(done) {
+        it('should check function handleBlur', function() {
             vmCustomPasswordInput.handleBlur();
-            done();
         });
 
-        it('should check function handleClick', function(done) {
+        it('should check function handleClick', function() {
             vmCustomPasswordInput.handleClick();
-            done();
         });
     })
 });

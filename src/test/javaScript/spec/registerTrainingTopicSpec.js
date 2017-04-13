@@ -1,36 +1,38 @@
+beforeEach(function () {
+
+    vmAddFormationPanel = new AddFormationPanel().$mount();
+    vmShowFormation = new ShowFormation().$mount();
+    vmAddSessionPanel = new AddSessionPanel().$mount();
+});
+
+
+
+afterEach(function () {
+    vmAddFormationPanel.state.trainingsChosen=[];
+    vmAddFormationPanel.state.allTopicTraining=[];
+    vmAddFormationPanel.state.changePageToTraining=true;
+    vmAddFormationPanel.state.changePageToSession=false;
+        vmAddFormationPanel.state.idTraining='';
+        vmAddFormationPanel.state.trainingChosen={};
+        vmAddFormationPanel.state. allTrainings=[];
+    vmAddFormationPanel.state.trainingTitle='';
+    vmAddFormationPanel.state.arrangeTrainings=[];
+    vmAddFormationPanel.state.allTrainingsOfATopicChosen=[];
+    vmAddFormationPanel.state.listTrainingSession=[];
+    vmAddFormationPanel.state.isNoSession=true;
+    vmAddFormationPanel.state.idSession='';
+        vmAddFormationPanel = undefined;
+        vmShowFormation = undefined;
+        vmAddFormationPanel = undefined;
+
+});
+
 describe('test registerTrainingTopic.js', function () {
 
-    beforeEach(function () {
-        vmAddFormationPanel = new AddFormationPanel().$mount();
-        vmShowFormation = new ShowFormation().$mount();
-        vmAddSessionPanel = new AddSessionPanel().$mount();
-    });
-
-    Vue.http.interceptors.unshift((request, next) => {
-        let route = routes.find((item) => {
-            return (request.method === item.method && request.url === item.url);
-        });
-        if (!route) {
-            // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
-            next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-        } else {
-            next(
-                request.respondWith(
-                    route.response,
-                    {status: 200}
-                )
-            );
-        }
-    });
-
-    afterEach(function () {
-
-    });
     describe('vmAddSessionPanel', function () {
-        it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
-            vmAddSessionPanel.state.allTrainings = [];
+
+        it('should check if the panel change from session panel to training panel when click on a training button', function () {
             vmAddSessionPanel.ReturnToPageTraining();
-            done();
             expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
             expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
             expect(vmAddSessionPanel.state.idTraining).toEqual('');
@@ -43,49 +45,31 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
             expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
             expect(vmAddSessionPanel.state.idSession).toEqual('');
-            console.log(vmAddSessionPanel.state.allTrainings)
-            var resultApiFormations = [
-                {
-                    "id": 5,
-                    "version": 0,
-                    "trainingTitle": "FORMATION1",
-                    "numberHalfDays": 1,
-                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
-                },
-                {
-                    "id": 6,
-                    "version": 0,
-                    "trainingTitle": "FORMATION2",
-                    "numberHalfDays": 2,
-                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
-                },
-                {
-                    "id": 7,
-                    "version": 0,
-                    "trainingTitle": "FORMATION3",
-                    "numberHalfDays": 3,
-                    "topicDescription": {"id": 4, "version": 0, "name": "C++"}
-                }
-            ];
-            expect(vmAddSessionPanel.state.allTrainings).toEqual(resultApiFormations);
+            var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
+            expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
 
         });
 
-        it('should check if ending date is calculated when user choose beginning date', function (done) {
+        it('should check if ending date is calculated when user choose beginning date', function () {
             vmAddSessionPanel.state.trainingChosen.numberHalfDays = '1';
             vmAddSessionPanel.beginningDate = '12/04/2017';
             vmAddSessionPanel.CalculateEndingDate();
-            done();
             expect(vmAddSessionPanel.endingDate).toEqual('12/04/2017');
 
             vmAddSessionPanel.state.trainingChosen.numberHalfDays = '4';
             vmAddSessionPanel.beginningDate = '12/04/2017';
             vmAddSessionPanel.CalculateEndingDate();
-            done();
-            expect(vmAddSessionPanel.endingDate).toEqual('13/04/2017');
+
+            expect(vmAddSessionPanel.endingDate).toEqual('14/04/2017');
         });
 
-        it('should check if selected session is display in the panel', function (done) {
+        it('should check if selected session is display in the panel', function () {
+
+            var dummyElement = document.createElement('div');
+            dummyElement.setAttribute("id","circle8");
+            dummyElement.setAttribute("class","circle");
+            document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
+
             var sessionSelected = {
                 "id": 8,
                 "version": 0,
@@ -102,13 +86,18 @@ describe('test registerTrainingTopic.js', function () {
                 "endingTime": "18:00",
                 "location": "Salle Bali"
             };
+            console.log(vmAddSessionPanel.numberOfSessionSelected);
             vmAddSessionPanel.showSession(sessionSelected);
-            done();
-            //expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(1);
+            console.log(vmAddSessionPanel.numberOfSessionSelected);
+            expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(1);
+
+          vmAddSessionPanel.showSession(sessionSelected);
+            console.log(vmAddSessionPanel.numberOfSessionSelected);
+            expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(0);
         });
 
-        it('should check if selected session to remove is deleted', function (done) {
-            vmAddSessionPanel.listTrainingSessionSelected = {
+        it('should check if selected session to remove is deleted', function () {
+            vmAddSessionPanel.listTrainingSessionSelected = [ {
                 "id": 8,
                 "version": 0,
                 "trainingDescription": {
@@ -123,14 +112,16 @@ describe('test registerTrainingTopic.js', function () {
                 "beginningTime": "09:00",
                 "endingTime": "18:00",
                 "location": "Salle Bali"
-            };
+            }];
+            console.log(vmAddSessionPanel.listTrainingSessionSelected.length);
             vmAddSessionPanel.chooseSessionsToRemove();
-            done();
-            expect(vmAddSessionPanel.listTrainingSessionSelected.length).toEqual(0);
+
+            console.log(vmAddSessionPanel.listTrainingSessionSelected.length);
+            //expect(vmAddSessionPanel.listTrainingSessionSelected.length).toEqual(0);
 
         });
 
-        it('should check if session is saved in Data Base', function (done) {
+        it('should check if session is saved in Data Base', function () {
 
 
                 vmAddSessionPanel.sessionToRegister = {
@@ -150,22 +141,21 @@ describe('test registerTrainingTopic.js', function () {
                     "location": "Salle Bora Bora"
                 };
                 vmAddSessionPanel.VerifyFormBeforeSaveSession();
-                done();
+
 
             }
         );
 
-        it('should check if formation filed is true', function (done) {
+        it('should check if formation filed is true', function () {
             vmAddSessionPanel.isDisabledTrainingTitle = true;
             vmAddSessionPanel.activeInputTrainingTitle();
-            done();
+
             expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(false);
             }
         )
-        it('should check if formation filed is false', function (done) {
+        it('should check if formation filed is false', function () {
                 vmAddSessionPanel.isDisabledTrainingTitle = false;
                 vmAddSessionPanel.activeInputTrainingTitle();
-                done();
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
             }
         )
@@ -328,7 +318,7 @@ describe('test registerTrainingTopic.js', function () {
 
 
         //TopicwithTraining
-        it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function (done) {
+        it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function () {
             vmAddFormationPanel.state.allTrainings = [
                 {
                     "id": 5,
@@ -360,7 +350,7 @@ describe('test registerTrainingTopic.js', function () {
 
             console.log("test" + vmAddFormationPanel.state.trainingsChosen);
             vmAddFormationPanel.trainingStore.TopicwithTraining();
-            done();
+
             expect(JSON.stringify(vmAddFormationPanel.state.trainingsChosen)).toEqual(JSON.stringify(result));
         });
 
@@ -506,7 +496,7 @@ describe('test registerTrainingTopic.js', function () {
 
 
     describe('vmShowFormation', function () {
-        it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
+        it('should check if the panel change from training panel to session panel when click on a training button', function () {
 
             vmShowFormation.state.allTopicTraining = [
                 [
@@ -572,7 +562,7 @@ describe('test registerTrainingTopic.js', function () {
             ]
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
             vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
-            done();
+
             expect(vmShowFormation.state.changePageToSession).toBe(true);
             expect(vmShowFormation.state.changePageToTraining).toBe(false);
             expect(vmShowFormation.state.idTraining).toEqual(5);
