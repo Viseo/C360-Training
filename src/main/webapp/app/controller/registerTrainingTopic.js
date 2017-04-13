@@ -573,7 +573,7 @@ Vue.component('add-session-panel', {
         },
 
         isTrainingTitleInAddSessionEmpty(){
-            if (this.trainingTitleInAddSession == '' || this.trainingTitleInAddSession == undefined) {
+            if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
         },
@@ -800,9 +800,6 @@ Vue.component('add-session-panel', {
                                                    style = "width:100%"/>                                                                        
                                         </div>
                                 </div>
-                                <div class = "row " style = "margin-bottom: 30px;">
-                                    
-                                </div>                                                       
                             </form>
                         </div>
                     </div>
