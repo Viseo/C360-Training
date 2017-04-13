@@ -560,7 +560,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             modifySessionButton: false,
             valueButtonSaveModify: "Ajouter",
             state: training_store.state,
-            trainingStore: training_store
+            trainingStore: training_store,
+            beginningDateForTest:''
         }
     },
 
@@ -569,7 +570,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.verifyTrainingTitleInAddSession(trainingTitleValue, 'trainingTitleInAddSessionRegexErrorMessage');
         },
 
-        beginningDate: function (beginningDateValue) {
+        beginningDateForTest: function (beginningDateValue) {
             this.verifyBeginningDate(beginningDateValue, 'beginningDateRegexErrorMessage');
         },
     },
@@ -628,15 +629,16 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         updateV2 (v) {
-            this.beginningDate = v
+            this.beginningDate = v;
+            this.beginningDateForTest = v;
         },
 
         updateV3 (v) {
-            this.location = v
+            this.location = v;
         },
 
         updateV4 (v) {
-            this.endingDate = v
+            this.endingDate = v;
         },
 
         ReturnToPageTraining(){
@@ -838,17 +840,19 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         CalculateEndingDate(){
-            var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
-            var beginningDate = this.beginningDate;
-            var dateParts = beginningDate.split("/");
-            var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
-            var dayOfMonth = dateObject.getDate();
-            dateObject.setDate(dayOfMonth + nbDays);
-            function pad(s) { return (s < 10) ? '0' + s : s; }
-            this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
-
+            if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(this.beginningDate)) {
+                var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+                var beginningDate = this.beginningDate;
+                var dateParts = beginningDate.split("/");
+                var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+                var dayOfMonth = dateObject.getDate();
+                dateObject.setDate(dayOfMonth + nbDays);
+                function pad(s) { return (s < 10) ? '0' + s : s; }
+                this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+            }else{
+                this.endingDate = '';
+            }
         }
-
     },
 
     template: `
