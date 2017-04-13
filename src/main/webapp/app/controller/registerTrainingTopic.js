@@ -889,7 +889,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
-        <button @click="testDate()">Test Date</button>
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                 <div class="col-sm-12 col-md-10 col-lg-7">
