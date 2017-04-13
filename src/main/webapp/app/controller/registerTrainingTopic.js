@@ -672,6 +672,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.ModifyTrainingSession();
             }
             else {
+                this.confirmSession = true;
+                setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
 
                 this.session.trainingDescription = this.state.trainingChosen;
                 this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
@@ -878,7 +880,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">
                         <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
-                        <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
+                        <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
                                         <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
@@ -918,7 +920,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         
                             </div>     
                             <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
-                                <div class = "row" style="margin-bottom: 30px;">
+                                <div class = "row" style="margin-bottom: 20px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
                                         <datepicker  
                                                     v-model = "beginningDate"
