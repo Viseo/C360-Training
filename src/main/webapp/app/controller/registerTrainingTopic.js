@@ -548,6 +548,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             numberOfSessionSelected:0,
             canNotRegisterForm: false,
             listTrainingSessionSelected:[],
+            allTrainings: [],
 
             modifySessionButton: false,
             valueButtonSaveModify: "Ajouter",
@@ -706,7 +707,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         chooseSessionsToRemove(){
-            console.log(JSON.stringify(this.listTrainingSessionSelected));
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
                     document.getElementById('circle' + this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id).className = 'circle';
@@ -1001,6 +1001,7 @@ class trainingStore {
         for (var tmp in this.state.trainingsChosen) {
             this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
         }
+        console.log(JSON.stringify(this.state.allTopicTraining));
     }
 
 }

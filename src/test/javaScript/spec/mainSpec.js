@@ -10,13 +10,8 @@ Vue.http.interceptors.unshift((request, next) => {
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
         next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    } else {
-
-        //  getRoute(route,args);
-        // console.log(route.response);
+    }else {
         next(
-            // getRoute(route, args),
-            // console.log(route.response),
             request.respondWith(
                 route.response,
                 {status: 200}
@@ -24,7 +19,6 @@ Vue.http.interceptors.unshift((request, next) => {
         );
     }
 });
-
 
 describe('Header test', function () {
 
@@ -51,21 +45,19 @@ describe('Header test', function () {
         expect(vmHeader.timeconnected).toBe(0);
     });
 
-    it('should set an value to the variable idleSecondsCounter', function (done) {
+    it('should set an value to the variable idleSecondsCounter', function () {
         vmHeader.setIdleSecondsCounter(10);
-        done();
         expect(vmHeader.idleSecondsCounter).toEqual(10);
 
     });
 
-    it('should check whether the user disconnect', function (done) {
+    it('should check whether the user disconnect', function () {
         vmHeader.token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
         vmHeader.disconnectUser();
-        done();
     });
 
     //to continue
-    it('should get the Cookie information', function (done) {
+    it('should get the Cookie information', function () {
         var document = {
             value_: '',
 
@@ -79,20 +71,17 @@ describe('Header test', function () {
         };
         document.cookie = "token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg; stayconnected=true";
         vmHeader.getCookieInfos();
-        done();
         expect(vmHeader.stayConnected).toBe(true);
     });
 
-    it('should checkIfUserInactive', function (done) {
+    it('should checkIfUserInactive', function () {
         vmHeader.stayConnected = false;
         vmHeader.checkIfUserInactive();
-        done();
     });
 
 
-    it('should checkIdleTime', function (done) {
+    it('should checkIdleTime', function () {
         vmHeader.checkIdleTime();
-        done();
     });
 
 
