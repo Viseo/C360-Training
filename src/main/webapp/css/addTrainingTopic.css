@@ -54,6 +54,10 @@ table.errorMessageAddSession{
     padding-top: 0px;
 }
 
+table.errorMessageAddSession td{
+    padding-left:0px;
+    padding-right: 0px;
+}
 
 .deletetopic{
     text-align: right;
