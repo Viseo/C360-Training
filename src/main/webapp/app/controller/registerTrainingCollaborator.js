@@ -4,8 +4,11 @@
 Vue.component('collaborator-formation', {
     data: function () {
         return {
+            sessionAlreadybooked:[],
             trainingsFound: [],
+            sessionAlreadyBookedMessage:false,
             noTrainingFound: false,
+            sessionsByCollab:[],
             allTrainings: [],
             addingRequestSucceeded: false,
             noSessionsSelectedError: false,
@@ -80,9 +83,9 @@ Vue.component('collaborator-formation', {
                                                 <div :id="training.id">
                                                 <div  class="col-lg-12"  v-for="i in listTrainingSession">
                                                 <div v-if="i.trainingDescription.id == training.id" >
-                                       
-                                                <input type="checkbox" v-model="checkedSessions" :value="i"> {{i.beginning}} - {{i.ending}} - {{i.location}}
-                                                
+                                                <span class="i.id">
+                                                <input :id="i.id" type="checkbox" v-model="checkedSessions" :value="i"> {{i.beginning}} - {{i.ending}} - {{i.location}}
+                                                <span></span>
                                                 
                                                 </div>
                                                 </div>
@@ -116,13 +119,25 @@ Vue.component('collaborator-formation', {
     },
 
     methods: {
+        disablingSessions(){
+            for(i in this.sessionsByCollab){
+                temp=document.getElementById(this.sessionsByCollab[i].id);
+                temp.disabled =true;
+                this.sessionAlreadyBookedMessage = true;
+                temp.nextElementSibling.innerHTML="";
+                $("#"+this.sessionsByCollab[i].id).after('<span>hello</span>');
+            }
+        },
         renitialize(training){
-            this.checkedSessions.splice(0, this.checkedSessions.length)
+            this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
             this.trainingSelected = training;
+            this.storeCollabsByTraining(training.id);
             this.check = false;
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
+            this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
+
         },
         disabling(id){
             this.check = !this.check;
@@ -247,6 +262,16 @@ Vue.component('collaborator-formation', {
             });
 
         },
+        storeCollabsByTraining(id){
+            this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
+                function (response){
+                    this.sessionsByCollab = response.data;
+                    console.log(this.sessionsByCollab);
+                    this.disablingSessions();
+                }
+
+            )
+        },
         storeTrainingSessions(id){
             this.$http.get("api/formations/" + id + "/sessions").then(
                 function (response) {
@@ -259,7 +284,6 @@ Vue.component('collaborator-formation', {
                         this.displayTrainings= true;
                         this.isNoSession = false;
                     }
-                    console.log(this.listTrainingSession);
                 });
         }
 
