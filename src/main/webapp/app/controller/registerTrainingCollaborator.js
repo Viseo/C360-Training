@@ -2,32 +2,32 @@
  * Created by CLH3623 on 10/04/2017.
  */
 Vue.component('collaborator-formation', {
-    data: function(){
+    data: function () {
         return {
-            trainingsFound:[],
-            noTrainingFound:false,
+            trainingsFound: [],
+            noTrainingFound: false,
             allTrainings: [],
-            addingRequestSucceeded : false,
-            noSessionsSelectedError:false,
-            checkedSessions:[],
+            addingRequestSucceeded: false,
+            noSessionsSelectedError: false,
+            checkedSessions: [],
             selected: '',
-            check:false,
-            idTraining:'3',
-            listTrainingSessions:[],
-            collaboratorIdentity:{
-                id:'',
-                lastName:'',
-                firstName:''
+            check: false,
+            idTraining: '3',
+            listTrainingSessions: [],
+            collaboratorIdentity: {
+                id: '',
+                lastName: '',
+                firstName: ''
             },
-            RequestToRegister:{
-                trainingDescription:{},
-                collaboratorIdentity:{},
-                trainingSessionsDescriptions:[]
+            RequestToRegister: {
+                trainingDescription: {},
+                collaboratorIdentity: {},
+                trainingSessionsDescriptions: []
             },
-            allTrainingTitles:[],
-            value:'',
+            allTrainingTitles: [],
+            value: '',
             selectedTraining: '',
-            trainingSelected:{},
+            trainingSelected: {},
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
@@ -57,7 +57,7 @@ Vue.component('collaborator-formation', {
                                                 <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
                                         <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span class="glyphicon glyphicon-search" @click="storeTrainingsFound"></span>
+                                                <input type="submit" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
                                                     </typeahead>  
                                                      <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
@@ -66,6 +66,7 @@ Vue.component('collaborator-formation', {
                                                    <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
+                                        
                                         <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                                             <p style="margin-top:50px;"></p>
                                             <hr style="margin:0px">
@@ -102,67 +103,70 @@ Vue.component('collaborator-formation', {
                         </div>
                     </div>
                 </div>`,
-    mounted: function(){
+    mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.GatherSessionsByTrainingFromDatabase();
         this.GetCookies();
     },
     computed: {
-        searchFormatted: function() {
+        searchFormatted: function () {
             return this.value.toUpperCase();
         }
     },
 
     methods: {
         renitialize(training){
+            this.checkedSessions.splice(0, this.checkedSessions.length)
+            this.storeTrainingSessions(training.id);
             this.trainingSelected = training;
             this.check = false;
             this.addingRequestSucceeded = false;
-            this.noSessionsSelectedError=false;
-            this.listTrainingSession
+            this.noSessionsSelectedError = false;
         },
         disabling(id){
             this.check = !this.check;
             var nodes = document.getElementById(id).getElementsByTagName("*");
-            if(this.check === true){
+            if (this.check === true) {
                 this.$http.get("api/formations/" + id + "/sessions").then(
                     function (response) {
-                        this.checkedSessions.splice(0,this.checkedSessions.length)
+                        this.checkedSessions.splice(0, this.checkedSessions.length)
                         this.checkedSessions = response.data;
                         if (this.checkedSessions.length === 0) {
                             this.isNoSession = true;
                         }
-                        else{
+                        else {
                             this.isNoSession = false;
                         }
                     });
-            for(var i = 0; i < nodes.length; i++){
-                nodes[i].disabled = true;
-            }}
-            else{
-                for(var i = 0; i < nodes.length; i++){
+                for (var i = 0; i < nodes.length; i++) {
+                    nodes[i].disabled = true;
+                }
+            }
+            else {
+                this.checkedSessions.splice(0, this.checkedSessions.length)
+                for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = false;
                 }
             }
         },
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false : true;
-            this.trainingsFound.splice(0,this.trainingsFound.length);
+            this.trainingsFound.splice(0, this.trainingsFound.length);
             if (!this.emptyTraining) {
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
                         this.listTrainingSession = response.data;
                         for (key in this.allTrainings) {
-                            if ( this.allTrainings[key].id == this.selectedTraining) {
+                            if (this.allTrainings[key].id == this.selectedTraining) {
                                 this.trainingsFound.push(this.allTrainings[key]);
                             }
                         }
                         if (this.listTrainingSession.length === 0) {
-                            this.displayTrainings=true;
+                            this.displayTrainings = true;
                             this.isNoSession = true;
                         }
-                        else{
-                            this.displayTrainings=true;
+                        else {
+                            this.displayTrainings = true;
                             this.isNoSession = false;
                         }
                     });
@@ -200,14 +204,14 @@ Vue.component('collaborator-formation', {
             //à changer
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
-            if(this.isNoSession == true || this.checkedSessions.length !=0){
-            this.RequestToRegister.trainingDescription = this.trainingSelected;
-            this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
-            this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
-            this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
-            console.log(this.RequestToRegister);
-            this.SaveTrainingSessionCollaborator();
-            }else{
+            if (this.isNoSession == true || this.checkedSessions.length != 0) {
+                this.RequestToRegister.trainingDescription = this.trainingSelected;
+                this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
+                this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
+                this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
+                console.log(this.RequestToRegister);
+                this.SaveTrainingSessionCollaborator();
+            } else {
                 this.noSessionsSelectedError = true;
             }
         },
@@ -223,31 +227,32 @@ Vue.component('collaborator-formation', {
             );
         },
         selectTrainingTitles(){
-            for(index in this.allTrainings){
+            for (index in this.allTrainings) {
                 this.allTrainingTitles.push(this.allTrainings[index].trainingTitle)
             }
             console.log(this.allTrainingTitles);
         },
         storeTrainingsFound(){
-            this.storeTrainingSessions();
-            this.displayTrainings = true;
             this.trainingsFound.splice(0, this.trainingsFound.length);
+            this.displayTrainings = true;
             for (index in this.allTrainings) {
                 if (this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1) {
                     this.trainingsFound.push(this.allTrainings[index])
                 }
             }
-            this.noTrainingFound = (this.trainingsFound.length==0) ? true : false;
+            this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
             this.value = null;
         },
-        storeTrainingSessions(){
-            this.$http.get("api/sessions").then(
+        storeTrainingSessions(id){
+            this.$http.get("api/formations/" + id + "/sessions").then(
                 function (response) {
                     this.listTrainingSession = response.data;
                     if (this.listTrainingSession.length === 0) {
+                        this.displayTrainings = true;
                         this.isNoSession = true;
                     }
                     else {
+                        this.displayTrainings= true;
                         this.isNoSession = false;
                     }
                     console.log(this.listTrainingSession);
@@ -258,6 +263,6 @@ Vue.component('collaborator-formation', {
     }
 
 })
-Vue.component('typeahead',VueStrap.typeahead);
-Vue.component('accordion',VueStrap.accordion);
-Vue.component('panel',VueStrap.panel);
+Vue.component('typeahead', VueStrap.typeahead);
+Vue.component('accordion', VueStrap.accordion);
+Vue.component('panel', VueStrap.panel);
