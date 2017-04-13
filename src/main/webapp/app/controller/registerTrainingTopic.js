@@ -5,8 +5,8 @@
 Vue.use(VueResource);
 
 Vue.component('error-messages',{
-    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
+    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','failureMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','emptyFailure','width'],
     data: function(){
         return {
             styleTd: {
@@ -25,6 +25,9 @@ Vue.component('error-messages',{
                                     </span>
                                     <span v-show="emptySuccess" 
                                           class="text-center color-green"> {{ successMessage }}
+                                    </span>
+                                    <span v-show="emptyFailure" 
+                                          class="text-center color-red"> {{ failureMessage }}
                                     </span>
                                     <span v-show="emptyRegexError" 
                                           class="color-red">{{ regexErrorMessage }}
@@ -669,7 +672,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.ModifyTrainingSession();
             }
             else {
-                this.confirmSession = true;
+
                 this.session.trainingDescription = this.state.trainingChosen;
                 this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
                 this.session.beginning = this.beginningDate;
@@ -700,6 +703,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 .then(
                     function (response) {
                         this.isSessionAlreadyPlanned = false;
+                        this.confirmSession = true;
                         this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
                     },
@@ -797,6 +801,13 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         showSession(session){
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+            this.isTrainingTitleInAddSessionValid = true;
+            this.isBeginningDateValid = true;
+            this.isSessionAlreadyPlanned = false;
+
             if( document.getElementById('circle'+session.id).className === 'circle') {
                 document.getElementById('circle' + session.id).className = 'full-circle';
                 this.numberOfSessionSelected++;
@@ -952,8 +963,10 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 <error-messages  
                                                     fillFieldErrorMessage =" Veuillez remplir tous les champs." 
                                                     successMessage =" La session a été créée avec succès."
+                                                    failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
                                                     :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                     :emptyRegexError = "!isBeginningDateValid && !beginningDateErrorMessage"
+                                                    :emptyFailure = "isSessionAlreadyPlanned && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
                                                 <error-messages>
