@@ -594,6 +594,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
                 this[errorMessage] = '';
                 this.isBeginningDateValid = true;
+                this.CalculateEndingDate();
             } else {
                 this[errorMessage] = "Veuillez entrer une date valide (JJ / mm / AAAA)";
                 this.isBeginningDateValid = false;
