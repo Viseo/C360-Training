@@ -19,6 +19,7 @@ Vue.component('collaborator-formation', {
             listTrainingSessions: [],
             collaboratorIdentity: {
                 id: '',
+                roles:'',
                 lastName: '',
                 firstName: ''
             },
@@ -83,8 +84,8 @@ Vue.component('collaborator-formation', {
                                                 <div :id="training.id">
                                                 <div  class="col-lg-12"  v-for="i in listTrainingSession">
                                                 <div v-if="i.trainingDescription.id == training.id" >
-                                                <span class="i.id">
-                                                <input :id="i.id" type="checkbox" v-model="checkedSessions" :value="i"> {{i.beginning}} - {{i.ending}} - {{i.location}}
+                                                <sdiv :id="i.id">
+                                                <input type="checkbox" v-model="checkedSessions" :value="i"><span id='i.value'> {{i.beginning}} - {{i.ending}} - {{i.location}}</div>
                                                 <span></span>
                                                 
                                                 </div>
@@ -106,10 +107,13 @@ Vue.component('collaborator-formation', {
                         </div>
                     </div>
                 </div>`,
+    beforeMount: function() {
+        this.GetCookies();
+        this.VerifyUserByDatabase();
+    },
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.GatherSessionsByTrainingFromDatabase();
-        this.GetCookies();
     },
     computed: {
         searchFormatted: function () {
@@ -119,6 +123,10 @@ Vue.component('collaborator-formation', {
     },
 
     methods: {
+        VerifyUserByDatabase(){
+            console.log(this.collaboratorIdentity.roles);
+            if(this.collaboratorIdentity.roles)  window.location.pathname = '/addTrainingTopic.html';
+        },
         disablingSessions(){
             for(i in this.sessionsByCollab){
                 temp=document.getElementById(this.sessionsByCollab[i].id);
@@ -209,6 +217,7 @@ Vue.component('collaborator-formation', {
             this.collaboratorIdentity.id = jwt_decode(this.token).id;
             this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
             this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+            this.collaboratorIdentity.roles = jwt_decode(this.token).roles;
         },
         GatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.idTraining + "/sessions").then(
