@@ -110,7 +110,8 @@ Vue.component('collaborator-formation', {
     },
     computed: {
         searchFormatted: function () {
-            return this.value.toUpperCase();
+            if(this.value) return this.value.toUpperCase();
+            else return '';
         }
     },
 
@@ -235,13 +236,16 @@ Vue.component('collaborator-formation', {
         storeTrainingsFound(){
             this.trainingsFound.splice(0, this.trainingsFound.length);
             this.displayTrainings = true;
-            for (index in this.allTrainings) {
-                if (this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1) {
-                    this.trainingsFound.push(this.allTrainings[index])
+            this.$http.get("api/formations").then(function(response){
+                for (index in this.allTrainings) {
+                    if (this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1) {
+                        this.trainingsFound.push(this.allTrainings[index]);
+                    }
                 }
-            }
-            this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
-            this.value = null;
+                this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
+                this.value = null;
+            });
+
         },
         storeTrainingSessions(id){
             this.$http.get("api/formations/" + id + "/sessions").then(

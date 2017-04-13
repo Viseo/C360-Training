@@ -6591,7 +6591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  computed: {
 	    inAccordion: function inAccordion() {
-	      return this.$parent && this.$parent._isAccordion;
+            return this.$parent && this.$parent._isAccordion;
 	    },
 	    panelType: function panelType() {
 	      return 'panel-' + (this.type || this.$parent && this.$parent.type || 'default');
