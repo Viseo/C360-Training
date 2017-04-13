@@ -8,19 +8,19 @@ beforeEach(function () {
 
 
 afterEach(function () {
-    vmAddFormationPanel.state.trainingsChosen=[];
-    vmAddFormationPanel.state.allTopicTraining=[];
-    vmAddFormationPanel.state.changePageToTraining=true;
-    vmAddFormationPanel.state.changePageToSession=false;
+        vmAddFormationPanel.state.trainingsChosen=[];
+        vmAddFormationPanel.state.allTopicTraining=[];
+        vmAddFormationPanel.state.changePageToTraining=true;
+        vmAddFormationPanel.state.changePageToSession=false;
         vmAddFormationPanel.state.idTraining='';
         vmAddFormationPanel.state.trainingChosen={};
         vmAddFormationPanel.state. allTrainings=[];
-    vmAddFormationPanel.state.trainingTitle='';
-    vmAddFormationPanel.state.arrangeTrainings=[];
-    vmAddFormationPanel.state.allTrainingsOfATopicChosen=[];
-    vmAddFormationPanel.state.listTrainingSession=[];
-    vmAddFormationPanel.state.isNoSession=true;
-    vmAddFormationPanel.state.idSession='';
+        vmAddFormationPanel.state.trainingTitle='';
+        vmAddFormationPanel.state.arrangeTrainings=[];
+        vmAddFormationPanel.state.allTrainingsOfATopicChosen=[];
+        vmAddFormationPanel.state.listTrainingSession=[];
+        vmAddFormationPanel.state.isNoSession=true;
+        vmAddFormationPanel.state.idSession='';
         vmAddFormationPanel = undefined;
         vmShowFormation = undefined;
         vmAddFormationPanel = undefined;
@@ -31,23 +31,25 @@ describe('test registerTrainingTopic.js', function () {
 
     describe('vmAddSessionPanel', function () {
 
-        it('should check if the panel change from session panel to training panel when click on a training button', function () {
+        it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
             vmAddSessionPanel.ReturnToPageTraining();
-            expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
-            expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
-            expect(vmAddSessionPanel.state.idTraining).toEqual('');
-            expect(vmAddSessionPanel.state.trainingChosen).toEqual({});
-            expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
-            expect(vmAddSessionPanel.beginningDate).toEqual('');
-            expect(vmAddSessionPanel.endingDate).toEqual('');
-            expect(vmAddSessionPanel.location).toEqual('');
-            expect(vmAddSessionPanel.modifySessionButton).toBe(false);
-            expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
-            expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
-            expect(vmAddSessionPanel.state.idSession).toEqual('');
-            var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
-            expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
-
+            setTimeout(function() {
+                expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
+                expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
+                expect(vmAddSessionPanel.state.idTraining).toEqual('');
+                expect(vmAddSessionPanel.state.trainingChosen).toEqual({});
+                expect(vmAddSessionPanel.state.trainingTitle).toEqual('');
+                expect(vmAddSessionPanel.beginningDate).toEqual('');
+                expect(vmAddSessionPanel.endingDate).toEqual('');
+                expect(vmAddSessionPanel.location).toEqual('');
+                expect(vmAddSessionPanel.modifySessionButton).toBe(false);
+                expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
+                expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
+                expect(vmAddSessionPanel.state.idSession).toEqual('');
+                var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
+                expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
+                done();
+            }, 2000);
         });
 
         it('should check if ending date is calculated when user choose beginning date', function () {
@@ -121,44 +123,160 @@ describe('test registerTrainingTopic.js', function () {
 
         });
 
-        it('should check if session is saved in Data Base', function () {
-
-
-                vmAddSessionPanel.sessionToRegister = {
-                    "id": 6,
+        it('should check if session is saved in Data Base', function (done) {
+                vmAddSessionPanel.modifySessionButton = false;
+                vmAddSessionPanel.state.trainingChosen= {
+                    "id": 5,
                     "version": 0,
-                    "trainingDescription": {
-                        "id": 5,
-                        "version": 0,
-                        "trainingTitle": "FORMATION1",
-                        "numberHalfDays": 1,
-                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
-                    },
-                    "beginning": "12/05/2017",
-                    "ending": "12/05/2017",
-                    "beginningTime": "09:00",
-                    "endingTime": "18:00",
-                    "location": "Salle Bora Bora"
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
                 };
+                vmAddSessionPanel.state.trainingTitle="FORMATION1";
+                vmAddSessionPanel.beginningDate="12/05/2017";
+                vmAddSessionPanel.endingDate="12/05/2017";
+                vmAddSessionPanel.beginningTime="09:00";
+                vmAddSessionPanel.endingTime="18:00";
+                vmAddSessionPanel.location="Salle Bora Bora";
                 vmAddSessionPanel.VerifyFormBeforeSaveSession();
+                setTimeout(function() {
+                    expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
+                    done();
+                }, 2000);
+            }
+        );
 
-
+        it('should check whether we can modify a session', function (done) {
+                vmAddSessionPanel.modifySessionButton = true;
+                vmAddSessionPanel.state.idSession = 6;
+                vmAddSessionPanel.state.trainingChosen= {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                };
+                vmAddSessionPanel.state.trainingTitle="FORMATION1";
+                vmAddSessionPanel.beginningDate="13/05/2017";
+                vmAddSessionPanel.endingDate="13/05/2017";
+                vmAddSessionPanel.beginningTime="09:00";
+                vmAddSessionPanel.endingTime="18:00";
+                vmAddSessionPanel.location="Salle Bora Bora";
+                vmAddSessionPanel.VerifyFormBeforeSaveSession();
+                setTimeout(function() {
+                    expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
+                    done();
+                }, 2000);
             }
         );
 
         it('should check if formation filed is true', function () {
             vmAddSessionPanel.isDisabledTrainingTitle = true;
-            vmAddSessionPanel.activeInputTrainingTitle();
+            vmAddSessionPanel.activeFieldTrainingTitle();
 
             expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(false);
             }
         )
         it('should check if formation filed is false', function () {
                 vmAddSessionPanel.isDisabledTrainingTitle = false;
-                vmAddSessionPanel.activeInputTrainingTitle();
+                vmAddSessionPanel.activeFieldTrainingTitle();
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
             }
-        )
+        );
+
+        it('should check training title is valid', function () {
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('');
+                expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(true);
+            }
+        );
+
+        it('should check training title is valid', function () {
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('');
+                expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(true);
+            }
+        );
+
+        it('should check training title is not valid', function () {
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation//","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)");
+                expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(false);
+            }
+        );
+
+        it('should check beginning date is valid', function () {
+                vmAddSessionPanel.verifyBeginningDate("01/06/2020","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('');
+                expect(vmAddSessionPanel.isBeginningDateValid).toBe(true);
+            }
+        );
+
+        it('should check beginning date has already passed', function () {
+                vmAddSessionPanel.verifyBeginningDate("01/06/2015","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
+                expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
+                vmAddSessionPanel.verifyBeginningDate("01/03/2017","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
+                expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
+                vmAddSessionPanel.verifyBeginningDate("10/04/2017","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
+                expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
+            }
+        );
+
+        it('should check beginning date is not valid', function () {
+                vmAddSessionPanel.verifyBeginningDate("02/","errorMessage");
+                expect(vmAddSessionPanel["errorMessage"]).toBe("Veuillez entrer une date valide (JJ / mm / AAAA)");
+                expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
+            }
+        );
+
+        it('should check update training topic filed ', function () {
+                vmAddSessionPanel.updateV1("formation");
+                expect(vmAddSessionPanel.trainingTitleInAddSession).toBe("formation");
+            }
+        );
+
+        it('should check update beginning date filed ', function () {
+                vmAddSessionPanel.updateV2("01/06/2020");
+                expect(vmAddSessionPanel.beginningDate).toBe("01/06/2020");
+                expect(vmAddSessionPanel.beginningDateForTest).toBe("01/06/2020");
+            }
+        );
+
+        it('should check update location filed ', function () {
+                vmAddSessionPanel.updateV3("salle de bali");
+                expect(vmAddSessionPanel.location).toBe("salle de bali");
+            }
+        );
+
+        it('should check update ending date filed ', function () {
+                vmAddSessionPanel.updateV4("01/06/2020");
+                expect(vmAddSessionPanel.endingDate).toBe("01/06/2020");
+            }
+        );
+
+        it('should check whether we can use the button Supprimer ', function () {
+                vmAddSessionPanel.numberOfSessionSelected = 1;
+                expect(vmAddSessionPanel.CanNotUseButtonSupprimer()).toBe(false);
+                vmAddSessionPanel.numberOfSessionSelected = 0;
+                expect(vmAddSessionPanel.CanNotUseButtonSupprimer()).toBe(true);
+            }
+        );
+
+        it('should check whether we can connect to the database in order to get all trainings', function () {
+                vmAddSessionPanel.state.idTraining = 5;
+                vmAddSessionPanel.GatherSessionsByTrainingFromDatabase();
+            }
+        );
+
+        it('should check whether we can modify training topic', function () {
+                vmAddSessionPanel.state.trainingTitle = "HELLO";
+                vmAddSessionPanel.ModifyTrainingTopic();
+            }
+        );
+
     });
     describe('vmAddFormationPanel', function () {
         let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
@@ -574,5 +692,7 @@ describe('test registerTrainingTopic.js', function () {
 
 
     });
+
+
 
 });
