@@ -596,9 +596,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 
         verifyBeginningDate(beginningDate, errorMessage) {
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
-                this[errorMessage] = '';
-                this.isBeginningDateValid = true;
-                this.CalculateEndingDate();
+                if(this.testDate(beginningDate)){
+                    this[errorMessage] = '';
+                    this.isBeginningDateValid = true;
+                    this.CalculateEndingDate();
+                }else{
+                    this[errorMessage] = "La date est déjà passée!";
+                    this.isBeginningDateValid = false;
+                }
             } else {
                 this[errorMessage] = "Veuillez entrer une date valide (JJ / mm / AAAA)";
                 this.isBeginningDateValid = false;
@@ -672,9 +677,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.ModifyTrainingSession();
             }
             else {
-                this.confirmSession = true;
-                setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
-
                 this.session.trainingDescription = this.state.trainingChosen;
                 this.session.trainingDescription.trainingTitle = this.state.trainingTitle;
                 this.session.beginning = this.beginningDate;
@@ -706,6 +708,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     function (response) {
                         this.isSessionAlreadyPlanned = false;
                         this.confirmSession = true;
+                        setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
                         this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
                     },
@@ -865,11 +868,28 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             }else{
                 this.endingDate = '';
             }
-        }
+        },
+        testDate(beginningDate){
+            var d = new Date();
+            function pad(s) { return (s < 10) ? '0' + s : s; }
+            var today = [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
+            var todayParts = today.split("/");
+            var dateParts = beginningDate.split("/");
+            if(dateParts[2]<todayParts[2]){
+                return false;
+            }else if((dateParts[2] == todayParts[2]) && (dateParts[1] < todayParts[1])){
+                return false;
+            }else if((dateParts[2] == todayParts[2]) && (dateParts[1] == todayParts[1]) && (dateParts[0]<todayParts[0])){
+                return false;
+            }else{
+                return true;
+            }
+        },
     },
 
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
+        <button @click="testDate()">Test Date</button>
             <div class="row">
                 <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
                 <div class="col-sm-12 col-md-10 col-lg-7">
