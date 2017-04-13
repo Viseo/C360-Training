@@ -49,6 +49,12 @@ table td {
     border-top: none;
 }
 
+table.errorMessageAddSession{
+    border:none;
+    padding-top: 0px;
+}
+
+
 .deletetopic{
     text-align: right;
     padding-top:20px;

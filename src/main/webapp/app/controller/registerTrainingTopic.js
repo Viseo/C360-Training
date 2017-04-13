@@ -771,17 +771,17 @@ Vue.component('add-session-panel', {
                                         </input-text>
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
-                                        <table>
-                                        <tr>
-                                            <error-messages  
-                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
-                                                successMessage =" La session a été créée avec succès."
-                                                :regexErrorMessage = "beginningDateRegexErrorMessage"
-                                                :emptyRegexError = "!isBeginningDateValid"
-                                                :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
-                                            <error-messages>
-                                        </tr>
+                                        <table class = "errorMessageAddSession">
+                                            <tr>
+                                                <error-messages  
+                                                    fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                    successMessage =" La session a été créée avec succès."
+                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                    :emptyRegexError = "!isBeginningDateValid && !beginningDateErrorMessage"
+                                                    :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
+                                                <error-messages>
+                                            </tr>
                                         </table> 
                                     </div> 
                                 </div> 
@@ -912,7 +912,7 @@ Vue.component('datepicker', {
 
     props: {
         language: {default: 'en'},
-        min: {default: '2017-04-11'},
+        min: {default: '2017-04-13'},
         max: {default: '2020-01-01'},
         value: {
             type: [String, Array],
