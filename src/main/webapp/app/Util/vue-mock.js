@@ -39,6 +39,19 @@ let routes = [
         ]
     },
     {
+        method: 'POST',
+        url: 'api/formations',
+        response: [
+            {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            }
+        ]
+    },
+    {
         method: 'GET',
         url: 'api/formations',
         response: [
