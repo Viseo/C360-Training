@@ -5,9 +5,8 @@
 Vue.use(VueResource);
 
 Vue.component('error-messages',{
-    props:['height','colspan',
-           'identicalErrorMessage','fillFieldErrorMessage','successMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','width'],
+    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','failureMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','emptyFailure','width'],
     data: function(){
         return {
             styleTd: {
@@ -26,6 +25,9 @@ Vue.component('error-messages',{
                                     </span>
                                     <span v-show="emptySuccess" 
                                           class="text-center color-green"> {{ successMessage }}
+                                    </span>
+                                    <span v-show="emptyFailure" 
+                                          class="text-center color-red"> {{ failureMessage }}
                                     </span>
                                     <span v-show="emptyRegexError" 
                                           class="color-red">{{ regexErrorMessage }}
@@ -132,10 +134,10 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
     },
 
-    mounted: function(){
-        this.gatherTopicsFromDatabase();
-        this.gatherTrainingsFromDatabase();
-    },
+        mounted: function(){
+            this.gatherTopicsFromDatabase();
+            this.gatherTrainingsFromDatabase();
+        },
 
     methods: {
         updateV1 (v) {
@@ -189,7 +191,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             }
         },
 
-
         isNewTopicEmpty(){
             if (this.newTopic == '' || this.newTopic == undefined) {
                 this.newTopicErrorMessage = true;
@@ -209,7 +210,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
-            this.newTopicErrorMessage=false;
+            this.newTopicErrorMessage = false;
             if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
                 this.saveTrainingIntoDatabase();
@@ -550,34 +551,103 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             listTrainingSessionSelected:[],
             allTrainings: [],
 
+            trainingTitleInAddSession:'',
+            isTrainingTitleInAddSessionValid:true,
+            isBeginningDateValid:true,
+            trainingTitleInAddSessionRegexErrorMessage:'',
+            beginningDateRegexErrorMessage:'',
+            locationRegexErrorMessage:'',
+            trainingTitleInAddSessionErrorMessage:false,
+            beginningDateErrorMessage:false,
+            locationErrorMessage:false,
+            confirmSession:false,
             modifySessionButton: false,
             valueButtonSaveModify: "Ajouter",
             state: training_store.state,
-            trainingStore: training_store
+            trainingStore: training_store,
+            beginningDateForTest:''
         }
     },
 
-    methods: {
+    watch:{
+        trainingTitleInAddSession: function (trainingTitleValue) {
+            this.verifyTrainingTitleInAddSession(trainingTitleValue, 'trainingTitleInAddSessionRegexErrorMessage');
+        },
 
-        activeInputTrainingTitle(){
-            if (this.isDisabledTrainingTitle == true) {
-                this.isDisabledTrainingTitle = false;
+        beginningDateForTest: function (beginningDateValue) {
+            this.verifyBeginningDate(beginningDateValue, 'beginningDateRegexErrorMessage');
+        },
+    },
+    methods: {
+        verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
+            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
+                this[errorMessage] = '';
+                this.isTrainingTitleInAddSessionValid = true;
             } else {
+                this[errorMessage] = "Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)";
+                this.isTrainingTitleInAddSessionValid = false;
+            }
+        },
+
+        isTrainingTitleInAddSessionEmpty(){
+            if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
+                this.trainingTitleInAddSessionErrorMessage = true;
+            }
+        },
+
+        verifyBeginningDate(beginningDate, errorMessage) {
+            if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
+                if(this.testDate(beginningDate)){
+                    this[errorMessage] = '';
+                    this.isBeginningDateValid = true;
+                    this.CalculateEndingDate();
+                }else{
+                    this[errorMessage] = "La date est déjà passée!";
+                    this.isBeginningDateValid = false;
+                }
+            } else {
+                this[errorMessage] = "Veuillez entrer une date valide (JJ / mm / AAAA)";
+                this.isBeginningDateValid = false;
+            }
+        },
+
+        isBeginningDateEmpty(){
+            if (this.beginningDate == '' || this.beginningDate == undefined) {
+                this.beginningDateErrorMessage = true;
+            }
+        },
+
+        isLocationEmpty(){
+            if (this.location == '' || this.location == undefined) {
+                this.locationErrorMessage = true;
+            }
+        },
+
+        activeFieldTrainingTitle(){
+            if (this.isDisabledTrainingTitle == true) {
+                this.trainingTitleInAddSession = this.state.trainingTitle;
+                this.isDisabledTrainingTitle = false;
+            } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
+                this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = true;
             }
         },
 
         updateV1 (v) {
-            this.state.trainingTitle = v
+            this.trainingTitleInAddSession = v;
         },
+
         updateV2 (v) {
-            this.beginningDate = v
+            this.beginningDate = v;
+            this.beginningDateForTest = v;
         },
+
         updateV3 (v) {
-            this.location = v
+            this.location = v;
         },
+
         updateV4 (v) {
-            this.endingDate = v
+            this.endingDate = v;
         },
 
         ReturnToPageTraining(){
@@ -591,6 +661,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.GatherTrainingsFromDatabase();
         },
 
+
         ResetSessionForm(){
             this.beginningDate = '';
             this.endingDate = '';
@@ -603,13 +674,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 
         VerifyFormBeforeSaveSession(){
 
-            /*this.isEmailEmpty(); this.isPasswordEmpty();
-             if(!this.emailEmpty && !this.passwordEmpty){
-             this.user.email=this.email;
-             this.user.password=this.password;
-             this.userToRegister = JSON.parse(JSON.stringify(this.user));
-             this.VerifyUserByDatabase();
-             }*/
             if(this.modifySessionButton){
                 this.ModifyTrainingSession();
             }
@@ -621,19 +685,31 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.session.beginningTime = this.beginningTime;
                 this.session.endingTime = this.endingTime;
                 this.session.location = this.location;
-                this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
-                this.SaveSessionIntoDatabase();
+
+                this.isTrainingTitleInAddSessionEmpty();
+                this.isBeginningDateEmpty();
+                this.isLocationEmpty();
+
+                if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
+                    this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
+                    this.SaveSessionIntoDatabase();
+                }
             }
         },
+
         ModifyTrainingTopic(){
-            this.state.trainingTitle = this.state.trainingTitle.replace(" ", "").toUpperCase();
-            this.$http.put("api/formations/"+ this.state.trainingTitle +"/formationid/"+ this.state.idTraining);
+            this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
+            this.state.trainingTitle = this.trainingTitleInAddSession;
+            this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
         },
+
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
                 .then(
                     function (response) {
                         this.isSessionAlreadyPlanned = false;
+                        this.confirmSession = true;
+                        setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
                         this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
                     },
@@ -730,6 +806,13 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         showSession(session){
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+            this.isTrainingTitleInAddSessionValid = true;
+            this.isBeginningDateValid = true;
+            this.isSessionAlreadyPlanned = false;
+
             if( document.getElementById('circle'+session.id).className === 'circle') {
                 document.getElementById('circle' + session.id).className = 'full-circle';
                 this.numberOfSessionSelected++;
@@ -773,18 +856,37 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         CalculateEndingDate(){
-            var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
-            var beginningDate = this.beginningDate;
-            var dateParts = beginningDate.split("/");
-            var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
-            var dayOfMonth = dateObject.getDate();
-            dateObject.setDate(dayOfMonth + nbDays);
+            if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(this.beginningDate)) {
+                var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+                var beginningDate = this.beginningDate;
+                var dateParts = beginningDate.split("/");
+                var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+                var dayOfMonth = dateObject.getDate();
+                dateObject.setDate(dayOfMonth + nbDays);
+                function pad(s) { return (s < 10) ? '0' + s : s; }
+                this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+            }else{
+                this.endingDate = '';
+            }
+        },
+        testDate(beginningDate){
+            var d = new Date();
             function pad(s) { return (s < 10) ? '0' + s : s; }
-            this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
-
-        }
-
+            var today = [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
+            var todayParts = today.split("/");
+            var dateParts = beginningDate.split("/");
+            if(dateParts[2]<todayParts[2]){
+                return false;
+            }else if((dateParts[2] == todayParts[2]) && (dateParts[1] < todayParts[1])){
+                return false;
+            }else if((dateParts[2] == todayParts[2]) && (dateParts[1] == todayParts[1]) && (dateParts[0]<todayParts[0])){
+                return false;
+            }else{
+                return true;
+            }
+        },
     },
+
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
             <div class="row">
@@ -795,24 +897,24 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                             <legend>Gérer une session</legend>
                         </div>
                     </div>
-                    <div style = "width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                    <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">
                         <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
-                        <div class = "row" style="margin-bottom: 30px; margin-top: 20px;">
+                        <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
-                                 <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
-                                    <span class = "glyphicon glyphicon-pencil icon"  @click = "activeInputTrainingTitle()"></span>                                                                                            
-                                    <input-text 
-                                        :value = "state.trainingTitle" 
-                                        @input = "updateV1"
-                                        placeholder = "formation"
-                                        maxlength = "20"
-                                        :isValid = "true"
-                                        icon = "glyphicon glyphicon-floppy-disk"
-                                        type = 'input'
-                                        :disabled = "isDisabledTrainingTitle" 
-                                        @click="ModifyTrainingTopic()">
-                                    </input-text> 
-                                 </form>
+                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
+                                        <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
+                                        <input-text 
+                                            :value = "state.trainingTitle" 
+                                            @input = "updateV1"
+                                            :isValid = "isTrainingTitleInAddSessionValid" 
+                                            placeholder = "Formation"
+                                            maxlength = "20"
+                                            icon = "glyphicon glyphicon-floppy-disk"
+                                            type = 'input'
+                                            :disabled = "isDisabledTrainingTitle" 
+                                            @click="ModifyTrainingTopic()">
+                                        </input-text>
+                                  </form>                                      
                             </div>
                             <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
@@ -837,20 +939,16 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         
                             </div>     
                             <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
-                                <div class = "row" style="margin-bottom: 30px;">
-                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">                                
-                                        <input-text 
-                                            label = "Date de début" 
-                                            :value = "beginningDate" 
-                                            @input = "updateV2"
-                                            placeholder = "--/--/----"
-                                            maxlength = "10"
-                                            :isValid = "true"
-                                            :disabled = "canNotRegisterForm"
-                                            icon = "glyphicon glyphicon-calendar"
-                                            @blur = "CalculateEndingDate()"
-                                            type = 'input'>
-                                        </input-text>
+                                <div class = "row" style="margin-bottom: 20px;">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
+                                        <datepicker  
+                                                    v-model = "beginningDate"
+                                                    :isValid = "isBeginningDateValid" 
+                                                    :disabled = "canNotRegisterForm"
+                                                    @blur = "CalculateEndingDate()"
+                                                    @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
+                                                    @input = "updateV2">                                                                                       
+                                        </datepicker>
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
                                         <input-text 
@@ -858,8 +956,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                             :value = "location" 
                                             @input = "updateV3"
                                             placeholder = "Salle"
+                                            @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
                                             maxlength = "10"
-                                            :isValid = "true"
                                             :disabled = "canNotRegisterForm" 
                                             :collection="AllSalles"
                                             type = 'select'>
@@ -880,6 +978,22 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                             type = 'input'>
                                         </input-text>
                                     </div>
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
+                                        <table class = "errorMessageAddSession">
+                                            <tr>
+                                                <error-messages  
+                                                    fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                    successMessage =" La session a été créée avec succès."
+                                                    failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
+                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                    :emptyRegexError = "!isBeginningDateValid && !beginningDateErrorMessage"
+                                                    :emptyFailure = "isSessionAlreadyPlanned && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
+                                                <error-messages>
+                                            </tr>
+                                        </table> 
+                                    </div> 
                                 </div> 
                                 <div class = "row " style = "margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
@@ -905,6 +1019,427 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             </div>
         </div>`,
 });
+
+Vue.component('datepicker', {
+
+    template: `
+         <div class="date-picker">
+            <div class = "form-group has-feedback" @click="togglePanel"
+                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                <label class = "label-control">Date de début</label>
+                <input class="form-control"
+                       placeholder="--/--/----"
+                       :value="range ? value[0] + ' -- ' + value[1] : value" 
+                       @mouseenter="showCancel = true" 
+                       @mouseleave="showCancel = false"
+                       @input="updateValue($event.target.value)"
+                       @focus="handleFocus"
+                       @blur="handleBlur"/>                     
+                <span class ="glyphicon form-control-feedback glyphicon-calendar"></span>
+            </div>            
+            <transition name="toggle">
+                <div class="date-panel" v-show="panelState" :style="coordinates">
+                    <div class="panel-header" v-show="panelType !== 'year'">
+                        <div class="arrow-left" @click="prevMonthPreview()">&lt;</div>
+                        <div class="year-month-box">
+                            <div class="year-box" @click="chType('year')" v-text="tmpYear"></div>
+                            <div class="month-box" @click="chType('month')">{{tmpMonth + 1 | month(language)}}</div>
+                        </div>
+                        <div class="arrow-right" @click="nextMonthPreview()">&gt;</div>
+                    </div>
+                    <div class="panel-header" v-show="panelType === 'year'">
+                        <div class="arrow-left" @click="chYearRange(0)">&lt;</div>
+                        <div class="year-range">
+                            <span v-text="yearList[0]"></span> - <span v-text="yearList[yearList.length - 1]"></span>
+                        </div>
+                        <div class="arrow-right" @click="chYearRange(1)">&gt;</div>
+                    </div>
+                    <div class="type-year" v-show="panelType === 'year'">
+                        <ul class="year-list">
+                            <li v-for="item in yearList"
+                                v-text="item"
+                                :class="{selected: isSelected('year', item), invalid: validateYear(item)}" 
+                                @click="selectYear(item)">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="type-month" v-show="panelType === 'month'">
+                        <ul class="month-list">
+                            <li v-for="(item, index) in monthList"
+                                :class="{selected: isSelected('month', index), invalid: validateMonth(index)}" 
+                                @click="selectMonth(index)">
+                                {{item | month(language)}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="type-date" v-show="panelType === 'date'">
+                        <ul class="weeks">
+                            <li v-for="item in weekList">{{item | week(language)}}</li>
+                        </ul>
+                        <ul class="date-list">
+                            <li v-for="(item, index) in dateList"
+                                :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth,
+                                         invalid: validateDate(item), firstItem: (index % 7) === 0}"
+                                @click="selectDate(item)">
+                                <div class="message" :class="{selected: isSelected('date', item)}">
+                                    <div class="bg"></div><span v-text="item.value"></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </transition>
+         </div>`,
+
+    data () {
+        let now = new Date()
+        return {
+            showCancel: false,
+            panelState: false,
+            panelType: 'date',
+            coordinates: {},
+            year: now.getFullYear(),
+            month: now.getMonth(),
+            date: now.getDate(),
+            tmpYear: now.getFullYear(),
+            tmpMonth: now.getMonth(),
+            tmpStartYear: now.getFullYear(),
+            tmpStartMonth: now.getMonth(),
+            tmpStartDate: now.getDate(),
+            tmpEndYear: now.getFullYear(),
+            tmpEndMonth: now.getMonth(),
+            tmpEndDate: now.getDate(),
+            minYear: Number,
+            minMonth: Number,
+            minDate: Number,
+            maxYear: Number,
+            maxMonth: Number,
+            maxDate: Number,
+            yearList: Array.from({length: 12}, (value, index) => new Date().getFullYear() + index),
+            monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            weekList: [0, 1, 2, 3, 4, 5, 6],
+            rangeStart: false,
+            toDay:''
+        }
+    },
+
+    props: {
+        language: {default: 'en'},
+        min: {default: '2017-04-13'},
+        max: {default: '2020-01-01'},
+        value: {
+            type: [String, Array],
+            default: ''
+        },
+        range: {
+            type: Boolean,
+            default: false
+        },
+        isValid: {
+            type: [String, Array],
+            default: ''
+        }
+    },
+
+    methods: {
+
+        handleFocus(){
+            this.$emit('focus');
+        },
+
+        handleBlur(){
+            this.$emit('blur');
+        },
+
+        updateValue(value){
+            this.$emit('input',value);
+        },
+
+        togglePanel () {
+            this.panelState = !this.panelState
+            this.rangeStart = false
+        },
+
+        isSelected (type, item) {
+            switch (type) {
+                case 'year':
+                    if (!this.range)
+                        return item === this.tmpYear
+                    return (new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
+                    && new Date(item, 0).getTime() <= new Date(this.tmpEndYear, 0).getTime())
+                case 'month':
+                    if (!this.range) return item === this.tmpMonth && this.year === this.tmpYear
+                    return (new Date(this.tmpYear, item).getTime() >= new Date(this.tmpStartYear, this.tmpStartMonth).getTime()
+                    && new Date(this.tmpYear, item).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth).getTime())
+                case 'date':
+                    if (!this.range) return this.date === item.value && this.month === this.tmpMonth && item.currentMonth
+                    let month = this.tmpMonth
+                    item.previousMonth && month--
+                    item.nextMonth && month++
+                    return (new Date(this.tmpYear, month, item.value).getTime() >= new Date(this.tmpStartYear, this.tmpStartMonth, this.tmpStartDate).getTime()
+                    && new Date(this.tmpYear, month, item.value).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime())
+            }
+        },
+
+        chType (type) {
+            this.panelType = type
+        },
+
+        chYearRange (next) {
+            if (next) {
+                this.yearList = this.yearList.map((i) => i + 12)
+            } else {
+                this.yearList = this.yearList.map((i) => i - 12)
+            }
+        },
+
+        prevMonthPreview () {
+            this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
+        },
+
+        nextMonthPreview () {
+            this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
+        },
+
+        selectYear (year) {
+            if (this.validateYear(year)) return
+            this.tmpYear = year
+            this.panelType = 'month'
+        },
+
+        selectMonth (month) {
+            if (this.validateMonth(month)) return
+            this.tmpMonth = month
+            this.panelType = 'date'
+        },
+
+        selectDate (date) {
+            setTimeout(() => {
+                if (this.validateDate(date)) return
+                if (date.previousMonth) {
+                    if (this.tmpMonth === 0) {
+                        this.year -= 1
+                        this.tmpYear -= 1
+                        this.month = this.tmpMonth = 11
+                    } else {
+                        this.month = this.tmpMonth - 1
+                        this.tmpMonth -= 1
+                    }
+                } else if (date.nextMonth) {
+                    if (this.tmpMonth === 11) {
+                        this.year += 1
+                        this.tmpYear += 1
+                        this.month = this.tmpMonth = 0
+                    } else {
+                        this.month = this.tmpMonth + 1
+                        this.tmpMonth += 1
+                    }
+                }
+                if (!this.range) {
+                    this.year = this.tmpYear
+                    this.month = this.tmpMonth
+                    this.date = date.value
+                    let value = `${('0' + this.date).slice(-2)}/${('0' + (this.month + 1)).slice(-2)}/${this.tmpYear}`
+                    this.$emit('input', value)
+                    this.panelState = false
+                } else if (this.range && !this.rangeStart) {
+                    this.tmpEndYear = this.tmpStartYear = this.tmpYear
+                    this.tmpEndMonth = this.tmpStartMonth = this.tmpMonth
+                    this.tmpEndDate = this.tmpStartDate = date.value
+                    this.rangeStart = true
+                } else if (this.range && this.rangeStart) {
+
+                    this.tmpEndYear = this.tmpYear
+                    this.tmpEndMonth = this.tmpMonth
+                    this.tmpEndDate = date.value
+                    let d1 = new Date(this.tmpStartYear, this.tmpStartMonth, this.tmpStartDate).getTime(),
+                        d2 = new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime()
+                    if (d1 > d2) {
+                        let tmpY, tmpM, tmpD
+                        tmpY = this.tmpEndYear
+                        tmpM = this.tmpEndMonth
+                        tmpD = this.tmpEndDate
+                        this.tmpEndYear = this.tmpStartYear
+                        this.tmpEndMonth = this.tmpStartMonth
+                        this.tmpEndDate = this.tmpStartDate
+                        this.tmpStartYear = tmpY
+                        this.tmpStartMonth = tmpM
+                        this.tmpStartDate = tmpD
+                    }
+                    let RangeStart = `${this.tmpStartYear}-${('0' + (this.tmpStartMonth + 1)).slice(-2)}-${('0' + this.tmpStartDate).slice(-2)}`
+                    let RangeEnd = `${this.tmpEndYear}-${('0' + (this.tmpEndMonth + 1)).slice(-2)}-${('0' + this.tmpEndDate).slice(-2)}`
+                    let value = [RangeStart, RangeEnd]
+                    this.$emit('input', value)
+                    this.rangeStart = false
+                    this.panelState = false
+                }
+            }, 0)
+        },
+
+        validateYear (year) {
+            return (year > this.maxYear || year < this.minYear) ? true : false
+        },
+
+        validateMonth (month) {
+            if (new Date(this.tmpYear, month).getTime() >= new Date(this.minYear, this.minMonth - 1).getTime()
+                && new Date(this.tmpYear, month).getTime() <= new Date(this.maxYear, this.maxMonth - 1).getTime()) {
+                return false
+            }
+            return true
+        },
+
+        validateDate (date) {
+            let mon = this.tmpMonth
+            if (date.previousMonth) {
+                mon -= 1
+            } else if (date.nextMonth) {
+                mon += 1
+            }
+            if (new Date(this.tmpYear, mon, date.value).getTime() >= new Date(this.minYear, this.minMonth - 1, this.minDate).getTime()
+                && new Date(this.tmpYear, mon, date.value).getTime() <= new Date(this.maxYear, this.maxMonth - 1, this.maxDate).getTime()) {
+                return false
+            }
+            return true
+        },
+
+        close (e) {
+            if (!this.$el.contains(e.target)) {
+                this.panelState = false
+                this.rangeStart = false
+            }
+        },
+        clear() {
+            this.$emit('input', this.range ? ['', ''] : '')
+        }
+    },
+
+    watch: {
+        min (v) {
+            let minArr = v.split('/')
+            this.minYear = Number(minArr[0])
+            this.minMonth = Number(minArr[1])
+            this.minDate = Number(minArr[2])
+        },
+        max (v) {
+            let maxArr = v.split('/')
+            this.maxYear = Number(maxArr[0])
+            this.maxMonth = Number(maxArr[1])
+            this.maxDate = Number(maxArr[2])
+        },
+        range (newVal, oldVal) {
+            if (newVal === oldVal) return
+            if (newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'String') {
+                this.$emit('input', ['', ''])
+            }
+            if (!newVal && Object.prototype.toString.call(this.value).slice(8, -1) === 'Array') {
+                this.$emit('input', '')
+            }
+        }
+    },
+
+    computed: {
+        dateList () {
+            let currentMonthLength = new Date(this.tmpYear, this.tmpMonth + 1, 0).getDate()
+            let dateList = Array.from({length: currentMonthLength}, (val, index) => {
+                return {
+                    currentMonth: true,
+                    value: index + 1
+                }
+            })
+            let startDay = new Date(this.tmpYear, this.tmpMonth, 1).getDay()
+
+            let previousMongthLength = new Date(this.tmpYear, this.tmpMonth, 0).getDate()
+            for (let i = 0, len = startDay; i < len; i++) {
+                dateList = [{previousMonth: true, value: previousMongthLength - i}].concat(dateList)
+            }
+            for (let i = dateList.length, item = 1; i < 2; i++, item++) {
+                dateList[dateList.length] = {nextMonth: true, value: item}
+            }
+            return dateList
+        }
+    },
+
+    filters: {
+        week: (item, lang) => {
+            switch (lang) {
+                case 'en':
+                    return {0: 'Su', 1: 'Mo', 2: 'Tu', 3: 'We', 4: 'Th', 5: 'Fr', 6: 'Sa'}[item]
+                case 'ch':
+                    return {0: '日', 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六'}[item]
+                default:
+                    return item
+            }
+        },
+
+        month: (item, lang) => {
+            switch (lang) {
+                case 'en':
+                    return {
+                        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+                        7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+                    }[item]
+                case 'ch':
+                    return {
+                        1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六',
+                        7: '七', 8: '八', 9: '九', 10: '十', 11: '十一', 12: '十二'
+                    }[item]
+                default:
+                    return item
+            }
+        }
+    },
+
+    mounted () {
+
+        this.$nextTick(() => {
+            if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
+                this.coordinates = {
+                    right: '0',
+                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                }
+            } else {
+                this.coordinates = {
+                    left: '0',
+                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                }
+            }
+            let minArr = this.min.split('-')
+            this.minYear = Number(minArr[0])
+            this.minMonth = Number(minArr[1])
+            this.minDate = Number(minArr[2])
+            let maxArr = this.max.split('-')
+            this.maxYear = Number(maxArr[0])
+            this.maxMonth = Number(maxArr[1])
+            this.maxDate = Number(maxArr[2])
+            if (this.range) {
+                if (Object.prototype.toString.call(this.value).slice(8, -1) !== 'Array') {
+                    throw new Error('Binding value must be an array in range mode.')
+                }
+                if (this.value.length) {
+                    let rangeStart = this.value[0].split('-')
+                    let rangeEnd = this.value[1].split('-')
+                    this.tmpStartYear = Number(rangeStart[0])
+                    this.tmpStartMonth = Number(rangeStart[1]) - 1
+                    this.tmpStartDate = Number(rangeStart[2])
+                    this.tmpEndYear = Number(rangeEnd[0])
+                    this.tmpEndMonth = Number(rangeEnd[1]) - 1
+                    this.tmpEndDate = Number(rangeEnd[2])
+                } else {
+                    this.$emit('input', ['', ''])
+                }
+
+            }
+            if (!this.value) {
+                this.$emit('input', '')
+            }
+            window.addEventListener('click', this.close)
+        })
+    },
+    beforeDestroy () {
+        window.removeEventListener('click', this.close)
+    }
+
+})
 
 class trainingStore {
 
@@ -1007,5 +1542,3 @@ class trainingStore {
 }
 
 let training_store = new trainingStore();
-
-
