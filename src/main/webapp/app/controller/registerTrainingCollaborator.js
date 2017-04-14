@@ -76,7 +76,7 @@ Vue.component('collaborator-formation', {
                                         </div></div>
                                         <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
 
-                                            <accordion :one-at-atime="true" type="info">
+                                            <accordion id="accordionId" :one-at-atime="true" type="info">
                                                 <div v-for="training in trainingsFound">
                                                     <panel @openPanel="renitialize(training)"type="primary">
                                                         <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
@@ -105,7 +105,10 @@ Vue.component('collaborator-formation', {
                                         <div class="row">
                                         <div class="col-lg-12" style="margin-top:10px">
                                         <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20" style="position: relative; left:50%; z-index:1;">
-                                        </div></div>
+                                        </div>
+                                        </div>
+                                        <center v-show="showChevrons"><p style="margin:10px;"><span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>Toutes les formations démarrent à 9h00</p></center>
+
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +126,9 @@ Vue.component('collaborator-formation', {
             else return '';
         },
         showChevrons(){
+           // document.getElementsByTagName("panel-group")[0].getAttribute("height");
+            //var height = $(".panel-group");
+            //console.log(height);
             if(this.trainingsFound.length >0){
                 return true;
             }

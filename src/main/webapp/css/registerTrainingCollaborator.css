@@ -1,7 +1,7 @@
 #trainingContainer {
     border:1px solid #dcdcdc;
     border-radius: 10px;
-    height:700px;
+    height:600px;
     width: 100%;
     overflow-y:hidden;
     overflow-x:hidden;
@@ -40,6 +40,7 @@ button + p {
     min-width: 200px;
     left: 0%;
     top: 100%;
+    z-index:6;
 }
 
 .panel-primary{
@@ -50,7 +51,7 @@ button + p {
 }
 
 #scroll{
-    height: 500px;
+    height: 420px;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 5;
 }
