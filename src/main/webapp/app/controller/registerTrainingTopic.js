@@ -5,8 +5,8 @@
 Vue.use(VueResource);
 
 Vue.component('error-messages',{
-    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','failureMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptyRegexError','emptyFailure','width'],
+    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
     data: function(){
         return {
             styleTd: {
@@ -25,6 +25,12 @@ Vue.component('error-messages',{
                                     </span>
                                     <span v-show="emptySuccess" 
                                           class="text-center color-green"> {{ successMessage }}
+                                    </span>
+                                    <span v-show="emptySuccessModification" 
+                                          class="text-center color-green"> {{ successModificationMessage }}
+                                    </span>
+                                    <span v-show="emptySuccessSupression" 
+                                          class="text-center color-green"> {{ successSupressionMessage }}
                                     </span>
                                     <span v-show="emptyFailure" 
                                           class="text-center color-red"> {{ failureMessage }}
@@ -565,7 +571,9 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             valueButtonSaveModify: "Ajouter",
             state: training_store.state,
             trainingStore: training_store,
-            beginningDateForTest:''
+            beginningDateForTest:'',
+            confirmModification:false,
+            confirmSupression:false
         }
     },
 
@@ -690,7 +698,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isBeginningDateEmpty();
                 this.isLocationEmpty();
 
-                if (!this.trainingTitleInAddSession && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
+                if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                     this.SaveSessionIntoDatabase();
                 }
@@ -767,6 +775,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.$http.put("api/sessions", this.sessionToModify).then(
                 function (response) {
                     this.isSessionAlreadyPlanned = false;
+                    this.confirmModification = true;
+                    setTimeout(function(){ this.confirmModification = false; }.bind(this), 1500);
                     document.getElementById('circle' + this.sessionToModify.id).className = 'circle';
                     this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
                     this.numberOfSessionSelected--;
@@ -774,6 +784,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.GatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
+                    this.confirmModification = false;
                     if (response.data.message === "TrainingSession already planned") {
                         this.isSessionAlreadyPlanned = true;
                     } else {
@@ -789,6 +800,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.numberOfSessionSelected--;
                 }
             this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
+            this.confirmSupression = true;
+            setTimeout(function(){ this.confirmSupression = false; }.bind(this), 1500);
 
         },
 
@@ -984,11 +997,15 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 <error-messages  
                                                     fillFieldErrorMessage =" Veuillez remplir tous les champs." 
                                                     successMessage =" La session a été créée avec succès."
+                                                    successModificationMessage = "La modification est bien enregistrée."
+                                                    successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
                                                     failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
                                                     :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                     :emptyRegexError = "!isBeginningDateValid && !beginningDateErrorMessage"
                                                     :emptyFailure = "isSessionAlreadyPlanned && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptySuccessModification = "confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptySuccessSupression = "confirmSupression && !confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
                                                 <error-messages>
                                             </tr>
@@ -1020,7 +1037,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         </div>`,
 });
 
-Vue.component('datepicker', {
+let DatePicker = Vue.component('datepicker', {
 
     template: `
          <div class="date-picker">

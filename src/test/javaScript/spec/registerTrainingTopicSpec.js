@@ -3,12 +3,15 @@ beforeEach(function () {
     vmAddFormationPanel = new AddFormationPanel().$mount();
     vmShowFormation = new ShowFormation().$mount();
     vmAddSessionPanel = new AddSessionPanel().$mount();
+    vmDatePicker = new DatePicker().$mount();
+
 });
 
 
 
 afterEach(function () {
-        vmAddFormationPanel.state.trainingsChosen=[];
+    vmDatePicker = undefined;
+    vmAddFormationPanel.state.trainingsChosen=[];
         vmAddFormationPanel.state.allTopicTraining=[];
         vmAddFormationPanel.state.changePageToTraining=true;
         vmAddFormationPanel.state.changePageToSession=false;
@@ -427,14 +430,6 @@ describe('test registerTrainingTopic.js', function () {
             expect(training_store.removeDuplicates(arrayWithDuplicates, "id")).toEqual(result);
         });
 
-        //verifyTrainingFormBeforeSubmit
-        //verifyTopicFormBeforeSubmit
-        //saveTrainingIntoDatabase
-        //saveTopicIntoDatabase
-        //gatherTopicsFromDatabase
-        //gatherTrainingsFromDatabase
-
-
         //TopicwithTraining
         it('should check whether the function TopicwithTraining can choose all the topics which have already got the trainings', function () {
             vmAddFormationPanel.state.allTrainings = [
@@ -702,6 +697,92 @@ describe('test registerTrainingTopic.js', function () {
             }, 2000);
         });
 
+
+    });
+
+    describe('vmDatePicker', function () {
+
+        it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
+            vmDatePicker.togglePanel();
+            expect(vmDatePicker.panelState).toBe(true);
+            expect(vmDatePicker.rangeStart).toBe(false);
+
+        });
+
+        it('Should check the selected component on the calendar', function () {
+            vmDatePicker.chType('day')
+            expect(vmDatePicker.panelType).toBe('day');
+            vmDatePicker.chType('month');
+            expect(vmDatePicker.panelType).toBe('month');
+            vmDatePicker.chType('year');
+            expect(vmDatePicker.panelType).toBe('year');
+
+        });
+
+
+        it('Should check prevMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1 ;
+            vmDatePicker.prevMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(0);
+            vmDatePicker.tmpMonth = 5 ;
+            vmDatePicker.prevMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(4);
+
+        });
+
+        it('Should check nextMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1 ;
+            vmDatePicker.nextMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(2);
+            vmDatePicker.tmpMonth = 5 ;
+            vmDatePicker.nextMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(6);
+
+        });
+
+        it('Should check selectYear', function () {
+            vmDatePicker.maxYear = 2018
+            vmDatePicker.year = 2017 ;
+            vmDatePicker.selectYear (vmDatePicker.year);
+            vmDatePicker.validateYear(vmDatePicker.year);
+            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
+            expect(vmDatePicker.panelType).toBe('month');
+
+        });
+
+        it('Should check selectMonth', function () {
+            vmDatePicker.maxYear = 2018
+            vmDatePicker.year = 2017 ;
+            vmDatePicker.selectYear (vmDatePicker.year);
+            vmDatePicker.validateYear(vmDatePicker.year);
+            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
+            expect(vmDatePicker.panelType).toBe('month');
+
+        });
+
+        it('Should check function handleFocus', function () {
+            vmDatePicker.handleFocus();
+        });
+
+        it('Should check function handleBlur', function () {
+            vmDatePicker.handleBlur();
+        });
+
+        it('should check update date filed ', function () {
+            vmDatePicker.updateValue("01/06/2020");
+        });
+
+        it('should check function togglePanel', function () {
+            vmDatePicker.panelState = true;
+            vmDatePicker.togglePanel();
+            expect(vmDatePicker.panelState).toBe(false);
+            expect(vmDatePicker.rangeStart).toBe(false);
+        });
+
+        it('should check function chYearRange', function () {
+            vmDatePicker.chYearRange(true);
+            vmDatePicker.chYearRange(false);
+        });
 
     });
 
