@@ -5,8 +5,8 @@
 Vue.use(VueResource);
 
 Vue.component('error-messages',{
-    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
-           'emptyIdenticalError','emptyFillError','emptySuccess','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
+    props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
+           'emptyIdenticalError','emptyFillError','emptySuccess','emptyfailureModification','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
     data: function(){
         return {
             styleTd: {
@@ -34,6 +34,9 @@ Vue.component('error-messages',{
                                     </span>
                                     <span v-show="emptyFailure" 
                                           class="text-center color-red"> {{ failureMessage }}
+                                    </span>
+                                    <span v-show="emptyfailureModification" 
+                                          class="text-center color-red"> {{ failureModification }}
                                     </span>
                                     <span v-show="emptyRegexError" 
                                           class="color-red">{{ regexErrorMessage }}
@@ -573,7 +576,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             trainingStore: training_store,
             beginningDateForTest:'',
             confirmModification:false,
-            confirmSupression:false
+            confirmSupression:false,
+            failureModification:false
         }
     },
 
@@ -636,8 +640,13 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = false;
             } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
-                this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = true;
+                if(this.trainingTitleInAddSession != this.state.trainingTitle){
+                    this.trainingTitleInAddSession = this.state.trainingTitle;
+                    this.failureModification = true;
+                    setTimeout(function(){ this.failureModification = false; }.bind(this), 2000);
+                }
+                this.trainingTitleInAddSession = this.state.trainingTitle;
             }
         },
 
@@ -709,6 +718,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
             this.state.trainingTitle = this.trainingTitleInAddSession;
             this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
+            this.confirmModification = true;
+            setTimeout(function(){ this.confirmModification = false; }.bind(this), 1500);
         },
 
         SaveSessionIntoDatabase(){
@@ -997,6 +1008,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 <error-messages  
                                                     fillFieldErrorMessage =" Veuillez remplir tous les champs." 
                                                     successMessage =" La session a été créée avec succès."
+                                                    failureModification =" La modification n'est pas enregistrée."
                                                     successModificationMessage = "La modification est bien enregistrée."
                                                     successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
                                                     failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
@@ -1006,6 +1018,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                     :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptySuccessModification = "confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptySuccessSupression = "confirmSupression && !confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
+                                                    :emptyfailureModification = "failureModification && !confirmSupression && !confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
                                                     :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
                                                 <error-messages>
                                             </tr>
