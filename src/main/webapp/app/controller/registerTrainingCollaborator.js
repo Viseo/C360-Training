@@ -126,9 +126,6 @@ Vue.component('collaborator-formation', {
             else return '';
         },
         showChevrons(){
-           // document.getElementsByTagName("panel-group")[0].getAttribute("height");
-            //var height = $(".panel-group");
-            //console.log(height);
             if(this.trainingsFound.length >0){
                 return true;
             }
@@ -245,7 +242,6 @@ Vue.component('collaborator-formation', {
                 this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
                 this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
                 this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
-                console.log(this.RequestToRegister);
                 this.SaveTrainingSessionCollaborator();
             } else {
                 this.noSessionsSelectedError = true;
@@ -267,7 +263,6 @@ Vue.component('collaborator-formation', {
             for (index in this.allTrainings) {
                 this.allTrainingTitles.push(this.allTrainings[index].trainingTitle)
             }
-            console.log(this.allTrainingTitles);
         },
         storeTrainingsFound(){
             this.trainingsFound.splice(0, this.trainingsFound.length);
@@ -287,7 +282,6 @@ Vue.component('collaborator-formation', {
             this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
                 function (response){
                     this.sessionsByCollab = response.data;
-                    console.log(this.sessionsByCollab);
                     this.disablingSessions();
                 }
 

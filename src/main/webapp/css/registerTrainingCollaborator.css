@@ -30,7 +30,7 @@ legend{
     position: absolute;
     top: 12px;
     cursor:pointer;
-    z-index: 1000;
+    z-index: 6;
 }
 button + p {
     margin:10px 0 0;
