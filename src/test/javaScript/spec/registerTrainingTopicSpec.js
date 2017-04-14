@@ -4,14 +4,12 @@ beforeEach(function () {
     vmShowFormation = new ShowFormation().$mount();
     vmAddSessionPanel = new AddSessionPanel().$mount();
     vmDatePicker = new DatePicker().$mount();
-
 });
 
 
 
 afterEach(function () {
-    vmDatePicker = undefined;
-    vmAddFormationPanel.state.trainingsChosen=[];
+        vmAddFormationPanel.state.trainingsChosen=[];
         vmAddFormationPanel.state.allTopicTraining=[];
         vmAddFormationPanel.state.changePageToTraining=true;
         vmAddFormationPanel.state.changePageToSession=false;
@@ -27,10 +25,69 @@ afterEach(function () {
         vmAddFormationPanel = undefined;
         vmShowFormation = undefined;
         vmAddFormationPanel = undefined;
+        vmDatePicker = undefined;
 
 });
 
 describe('test registerTrainingTopic.js', function () {
+
+    describe('vmDatePicker', function () {
+
+        it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
+            vmDatePicker.togglePanel();
+            expect(vmDatePicker.panelState).toBe(true);
+            expect(vmDatePicker.rangeStart).toBe(false);
+
+        });
+
+        it('Should check the selected component on the calendar', function () {
+            vmDatePicker.chType('day')
+            expect(vmDatePicker.panelType).toBe('day');
+            vmDatePicker.chType('month');
+            expect(vmDatePicker.panelType).toBe('month');
+            vmDatePicker.chType('year');
+            expect(vmDatePicker.panelType).toBe('year');
+
+        });
+
+        /*it('should range of date', function () {
+            vmDatePicker.yearList = Array.from({length: 12}, (value, index) => new Date().getFullYear() + index);
+            vmDatePicker.chYearRange(1);
+            expect(vmDatePicker.yearList.map((i) => i + 2)).toBe('[ 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030 ]');
+
+        });*/
+
+        it('Should check prevMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1 ;
+            vmDatePicker.prevMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(0);
+            vmDatePicker.tmpMonth = 5 ;
+            vmDatePicker.prevMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(4);
+
+        });
+
+        it('Should check nextMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1 ;
+            vmDatePicker.nextMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(2);
+            vmDatePicker.tmpMonth = 5 ;
+            vmDatePicker.nextMonthPreview ();
+            expect(vmDatePicker.tmpMonth).toBe(6);
+
+        });
+
+        it('Should check selectYear', function () {
+            vmDatePicker.maxYear = 2018
+            vmDatePicker.year = 2017 ;
+            vmDatePicker.selectYear (vmDatePicker.year);
+            vmDatePicker.validateYear(vmDatePicker.year);
+            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
+            expect(vmDatePicker.panelType).toBe('month');
+
+        });
+
+    });
 
     describe('vmAddSessionPanel', function () {
 
@@ -281,6 +338,7 @@ describe('test registerTrainingTopic.js', function () {
         );
 
     });
+
     describe('vmAddFormationPanel', function () {
         let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
 
@@ -616,7 +674,6 @@ describe('test registerTrainingTopic.js', function () {
         });
 
     });
-
 
     describe('vmShowFormation', function () {
         it('should check if the panel change from training panel to session panel when click on a training button', function () {
