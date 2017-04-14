@@ -1,0 +1,56 @@
+#trainingContainer {
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
+    height:700px;
+    width: 100%;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    z-index: -1;
+    padding:20px;
+    margin-left:15px;
+}
+
+legend{
+    display: block;
+    width: inherit;
+    margin-bottom: -1%;
+    margin-left: 25px;
+    padding: 0 10px;
+    border-bottom: none;
+    border-radius: 5px;
+    background-color: #428bca;
+    color: white;
+}
+#trainingErrorMessage {
+    margin: 6px 0px 5px 3px;
+}
+.color-red {color: #B22222;}
+.searchField .glyphicon-search {
+    right: 25px;
+    position: absolute;
+    top: 12px;
+    cursor:pointer;
+    z-index: 1000;
+}
+button + p {
+    margin:10px 0 0;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+    left: 0%;
+    top: 100%;
+}
+
+.panel-primary{
+    border-color: rgb(210, 210, 210);
+}
+.panel-heading{
+    background-color: rgba(66, 139, 202,0.8) !important;
+}
+
+#scroll{
+    height: 500px;
+    overflow: hidden;
+    z-index: 1000;
+}

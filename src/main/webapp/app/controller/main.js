@@ -64,7 +64,7 @@ let Header = Vue.component('blue-header',{
             test: 50,
             stayConnected: true,
             dialog: false,
-            timeconnected: 0
+            timeconnected: 0,
         }
     },
     mounted: function(){
@@ -181,6 +181,17 @@ $('#test').bind('mousewheel DOMMouseScroll', function(event){
         $('#test').animate({scrollTop: "+=100"}, 80);
     }
 });
+
+$('#scroll-up-2').click(function() {
+    console.log("coucou");
+    $('#scroll').animate({scrollTop: "-=100"}, 500);
+})
+
+$('#scroll-down-2').click(function() {
+    console.log("coucou");
+    $('#scroll').animate({scrollTop: "+=100"}, 500);
+})
+
 
 $('ul.nav li.dropdown').hover(function() {http://www.bootply.com/PZIuAAmHST#
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
