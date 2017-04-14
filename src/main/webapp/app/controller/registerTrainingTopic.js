@@ -1166,8 +1166,8 @@ let DatePicker = Vue.component('datepicker', {
             default: false
         },
         isValid: {
-            type: [String, Array],
-            default: ''
+            type: Boolean,
+            default: true
         }
     },
 
@@ -1195,7 +1195,7 @@ let DatePicker = Vue.component('datepicker', {
                 case 'year':
                     if (!this.range)
                         return item === this.tmpYear
-                    return (new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
+                   alert(new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
                     && new Date(item, 0).getTime() <= new Date(this.tmpEndYear, 0).getTime())
                 case 'month':
                     if (!this.range) return item === this.tmpMonth && this.year === this.tmpYear
@@ -1217,9 +1217,11 @@ let DatePicker = Vue.component('datepicker', {
 
         chYearRange (next) {
             if (next) {
-                this.yearList = this.yearList.map((i) => i + 12)
+                console.log(this.yearList);
+
+                this.yearList = this.yearList.map((i) => i + 2)
             } else {
-                this.yearList = this.yearList.map((i) => i - 12)
+                this.yearList = this.yearList.map((i) => i - 2)
             }
         },
 
