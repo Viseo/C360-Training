@@ -69,7 +69,6 @@ Vue.component('collaborator-formation', {
                                                    <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
-                                        
                                         <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                                             <p style="margin-top:50px;"></p>
                                             <hr style="margin:0px">
@@ -78,8 +77,8 @@ Vue.component('collaborator-formation', {
                                             <div v-for="training in trainingsFound">
                                             <panel @openPanel="renitialize(training)"type="primary">
                                                 <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
-                                                <h4 class="col-lg-8"><u>Sessions disponibles</u></h4>
-                                                <div class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
+                                                <h4 v-show="!isNoSession"class="col-lg-8"><u>Sessions disponibles</u></h4>
+                                                <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
                                                 <div :id="training.id">
                                                 <div  class="col-lg-12"  v-for="i in listTrainingSession">
                                                 <div v-if="i.trainingDescription.id == training.id" >
@@ -93,9 +92,10 @@ Vue.component('collaborator-formation', {
                                                 <div class="col-lg-12">
                                                 <center>
                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
-                                                <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
                                                 <p style="color:blue" v-show="isNoSession"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
                                                 <button class="btn btn-primary" value="Envoyer une demande" @click="VerifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
+
                                                 </center></div>
                                             </panel>
                                             </accordion>

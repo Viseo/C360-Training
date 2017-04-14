@@ -32,6 +32,9 @@ legend{
     cursor:pointer;
     z-index: 1000;
 }
+button + p {
+    margin:10px 0 0;
+}
 
 .dropdown-menu {
     min-width: 200px;
