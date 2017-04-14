@@ -1063,7 +1063,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     </div>
                 </div>
             </div>
-            <pre>{{$data|json}}</pre>
         </div>`,
 });
 
