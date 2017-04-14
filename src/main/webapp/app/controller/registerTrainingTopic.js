@@ -149,6 +149,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
     methods: {
+
         updateV1 (v) {
             this.trainingTitle = v
         },
@@ -577,7 +578,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             beginningDateForTest:'',
             confirmModification:false,
             confirmSupression:false,
-            failureModification:false
+            failureModification:false,
             beginningDateForTest:'',
             toDay:''
         }

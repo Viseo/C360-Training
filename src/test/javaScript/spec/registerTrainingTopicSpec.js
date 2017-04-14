@@ -684,6 +684,7 @@ describe('test registerTrainingTopic.js', function () {
 
     });
 
+
     describe('vmShowFormation', function () {
         it('should check if the panel change from training panel to session panel when click on a training button', function () {
 
