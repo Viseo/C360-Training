@@ -182,6 +182,17 @@ $('#test').bind('mousewheel DOMMouseScroll', function(event){
     }
 });
 
+$('#scroll-up-2').click(function() {
+    console.log("coucou");
+    $('#scroll').animate({scrollTop: "-=100"}, 500);
+})
+
+$('#scroll-down-2').click(function() {
+    console.log("coucou");
+    $('#scroll').animate({scrollTop: "+=100"}, 500);
+})
+
+
 $('ul.nav li.dropdown').hover(function() {http://www.bootply.com/PZIuAAmHST#
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
 }, function() {

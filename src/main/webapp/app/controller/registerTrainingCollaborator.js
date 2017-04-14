@@ -49,7 +49,7 @@ Vue.component('collaborator-formation', {
                                 </div>
                                 <div class="row">
                                     <div id="trainingContainer">
-                                        <div class="row">
+                                        <div class="row" style="margin-bottom:35px">
                                             <div class="col-lg-4 col-md-4 col-sm-12">
                                                 <select required class="form-control" v-model="selectedTraining">
                                                     <option  value="" disabled hidden>Formations disponibles</option>
@@ -59,16 +59,23 @@ Vue.component('collaborator-formation', {
                                             <div class="col-lg-2 col-md-2 col-sm-12">
                                                 <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
-                                            <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <input type="submit" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
-                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
-                                                <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
-                                            </div>
+                                        <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                                <span class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
+                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
+                                                    </typeahead>  
+                                                     <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
                                         </div>
-                                        <div class="row">
+                                    </div>
+
+                                                   <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
-                                        <div class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+                                        <div class="row">
+                                        <div class="col-lg-12" style="margin-bottom:30px">
+                                              <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                        </div></div>
+                                        <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+
                                             <accordion :one-at-atime="true" type="info">
                                                 <div v-for="training in trainingsFound">
                                                     <panel @openPanel="renitialize(training)"type="primary">
@@ -95,6 +102,10 @@ Vue.component('collaborator-formation', {
                                                 </div>
                                             </accordion>
                                         </div>
+                                        <div class="row">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+                                        </div></div>
                                     </div>
                                 </div>
                             </div>
@@ -110,6 +121,14 @@ Vue.component('collaborator-formation', {
         searchFormatted: function () {
             if(this.value) return this.value.toUpperCase();
             else return '';
+        },
+        showChevrons(){
+            if(this.trainingsFound.length >0){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
     },
 
@@ -120,7 +139,7 @@ Vue.component('collaborator-formation', {
                 temp.disabled =true;
                 this.sessionAlreadyBookedMessage = true;
                 temp.nextElementSibling.innerHTML="";
-                $("#"+this.sessionsByCollab[i].id).after('<span>' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette sessions </span></span>');
+                $("#"+this.sessionsByCollab[i].id).after('<span>' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
             }
         },
         renitialize(training){
@@ -225,6 +244,7 @@ Vue.component('collaborator-formation', {
             } else {
                 this.noSessionsSelectedError = true;
             }
+            this.storeCollabsByTraining(this.trainingSelected.id);
         },
         SaveTrainingSessionCollaborator(){
             this.$http.post("api/requests", this.RequestToRegister).then(
