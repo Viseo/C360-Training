@@ -578,7 +578,13 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             confirmModification:false,
             confirmSupression:false,
             failureModification:false
+            beginningDateForTest:'',
+            toDay:''
         }
+    },
+
+    mounted: function () {
+        this.getDate();
     },
 
     watch:{
@@ -909,6 +915,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 return true;
             }
         },
+
+        getDate(){
+            var now = new Date();
+            var day = now.getDate();
+            var month = now.getMonth() + 1;
+            var year = now.getFullYear();
+            this.toDay = (year + "-" + month + "-" + day);
+        },
     },
 
     template: `
@@ -971,7 +985,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                     :disabled = "canNotRegisterForm"
                                                     @blur = "CalculateEndingDate()"
                                                     @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
-                                                    @input = "updateV2">                                                                                       
+                                                    @input = "updateV2"
+                                                    :min = "toDay">                                                                                       
                                         </datepicker>
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
@@ -1155,7 +1170,7 @@ let DatePicker = Vue.component('datepicker', {
 
     props: {
         language: {default: 'en'},
-        min: {default: '2017-04-13'},
+        min: {default: '2017-04-10'},
         max: {default: '2020-01-01'},
         value: {
             type: [String, Array],
@@ -1195,7 +1210,7 @@ let DatePicker = Vue.component('datepicker', {
                 case 'year':
                     if (!this.range)
                         return item === this.tmpYear
-                   alert(new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
+                   return (new Date(item, 0).getTime() >= new Date(this.tmpStartYear, 0).getTime()
                     && new Date(item, 0).getTime() <= new Date(this.tmpEndYear, 0).getTime())
                 case 'month':
                     if (!this.range) return item === this.tmpMonth && this.year === this.tmpYear
@@ -1217,8 +1232,6 @@ let DatePicker = Vue.component('datepicker', {
 
         chYearRange (next) {
             if (next) {
-                console.log(this.yearList);
-
                 this.yearList = this.yearList.map((i) => i + 2)
             } else {
                 this.yearList = this.yearList.map((i) => i - 2)
@@ -1422,7 +1435,6 @@ let DatePicker = Vue.component('datepicker', {
     },
 
     mounted () {
-
         this.$nextTick(() => {
             if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
                 this.coordinates = {

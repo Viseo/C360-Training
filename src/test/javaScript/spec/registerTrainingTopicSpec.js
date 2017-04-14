@@ -87,6 +87,15 @@ describe('test registerTrainingTopic.js', function () {
 
         });
 
+        it('Should check selectMonth', function () {
+            vmDatePicker.month = 10;
+            vmDatePicker.selectMonth(vmDatePicker.month);
+            expect(vmDatePicker.tmpMonth).toBe(vmDatePicker.month);
+            expect(vmDatePicker.panelType).toBe('date');
+
+
+        });
+
     });
 
     describe('vmAddSessionPanel', function () {
