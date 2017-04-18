@@ -1,7 +1,7 @@
 /**
  * Created by CLH3623 on 10/04/2017.
  */
-Vue.component('collaborator-formation', {
+let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
             sessionAlreadybooked:[],
@@ -57,7 +57,7 @@ Vue.component('collaborator-formation', {
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-12">
-                                                <input @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
+                                                <input ref="btnValidateSearch" @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
                                         <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
@@ -186,13 +186,19 @@ Vue.component('collaborator-formation', {
             this.emptyTraining = this.selectedTraining ? false : true;
             this.trainingsFound.splice(0, this.trainingsFound.length);
             if (!this.emptyTraining) {
+                console.log("hello1");
+
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
+                        console.log("hellooo");
                         this.listTrainingSession = response.data;
                         for (key in this.allTrainings) {
                             if (this.allTrainings[key].id == this.selectedTraining) {
+                                console.log("hhuhu");
                                 this.trainingsFound.push(this.allTrainings[key]);
                             }
+                            else {
+                                console.log("error");}
                         }
                         if (this.listTrainingSession.length === 0) {
                             this.displayTrainings = true;
@@ -202,7 +208,10 @@ Vue.component('collaborator-formation', {
                             this.displayTrainings = true;
                             this.isNoSession = false;
                         }
-                    });
+                    },
+                function(error) {
+                        console.log(error);
+                });
             }
         },
         gatherTrainingsFromDatabase(){
@@ -222,10 +231,15 @@ Vue.component('collaborator-formation', {
         },
         GetCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            this.token = String(regexCookieToken.pop());
-            this.collaboratorIdentity.id = jwt_decode(this.token).id;
-            this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-            this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+           try {
+               this.token = String(regexCookieToken.pop());
+               if (this.token != 'undefined'){
+                   this.collaboratorIdentity.id = jwt_decode(this.token).id;
+                   this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+                   this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+           }
+           } catch(e) {
+           }
         },
         GatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.idTraining + "/sessions").then(

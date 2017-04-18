@@ -282,7 +282,7 @@ let routes = [
             "numberHalfDays": 1,
             "topicDescription": {"id": 3, "version": 0, "name": "C"}
         }
-    },
+    }
 
 ];
 
