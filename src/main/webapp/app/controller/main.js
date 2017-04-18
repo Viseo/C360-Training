@@ -26,7 +26,7 @@ let Header = Vue.component('blue-header',{
                                         <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> 
                          </ul>
                     </div>
                 </div>     

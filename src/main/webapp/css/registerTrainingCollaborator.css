@@ -55,3 +55,9 @@ button + p {
     overflow: hidden;
     z-index: 5;
 }
+
+.showmeonhover { display: none; }
+
+.alwaysshowme:hover .showmeonhover {
+    display: inline;
+}

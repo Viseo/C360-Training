@@ -220,6 +220,9 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
+            console.log("training: "+this.trainingTitle);
+            console.log("days: "+this.numberHalfDays);
+            console.log("topic: "+this.training.topicDescription);
             this.newTopicErrorMessage = false;
             if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
@@ -736,6 +739,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         this.isSessionAlreadyPlanned = false;
                         this.confirmSession = true;
                         setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
+                        this.state.changePageToSession = false;
+                        this.state.changePageToTraining = true;
                         this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
                     },

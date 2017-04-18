@@ -142,7 +142,7 @@ Vue.component('collaborator-formation', {
                 temp.disabled =true;
                 this.sessionAlreadyBookedMessage = true;
                 temp.nextElementSibling.innerHTML="";
-                $("#"+this.sessionsByCollab[i].id).after('<span>' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
             }
         },
         renitialize(training){
