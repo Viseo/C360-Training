@@ -204,14 +204,10 @@ public class CollaboratorWS {
 
     @RequestMapping(value = "${endpoint.collaboratorsRequestingListByTrainingSession}", method = RequestMethod.GET)
     @ResponseBody
-    public List<CollaboratorIdentity> getCollaboratorsRequestingListByTrainingSession(@PathVariable Long id) {
-        TrainingSession trainingSession = null;
-        try {
-            trainingSession = trainingDAO.getSessionTraining(id);
-            return new CollaboratorToIdentity().convert(collaboratorDAO.getCollaboratorsRequestingBySession(trainingSession));
-        } catch (PersistentObjectNotFoundException e) {
-            throw new C360Exception(e);
-        }
+    public List<CollaboratorIdentity> getCollaboratorsRequestingListByTrainingSession(@PathVariable Long id) throws PersistentObjectNotFoundException {
+        //TrainingSession trainingSession = null;
+        //trainingSession = trainingDAO.getSessionTraining(id);
+        return new CollaboratorToIdentity().convert(collaboratorDAO.getCollaboratorsRequestingBySession(id));
     }
 
     //Update Collaborator Password

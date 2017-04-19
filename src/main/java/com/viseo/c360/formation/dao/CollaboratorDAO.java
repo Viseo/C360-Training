@@ -99,6 +99,13 @@ public class CollaboratorDAO {
         }
     }
 
+    public List<Collaborator> getCollaboratorsRequestingBySession(long myTrainnigSession){
+        List<Collaborator> listCollaborator =  daoFacade.getList(
+                "select c from requesttraining_trainingsession rs,requesttraining r,collaborator c where rs.requesttraining_id = r.id and r.collaborator_id = c.id and rs.sessions_id = 4");
+        System.out.println(listCollaborator.get(0));
+        return listCollaborator;
+    }
+/*
     public List<Collaborator> getCollaboratorsRequestingBySession(TrainingSession myTrainnigSession) {
         Set<Collaborator> listCollaborator = new HashSet<Collaborator>((Collection) daoFacade.getList(
                 "select c from RequestTraining r Inner Join r.collaborator c Inner Join r.sessions s Where s = :session",
@@ -111,5 +118,6 @@ public class CollaboratorDAO {
                 param("training", myTrainnigSession.getTraining())));
         return new ArrayList<>(listCollaborator);
     }
+*/
 }
 
