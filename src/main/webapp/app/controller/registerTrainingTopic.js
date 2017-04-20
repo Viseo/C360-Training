@@ -288,6 +288,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.$http.post("api/themes", this.topicToRegister)
                 .then(
                     function (response) {
+                        console.log("test");
                         this.confirmTopic = true;
                         this.gatherTopicsFromDatabase();
                         setTimeout(function(){ this.confirmTopic = false; }.bind(this), 2000);
@@ -1588,7 +1589,6 @@ class trainingStore {
         for (var tmp in this.state.trainingsChosen) {
             this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
         }
-        console.log(JSON.stringify(this.state.allTopicTraining));
     }
 
 }

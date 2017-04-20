@@ -29,6 +29,7 @@ afterEach(function () {
 
 });
 
+
 describe('test registerTrainingTopic.js', function () {
 
     describe('vmDatePicker', function () {
@@ -767,7 +768,7 @@ describe('test registerTrainingTopic.js', function () {
 
     });
 
-    describe('vmDatePicker', function () {
+    describe('vmDatePicker2', function () {
 
         it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
             vmDatePicker.togglePanel();

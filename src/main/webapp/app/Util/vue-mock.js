@@ -5,11 +5,9 @@ Vue.use(VueResource);
 
 let routes = [
     {
-      method: 'POST',
+        method: 'POST',
         url: 'api/sessionstoremove',
-        response: [
-
-        ]
+        response: []
     },
     {
         method: 'GET',
@@ -99,7 +97,7 @@ let routes = [
             {
                 "id": 7,
                 "version": 0,
-                "trainingTitle": "FORMATION3",
+                "trainingTitle": "JAVA",
                 "numberHalfDays": 3,
                 "topicDescription": {"id": 4, "version": 0, "name": "C++"}
             }
@@ -148,6 +146,10 @@ let routes = [
                 "location": "Salle Bali"
             }
         ]
+    },{
+        method: 'GET',
+        url: 'api/formations/6/sessions',
+        response: []
     },
     {
         method: 'GET',
@@ -224,8 +226,36 @@ let routes = [
     },
     {
         method: 'POST',
+        url: 'api/requests',
+        response: {status:"ok"}
+    },
+    {
+        method: 'GET',
+        url: 'api/formations/5/alreadyrequestedsession/2',
+        response: [
+            {
+                "id": 8,
+                "version": 0,
+                "trainingDescription": {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                "beginning": "18/05/2017",
+                "ending": "18/05/2017",
+                "beginningTime": "09:00",
+                "endingTime": "18:00",
+                "location": "Salle Bali"
+
+            }
+        ]
+    },
+    {
+        method: 'POST',
         url: 'api/themes',
-        response: {id: "2", version: "0", name: "PROGRAMMATION"}
+        response: {}
     },
     {
         method: 'POST',
@@ -282,7 +312,7 @@ let routes = [
             "numberHalfDays": 1,
             "topicDescription": {"id": 3, "version": 0, "name": "C"}
         }
-    },
+    }
 
 ];
 
