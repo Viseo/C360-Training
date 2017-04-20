@@ -220,9 +220,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.isTrainingTitleEmpty();
             this.isNumberHalfDaysEmpty();
             this.isTopicEmpty();
-            console.log("training: "+this.trainingTitle);
-            console.log("days: "+this.numberHalfDays);
-            console.log("topic: "+this.training.topicDescription);
             this.newTopicErrorMessage = false;
             if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
                 this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
@@ -341,10 +338,9 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     },
 template:`
  <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-10 col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 text-center">
+        
+                    <div class="row" >
+                        <div class="col-lg-7 col-md-7 text-center">
                             <legend>Ajouter une formation</legend>
                         </div>
                     </div>
@@ -434,8 +430,7 @@ template:`
                             </error-messages>
                         </tr>
                     </table>
-            </div>
-        </div>
+        
     </div>
 `
 });
@@ -481,13 +476,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
     },
     template: `
-<div class="container-fluid">
-             <div v-show="state.changePageToTraining" id="addFormation">
-                  <div class="row" >
-                      <div class="col-md-12 col-lg-10 col-sm-12" style="padding:10px;"></div>
-                   
+             <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
+                  
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 text-center">
+                                <div class="col-lg-7 col-md-7 text-center">
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
@@ -523,10 +515,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     </tbody>
                                 </table>
                                <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                           </div>
-                     
-                </div>
-                </div>
+                        
              </div>`
 });
 
@@ -934,17 +923,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     },
 
     template: `
-        <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
-            <div class="row">
-                <div class="col-md-12 col-lg-7 col-sm-12" style="padding:10px;"></div>
-                <div class="col-sm-12 col-md-10 col-lg-7">
-                    <div class="row">
-                        <div class="col-lg-7 col-md-7 text-center">
+        <div v-show="state.changePageToSession" class="container-fluid" id="addSession ">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-lg-7 col-md-7 text-center ">
                             <legend>Gérer une session</legend>
                         </div>
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">
-                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
+                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:5%; top:45%; z-index:1;">
                         <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
@@ -1067,9 +1053,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                 </div>                                                     
                             </form>
                         </div>
-                    </div>
-                </div>
-            </div>
         </div>`,
 });
 
