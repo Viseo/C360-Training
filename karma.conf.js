@@ -17,6 +17,7 @@ module.exports = function (config) {
         files: [
             'src/main/webapp/lib/jquery.min.js',
             'src/main/webapp/lib/vue.js',
+            'src/main/webapp/lib/vue-strap.js',
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-resource-mock.min.js',
             'src/main/webapp/lib/jwt-decode.js',
@@ -24,7 +25,8 @@ module.exports = function (config) {
             'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/registerTrainingTopic.js',
-            'src/test/javaScript/spec/*.js'
+            'src/main/webapp/app/controller/registerTrainingCollaborator.js',
+            'src/test/javaScript/spec/*.js',
         ],
 
 
