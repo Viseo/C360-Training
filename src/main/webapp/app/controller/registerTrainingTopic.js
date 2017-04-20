@@ -351,7 +351,7 @@ template:`
                     </div>
                     <table>
                     <tr>
-                    <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
+                    <div id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
                         <input-text 
                             width="20%" 
                             label="Formation" 
@@ -382,7 +382,7 @@ template:`
                             print-prop="name"
                             type="select">
                         </input-text>
-                        </form>
+                        </div>
                         <td class="text-center" 
                             width="20%">
                             <div class="form-group">
@@ -394,7 +394,7 @@ template:`
                                        style="width:80%"/>
                             </div>
                         </td>
-                        <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
+                        <div id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
                             <input-text width="30%" 
                                         label="Nouveau thème" 
                                         :value="newTopic"
@@ -408,7 +408,7 @@ template:`
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
                             </input-text>
-                        </form>
+                        </div>
                         </tr>
                         <tr>
                             <error-messages :colspan="2" 
