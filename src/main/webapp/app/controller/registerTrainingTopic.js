@@ -351,9 +351,8 @@ template:`
                     </div>
                     <table>
                     <tr>
-                    <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
                         <input-text 
-                            width="20%" 
+                            width="20%"
                             label="Formation" 
                             :value="trainingTitle" 
                             @input="updateV1"
@@ -363,6 +362,7 @@ template:`
                             :isValid="isTrainingTitleValid"
                             type='input'>
                         </input-text>
+                        
                         <input-text
                             width="15%"
                             label="1/2 journées"
@@ -372,6 +372,7 @@ template:`
                             :collection="200"
                             type="select">
                          </input-text>
+                         
                         <input-text
                             width="20%"
                             label="Thèmes"
@@ -382,7 +383,7 @@ template:`
                             print-prop="name"
                             type="select">
                         </input-text>
-                        </form>
+                        
                         <td class="text-center" 
                             width="20%">
                             <div class="form-group">
@@ -394,7 +395,7 @@ template:`
                                        style="width:80%"/>
                             </div>
                         </td>
-                        <form id="registr-form" @submit.prevent="verifyTopicFormBeforeSubmit"">
+                        <div id="registr-form">
                             <input-text width="30%" 
                                         label="Nouveau thème" 
                                         :value="newTopic"
@@ -408,10 +409,11 @@ template:`
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
                             </input-text>
-                        </form>
+                         </div>
                         </tr>
                         <tr>
-                            <error-messages :colspan="2" 
+                            <error-messages :colspan="4"
+                                            :height="80"
                                             identicalErrorMessage="Une formation identique existe déjà." 
                                             fillFieldErrorMessage="Veuillez remplir tous les champs." 
                                             successMessage="La formation a été créée avec succès." 
@@ -422,7 +424,7 @@ template:`
                                             :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
                             </error-messages>
                             <error-messages class="td-right"
-                                            :height="80" 
+                                            :height="80"
                                             :width="250"
                                             identicalErrorMessage="Un thème identique existe déjà." 
                                             fillFieldErrorMessage="Veuillez remplir le champ." 
