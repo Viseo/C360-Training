@@ -27,7 +27,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="row">
                         <div id="assignCollaborator">
-                    
                         <input-text
                             width="20%"
                             label="Sélectionner session"
