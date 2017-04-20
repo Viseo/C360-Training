@@ -36,12 +36,9 @@ Vue.component('collaborator-formation', {
             listTrainingSession: [],
             isNoSession: true,
             displayTrainings: false,
-            nomrequest:[]
         }
     },
     template: `<div class="container-fluid">
-                    <button @click="GatherAllRequestsBySession()">Test</button>
-                    <pre>{{$data|json}}</pre>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
                             <div class="col-sm-12 col-md-10 col-lg-7">
@@ -304,18 +301,6 @@ Vue.component('collaborator-formation', {
                     }
                 });
         },
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/4/collaborators").then(
-                function (response) {
-                    console.log("success");
-                    this.nomrequest = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
-        }
-
 
     }
 
