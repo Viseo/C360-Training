@@ -1,7 +1,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-let Header = Vue.component('blue-header', {
+Vue.component('blue-header', {
     template: `<div id="wrap">
     <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
         <div class="container-fluid">
@@ -41,7 +41,7 @@ let Header = Vue.component('blue-header', {
 
 			<!-- Buttons, both options close the window in this demo -->
            <div class="dialog-buttons">
-           <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
+           <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link>
 		</div>
 	</div>	
 </div>
@@ -79,6 +79,7 @@ let Header = Vue.component('blue-header', {
             this.idleSecondsCounter = value;
         },
         checkIfUserInactive(){
+            console.log("salut");
             if (this.timeconnected != 0)
                 if ((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1) {
                     this.dialog = true
@@ -121,19 +122,20 @@ let Header = Vue.component('blue-header', {
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             if (regexCookieToken && regexCookieStayConnected) {
-                if (window.location.pathname != '/')
+                if (window.location.pathname != '/login')
                     this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                console.log(this.stayConnected);
                 this.token = String(regexCookieToken.pop());
                 if (regexCookieTimeConnected) {
-                    if (window.location.pathname != '/')
+                    if (window.location.pathname != '/login')
                         this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
                 this.nom = jwt_decode(this.token).lastName;
                 this.prenom = jwt_decode(this.token).sub;
             }
             else {
-                if (window.location.pathname != '/')
-                    window.location.pathname = '/';
+                if (window.location.pathname != '/login')
+                    this.$router.push('/login')
             }
         },
         disconnectUser(){
