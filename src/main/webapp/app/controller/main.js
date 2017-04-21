@@ -1,4 +1,5 @@
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 let Header = Vue.component('blue-header',{
     template: `<div id="wrap">
@@ -121,19 +122,19 @@ let Header = Vue.component('blue-header',{
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken && regexCookieStayConnected){
-                if(window.location.pathname != '/index.html')
+                if(window.location.pathname != '/')
                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
                 this.token = String(regexCookieToken.pop());
                 if(regexCookieTimeConnected) {
-                    if(window.location.pathname != '/index.html')
+                    if(window.location.pathname != '/')
                     this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
                 this.nom = jwt_decode(this.token).lastName;
                 this.prenom = jwt_decode(this.token).sub;
             }
             else{
-                if(window.location.pathname != '/index.html')
-                window.location.pathname = '/index.html';
+                if(window.location.pathname != '/')
+                window.location.pathname = '/';
             }
         },
         disconnectUser(){
@@ -159,10 +160,23 @@ let Header = Vue.component('blue-header',{
         }
     }
 });
+let router = new VueRouter({
+    mode: 'history',
+    routes:[
+        {
+            path: '/',
+            components: {default: Header,navigationmenu: NavigationMenu}
 
-
+        },
+        {
+            path: '/addTrainingTopic',
+            components: {default: Header, addformation: AddFormationPanel}
+        }
+    ]
+});
 new Vue({
-    el: '#newVue'
+    el: '#newVue',
+    router
 });
 
 $('#scroll-up').click(function() {
@@ -193,7 +207,7 @@ $('#scroll-down-2').click(function() {
 })
 
 
-$('ul.nav li.dropdown').hover(function() {http://www.bootply.com/PZIuAAmHST#
+$('ul.nav li.dropdown').hover(function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
 }, function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
