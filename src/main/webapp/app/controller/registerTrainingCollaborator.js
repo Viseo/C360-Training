@@ -40,8 +40,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         }
     },
     template: `<div class="container-fluid">
-                    <button @click="GatherAllRequestsBySession()">Test</button>
-                    <pre>{{$data|json}}</pre>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
                             <div class="col-sm-12 col-md-10 col-lg-7">

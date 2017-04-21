@@ -394,7 +394,6 @@ template:`
                                  <input type="submit" 
                                        class="btn btn-primary" 
                                        value="Valider" 
-                                       @click="verifyTrainingFormBeforeSubmit" 
                                        style="width:80%"/>
                             </div>
                         </td>
