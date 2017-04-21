@@ -97,7 +97,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         GatherAllSessions(){
             this.$http.get("api/sessions").then(
                 function (response) {
-                    console.log("success to get all sessions");
+                    console.log("success to get all sessions from database");
                     this.allSessions = response.data;
                 },
                 function (response) {
@@ -108,7 +108,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         GatherAllRequestsBySession(){
             this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
                 function (response) {
-                    console.log("success to get all requests");
+                    console.log("success to get all requests from database");
                     console.log(response.data);
                     this.nomrequest = response.data;
                 },
@@ -120,7 +120,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         AddCollaboratorsToTrainingSession(){
                 this.$http.put("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                     function (response) {
-                        console.log("success to modify");
+                        console.log("success to modify the table trainingsession_collaborator");
                         console.log(response.data);
                     },
                     function (response) {
@@ -131,7 +131,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         VerifyFormBeforeSubmit(){
             this.$http.get("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                 function (response) {
-                    console.log("success to get all collaborators");
+                    console.log("success to get all collaborators from the table trainingsession_collaborator");
                     console.log(response.data);
                     this.collaboratorAlreadyInSession = false;
                     this.allCollaboratorsAlreadyInSessions = response.data;
