@@ -20,7 +20,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     },
     template: `
         <div class="container-fluid">
-        <button @click="VerifyFormBeforeSubmit()">Test</button>
             <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-12"></div>
                     <div class="row">
