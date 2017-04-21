@@ -366,26 +366,27 @@ template:`
                             type='input'>
                         </input-text>
                         
-                        <input-text
-                            width="15%"
-                            label="1/2 journées"
-                            :value="numberHalfDays"
-                            @input="updateV2"
-                            @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
-                            :collection="200"
-                            type="select">
-                         </input-text>
+                        <td width="15%">
+                        <div class="form-group has-feedback " 
+                                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                        <label class="label-control">1/2 journées</label><br/>
+                        <select class="form-control" v-model="numberHalfDays"  
+                                @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;">
+                            <option v-for="n in 200">{{n}}</option>
+                        </select>
+                        </div>
+                        </td>
                          
-                        <input-text
-                            width="20%"
-                            label="Thèmes"
-                            :value="topicDescription"
-                            @input="updateV3"
-                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;"
-                            :collection="selectOptionsOfTopic"
-                            print-prop="name"
-                            type="select">
-                        </input-text>
+                        <td width="20%">
+                        <div class="form-group has-feedback " 
+                                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                        <label class="label-control">Thèmes</label><br/>
+                        <select class="form-control" v-model="topicDescription"
+                            @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;">
+                            <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
+                        </select>
+                        </div>
+                        </td>
                         
                         <td class="text-center" 
                             width="20%">
@@ -1002,18 +1003,17 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                         </datepicker>
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
-                                        <input-text 
-                                            label = "Salles" 
-                                            :value = "location" 
-                                            @input = "updateV3"
-                                            placeholder = "Salle"
-                                            @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
-                                            maxlength = "10"
-                                            :disabled = "canNotRegisterForm" 
-                                            :collection="AllSalles"
-                                            type = 'select'>
-                                        </input-text> 
-                                    </div> 
+                                        <td width="15%">
+                                            <div class="form-group has-feedback " 
+                                                     :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                                                <label class="label-control">Salles</label><br/>
+                                                <select class="form-control" maxlength = "10" :disabled = "canNotRegisterForm" placeholder = "Salle" v-model="location"  
+                                                        @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;">
+                                                    <option v-for="n in AllSalles">{{n}}</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </div>
                                 </div> 
                                 <div class = "row" style="margin-bottom: 30px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
