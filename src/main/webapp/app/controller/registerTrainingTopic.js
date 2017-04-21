@@ -367,22 +367,20 @@ template:`
                         </input-text>
                         
                         <td width="15%">
-                        <div class="form-group has-feedback " 
-                                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                        <div class="form-group has-feedback ">
                         <label class="label-control">1/2 journées</label><br/>
                         <select class="form-control" v-model="numberHalfDays"  
-                                @focus="msgnumberHalfDays = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;">
+                                @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                             <option v-for="n in 200">{{n}}</option>
                         </select>
                         </div>
                         </td>
                          
                         <td width="20%">
-                        <div class="form-group has-feedback " 
-                                 :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                        <div class="form-group has-feedback ">
                         <label class="label-control">Thèmes</label><br/>
                         <select class="form-control" v-model="topicDescription"
-                            @focus="msgtopic = false; confirmFormation = false; isNewTrainingTitle = true; msgname=false;">
+                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
                             <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
                         </select>
                         </div>
@@ -1004,8 +1002,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                     </div>
                                     <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
                                         <td width="15%">
-                                            <div class="form-group has-feedback " 
-                                                     :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
+                                            <div class="form-group has-feedback ">
                                                 <label class="label-control">Salles</label><br/>
                                                 <select class="form-control" maxlength = "10" :disabled = "canNotRegisterForm" placeholder = "Salle" v-model="location"  
                                                         @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;">
