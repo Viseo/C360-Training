@@ -10,16 +10,17 @@
     <script src="lib/vue.js"></script>
     <script src="lib/vue-resource.js"></script>
     <script src="lib/jwt-decode.js"></script>
+    <script src="lib/vue-router.js"></script>
+    <script src="app/Util/router.js"></script>
 </head>
 <body>
 <div id="newVue" v-cloak>
-    <blue-header></blue-header>
-    <div id="connectUser" class="container-fluid">
-            <connect-user></connect-user>
-    </div>
-</div>
+    <router-view></router-view>
+    <router-view name="navigationmenu"></router-view>
+    <router-view name="addformation"></router-view>
 </div>
 <script src="app/controller/registerCollaborator.js"></script>
+<script src="app/controller/registerTrainingTopic.js"></script>
 <script src="app/controller/main.js"></script>
 </body>
 </html>
