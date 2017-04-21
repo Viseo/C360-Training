@@ -290,7 +290,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.$http.post("api/themes", this.topicToRegister)
                 .then(
                     function (response) {
-                        console.log("test");
                         this.confirmTopic = true;
                         this.gatherTopicsFromDatabase();
                         setTimeout(function(){ this.confirmTopic = false; }.bind(this), 2000);
@@ -1133,7 +1132,7 @@ let DatePicker = Vue.component('datepicker', {
                         <ul class="date-list">
                             <li v-for="(item, index) in dateList"
                                 :class="{preMonth: item.previousMonth, nextMonth: item.nextMonth,
-                                         invalid: validateDate(item), firstItem: (index % 7) === 0}"
+                                         invalid: validateDate(item) || item.weekend || item.publicholiday, firstItem: (index % 7) === 0}"
                                 @click="selectDate(item)">
                                 <div class="message" :class="{selected: isSelected('date', item)}">
                                     <div class="bg"></div><span v-text="item.value"></span>
@@ -1173,12 +1172,14 @@ let DatePicker = Vue.component('datepicker', {
             monthList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             weekList: [0, 1, 2, 3, 4, 5, 6],
             rangeStart: false,
-            toDay:''
+            toDay:'',
+            arrayJoursFeries:[],
+            arrayJoursFeriersMonth:[]
         }
     },
 
     props: {
-        language: {default: 'en'},
+        language: {default: 'fr'},
         min: {default: '2017-04-10'},
         max: {default: '2020-01-01'},
         value: {
@@ -1234,7 +1235,34 @@ let DatePicker = Vue.component('datepicker', {
                     && new Date(this.tmpYear, month, item.value).getTime() <= new Date(this.tmpEndYear, this.tmpEndMonth, this.tmpEndDate).getTime())
             }
         },
+        JoursFeries (an){
+    var JourAn = new Date(an, "00", "01")
+    var FeteTravail = new Date(an, "04", "01")
+    var Victoire1945 = new Date(an, "04", "08")
+    var FeteNationale = new Date(an,"06", "14")
+    var Assomption = new Date(an, "07", "15")
+    var Toussaint = new Date(an, "10", "01")
+    var Armistice = new Date(an, "10", "11")
+    var Noel = new Date(an, "11", "25")
+    var SaintEtienne = new Date(an, "11", "26")
 
+    var G = an%19
+    var C = Math.floor(an/100)
+    var H = (C - Math.floor(C/4) - Math.floor((8*C+13)/25) + 19*G + 15)%30
+    var I = H - Math.floor(H/28)*(1 - Math.floor(H/28)*Math.floor(29/(H + 1))*Math.floor((21 - G)/11))
+    var J = (an*1 + Math.floor(an/4) + I + 2 - C + Math.floor(C/4))%7
+    var L = I - J
+    var MoisPaques = 3 + Math.floor((L + 40)/44)
+    var JourPaques = L + 28 - 31*Math.floor(MoisPaques/4)
+    var Paques = new Date(an, MoisPaques-1, JourPaques)
+    var VendrediSaint = new Date(an, MoisPaques-1, JourPaques-2)
+    var LundiPaques = new Date(an, MoisPaques-1, JourPaques+1)
+    var Ascension = new Date(an, MoisPaques-1, JourPaques+39)
+    var Pentecote = new Date(an, MoisPaques-1, JourPaques+49)
+    var LundiPentecote = new Date(an, MoisPaques-1, JourPaques+50)
+
+    return new Array(JourAn, LundiPaques, FeteTravail, Victoire1945, Ascension, LundiPentecote, FeteNationale, Assomption, Toussaint, Armistice, Noel, SaintEtienne)
+},
         chType (type) {
             this.panelType = type
         },
@@ -1393,6 +1421,7 @@ let DatePicker = Vue.component('datepicker', {
 
     computed: {
         dateList () {
+            this.arrayJoursFeriersMonth.splice(0,this.arrayJoursFeriersMonth.length)
             let currentMonthLength = new Date(this.tmpYear, this.tmpMonth + 1, 0).getDate()
             let dateList = Array.from({length: currentMonthLength}, (val, index) => {
                 return {
@@ -1403,12 +1432,34 @@ let DatePicker = Vue.component('datepicker', {
             let startDay = new Date(this.tmpYear, this.tmpMonth, 1).getDay()
 
             let previousMongthLength = new Date(this.tmpYear, this.tmpMonth, 0).getDate()
-            for (let i = 0, len = startDay; i < len; i++) {
+            for (let i = 0, len = startDay; i < len-1; i++) {
                 dateList = [{previousMonth: true, value: previousMongthLength - i}].concat(dateList)
             }
             for (let i = dateList.length, item = 1; i < 2; i++, item++) {
                 dateList[dateList.length] = {nextMonth: true, value: item}
             }
+            this.arrayJoursFeries = this.JoursFeries (this.tmpYear);
+            for (let i = 0; i < this.arrayJoursFeries.length; i++){
+                if((this.arrayJoursFeries[i].getMonth())==this.tmpMonth)
+                    this.arrayJoursFeriersMonth.push(this.arrayJoursFeries[i])
+            }
+
+            for (let i = 5; i < dateList.length; i += 7) {
+                if (dateList[i]) {
+                    dateList[i].weekend = true;
+                }
+                if (dateList[i + 1]) {
+                    dateList[i + 1].weekend = true;
+                }
+            }
+            for (let i = 0; i < dateList.length; i++) {
+                for (let j = 0; j < this.arrayJoursFeriersMonth.length; j++) {
+                    if (dateList[i].value == this.arrayJoursFeriersMonth[j].getDate()) {
+                        dateList[i].publicholiday = true;
+                    }
+                }
+            }
+
             return dateList
         }
     },
@@ -1418,8 +1469,8 @@ let DatePicker = Vue.component('datepicker', {
             switch (lang) {
                 case 'en':
                     return {0: 'Su', 1: 'Mo', 2: 'Tu', 3: 'We', 4: 'Th', 5: 'Fr', 6: 'Sa'}[item]
-                case 'ch':
-                    return {0: '日', 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六'}[item]
+                case 'fr':
+                    return {0: 'Lun', 1: 'Mar', 2: 'Mer', 3: 'Jeu', 4: 'Ven', 5: 'Sam', 6: 'Dim'}[item]
                 default:
                     return item
             }
@@ -1432,10 +1483,10 @@ let DatePicker = Vue.component('datepicker', {
                         1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
                         7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
                     }[item]
-                case 'ch':
+                case 'fr':
                     return {
-                        1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六',
-                        7: '七', 8: '八', 9: '九', 10: '十', 11: '十一', 12: '十二'
+                        1: 'Janvier', 2: 'Fevrier', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin',
+                        7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Decembre'
                     }[item]
                 default:
                     return item
