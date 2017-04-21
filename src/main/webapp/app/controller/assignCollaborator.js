@@ -15,9 +15,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             collaboratorAlreadyInSession:false
         }
     },
-    methods : {
-
-    },
     template: `
         <div class="container-fluid">
             <div class="row">
