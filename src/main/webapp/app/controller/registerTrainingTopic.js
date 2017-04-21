@@ -1377,6 +1377,11 @@ let DatePicker = Vue.component('datepicker', {
             } else if (date.nextMonth) {
                 mon += 1
             }
+            if(date.weekend)
+                return true
+            if(date.publicholiday)
+                return true
+
             if (new Date(this.tmpYear, mon, date.value).getTime() >= new Date(this.minYear, this.minMonth - 1, this.minDate).getTime()
                 && new Date(this.tmpYear, mon, date.value).getTime() <= new Date(this.maxYear, this.maxMonth - 1, this.maxDate).getTime()) {
                 return false
