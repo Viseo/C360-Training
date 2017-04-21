@@ -8,9 +8,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     data: function () {
         return {
             allSessions:[],
-            sessionIdChosen:{},
+            sessionIdChosen:'',
             nomrequest:[],
-            allCollaboratorsIdChosen:[10,12]
+            allCollaboratorsIdChosen:[],
+            allCollaboratorsAlreadyInSessions:[],
+            collaboratorAlreadyInSession:false
         }
     },
     methods : {
@@ -18,6 +20,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     },
     template: `
         <div class="container-fluid">
+        <button @click="VerifyFormBeforeSubmit()">Test</button>
             <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-12"></div>
                     <div class="row">
@@ -126,6 +129,29 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         console.error(response);
                     });
         },
+        VerifyFormBeforeSubmit(){
+            this.$http.get("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
+                function (response) {
+                    console.log("success to get all collaborators");
+                    console.log(response.data);
+                    this.collaboratorAlreadyInSession = false;
+                    this.allCollaboratorsAlreadyInSessions = response.data;
+                    for (var tmp1 in this.allCollaboratorsIdChosen) {
+                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions){
+                            if (this.allCollaboratorsIdChosen[tmp1] == this.allCollaboratorsAlreadyInSessions[tmp2].id){
+                                this.collaboratorAlreadyInSession = true;
+                            }
+                        }
+                    }
+                    if(!this.collaboratorAlreadyInSession){
+                        this.AddCollaboratorsToTrainingSession();
+                    }
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        }
     }
 });
 Vue.component('typeahead', VueStrap.typeahead);

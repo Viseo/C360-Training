@@ -96,6 +96,12 @@ public class TrainingDAO {
         return daoFacade.getList("select s from TrainingSession s");
     }
 
+    public List<Collaborator> getCollaboratorsBySession(long sessionID){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select sc from TrainingSession s join s.collaborators sc where s.id = :sessionID",
+                param("sessionID", sessionID));
+    }
+
     @Transactional
     public TrainingSession getSessionTraining(long id) throws PersistentObjectNotFoundException{
             TrainingSession trainingSession = daoFacade.find(TrainingSession.class, id);

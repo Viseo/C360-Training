@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
+import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.topic.DescriptionToTopic;
 import com.viseo.c360.formation.converters.topic.TopicToDescription;
 import com.viseo.c360.formation.converters.training.DescriptionToTraining;
@@ -19,6 +20,7 @@ import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
+import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
 import com.viseo.c360.formation.converters.trainingsession.DescriptionToTrainingSession;
@@ -179,6 +181,20 @@ public class TrainingWS {
             throw new C360Exception(e);
         }
     }
+
+
+    @RequestMapping(value = "${endpoint.addcollaboratortotrainingsession}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CollaboratorIdentity> getCollaboratorsBySession(@PathVariable Long id_session) {
+        try {
+            return new CollaboratorToIdentity().convert(trainingDAO.getCollaboratorsBySession(id_session));
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+
 
     @RequestMapping(value = "${endpoint.sessions}", method = RequestMethod.GET)
     @ResponseBody
