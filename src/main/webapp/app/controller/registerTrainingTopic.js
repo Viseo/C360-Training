@@ -209,25 +209,27 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
         verifyTrainingFormBeforeSubmit() {
-            this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
-            this.training.trainingTitle = this.trainingTitle;
-            this.training.numberHalfDays = this.numberHalfDays;
-            for (var tmp in this.selectOptionsOfTopic){
-                if(this.topicDescription == this.selectOptionsOfTopic[tmp].name){
-                    this.training.topicDescription = this.selectOptionsOfTopic[tmp];
+            if(this.newTopic != ''){
+                this.verifyTopicFormBeforeSubmit();
+            }else{
+                this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
+                this.training.trainingTitle = this.trainingTitle;
+                this.training.numberHalfDays = this.numberHalfDays;
+                for (var tmp in this.selectOptionsOfTopic){
+                    if(this.topicDescription == this.selectOptionsOfTopic[tmp].name){
+                        this.training.topicDescription = this.selectOptionsOfTopic[tmp];
+                    }
+                }
+                this.isTrainingTitleEmpty();
+                this.isNumberHalfDaysEmpty();
+                this.isTopicEmpty();
+                this.newTopicErrorMessage = false;
+                if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
+                    this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
+                    this.saveTrainingIntoDatabase();
                 }
             }
-            this.isTrainingTitleEmpty();
-            this.isNumberHalfDaysEmpty();
-            this.isTopicEmpty();
-            console.log("training: "+this.trainingTitle);
-            console.log("days: "+this.numberHalfDays);
-            console.log("topic: "+this.training.topicDescription);
-            this.newTopicErrorMessage = false;
-            if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
-                this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
-                this.saveTrainingIntoDatabase();
-            }
+
         },
 
         verifyTopicFormBeforeSubmit() {
@@ -349,9 +351,9 @@ template:`
                             <legend>Ajouter une formation</legend>
                         </div>
                     </div>
+                    <form @submit.prevent="verifyTrainingFormBeforeSubmit">
                     <table>
                     <tr>
-                    <div id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
                         <input-text 
                             width="20%"
                             label="Formation" 
@@ -396,9 +398,8 @@ template:`
                                        style="width:80%"/>
                             </div>
                         </td>
-                        </div>
-                        <div id="registr-form">
-                            <input-text width="30%" 
+                        
+                        <input-text width="30%" 
                                         label="Nouveau thème" 
                                         :value="newTopic"
                                          @input="updateV4"
@@ -410,8 +411,8 @@ template:`
                                         type='input'
                                         class="td-right"
                                         @click="verifyTopicFormBeforeSubmit">
-                            </input-text>
-                        </div>
+                        </input-text>
+                        
                         </tr>
                         <tr>
                             <error-messages :colspan="4"
@@ -423,7 +424,7 @@ template:`
                                             :emptyIdenticalError="!isNewTrainingTitle"
                                             :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
                                             :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                            :emptyRegexError=" !isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
+                                            :emptyRegexError="!isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
                             </error-messages>
                             <error-messages class="td-right"
                                             :height="80"
@@ -435,10 +436,11 @@ template:`
                                             :emptyIdenticalError="!isNewTopic"
                                             :emptyFillError="newTopicErrorMessage"
                                             :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
-                                            :emptyRegexError=" !isNewTopicValid">
+                                            :emptyRegexError="!isNewTopicValid">
                             </error-messages>
                         </tr>
                     </table>
+                    </form>
             </div>
         </div>
     </div>
