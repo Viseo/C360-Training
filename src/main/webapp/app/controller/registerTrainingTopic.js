@@ -348,7 +348,7 @@ template:`
                             <legend>Ajouter une formation</legend>
                         </div>
                     </div>
-                    <table>
+                    <table class="borderRadius">
                     <tr>
                     <form id="registr-form" @submit.prevent="verifyTrainingFormBeforeSubmit"">
                         <input-text 

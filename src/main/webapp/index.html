@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/signInSignUp.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/addTrainingTopic.css">
+    <link rel="stylesheet" href="css/registerTrainingCollaborator.css">
+    <link rel="stylesheet" href="css/signInSignUp.css">
     <script src="lib/vue.js"></script>
+    <script src="lib/vue-strap.js"></script>
     <script src="lib/vue-resource.js"></script>
     <script src="lib/jwt-decode.js"></script>
     <script src="lib/vue-router.js"></script>
@@ -16,9 +20,9 @@
 <body>
 <div id="newVue" v-cloak>
     <router-view></router-view>
-    <router-view name="navigationmenu"></router-view>
-    <router-view name="addformation"></router-view>
 </div>
+<script src="app/controller/scroll.js"></script>
+<script src="app/controller/registerTrainingCollaborator.js"></script>
 <script src="app/controller/registerCollaborator.js"></script>
 <script src="app/controller/registerTrainingTopic.js"></script>
 <script src="app/controller/main.js"></script>

@@ -19,12 +19,12 @@ legend{
 
 }
 
-table{
+table.borderRadius{
     border:1px solid #dcdcdc;
     border-radius: 10px;
 
 }
-table td {
+table.borderRadius td {
     padding-top:20px;
     padding-left:10px;
     padding-right:10px;

@@ -531,7 +531,7 @@ let ConnexionForm = Vue.component('connexionForm', {
 
                       }
                         else
-                            this.$router.push('/addTrainingTopic');
+                            this.$router.push('/registerTrainingCollaborator');
                     }
                 ).catch(function () {
                 this.password = "";
