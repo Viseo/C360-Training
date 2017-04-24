@@ -22,3 +22,16 @@
     width: 138%;
 }
 
+.green {
+    color: green;
+    top: 20px;
+}
+.blue{
+    color: blue;
+    top: 20px;
+}
+.tabCentring {
+    border: none;
+    width: 200px;
+
+}
