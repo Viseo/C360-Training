@@ -139,8 +139,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
     },
     mounted: function(){
-            this.gatherTopicsFromDatabase();
-            this.gatherTrainingsFromDatabase();
+        this.gatherTopicsFromDatabase();
+        this.gatherTrainingsFromDatabase();
     },
     methods: {
         updateV1 (v) {
@@ -216,7 +216,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     this.saveTrainingIntoDatabase();
                 }
             }
-
         },
         verifyTopicFormBeforeSubmit() {
             this.newTopic = this.newTopic.replace(/ +/g, "");
@@ -317,6 +316,32 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 }
             );
         },
+        resetVarialbesByInputTrainingTitle(){
+            this.trainingTitleErrorMessage = false;
+            this.confirmFormation = false;
+            this.isNewTrainingTitle = true;
+            this.newTopicErrorMessage = false;
+        },
+        resetVariablesByInputNumberHalfDays(){
+            this.numberHalfDaysErrorMessage = false;
+            this.confirmFormation = false;
+            this.isNewTrainingTitle = true;
+            this.newTopicErrorMessage = false;
+        },
+        resetVariablesByInputTopic(){
+            this.topicErrorMessage = false;
+            this.confirmFormation = false;
+            this.isNewTrainingTitle = true;
+            this.newTopicErrorMessage=false;
+        },
+        resetVariablesByInputNameTopic(){
+            this.newTopicErrorMessage = false;
+            this.confirmTopic = false;
+            this.isNewTopic = true;
+            this.trainingTitleErrorMessage = false;
+            this.numberHalfDaysErrorMessage = false;
+            this.topicErrorMessage = false;
+        }
 
     },
 template:`
@@ -330,64 +355,60 @@ template:`
                         </div>
                         <form @submit.prevent="verifyTrainingFormBeforeSubmit">
                             <table>
-                            <tr>
-                                <input-text 
-                                    width="20%"
-                                    label="Formation" 
-                                    :value="trainingTitle" 
-                                    @input="updateV1"
-                                    placeholder="Formation"
-                                    maxlength="20"
-                                    @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
-                                    :isValid="isTrainingTitleValid"
-                                    type='input'>
-                                </input-text>
-                                <td width="15%">
-                                    <div class="form-group has-feedback ">
-                                        <label class="label-control">1/2 journées</label>
-                                        <br/>
-                                        <select class="form-control" v-model="numberHalfDays"  
-                                                @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                                            <option v-for="n in 200">{{n}}</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td width="20%">
-                                    <div class="form-group has-feedback ">
-                                        <label class="label-control">Thèmes</label>
-                                        <br/>
-                                        <select class="form-control" v-model="topicDescription"
-                                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                                            <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                
-                                <td class="text-center" 
-                                    width="20%">
-                                    <div class="form-group">
-                                         <label>&nbsp</label><br/>
-                                         <input type="submit" 
-                                               class="btn btn-primary" 
-                                               value="Valider" 
-                                               style="width:80%"/>
-                                    </div>
-                                </td>
-                                
-                                <input-text width="30%" 
-                                                label="Nouveau thème" 
-                                                :value="newTopic"
-                                                 @input="updateV4"
-                                                placeholder="Thème"
-                                                maxlength="50"
-                                                @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
-                                                :isValid="isNewTopicValid"
-                                                icon="glyphicon-plus btn btn-primary"
-                                                type='input'
-                                                class="td-right"
-                                                @click="verifyTopicFormBeforeSubmit">
-                                </input-text>
-                                
+                                <tr>
+                                    <input-text 
+                                        width="20%"
+                                        label="Formation" 
+                                        :value="trainingTitle" 
+                                        @input="updateV1"
+                                        placeholder="Formation"
+                                        maxlength="20"
+                                        @focus="resetVarialbesByInputTrainingTitle()"
+                                        :isValid="isTrainingTitleValid"
+                                        type='input'>
+                                    </input-text>
+                                    <td width="15%">
+                                        <div class="form-group has-feedback ">
+                                            <label class="label-control">1/2 journées</label>
+                                            <br/>
+                                            <select class="form-control" v-model="numberHalfDays"  
+                                                    @focus="resetVariablesByInputNumberHalfDays()">
+                                                <option v-for="n in 200">{{n}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="form-group has-feedback ">
+                                            <label class="label-control">Thèmes</label>
+                                            <br/>
+                                            <select class="form-control" v-model="topicDescription"
+                                                @focus="resetVariablesByInputTopic()">
+                                                <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class="text-center" width="20%">
+                                        <div class="form-group">
+                                             <label>&nbsp</label><br/>
+                                             <input type="submit" 
+                                                   class="btn btn-primary" 
+                                                   value="Valider" 
+                                                   style="width:80%"/>
+                                        </div>
+                                    </td>
+                                    <input-text width="30%" 
+                                                    label="Nouveau thème" 
+                                                    :value="newTopic"
+                                                    @input="updateV4"
+                                                    placeholder="Thème"
+                                                    maxlength="50"
+                                                    @focus="resetVariablesByInputNameTopic()"
+                                                    :isValid="isNewTopicValid"
+                                                    icon="glyphicon-plus btn btn-primary"
+                                                    type='input'
+                                                    class="td-right"
+                                                    @click="verifyTopicFormBeforeSubmit">
+                                    </input-text>
                                 </tr>
                                 <tr>
                                     <error-messages :colspan="4"
@@ -415,10 +436,10 @@ template:`
                                     </error-messages>
                                 </tr>
                             </table>
-                            </form>
-                    </div>
-                </div>
-            </div>
+                        </form>
+                   </div>
+              </div>
+         </div>
         `
 });
 
@@ -427,7 +448,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
         return {
             state: training_store.state,
             trainingStore: training_store
-
         }
     },
     computed: {
