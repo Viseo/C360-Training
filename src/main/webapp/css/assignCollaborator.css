@@ -1,0 +1,37 @@
+#assignCollaborator {
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
+    height:555px;
+    width: 95%;
+    padding:20px;
+    margin-left:15px;
+}
+.panel-body {
+    height:300px;
+    width: 100%;
+}
+.searchField .glyphicon-search {
+    right: 35px;
+    position: absolute;
+    top: 11px;
+    cursor:pointer;
+    z-index: 1000;
+}
+.searchField{
+    margin-left: -42px;
+    width: 138%;
+}
+
+.green {
+    color: green;
+    top: 20px;
+}
+.blue{
+    color: blue;
+    top: 20px;
+}
+.tabCentring {
+    border: none;
+    width: 200px;
+
+}

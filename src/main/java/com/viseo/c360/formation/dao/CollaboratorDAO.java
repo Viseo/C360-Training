@@ -99,17 +99,11 @@ public class CollaboratorDAO {
         }
     }
 
-    public List<Collaborator> getCollaboratorsRequestingBySession(TrainingSession myTrainnigSession) {
-        Set<Collaborator> listCollaborator = new HashSet<Collaborator>((Collection) daoFacade.getList(
-                "select c from RequestTraining r Inner Join r.collaborator c Inner Join r.sessions s Where s = :session",
-                param("session", myTrainnigSession)));
-        listCollaborator.addAll((Collection) daoFacade.getList(
-                "select c from RequestTraining r Inner Join r.collaborator c Where r.training = :training",
-                param("training", myTrainnigSession.getTraining())));
-        listCollaborator.removeAll(daoFacade.getList(
-                "select c from TrainingSession s Inner Join s.collaborators c Where s.training = :training",
-                param("training", myTrainnigSession.getTraining())));
-        return new ArrayList<>(listCollaborator);
+    public List<Collaborator> getCollaboratorsRequestingBySession(TrainingSession myTrainnigSession){
+        List<Collaborator> listCollaborator =  daoFacade.getList(
+                "select r.collaborator from RequestTraining r join r.sessions rs where rs = :session",
+                param("session", myTrainnigSession));
+        return listCollaborator;
     }
 }
 

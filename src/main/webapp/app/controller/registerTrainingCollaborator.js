@@ -35,7 +35,7 @@ Vue.component('collaborator-formation', {
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
             isNoSession: true,
-            displayTrainings: false
+            displayTrainings: false,
         }
     },
     template: `<div class="container-fluid">
@@ -300,12 +300,11 @@ Vue.component('collaborator-formation', {
                         this.isNoSession = false;
                     }
                 });
-        }
-
+        },
 
     }
 
-})
+});
 Vue.component('typeahead', VueStrap.typeahead);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('panel', VueStrap.panel);
