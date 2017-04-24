@@ -217,36 +217,43 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 }
             );
         },
-
         storeCollaboratorsFound(){
-            this.collaboratorsFound.splice(0, this.collaboratorsFound.length);
-            this.displayCollaborators = true;
-            this.$http.get("api/collaborateurs").then(function(response){
+            this.nomrequest.splice(0, this.nomrequest.length);
+            this.displayCollaborators = false;
+
                 for (index in this.allCollaborators)
                 {
-                     if (this.allCollaborators[index].lastName.indexOf(this.searchFormatted) != -1) {
-                     this.collaboratorsFound.push(this.allCollaborators[index]);
+                     if ( (this.allCollaborators[index].lastName +" " +this.allCollaborators[index].firstName) === this.value ) {
+                        this.nomrequest.push(this.allCollaborators[index]);
                     }
                 }
-                this.noCollaboratorsFound = (this.collaboratorsFound.length == 0) ? true : false;
+
                this.value = null;
-            });
         },
         selectCollaborators(){
             for (index in this.allCollaborators) {
-                this.allCollaboratorsName.push(this.allCollaborators[index].lastName +"  " +this.allCollaborators[index].firstName);
+                this.allCollaboratorsName.push(this.allCollaborators[index].lastName +" " +this.allCollaborators[index].firstName);
             }
-
-            //this.allCollaboratorsName = this.allCollaborators.firstName;
         }
     },
+
         watch: {
             sessionIdChosen: function(value) {
                 this.verifyCheckedNames(value);
             },
             checkedNames: function(value) {
                 this.verifyCheckedNames(value);
+            },
+            nomrequest: function(){
+                if(this.nomrequest.length>0){
+                    this.noCollaboratorsFound = false;
+                }
+                else {
+                    this.noCollaboratorsFound = true;
+                }
             }
         },
+
+
 });
 Vue.component('typeahead', VueStrap.typeahead);
