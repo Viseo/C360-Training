@@ -183,7 +183,7 @@ public class TrainingWS {
     }
 
 
-    @RequestMapping(value = "${endpoint.addcollaboratortotrainingsession}", method = RequestMethod.GET)
+    @RequestMapping(value = "${endpoint.getcollaboratortotrainingsession}", method = RequestMethod.GET)
     @ResponseBody
     public List<CollaboratorIdentity> getCollaboratorsBySession(@PathVariable Long id_session) {
         try {
