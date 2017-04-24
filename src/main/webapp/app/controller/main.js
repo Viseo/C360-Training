@@ -202,6 +202,10 @@ let router = new VueRouter({
                                        <connect-user></connect-user>
                             </div>`
             }
+        },
+        {
+            path: "/",
+            redirect :"/login"
         }
     ]
 });
