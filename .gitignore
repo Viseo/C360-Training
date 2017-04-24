@@ -44,3 +44,4 @@ proguard/
 .gradle/
 build/
 bin/
+package\.json

@@ -31,7 +31,6 @@ let NavigationMenu = Vue.component('connect-user', {
                 </div>
             </div>
         `,
-
     beforeCreate: function () {
         let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
         if (regexCookie) {
@@ -47,7 +46,6 @@ let NavigationMenu = Vue.component('connect-user', {
                     });
         }
     },
-
     methods: {
         showInscriptionForm() {
             this.tabinscription = 'tab active';
@@ -60,7 +58,7 @@ let NavigationMenu = Vue.component('connect-user', {
             this.newCollab = false;
         }
     }
-})
+});
 
 let Formulaire = Vue.component('inscription-form', {
     template: `
@@ -73,18 +71,17 @@ let Formulaire = Vue.component('inscription-form', {
                     tab="1" 
                     placeholder="ABC1234" 
                     v-model="personnalIdNumber" 
-                    @focus="loginEmpty=false;" 
+                    @focus="setLoginEmptyToFalse()" 
                     @blur="isLoginEmpty" 
                     maxlength="20" minlength="2" 
                     :emptyField="loginEmpty"
-                    emptyMessage="Code de login obligatoire" 
                     :existField="!personalIdNumberAlreadyExist"
                     existMessage="Ce code de login a déjà été enregistré" 
-                    :errorField="!isLoginValid && !loginEmpty"
+                    :errorField="isErrorLogin()"
                     :errorMessage="errorMessageLogin">
                 </customInput>
                 <!-- NOM -->
-                 <customInput 
+                <customInput 
                     label="nom" 
                     labelText="Nom" 
                     icon="glyphicon-user" 
@@ -92,13 +89,12 @@ let Formulaire = Vue.component('inscription-form', {
                     tab="2" 
                     placeholder="DUPONT" 
                     v-model="lastName" 
-                    @focus="lastNameEmpty = false" 
+                    @focus="setLastNameEmptyToFalse()" 
                     @blur="isLastNameEmpty" 
                     maxlength="125" minlength="2" 
                     :emptyField="lastNameEmpty"
-                    emptyMessage="Nom est obligatoire" 
                     existField=""
-                    :errorField="!isLastNameValid && !lastNameEmpty"
+                    :errorField="isErrorLastName()"
                     :errorMessage="errorMessageLastName">
                 </customInput>
                 <!-- PRENOM -->
@@ -110,13 +106,12 @@ let Formulaire = Vue.component('inscription-form', {
                     tab="2" 
                     placeholder="Eric" 
                     v-model="firstName" 
-                    @focus="firstNameEmpty = false" 
+                    @focus="setFirstNameEmptyToFalse()" 
                     @blur="isFirstNameEmpty" 
                     maxlength="125" minlength="2" 
                     :emptyField="firstNameEmpty"
-                    emptyMessage="Prénom est obligatoire" 
                     existField=""
-                    :errorField="!isFirstNameValid && !firstNameEmpty"
+                    :errorField="isErrorFirstName()"
                     :errorMessage="errorMessageFirstName">
                 </customInput>          
                 <!-- EMAIL-->
@@ -128,13 +123,12 @@ let Formulaire = Vue.component('inscription-form', {
                     tab="2" 
                     placeholder="eric.dupont@viseo.com" 
                     v-model="email" 
-                    @focus="emailAlreadyExist = true; emailEmpty = false" 
+                    @focus="setEmailAlreadyExistToTrue()" 
                     @blur="isEmailEmpty"
                     :emptyField="emailEmpty"
-                    emptyMessage="Email est obligatoire" 
                     :existField="!emailAlreadyExist"
                     existMessage="Cet email a déjà été enregistré."
-                    :errorField="!isEmailValid && !emailEmpty"
+                    :errorField="isErrorEmail()"
                     :errorMessage="errorMessageEmail">
                 </customInput>  
                 <!-- MOT DE PASSE -->
@@ -142,29 +136,27 @@ let Formulaire = Vue.component('inscription-form', {
                     label="mdp"
                     labelText="Mot de passe"
                     v-model="password"
-                    @focus="passwordEmpty = false" 
+                    @focus="setPasswordEmptyToFalse()" 
                     @blur="isPasswordEmpty"
                     :emptyField="passwordEmpty"
-                    :errorField="!isPasswordValid && !passwordEmpty"
+                    :errorField="isErrorPassword()"
                     :errorMessage="errorMessagePassword"
                     :show="showPass"
-                    @click="showPass = !showPass">
-                 </customPasswordInput>
-             
+                    @click="toggleShowPassword">
+                </customPasswordInput>
                 <!-- CONFIRMATION MOT DE PASSE -->
                 <customPasswordInput
                     label="mdpc"
                     labelText="Confirmation mot de passe"
                     v-model="confirmPassword"
-                    @focus="confirmPasswordEmpty = false" 
+                    @focus="setConfirmPasswordEmptyToFalse()" 
                     @blur="isConfirmPasswordEmpty"
                     :emptyField="confirmPasswordEmpty"
-                    :errorField="!isConfirmPasswordValid && !confirmPasswordEmpty"
+                    :errorField="isErrorConfirmPassword()"
                     :errorMessage="errorMessageConfirmPassword"
                     :show="showPassConf"
-                    @click="showPassConf = !showPassConf">
-                 </customPasswordInput>
-                </div>
+                    @click="toggleShowPasswordConfirmation">
+                </customPasswordInput>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
@@ -219,7 +211,6 @@ let Formulaire = Vue.component('inscription-form', {
             isConfirmPasswordValid: true
         }
     },
-
     watch: {
         personnalIdNumber: function (value) {
             this.verifyLogin(value);
@@ -242,8 +233,50 @@ let Formulaire = Vue.component('inscription-form', {
             this.verifyConfirmPassword(value);
         }
     },
-
     methods: {
+        isErrorLogin() {
+            return !this.isLoginValid && !this.loginEmpty;
+        },
+        isErrorLastName() {
+            return !this.isLastNameValid && !this.lastNameEmpty;
+        },
+        isErrorFirstName() {
+            return !this.isFirstNameValid && !this.firstNameEmpty;
+        },
+        isErrorEmail() {
+            return !this.isEmailValid && !this.emailEmpty;
+        },
+        isErrorPassword() {
+            return !this.isPasswordValid && !this.passwordEmpty;
+        },
+        isErrorConfirmPassword() {
+            return !this.isConfirmPasswordValid && !this.confirmPasswordEmpty;
+        },
+        toggleShowPassword() {
+            this.showPass = !this.showPass;
+        },
+        toggleShowPasswordConfirmation() {
+            this.showPassConf = !this.showPassConf;
+        },
+        setLoginEmptyToFalse() {
+            this.loginEmpty = false;
+        },
+        setLastNameEmptyToFalse() {
+            this.lastNameEmpty = false;
+        },
+        setFirstNameEmptyToFalse() {
+            this.firstNameEmpty = false;
+        },
+        setEmailAlreadyExistToTrue() {
+            this.emailAlreadyExist = true;
+            this.emailEmpty = false
+        },
+        setPasswordEmptyToFalse() {
+            this.passwordEmpty = false
+        },
+        setConfirmPasswordEmptyToFalse() {
+            this.confirmPasswordEmpty = false
+        },
         verifyLogin(personnalIdNumber) {
             this.personalIdNumberAlreadyExist = true;
             this.loginEmpty = false;
@@ -344,7 +377,7 @@ let Formulaire = Vue.component('inscription-form', {
         },
 
         saveAction() {
-            delete this.collaboratorToRegister['confirmPassword'];  //delete la confirmation de password
+            delete this.collaboratorToRegister['confirmPassword'];  //delete password confirmation
             //post the form to the server
             this.$http.post("api/collaborateurs", this.collaboratorToRegister)
                 .then(
@@ -477,8 +510,8 @@ let ConnexionForm = Vue.component('connexionForm', {
             emailToSend: '',
             passwordToSend: '',
             idToSend: '',
-            nomToSend: '',
-            prenomToSend: ''
+            lastNameToSend: '',
+            firstNameToSend: ''
         }
     },
     methods: {
@@ -579,8 +612,8 @@ let ConnexionForm = Vue.component('connexionForm', {
                             this.emailToSend = this.allUsers[tmp].email;
                             this.passwordToSend = this.allUsers[tmp].password;
                             this.idToSend = this.allUsers[tmp].id;
-                            this.nomToSend = this.allUsers[tmp].lastName;
-                            this.prenomToSend = this.allUsers[tmp].firstName;
+                            this.lastNameToSend = this.allUsers[tmp].lastName;
+                            this.firstNameToSend = this.allUsers[tmp].firstName;
                             this.isNotNewEmail = true;
                             break;
                         }
@@ -595,19 +628,19 @@ let ConnexionForm = Vue.component('connexionForm', {
                     this.emailToSend = this.allUsers[tmp].email;
                     this.passwordToSend = this.allUsers[tmp].password;
                     this.idToSend = this.allUsers[tmp].id;
-                    this.nomToSend = this.allUsers[tmp].lastName;
-                    this.prenomToSend = this.allUsers[tmp].firstName;
+                    this.lastNameToSend = this.allUsers[tmp].lastName;
+                    this.firstNameToSend = this.allUsers[tmp].firstName;
                     this.isNotNewEmail = true;
                     break;
                 }
             }
         }
     }
-})
+});
 
 let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
-        "minlength", 'emptyField', "emptyMessage", "existField", "existMessage", "errorField", "errorMessage"],
+        "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage"],
     template: `
                 <table style="border-spacing: 0px">
                 <div class="form-group">

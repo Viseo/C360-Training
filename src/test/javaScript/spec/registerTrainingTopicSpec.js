@@ -1,12 +1,9 @@
 beforeEach(function () {
-
     vmAddFormationPanel = new AddFormationPanel().$mount();
     vmShowFormation = new ShowFormation().$mount();
     vmAddSessionPanel = new AddSessionPanel().$mount();
     vmDatePicker = new DatePicker().$mount();
 });
-
-
 
 afterEach(function () {
         vmAddFormationPanel.state.trainingsChosen=[];
@@ -26,84 +23,15 @@ afterEach(function () {
         vmShowFormation = undefined;
         vmAddFormationPanel = undefined;
         vmDatePicker = undefined;
-
 });
 
-
 describe('test registerTrainingTopic.js', function () {
-
-    describe('vmDatePicker', function () {
-
-        it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
-            vmDatePicker.togglePanel();
-            expect(vmDatePicker.panelState).toBe(true);
-            expect(vmDatePicker.rangeStart).toBe(false);
-
-        });
-
-        it('Should check the selected component on the calendar', function () {
-            vmDatePicker.chType('day')
-            expect(vmDatePicker.panelType).toBe('day');
-            vmDatePicker.chType('month');
-            expect(vmDatePicker.panelType).toBe('month');
-            vmDatePicker.chType('year');
-            expect(vmDatePicker.panelType).toBe('year');
-
-        });
-
-        /*it('should range of date', function () {
-            vmDatePicker.yearList = Array.from({length: 12}, (value, index) => new Date().getFullYear() + index);
-            vmDatePicker.chYearRange(1);
-            expect(vmDatePicker.yearList.map((i) => i + 2)).toBe('[ 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030 ]');
-
-        });*/
-
-        it('Should check prevMonthPreview', function () {
-            vmDatePicker.tmpMonth = 1 ;
-            vmDatePicker.prevMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(0);
-            vmDatePicker.tmpMonth = 5 ;
-            vmDatePicker.prevMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(4);
-
-        });
-
-        it('Should check nextMonthPreview', function () {
-            vmDatePicker.tmpMonth = 1 ;
-            vmDatePicker.nextMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(2);
-            vmDatePicker.tmpMonth = 5 ;
-            vmDatePicker.nextMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(6);
-
-        });
-
-        it('Should check selectYear', function () {
-            vmDatePicker.maxYear = 2018
-            vmDatePicker.year = 2017 ;
-            vmDatePicker.selectYear (vmDatePicker.year);
-            vmDatePicker.validateYear(vmDatePicker.year);
-            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
-            expect(vmDatePicker.panelType).toBe('month');
-
-        });
-
-        it('Should check selectMonth', function () {
-            vmDatePicker.month = 3;
-            vmDatePicker.selectMonth(vmDatePicker.month);
-            expect(vmDatePicker.tmpMonth).toBe(vmDatePicker.month);
-            expect(vmDatePicker.panelType).toBe('date');
-
-
-        });
-
-    });
 
     describe('vmAddSessionPanel', function () {
 
         it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
             vmAddSessionPanel.ReturnToPageTraining();
-            setTimeout(function() {
+            setTimeout(function () {
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
                 expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
                 expect(vmAddSessionPanel.state.idTraining).toEqual('');
@@ -119,7 +47,7 @@ describe('test registerTrainingTopic.js', function () {
                 var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
                 expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
                 done();
-            }, 2000);
+            }, 600);
         });
 
         it('should check if ending date is calculated when user choose beginning date', function () {
@@ -127,19 +55,16 @@ describe('test registerTrainingTopic.js', function () {
             vmAddSessionPanel.beginningDate = '12/04/2017';
             vmAddSessionPanel.CalculateEndingDate();
             expect(vmAddSessionPanel.endingDate).toEqual('12/04/2017');
-
             vmAddSessionPanel.state.trainingChosen.numberHalfDays = '4';
             vmAddSessionPanel.beginningDate = '12/04/2017';
             vmAddSessionPanel.CalculateEndingDate();
-
             expect(vmAddSessionPanel.endingDate).toEqual('14/04/2017');
         });
 
         it('should check if selected session is display in the panel', function () {
-
             var dummyElement = document.createElement('div');
-            dummyElement.setAttribute("id","circle8");
-            dummyElement.setAttribute("class","circle");
+            dummyElement.setAttribute("id", "circle8");
+            dummyElement.setAttribute("class", "circle");
             document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
 
             var sessionSelected = {
@@ -162,14 +87,13 @@ describe('test registerTrainingTopic.js', function () {
             vmAddSessionPanel.showSession(sessionSelected);
             console.log(vmAddSessionPanel.numberOfSessionSelected);
             expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(1);
-
-          vmAddSessionPanel.showSession(sessionSelected);
+            vmAddSessionPanel.showSession(sessionSelected);
             console.log(vmAddSessionPanel.numberOfSessionSelected);
             expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(0);
         });
 
         it('should check if selected session to remove is deleted', function () {
-            vmAddSessionPanel.listTrainingSessionSelected = [ {
+            vmAddSessionPanel.listTrainingSessionSelected = [{
                 "id": 8,
                 "version": 0,
                 "trainingDescription": {
@@ -187,64 +111,61 @@ describe('test registerTrainingTopic.js', function () {
             }];
             console.log(vmAddSessionPanel.listTrainingSessionSelected.length);
             vmAddSessionPanel.chooseSessionsToRemove();
-
-            console.log(vmAddSessionPanel.listTrainingSessionSelected.length);
             //expect(vmAddSessionPanel.listTrainingSessionSelected.length).toEqual(0);
 
         });
 
         it('should check if session is saved in Data Base', function (done) {
                 vmAddSessionPanel.modifySessionButton = false;
-                vmAddSessionPanel.state.trainingChosen= {
+                vmAddSessionPanel.state.trainingChosen = {
                     "id": 5,
                     "version": 0,
                     "trainingTitle": "FORMATION1",
                     "numberHalfDays": 1,
                     "topicDescription": {"id": 3, "version": 0, "name": "C"}
                 };
-                vmAddSessionPanel.state.trainingTitle="FORMATION1";
-                vmAddSessionPanel.beginningDate="12/05/2017";
-                vmAddSessionPanel.endingDate="12/05/2017";
-                vmAddSessionPanel.beginningTime="09:00";
-                vmAddSessionPanel.endingTime="18:00";
-                vmAddSessionPanel.location="Salle Bora Bora";
+                vmAddSessionPanel.state.trainingTitle = "FORMATION1";
+                vmAddSessionPanel.beginningDate = "12/05/2017";
+                vmAddSessionPanel.endingDate = "12/05/2017";
+                vmAddSessionPanel.beginningTime = "09:00";
+                vmAddSessionPanel.endingTime = "18:00";
+                vmAddSessionPanel.location = "Salle Bora Bora";
                 vmAddSessionPanel.VerifyFormBeforeSaveSession();
-                setTimeout(function() {
+                setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
-                }, 2000);
+                }, 600);
             }
         );
 
         it('should check whether we can modify a session', function (done) {
                 vmAddSessionPanel.modifySessionButton = true;
                 vmAddSessionPanel.state.idSession = 6;
-                vmAddSessionPanel.state.trainingChosen= {
+                vmAddSessionPanel.state.trainingChosen = {
                     "id": 5,
                     "version": 0,
                     "trainingTitle": "FORMATION1",
                     "numberHalfDays": 1,
                     "topicDescription": {"id": 3, "version": 0, "name": "C"}
                 };
-                vmAddSessionPanel.state.trainingTitle="FORMATION1";
-                vmAddSessionPanel.beginningDate="13/05/2017";
-                vmAddSessionPanel.endingDate="13/05/2017";
-                vmAddSessionPanel.beginningTime="09:00";
-                vmAddSessionPanel.endingTime="18:00";
-                vmAddSessionPanel.location="Salle Bora Bora";
+                vmAddSessionPanel.state.trainingTitle = "FORMATION1";
+                vmAddSessionPanel.beginningDate = "13/05/2017";
+                vmAddSessionPanel.endingDate = "13/05/2017";
+                vmAddSessionPanel.beginningTime = "09:00";
+                vmAddSessionPanel.endingTime = "18:00";
+                vmAddSessionPanel.location = "Salle Bora Bora";
                 vmAddSessionPanel.VerifyFormBeforeSaveSession();
-                setTimeout(function() {
+                setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
-                }, 2000);
+                }, 600);
             }
         );
 
         it('should check if formation filed is true', function () {
-            vmAddSessionPanel.isDisabledTrainingTitle = true;
-            vmAddSessionPanel.activeFieldTrainingTitle();
-
-            expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(false);
+                vmAddSessionPanel.isDisabledTrainingTitle = true;
+                vmAddSessionPanel.activeFieldTrainingTitle();
+                expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(false);
             }
         )
         it('should check if formation filed is false', function () {
@@ -255,48 +176,48 @@ describe('test registerTrainingTopic.js', function () {
         );
 
         it('should check training title is valid', function () {
-                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation","errorMessage");
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('');
                 expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(true);
             }
         );
 
         it('should check training title is valid', function () {
-                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation","errorMessage");
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('');
                 expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(true);
             }
         );
 
         it('should check training title is not valid', function () {
-                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation//","errorMessage");
+                vmAddSessionPanel.verifyTrainingTitleInAddSession("formation//", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe("Veuillez entrer un nom de formation valide (-.'_@:+#% autorisés)");
                 expect(vmAddSessionPanel.isTrainingTitleInAddSessionValid).toBe(false);
             }
         );
 
         it('should check beginning date is valid', function () {
-                vmAddSessionPanel.verifyBeginningDate("01/06/2020","errorMessage");
+                vmAddSessionPanel.verifyBeginningDate("01/06/2020", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('');
                 expect(vmAddSessionPanel.isBeginningDateValid).toBe(true);
             }
         );
 
         it('should check beginning date has already passed', function () {
-                vmAddSessionPanel.verifyBeginningDate("01/06/2015","errorMessage");
+                vmAddSessionPanel.verifyBeginningDate("01/06/2015", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
                 expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
-                vmAddSessionPanel.verifyBeginningDate("01/03/2017","errorMessage");
+                vmAddSessionPanel.verifyBeginningDate("01/03/2017", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
                 expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
-                vmAddSessionPanel.verifyBeginningDate("10/04/2017","errorMessage");
+                vmAddSessionPanel.verifyBeginningDate("10/04/2017", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe('La date est déjà passée!');
                 expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
             }
         );
 
         it('should check beginning date is not valid', function () {
-                vmAddSessionPanel.verifyBeginningDate("02/","errorMessage");
+                vmAddSessionPanel.verifyBeginningDate("02/", "errorMessage");
                 expect(vmAddSessionPanel["errorMessage"]).toBe("Veuillez entrer une date valide (JJ / mm / AAAA)");
                 expect(vmAddSessionPanel.isBeginningDateValid).toBe(false);
             }
@@ -380,7 +301,6 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmAddFormationPanel.allTrainingsOfATopicChosen).toEqual([]);
             expect(vmAddFormationPanel.state.trainingsChosen).toEqual([]);
             expect(vmAddFormationPanel.state.allTopicTraining).toEqual([]);
-
             expect(vmShowFormation.state.trainingsChosen).toEqual([]);
             expect(vmShowFormation.state.allTopicTraining).toEqual([]);
         });
@@ -479,10 +399,8 @@ describe('test registerTrainingTopic.js', function () {
             vmAddFormationPanel.newTopic = 'PROGRAMMATION';
             let resp = vmAddFormationPanel.saveTopicIntoDatabase();
         });
-
         //removeDuplicates
         it('should check whether the function removeDuplicates can remove those duplicates', function () {
-
             var arrayWithDuplicates = [
                 {"id": "1", "mame": "c"},
                 {"id": "2", "mame": "java"},
@@ -528,23 +446,18 @@ describe('test registerTrainingTopic.js', function () {
                 {"id": 3, "version": 0, "name": "C"},
                 {"id": 4, "version": 0, "name": "C++"}
             ];
-
-            console.log("test" + vmAddFormationPanel.state.trainingsChosen);
             vmAddFormationPanel.trainingStore.TopicwithTraining();
-
             expect(JSON.stringify(vmAddFormationPanel.state.trainingsChosen)).toEqual(JSON.stringify(result));
         });
 
         //reorganizeTrainings
         it('should check whether the function reorganizeTrainings can reorganize an array of trainings', function () {
-
             var arrayToTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             var result = [
                 [1, 2, 3, 4],
                 [5, 6, 7, 8],
                 [9, 10]
             ];
-
             expect(vmAddFormationPanel.trainingStore.reorganizeTrainings(arrayToTest)).toEqual(result);
         });
 
@@ -573,7 +486,6 @@ describe('test registerTrainingTopic.js', function () {
                     "topicDescription": {"id": 4, "version": 0, "name": "C++"}
                 }
             ];
-
             var result = [
                 {
                     "id": 5,
@@ -590,7 +502,6 @@ describe('test registerTrainingTopic.js', function () {
                     "topicDescription": {"id": 3, "version": 0, "name": "C"}
                 },
             ];
-
             expect(vmAddFormationPanel.trainingStore.chooseAllTrainingsOfATopic("C")).toEqual(result);
         });
 
@@ -655,18 +566,13 @@ describe('test registerTrainingTopic.js', function () {
             vmAddFormationPanel.trainingStore.reorganizeAllTopicsAndTrainings();
             expect(vmAddFormationPanel.state.allTopicTraining).toEqual(result);
         });
-        it('should check if training is added into the database', function (done) {
+        it('should check if training is added into the database', function () {
             vmAddFormationPanel.trainingTitle = "FORMATION1";
             vmAddFormationPanel.numberHalfDays = 1;
             vmAddFormationPanel.topicDescription = "C";
-            vmAddFormationPanel.selectOptionsOfTopic =
             vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
-            setTimeout(function() {
-
-            done();
-        }, 2000);
         });
-        });
+    });
 
     describe('vmShowFormationPanel', function () {
         //showChevrons
@@ -682,13 +588,10 @@ describe('test registerTrainingTopic.js', function () {
             ];
             expect(vmShowFormation.showChevrons).toBe(true);
         });
-
     });
-
 
     describe('vmShowFormation', function () {
         it('should check if the panel change from training panel to session panel when click on a training button', function () {
-
             vmShowFormation.state.allTopicTraining = [
                 [
                     [{
@@ -749,84 +652,21 @@ describe('test registerTrainingTopic.js', function () {
                     "endingTime": "18:00",
                     "location": "Salle Bali"
                 }
-
-            ]
+            ];
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
             vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
-            setTimeout(function() {
-
-
-            expect(vmShowFormation.state.changePageToSession).toBe(true);
-            expect(vmShowFormation.state.changePageToTraining).toBe(false);
-            expect(vmShowFormation.state.idTraining).toEqual(5);
-            expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
-            expect(vmShowFormation.state.isNoSession).toBe(false);
-            expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
-            }, 2000);
+            setTimeout(function () {
+                expect(vmShowFormation.state.changePageToSession).toBe(true);
+                expect(vmShowFormation.state.changePageToTraining).toBe(false);
+                expect(vmShowFormation.state.idTraining).toEqual(5);
+                expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
+                expect(vmShowFormation.state.isNoSession).toBe(false);
+                expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
+            }, 600);
         });
-
-
     });
 
     describe('vmDatePicker2', function () {
-
-        it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
-            vmDatePicker.togglePanel();
-            expect(vmDatePicker.panelState).toBe(true);
-            expect(vmDatePicker.rangeStart).toBe(false);
-
-        });
-
-        it('Should check the selected component on the calendar', function () {
-            vmDatePicker.chType('day')
-            expect(vmDatePicker.panelType).toBe('day');
-            vmDatePicker.chType('month');
-            expect(vmDatePicker.panelType).toBe('month');
-            vmDatePicker.chType('year');
-            expect(vmDatePicker.panelType).toBe('year');
-
-        });
-
-
-        it('Should check prevMonthPreview', function () {
-            vmDatePicker.tmpMonth = 1 ;
-            vmDatePicker.prevMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(0);
-            vmDatePicker.tmpMonth = 5 ;
-            vmDatePicker.prevMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(4);
-
-        });
-
-        it('Should check nextMonthPreview', function () {
-            vmDatePicker.tmpMonth = 1 ;
-            vmDatePicker.nextMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(2);
-            vmDatePicker.tmpMonth = 5 ;
-            vmDatePicker.nextMonthPreview ();
-            expect(vmDatePicker.tmpMonth).toBe(6);
-
-        });
-
-        it('Should check selectYear', function () {
-            vmDatePicker.maxYear = 2018
-            vmDatePicker.year = 2017 ;
-            vmDatePicker.selectYear (vmDatePicker.year);
-            vmDatePicker.validateYear(vmDatePicker.year);
-            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
-            expect(vmDatePicker.panelType).toBe('month');
-
-        });
-
-        it('Should check selectMonth', function () {
-            vmDatePicker.maxYear = 2018
-            vmDatePicker.year = 2017 ;
-            vmDatePicker.selectYear (vmDatePicker.year);
-            vmDatePicker.validateYear(vmDatePicker.year);
-            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
-            expect(vmDatePicker.panelType).toBe('month');
-
-        });
 
         it('Should check function handleFocus', function () {
             vmDatePicker.handleFocus();
@@ -840,11 +680,72 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.updateValue("01/06/2020");
         });
 
-        it('should check function togglePanel', function () {
-            vmDatePicker.panelState = true;
+        it('Should check the initialization of variables of the event togglePanel() that allows to display the calendar', function () {
             vmDatePicker.togglePanel();
-            expect(vmDatePicker.panelState).toBe(false);
+            expect(vmDatePicker.panelState).toBe(true);
             expect(vmDatePicker.rangeStart).toBe(false);
+        });
+
+        it('should check function isSelected', function () {
+            vmDatePicker.type = "year";
+            vmDatePicker.item = 2017;
+            vmDatePicker.range = false;
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            vmDatePicker.range = true;
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            vmDatePicker.type = "month";
+            vmDatePicker.item = 2017;
+            vmDatePicker.range = false
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.tmpMonth).toEqual(3);
+            expect(vmDatePicker.year).toEqual(2017);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            vmDatePicker.range = true;
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.tmpStartYear).toEqual(2017);
+            expect(vmDatePicker.tmpStartMonth).toEqual(3);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.tmpEndMonth).toEqual(3);
+            vmDatePicker.type = "date";
+            vmDatePicker.item = 2017;
+            vmDatePicker.range = false;
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.date).toEqual(24);
+            expect(vmDatePicker.month).toEqual(3);
+            expect(vmDatePicker.tmpMonth).toEqual(3);
+            vmDatePicker.type = "date";
+            vmDatePicker.item = 2017;
+            vmDatePicker.range = true;
+            vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            /*
+             expect(vmDatePicker.item.valueOf()).toEqual(27);
+             */
+            expect(vmDatePicker.tmpStartYear).toEqual(2017);
+            expect(vmDatePicker.tmpStartMonth).toEqual(3);
+            expect(vmDatePicker.tmpStartDate).toEqual(24);
+            expect(vmDatePicker.tmpYear).toEqual(2017);
+            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.tmpEndMonth).toEqual(3);
+            expect(vmDatePicker.tmpEndDate).toEqual(24);
+        });
+
+        it('Should check the selected component on the calendar', function () {
+            vmDatePicker.chType('day')
+            expect(vmDatePicker.panelType).toBe('day');
+            vmDatePicker.chType('month');
+            expect(vmDatePicker.panelType).toBe('month');
+            vmDatePicker.chType('year');
+            expect(vmDatePicker.panelType).toBe('year');
         });
 
         it('should check function chYearRange', function () {
@@ -852,8 +753,70 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.chYearRange(false);
         });
 
+        it('Should check prevMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1;
+            vmDatePicker.prevMonthPreview();
+            expect(vmDatePicker.tmpMonth).toBe(0);
+            vmDatePicker.tmpMonth = 5;
+            vmDatePicker.prevMonthPreview();
+            expect(vmDatePicker.tmpMonth).toBe(4);
+        });
+
+        it('Should check nextMonthPreview', function () {
+            vmDatePicker.tmpMonth = 1;
+            vmDatePicker.nextMonthPreview();
+            expect(vmDatePicker.tmpMonth).toBe(2);
+            vmDatePicker.tmpMonth = 5;
+            vmDatePicker.nextMonthPreview();
+            expect(vmDatePicker.tmpMonth).toBe(6);
+        });
+
+        it('Should check selectYear', function () {
+            vmDatePicker.maxYear = 2018
+            vmDatePicker.year = 2017;
+            vmDatePicker.selectYear(vmDatePicker.year);
+            vmDatePicker.validateYear(vmDatePicker.year);
+            expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
+            expect(vmDatePicker.panelType).toBe('month');
+        });
+
+        it('Should check selectMonth', function () {
+            vmDatePicker.month = 4;
+            vmDatePicker.selectMonth(vmDatePicker.month);
+            vmDatePicker.validateMonth(vmDatePicker.month);
+            expect(vmDatePicker.tmpMonth).toBe(3);
+            expect(vmDatePicker.panelType).toBe('date');
+        });
+
+        it('Should check  selectDate', function () {
+            setTimeout(function () {
+                vmDatePicker.date.value = 24;  //!this.range
+                vmDatePicker.selectDate(vmDatePicker.date.value);
+                vmDatePicker.validateDate(vmDatePicker.date.value);
+                vmDatePicker.range = false;
+                expect(vmDatePicker.year).toEqual(2017);
+                expect(vmDatePicker.month).toEqual(3);
+                expect(vmDatePicker.date.value).toEqual(24);
+                expect(vmDatePicker.panelState).toBe(false);
+                vmDatePicker.validateDate(vmDatePicker.date); // if (this.range && !this.rangeStart)
+                vmDatePicker.range = false;
+                vmDatePicker.rangeStart = false;
+                expect(vmDatePicker.tmpEndYear).toEqual(2017);
+                expect(vmDatePicker.tmpStartYear).toEqual(2017);
+                expect(vmDatePicker.tmpYear).toEqual(2017);
+                expect(vmDatePicker.tmpEndMonth).toEqual(3);
+                expect(vmDatePicker.tmpStartMonth).toEqual(3);
+                expect(vmDatePicker.tmpMonth).toEqual(3);
+                expect(vmDatePicker.tmpEndDate).toEqual(24);
+                expect(vmDatePicker.tmpStartDate).toEqual(24);
+                expect(vmDatePicker.rangeStart).toBe(false);
+                vmDatePicker.validateDate(vmDatePicker.date); //if (this.range && this.rangeStart)
+                vmDatePicker.range = false;
+                vmDatePicker.rangeStart = false;
+                expect(vmDatePicker.tmpEndYear).toEqual(2017);
+                expect(vmDatePicker.tmpEndMonth).toEqual(3);
+                expect(vmDatePicker.tmpEndDate).toEqual(24);
+            })
+        })
     });
-
-
-
 });

@@ -60,7 +60,6 @@ let Header = Vue.component('blue-header',{
             IDLE_TIMEOUT: 20, //seconds
             idleSecondsCounter: 0,
             myInterval:'',
-            test: 50,
             stayConnected: true,
             dialog: false,
             timeconnected: 0,
@@ -89,122 +88,109 @@ let Header = Vue.component('blue-header',{
           this.idleSecondsCounter = value;
         },
         checkIfUserInactive(){
-            if(this.timeconnected != 0)
-            if((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1) {
-                this.dialog = true
-                this.disconnectUser();
-            }
-            document.onclick = function() {
+            if (this.timeconnected != 0)
+                if ((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1) {
+                    this.dialog = true;
+                    this.disconnectUser();
+                }
+            document.onclick = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onmousemove = function() {
+            document.onmousemove = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onkeypress = function() {
+            document.onkeypress = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-
-            window.onbeforeunload = function(){
-                if(!this.disconnect && !this.dialog)
-                document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
+            window.onbeforeunload = function () {
+                if (!this.disconnect && !this.dialog)
+                    document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
-
             this.myInterval = window.setInterval(this.checkIdleTime, 1000);
-
-
-
         },
-
         checkIdleTime() {
             this.idleSecondsCounter++;
             var oPanel = document.getElementById("newVue");
             if (oPanel) {
                 if (this.idleSecondsCounter >= this.IDLE_TIMEOUT) {
-                    window.clearInterval(this.myInterval)
+                    window.clearInterval(this.myInterval);
                     this.dialog = true;
                     this.disconnectUser();
                 }
             }
         },
-
         getCookieInfos() {
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken && regexCookieStayConnected){
-                if(window.location.pathname != '/index.html')
-                this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                this.token = String(regexCookieToken.pop());
-                if(regexCookieTimeConnected) {
-                    if(window.location.pathname != '/index.html')
-                    this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+            this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
+            if (this.token == 'undefined') regexCookieToken = false;
+            if (regexCookieToken && regexCookieStayConnected) {
+                if (window.location.pathname != '/index.html')
+                    this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                if (regexCookieTimeConnected) {
+                    if (window.location.pathname != '/index.html')
+                        this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
                 this.lastName = jwt_decode(this.token).lastName;
                 this.firstName = jwt_decode(this.token).sub;
             }
-            else{
-                if(window.location.pathname != '/index.html')
-                window.location.pathname = '/index.html';
+            else {
+                if (window.location.pathname != '/index.html')
+                    window.location.pathname = '/index.html';
             }
         },
         disconnectUser(){
             this.$http.post("api/userdisconnect", this.token)
                 .then(
                     function (response) {
-                        if(response) {
-                            console.log(response);
+                        if (response) {
                             let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                             let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
                             let getCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-                            if(getCookieToken && getCookieStayConnected) {
-                                document.cookie = "token="+ this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                                document.cookie = "stayconnected="+ this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                                if(getCookieTimeConnected)
-                                document.cookie = "timeconnected="+ "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                            if (getCookieToken && getCookieStayConnected) {
+                                document.cookie = "token=" + this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                                document.cookie = "stayconnected=" + this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                                if (getCookieTimeConnected)
+                                    document.cookie = "timeconnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                             }
-                            if(!this.dialog)
-                            window.location.pathname = '/index.html';
+                            if (!this.dialog) window.location.pathname = '/index.html';
                         }
-
                     });
         }
     }
 });
-
 
 new Vue({
     el: '#newVue'
 });
 
 $('#scroll-up').click(function() {
-    $('#test').animate({scrollTop: "-=100"}, 500);
+    $('#scrollableTrainings').animate({scrollTop: "-=100"}, 500);
 })
 
 $('#scroll-down').click(function() {
-    $('#test').animate({scrollTop: "+=100"}, 500);
+    $('#scrollableTrainings').animate({scrollTop: "+=100"}, 500);
 })
 
-$('#test').bind('mousewheel DOMMouseScroll', function(event){
+$('#scrollableTrainings').bind('mousewheel DOMMouseScroll', function(event){
     if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        $('#test').animate({scrollTop: "-=100"}, 80);
+        $('#scrollableTrainings').animate({scrollTop: "-=100"}, 80);
     }
     else{
-        $('#test').animate({scrollTop: "+=100"}, 80);
+        $('#scrollableTrainings').animate({scrollTop: "+=100"}, 80);
     }
 });
 
 $('#scroll-up-2').click(function() {
-    console.log("coucou");
     $('#scroll').animate({scrollTop: "-=100"}, 500);
 })
 
 $('#scroll-down-2').click(function() {
-    console.log("coucou");
     $('#scroll').animate({scrollTop: "+=100"}, 500);
 })
 
-
-$('ul.nav li.dropdown').hover(function() {http://www.bootply.com/PZIuAAmHST#
+$('ul.nav li.dropdown').hover(function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
 }, function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
