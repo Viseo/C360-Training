@@ -35,8 +35,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
             isNoSession: true,
-            displayTrainings: false,
-            nomrequest:[]
+            displayTrainings: false
         }
     },
     template: `<div class="container-fluid">
@@ -60,28 +59,26 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <div class="col-lg-2 col-md-2 col-sm-12">
                                                 <input ref="btnValidateSearch" @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
-                                        <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                            <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
-                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation">
-                                                    </typeahead>  
-                                                     <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
+                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
+                                                <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
+                                            </div>
                                         </div>
-                                    </div>
-
-                                                   <div class="row">
+                                        <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
                                         <div class="row">
-                                        <div class="col-lg-12" style="margin-bottom:30px">
-                                              <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                                        </div></div>
+                                            <div class="col-lg-12" style="margin-bottom:30px">
+                                                  <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                            </div>
+                                        </div>
                                         <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
-
                                             <accordion id="accordionId" :one-at-atime="true" type="info">
                                                 <div v-for="training in trainingsFound">
                                                     <panel ref="selectingTraining" @openPanel="renitialize(training)"type="primary">
                                                         <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
-                                                        <h4 v-show="!isNoSession"class="col-lg-8"><u>Sessions disponibles</u></h4>
+                                                        <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                                         <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
                                                         <div :id="training.id">
                                                             <div  class="col-lg-12"  v-for="i in listTrainingSession">
@@ -104,12 +101,16 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             </accordion>
                                         </div>
                                         <div class="row">
-                                        <div class="col-lg-12" style="margin-top:10px">
-                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+                                            <div class="col-lg-12" style="margin-top:10px">
+                                                <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+                                            </div>
                                         </div>
-                                        </div>
-                                        <center v-show="showChevrons"><p style="margin:10px;"><span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>Toutes les formations démarrent à 9h00</p></center>
-
+                                        <center v-show="showChevrons">
+                                            <p style="margin:10px;">
+                                                <span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>
+                                                Toutes les formations démarrent à 9h00
+                                            </p>
+                                        /center>
                                     </div>
                                 </div>
                             </div>
@@ -314,19 +315,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     }
                 });
         },
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/4/collaborators").then(
-                function (response) {
-                    console.log("success");
-                    this.nomrequest = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
-        }
-
-
     }
 
 });

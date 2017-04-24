@@ -6,7 +6,7 @@ let Header = Vue.component('blue-header',{
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
                 <div class="container-fluid">
                     <div class="row">
-                        <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">C360_formation@localhost
+                        <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                             <p id="navbar-title" href="#">Collaborateur 360</p>
                             <p id="navbar-subtitle">Gestion des formations</p>
                         </div>

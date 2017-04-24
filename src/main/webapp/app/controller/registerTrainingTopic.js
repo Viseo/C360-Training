@@ -61,7 +61,7 @@ Vue.component('input-text',{
             this.$emit('blur');
         }
     },
-   template: `<td :width="width">
+   template: `        <td :width="width">
                             <div class="form-group has-feedback " 
                                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
                                 <label class="label-control">{{ label }}</label><br/>
@@ -80,7 +80,6 @@ Vue.component('input-text',{
                                       :class="icon"
                                       @click="handleClick">
                                 </span>
-
                                 <select v-else-if="type==='select'"
                                         class="form-control" 
                                         :value="value" 
@@ -89,9 +88,8 @@ Vue.component('input-text',{
                                         <option selected disabled hidden style='display: none' value=''></option>
                                         <option v-for="item in collection" >{{printProp ? item[printProp] : item }}</option>
                                 </select>
-                         
                             </div>
-              </td>`
+                        </td>`
 });
 
 let AddFormationPanel = Vue.component('add-formation-panel', {
@@ -128,7 +126,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             topicsChosen:[],
             arrangeTrainings:undefined,
             allTrainingsOfATopicChosen:[],
-
             state: training_store.state,
             trainingStore: training_store
         }
@@ -137,19 +134,15 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         trainingTitle: function (trainingTitleValue) {
             this.verifyTrainingField(trainingTitleValue, 'trainingTitleRegexErrorMessage');
         },
-
         newTopic: function (newTopicValue) {
             this.verifyNewTopicField(newTopicValue, 'newTopicRegexErrorMessage');
         },
     },
-
-        mounted: function(){
+    mounted: function(){
             this.gatherTopicsFromDatabase();
             this.gatherTrainingsFromDatabase();
-        },
-
+    },
     methods: {
-
         updateV1 (v) {
             this.trainingTitle = v
         },
@@ -171,7 +164,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.isTrainingTitleValid = false;
             }
         },
-
         verifyNewTopicField(newTopic, errorMessage) {
             if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(newTopic)) {
                 this[errorMessage] = '';
@@ -182,32 +174,27 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
 
             }
         },
-
         isTrainingTitleEmpty(){
             if (this.trainingTitle == '' || this.trainingTitle == undefined) {
                 this.trainingTitleErrorMessage = true;
             }
         },
-
         isNumberHalfDaysEmpty(){
             if (this.numberHalfDays == '' || this.numberHalfDays == undefined) {
                 this.numberHalfDaysErrorMessage = true;
             }
         },
-
         isTopicEmpty(){
             if (this.topicDescription == '' || this.topicDescription == undefined) {
                 this.topicErrorMessage = true;
             }
         },
-
         isNewTopicEmpty(){
             if (this.newTopic == '' || this.newTopic == undefined) {
                 this.newTopicErrorMessage = true;
 
             }
         },
-
         verifyTrainingFormBeforeSubmit() {
             if(this.newTopic != ''){
                 this.verifyTopicFormBeforeSubmit();
@@ -231,7 +218,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             }
 
         },
-
         verifyTopicFormBeforeSubmit() {
             this.newTopic = this.newTopic.replace(/ +/g, "");
             this.topic.name = this.newTopic;
@@ -245,7 +231,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.saveTopicIntoDatabase();
             }
         },
-
         resetTrainingForm() {
             this.trainingTitle = '';
             this.numberHalfDays = '';
@@ -253,12 +238,10 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.trainingToRegister = {};
 
         },
-
         resetTopicForm() {
             this.newTopic = '';
             this.topicToRegister = {};
         },
-
         saveTrainingIntoDatabase() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
@@ -282,11 +265,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     }
                 );
         },
-
         saveTopicIntoDatabase() {
-            this.topicToRegister.name = this.newTopic.replace(" ", "").toUpperCase();  //delete useless spaces between words
-
-            //post the form to the server
+            this.topicToRegister.name = this.newTopic.replace(" ", "").toUpperCase();
             this.$http.post("api/themes", this.topicToRegister)
                 .then(
                     function (response) {
@@ -304,7 +284,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     }
                 );
         },
-
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
@@ -320,7 +299,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 }
             );
         },
-
         gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
@@ -342,106 +320,106 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
 
     },
 template:`
- <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-10 col-lg-7">
-                    <div class="row">
-                        <div class="col-lg-7 col-md-7 text-center">
-                            <legend>Ajouter une formation</legend>
+         <div class="container-fluid">
+              <div class="row">
+                   <div class="col-sm-12 col-md-10 col-lg-7">
+                        <div class="row">
+                             <div class="col-lg-7 col-md-7 text-center">
+                                  <legend>Ajouter une formation</legend>
+                             </div>
                         </div>
+                        <form @submit.prevent="verifyTrainingFormBeforeSubmit">
+                            <table>
+                            <tr>
+                                <input-text 
+                                    width="20%"
+                                    label="Formation" 
+                                    :value="trainingTitle" 
+                                    @input="updateV1"
+                                    placeholder="Formation"
+                                    maxlength="20"
+                                    @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
+                                    :isValid="isTrainingTitleValid"
+                                    type='input'>
+                                </input-text>
+                                <td width="15%">
+                                    <div class="form-group has-feedback ">
+                                        <label class="label-control">1/2 journées</label>
+                                        <br/>
+                                        <select class="form-control" v-model="numberHalfDays"  
+                                                @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                            <option v-for="n in 200">{{n}}</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td width="20%">
+                                    <div class="form-group has-feedback ">
+                                        <label class="label-control">Thèmes</label>
+                                        <br/>
+                                        <select class="form-control" v-model="topicDescription"
+                                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
+                                            <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                
+                                <td class="text-center" 
+                                    width="20%">
+                                    <div class="form-group">
+                                         <label>&nbsp</label><br/>
+                                         <input type="submit" 
+                                               class="btn btn-primary" 
+                                               value="Valider" 
+                                               style="width:80%"/>
+                                    </div>
+                                </td>
+                                
+                                <input-text width="30%" 
+                                                label="Nouveau thème" 
+                                                :value="newTopic"
+                                                 @input="updateV4"
+                                                placeholder="Thème"
+                                                maxlength="50"
+                                                @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
+                                                :isValid="isNewTopicValid"
+                                                icon="glyphicon-plus btn btn-primary"
+                                                type='input'
+                                                class="td-right"
+                                                @click="verifyTopicFormBeforeSubmit">
+                                </input-text>
+                                
+                                </tr>
+                                <tr>
+                                    <error-messages :colspan="4"
+                                                    :height="80"
+                                                    identicalErrorMessage="Une formation identique existe déjà." 
+                                                    fillFieldErrorMessage="Veuillez remplir tous les champs." 
+                                                    successMessage="La formation a été créée avec succès." 
+                                                    :regexErrorMessage="trainingTitleRegexErrorMessage"
+                                                    :emptyIdenticalError="!isNewTrainingTitle"
+                                                    :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                    :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
+                                                    :emptyRegexError="!isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
+                                    </error-messages>
+                                    <error-messages class="td-right"
+                                                    :height="80"
+                                                    :width="250"
+                                                    identicalErrorMessage="Un thème identique existe déjà." 
+                                                    fillFieldErrorMessage="Veuillez remplir le champ." 
+                                                    successMessage="Le nouveau thème a été ajouté avec succès." 
+                                                    :regexErrorMessage="newTopicRegexErrorMessage"
+                                                    :emptyIdenticalError="!isNewTopic"
+                                                    :emptyFillError="newTopicErrorMessage"
+                                                    :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
+                                                    :emptyRegexError="!isNewTopicValid">
+                                    </error-messages>
+                                </tr>
+                            </table>
+                            </form>
                     </div>
-                    <form @submit.prevent="verifyTrainingFormBeforeSubmit">
-                    <table>
-                    <tr>
-                        <input-text 
-                            width="20%"
-                            label="Formation" 
-                            :value="trainingTitle" 
-                            @input="updateV1"
-                            placeholder="Formation"
-                            maxlength="20"
-                            @focus="trainingTitleErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true; newTopicErrorMessage=false;"
-                            :isValid="isTrainingTitleValid"
-                            type='input'>
-                        </input-text>
-                        
-                        <td width="15%">
-                        <div class="form-group has-feedback ">
-                        <label class="label-control">1/2 journées</label><br/>
-                        <select class="form-control" v-model="numberHalfDays"  
-                                @focus="numberHalfDaysErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                            <option v-for="n in 200">{{n}}</option>
-                        </select>
-                        </div>
-                        </td>
-                         
-                        <td width="20%">
-                        <div class="form-group has-feedback ">
-                        <label class="label-control">Thèmes</label><br/>
-                        <select class="form-control" v-model="topicDescription"
-                            @focus="topicErrorMessage = false; confirmFormation = false; isNewTrainingTitle = true;newTopicErrorMessage=false;">
-                            <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
-                        </select>
-                        </div>
-                        </td>
-                        
-                        <td class="text-center" 
-                            width="20%">
-                            <div class="form-group">
-                                 <label>&nbsp</label><br/>
-                                 <input type="submit" 
-                                       class="btn btn-primary" 
-                                       value="Valider" 
-                                       style="width:80%"/>
-                            </div>
-                        </td>
-                        
-                        <input-text width="30%" 
-                                        label="Nouveau thème" 
-                                        :value="newTopic"
-                                         @input="updateV4"
-                                        placeholder="Thème"
-                                        maxlength="50"
-                                        @focus="newTopicErrorMessage = false; confirmTopic = false; isNewTopic = true; trainingTitleErrorMessage = false;numberHalfDaysErrorMessage = false;topicErrorMessage = false;"
-                                        :isValid="isNewTopicValid"
-                                        icon="glyphicon-plus btn btn-primary"
-                                        type='input'
-                                        class="td-right"
-                                        @click="verifyTopicFormBeforeSubmit">
-                        </input-text>
-                        
-                        </tr>
-                        <tr>
-                            <error-messages :colspan="4"
-                                            :height="80"
-                                            identicalErrorMessage="Une formation identique existe déjà." 
-                                            fillFieldErrorMessage="Veuillez remplir tous les champs." 
-                                            successMessage="La formation a été créée avec succès." 
-                                            :regexErrorMessage="trainingTitleRegexErrorMessage"
-                                            :emptyIdenticalError="!isNewTrainingTitle"
-                                            :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                            :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                            :emptyRegexError="!isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
-                            </error-messages>
-                            <error-messages class="td-right"
-                                            :height="80"
-                                            :width="250"
-                                            identicalErrorMessage="Un thème identique existe déjà." 
-                                            fillFieldErrorMessage="Veuillez remplir le champ." 
-                                            successMessage="Le nouveau thème a été ajouté avec succès." 
-                                            :regexErrorMessage="newTopicRegexErrorMessage"
-                                            :emptyIdenticalError="!isNewTopic"
-                                            :emptyFillError="newTopicErrorMessage"
-                                            :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
-                                            :emptyRegexError="!isNewTopicValid">
-                            </error-messages>
-                        </tr>
-                    </table>
-                    </form>
+                </div>
             </div>
-        </div>
-    </div>
-`
+        `
 });
 
 let ShowFormation = Vue.component('show-formation-panel', {
