@@ -39,7 +39,7 @@ let NavigationMenu = Vue.component('connect-user', {
                 .then(
                     function (response) {
                         if (response) {
-                            window.location.pathname = '/addTrainingTopic.html';
+                            this.$router.push('/registerTrainingCollaborator')
                         }
                         else {
                         }
@@ -560,11 +560,11 @@ let ConnexionForm = Vue.component('connexionForm', {
                     function (userPersistedToken) {
                         this.handleCookie(userPersistedToken.data['userConnected']);
                         if(jwt_decode(userPersistedToken.data['userConnected']).roles) {
-                          window.location.pathname = '/addTrainingTopic.html';
+                            this.$router.push('/addTrainingTopic');
 
                       }
                         else
-                          window.location.pathname = '/registerTrainingCollaborator.html';
+                            this.$router.push('/registerTrainingCollaborator');
                     }
                 ).catch(function () {
                 this.password = "";

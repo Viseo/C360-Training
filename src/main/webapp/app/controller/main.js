@@ -1,6 +1,7 @@
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
-let Header = Vue.component('blue-header',{
+Vue.component('blue-header',{
     template:
         `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
@@ -39,23 +40,23 @@ let Header = Vue.component('blue-header',{
                     <div class="dialog-title">Oups....</div>
                     <div class="dialog-description">{{ firstName }} {{ lastName }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
                     <div class="dialog-buttons">
-                        <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
+                        <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link>
                     </div>
                 </div>	
             </div>
         </div>
   `,
-    data: function(){
+    data: function () {
         return {
             lastName:'',
             firstName:'',
             token:'',
             disconnect:false,
             app: {
-                training:true,
-                skills:false,
-                mission:false,
-                leave:false
+                training: true,
+                skills: false,
+                mission: false,
+                leave: false
             },
             IDLE_TIMEOUT: 20, //seconds
             idleSecondsCounter: 0,
@@ -65,9 +66,9 @@ let Header = Vue.component('blue-header',{
             timeconnected: 0,
         }
     },
-    mounted: function(){
+    mounted: function () {
         this.getCookieInfos();
-        if(this.stayConnected===false) {
+        if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
     },
@@ -85,7 +86,7 @@ let Header = Vue.component('blue-header',{
             return this.disconnect && !this.dialog;
         },
         setIdleSecondsCounter(value){
-          this.idleSecondsCounter = value;
+            this.idleSecondsCounter = value;
         },
         checkIfUserInactive(){
             if (this.timeconnected != 0)
@@ -126,18 +127,26 @@ let Header = Vue.component('blue-header',{
             this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
             if (this.token == 'undefined') regexCookieToken = false;
             if (regexCookieToken && regexCookieStayConnected) {
-                if (window.location.pathname != '/index.html')
-                    this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                if (this.$route.name != 'login')
+                this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                this.token = String(regexCookieToken.pop());
                 if (regexCookieTimeConnected) {
-                    if (window.location.pathname != '/index.html')
+                    if (this.$route.name != 'login')
                         this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
-                this.lastName = jwt_decode(this.token).lastName;
+                if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
+                    this.$router.push('/registerTrainingCollaborator');
+                }
+                if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
+                    this.$router.push('/addTrainingTopic');
+                }
+                    this.lastName = jwt_decode(this.token).lastName;
                 this.firstName = jwt_decode(this.token).sub;
             }
             else {
-                if (window.location.pathname != '/index.html')
-                    window.location.pathname = '/index.html';
+                if (this.$route.name != 'login'){
+                    this.$router.push('/login');
+                }
             }
         },
         disconnectUser(){
@@ -154,15 +163,58 @@ let Header = Vue.component('blue-header',{
                                 if (getCookieTimeConnected)
                                     document.cookie = "timeconnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                             }
-                            if (!this.dialog) window.location.pathname = '/index.html';
+                            if (!this.dialog)
+                                this.$router.push('/login')
                         }
                     });
         }
     }
 });
+let router = new VueRouter({
+    mode: 'hash',
+    routes: [
+        {
+            path: "/addTrainingTopic",
+            component: {
+                template: `<div id="newVue" v-cloak>
+            <blue-header></blue-header>
+            <add-formation-panel></add-formation-panel>
+            <show-formation-panel></show-formation-panel>
+            <add-session-panel></add-session-panel>
 
+            </div>`
+            },
+            name:'addTrainingTopic'
+        },
+        {
+            path: "/registerTrainingCollaborator",
+            name:'registerTrainingCollaborator',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                            <blue-header></blue-header>
+                            <collaborator-formation></collaborator-formation>
+                            </div>`
+            }
+        },
+        {
+            path: "/login",
+            name:'login',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                               <blue-header></blue-header>
+                                       <connect-user></connect-user>
+                            </div>`
+            }
+        },
+        {
+            path: "/",
+            redirect :"/login"
+        }
+    ]
+});
 new Vue({
-    el: '#newVue'
+    el: '#newVue',
+    router
 });
 
 $('#scroll-up').click(function() {
@@ -192,7 +244,7 @@ $('#scroll-down-2').click(function() {
 
 $('ul.nav li.dropdown').hover(function() {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-}, function() {
+}, function () {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
 });
 
