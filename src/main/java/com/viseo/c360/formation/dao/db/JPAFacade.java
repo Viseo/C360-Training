@@ -56,6 +56,16 @@ public class JPAFacade implements DAOFacade {
 	}
 
 	@Override
+	public <T> void executeRequest(String request, Parameter... params) {
+		entityManager.setFlushMode(FlushModeType.COMMIT);
+		Query query = entityManager.createQuery(request);
+		for(Parameter param : params){
+			query.setParameter(param.getName(), param.getValue());
+		}
+		query.executeUpdate();
+	}
+
+	@Override
 	public <T> void persist(T entity) {
 		entityManager.persist(entity);
 	}

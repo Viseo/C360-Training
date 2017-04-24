@@ -248,6 +248,11 @@ public class FakeDAOFacade implements DAOFacade {
 		log.info("Removing : " + entity.getClass() + " : " + value);
 	}
 
+	@Override
+	public <T> void executeRequest(String request, Parameter... params) {
+
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> void persist(T entity) {

@@ -63,6 +63,14 @@ public class TrainingDAO {
         daoFacade.flush();
         return topic;
     }
+    @Transactional
+    public Topic removeTopic(Topic topic) throws PersistenceException {
+        daoFacade.executeRequest("Delete FROM TrainingSession ts WHERE ts.training.id in (SELECT t.id from Training t where t.topic.id =:id)",param("id",topic.getId()));
+        daoFacade.executeRequest("Delete FROM Training t WHERE t.topic.id =:id",param("id",topic.getId()));
+        daoFacade.remove(topic);
+        daoFacade.flush();
+        return topic;
+    }
 
     public Topic getTopic(long id){
         return daoFacade.find(Topic.class,id);

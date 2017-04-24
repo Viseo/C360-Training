@@ -454,6 +454,15 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+        RemoveTopic(topicToRemove){
+            this.$http.post("api/removetopic", topicToRemove).then(
+                function (response) {
+                    window.location.reload();
+                },
+                function (response) {
+                    console.error(response);
+                });
+        },
         CreateSession(id){
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
@@ -497,7 +506,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                     <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                     <th width="25%"></th>
                                                                     <th width="25%"></th>
-                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
