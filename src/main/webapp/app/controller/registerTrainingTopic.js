@@ -494,7 +494,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
-                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="scrollableTrainings" class="roundedCorner">
                               <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                 <table class="fix tabnonborder" >
                                     <tbody>
