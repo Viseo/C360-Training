@@ -1501,15 +1501,23 @@ let DatePicker = Vue.component('datepicker', {
 
     mounted () {
         this.$nextTick(() => {
-            if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
-                this.coordinates = {
-                    right: '0',
-                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+            if(this.$el.parentNode != null) {
+                if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
+                    this.coordinates = {
+                        right: '0',
+                        top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                    }
+                } else {
+                    this.coordinates = {
+                        left: '0',
+                        top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                    }
                 }
-            } else {
+            }
+            else {
                 this.coordinates = {
                     left: '0',
-                    top: `${window.getComputedStyle(this.$el.children[0]).offsetHeight + 4}px`
+                    top: '0'
                 }
             }
             let minArr = this.min.split('-')

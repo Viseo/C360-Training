@@ -146,7 +146,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
         renitialize(training){
-            console.log("salut");
             this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
             this.trainingSelected = training;
@@ -157,11 +156,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
 
         },
-        disabling(id){
+        disabling(id, runtime){
             this.check = !this.check;
             var test = document.getElementById(id);
             if (test != null){
-                var nodes= document.getElementById(id).getElementsByTagName("*");}
+                var nodes= document.getElementById(id).getElementsByTagName("*");
+            }
+            else if (runtime == "test") {
+                var nodes = ["input","input"];
+            }
             if (this.check == true) {
                 this.$http.get("api/formations/" + id + "/sessions").then(
                     function (response) {
@@ -171,7 +174,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                             this.isNoSession = true;
                         }
                         else {
-                            console.log(this.checkedSessions);
                             this.isNoSession = false;
                         }
                     });
@@ -190,20 +192,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.emptyTraining = this.selectedTraining ? false : true;
             this.trainingsFound.splice(0, this.trainingsFound.length);
             if (!this.emptyTraining) {
-                console.log("hello1");
-
+                let selectedTraining = this.selectedTraining;
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
-                        console.log("api/formations/" + this.selectedTraining + "/sessions");
                         this.listTrainingSession = response.data;
-                        console.log(response.data);
                         for (key in this.allTrainings) {
-                            if (this.allTrainings[key].id == this.selectedTraining) {
-                                console.log("hhuhu");
+                            if (this.allTrainings[key].id == selectedTraining) {
                                 this.trainingsFound.push(this.allTrainings[key]);
                             }
-                            else {
-                                console.log("error");}
                         }
                         if (this.listTrainingSession.length === 0) {
                             this.displayTrainings = true;
@@ -289,7 +285,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 console.log(this.noTrainingFound);
                 this.value = null;
             });
-
         },
         storeSessionsByCollab(id){
             this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
@@ -313,22 +308,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.isNoSession = false;
                     }
                 });
-        },
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/4/collaborators").then(
-                function (response) {
-                    console.log("success");
-                    this.nomrequest = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
         }
-
-
     }
-
 });
 Vue.component('typeahead', VueStrap.typeahead);
 Vue.component('accordion', VueStrap.accordion);

@@ -33,7 +33,7 @@ describe('Header test', function () {
     it('should check variable initialization from Header component', function () {
         expect(vmHeader.lastName).toBe('');
         expect(vmHeader.firstName).toBe('');
-        expect(vmHeader.token).toBe('');
+        //expect(vmHeader.token).toBe('');
         expect(vmHeader.disconnect).toBe(false);
         expect(vmHeader.app).toEqual({training:true, skills:false, mission:false, leave:false});
         expect(vmHeader.IDLE_TIMEOUT).toBe(20);

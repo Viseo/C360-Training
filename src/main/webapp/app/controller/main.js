@@ -123,10 +123,11 @@ let Header = Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
+            this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
+            if (this.token == 'undefined') regexCookieToken = false;
             if (regexCookieToken && regexCookieStayConnected) {
                 if (window.location.pathname != '/index.html')
                     this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                this.token = String(regexCookieToken.pop());
                 if (regexCookieTimeConnected) {
                     if (window.location.pathname != '/index.html')
                         this.timeconnected = parseInt(regexCookieTimeConnected.pop());
