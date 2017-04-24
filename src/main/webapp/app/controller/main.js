@@ -1,55 +1,54 @@
 Vue.use(VueResource);
 
 let Header = Vue.component('blue-header',{
-    template: `<div id="wrap">
-    <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
-        <div class="container-fluid">
-        <div class="row">
-                <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
-                    <p id="navbar-title" href="#">Collaborateur 360</p>
-                    <p id="navbar-subtitle">Gestion des formations</p>
+    template:
+        `<div id="wrap">
+            <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">C360_formation@localhost
+                            <p id="navbar-title" href="#">Collaborateur 360</p>
+                            <p id="navbar-subtitle">Gestion des formations</p>
+                        </div>
+                        <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
+                                 <span @mouseover="setDisconnectedToTrue()" v-show="showName()">{{firstName}} {{lastName}}</span>
+                                 <button @click="disconnectUser" @mouseout="setDisconnectedToFalse()" v-show="showDisconnexion()" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown">	
+                                        <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
+                                        <ul id="dropdown-app" class="dropdown-menu">
+                                            <li>
+                                                <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
+                                                <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
+                                                <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.training"><img src="/img/icon_formation.png" href="#" class="text-center icon-app"><p>GF</p></span>
+                                                <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
+                                            </li>
+                                        </ul>
+                                    </li> 
+                                 </ul>
+                            </div>
+                        </div>     
+                    </div>
                 </div>
-                <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
-                         <span @mouseover="disconnect=true;" v-show="!disconnect && !dialog">{{prenom}} {{nom}}</span>
-                         <button @click="disconnectUser" @mouseout="disconnect=false;" v-show="disconnect && !dialog" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
+            </div>
+            <div v-if="dialog" class="dialog">
+                <div class="dialog-bg">
+                    <div class="dialog-title">Oups....</div>
+                    <div class="dialog-description">{{ firstName }} {{ lastName }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
+                    <div class="dialog-buttons">
+                        <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
-                        <ul class="nav navbar-nav">
-                            <li class="dropdown">	
-                                <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
-                                <ul id="dropdown-app" class="dropdown-menu">
-                                    <li>
-                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
-                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
-                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.training"><img src="/img/icon_formation.png" href="#" class="text-center icon-app"><p>GF</p></span>
-                                        <span class="col-lg-5 col-md-12 col-sm-12" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
-                                    </li>
-                                </ul>
-                            </li> 
-                         </ul>
-                    </div>
-                </div>     
+                </div>	
+            </div>
         </div>
-        </div>
-    </div>
-    <div v-if="dialog" class="dialog">
-	<div class="dialog-bg">
-       	<div class="dialog-title">Oups....</div>
-           <div class="dialog-description">{{ prenom }} {{ nom }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
-
-			<!-- Buttons, both options close the window in this demo -->
-           <div class="dialog-buttons">
-           <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
-		</div>
-	</div>	
-</div>
-</div>
   `,
     data: function(){
         return {
-            nom:'',
-            prenom:'',
+            lastName:'',
+            firstName:'',
             token:'',
             disconnect:false,
             app: {
@@ -74,6 +73,18 @@ let Header = Vue.component('blue-header',{
         }
     },
     methods: {
+        setDisconnectedToTrue(){
+            this.disconnect = true;
+        },
+        setDisconnectedToFalse(){
+            this.disconnect = false;
+        },
+        showName(){
+            return !this.disconnect && !this.dialog;
+        },
+        showDisconnexion(){
+            return this.disconnect && !this.dialog;
+        },
         setIdleSecondsCounter(value){
           this.idleSecondsCounter = value;
         },
@@ -128,8 +139,8 @@ let Header = Vue.component('blue-header',{
                     if(window.location.pathname != '/index.html')
                     this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
-                this.nom = jwt_decode(this.token).lastName;
-                this.prenom = jwt_decode(this.token).sub;
+                this.lastName = jwt_decode(this.token).lastName;
+                this.firstName = jwt_decode(this.token).sub;
             }
             else{
                 if(window.location.pathname != '/index.html')
