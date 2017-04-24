@@ -89,10 +89,8 @@ a.changecolor{
 .tabnonborder{
     border:none;
 }
-
 table.fix{
     table-layout: fixed;
-    margin:0;
     border-collapse: collapse;
 
 

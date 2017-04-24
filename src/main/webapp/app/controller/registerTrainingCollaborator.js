@@ -222,10 +222,10 @@ Vue.component('collaborator-formation', {
         },
         GetCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            this.token = String(regexCookieToken.pop());
+            if(this.token){this.token = String(regexCookieToken.pop());
             this.collaboratorIdentity.id = jwt_decode(this.token).id;
             this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-            this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+            this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;}
         },
         GatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.idTraining + "/sessions").then(
@@ -279,7 +279,7 @@ Vue.component('collaborator-formation', {
 
         },
         storeCollabsByTraining(id){
-            this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
+            this.http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
                 function (response){
                     this.sessionsByCollab = response.data;
                     this.disablingSessions();

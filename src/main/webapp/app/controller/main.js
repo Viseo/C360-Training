@@ -122,20 +122,26 @@ Vue.component('blue-header', {
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             if (regexCookieToken && regexCookieStayConnected) {
-                if (window.location.pathname != '/login')
-                    this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                console.log(this.stayConnected);
+                if (this.$route.name != 'login')
+                this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
                 this.token = String(regexCookieToken.pop());
                 if (regexCookieTimeConnected) {
-                    if (window.location.pathname != '/login')
+                    if (this.$route.name != 'login')
                         this.timeconnected = parseInt(regexCookieTimeConnected.pop());
                 }
-                this.nom = jwt_decode(this.token).lastName;
+                if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
+                    this.$router.push('/registerTrainingCollaborator');
+                }
+                if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
+                    this.$router.push('/addTrainingTopic');
+                }
+                    this.nom = jwt_decode(this.token).lastName;
                 this.prenom = jwt_decode(this.token).sub;
             }
             else {
-                if (window.location.pathname != '/login')
-                    this.$router.push('/login')
+                if (this.$route.name != 'login'){
+                    this.$router.push('/login');
+                }
             }
         },
         disconnectUser(){
@@ -174,10 +180,12 @@ let router = new VueRouter({
             <add-session-panel></add-session-panel>
 
             </div>`
-            }
+            },
+            name:'addTrainingTopic'
         },
         {
             path: "/registerTrainingCollaborator",
+            name:'registerTrainingCollaborator',
             component: {
                 template: `<div id="newVue" v-cloak>
                             <blue-header></blue-header>
@@ -187,6 +195,7 @@ let router = new VueRouter({
         },
         {
             path: "/login",
+            name:'login',
             component: {
                 template: `<div id="newVue" v-cloak>
                                <blue-header></blue-header>

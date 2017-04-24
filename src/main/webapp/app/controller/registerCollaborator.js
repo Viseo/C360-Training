@@ -40,7 +40,7 @@ let NavigationMenu = Vue.component('connect-user', {
                 .then(
                     function (response) {
                         if (response) {
-                            this.$router.push('/addTrainingTopic')
+                            this.$router.push('/registerTrainingCollaborator')
                         }
                         else {
                         }
