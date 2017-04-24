@@ -307,7 +307,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     });
                     this.state.allTrainings = this.selectOptionsOfTraining;
                     this.resetTrainingForm();
-                    this.trainingStore.TopicwithTraining();
+                    this.trainingStore.topicwithTraining();
                     this.trainingStore.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
@@ -341,8 +341,31 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.trainingTitleErrorMessage = false;
             this.numberHalfDaysErrorMessage = false;
             this.topicErrorMessage = false;
+        },
+        showSuccessMessageForTrainingForm(){
+            return this.confirmFormation && this.isNewTrainingTitle && !(this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
+        },
+        showSuccessMessageForTopicForm(){
+            return this.confirmTopic && this.isNewTopic && !this.newTopicErrorMessage;
+        },
+        showEmptyInputMessageForTrainingForm(){
+            return (this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
+        },
+        showEmptyInputMessageForTopicForm(){
+            return this.newTopicErrorMessage;
+        },
+        showInvalidateInputMessageForTrainingForm(){
+            return !this.isTrainingTitleValid && !(this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
+        },
+        showInvalidateInputMessageForTopicForm(){
+            return !this.isNewTopicValid;
+        },
+        showExistInputMessageForTrainingForm(){
+            return !this.isNewTrainingTitle;
+        },
+        showExistInputMessageForTopicForm(){
+            return !this.isNewTopic;
         }
-
     },
 template:`
          <div class="container-fluid">
@@ -417,10 +440,10 @@ template:`
                                                     fillFieldErrorMessage="Veuillez remplir tous les champs." 
                                                     successMessage="La formation a été créée avec succès." 
                                                     :regexErrorMessage="trainingTitleRegexErrorMessage"
-                                                    :emptyIdenticalError="!isNewTrainingTitle"
-                                                    :emptyFillError="(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                                    :emptySuccess="confirmFormation && isNewTrainingTitle && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)"
-                                                    :emptyRegexError="!isTrainingTitleValid && !(trainingTitleErrorMessage || numberHalfDaysErrorMessage || topicErrorMessage)">
+                                                    :emptyIdenticalError="showExistInputMessageForTrainingForm()"
+                                                    :emptyFillError="showEmptyInputMessageForTrainingForm()"
+                                                    :emptySuccess="showSuccessMessageForTrainingForm()"
+                                                    :emptyRegexError="showInvalidateInputMessageForTrainingForm()">
                                     </error-messages>
                                     <error-messages class="td-right"
                                                     :height="80"
@@ -429,10 +452,10 @@ template:`
                                                     fillFieldErrorMessage="Veuillez remplir le champ." 
                                                     successMessage="Le nouveau thème a été ajouté avec succès." 
                                                     :regexErrorMessage="newTopicRegexErrorMessage"
-                                                    :emptyIdenticalError="!isNewTopic"
-                                                    :emptyFillError="newTopicErrorMessage"
-                                                    :emptySuccess="confirmTopic && isNewTopic && !newTopicErrorMessage"
-                                                    :emptyRegexError="!isNewTopicValid">
+                                                    :emptyIdenticalError="showExistInputMessageForTopicForm()"
+                                                    :emptyFillError="showEmptyInputMessageForTopicForm()"
+                                                    :emptySuccess="showSuccessMessageForTopicForm()"
+                                                    :emptyRegexError="showInvalidateInputMessageForTopicForm()">
                                     </error-messages>
                                 </tr>
                             </table>
@@ -461,15 +484,15 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
-        CreateSession(id){
+        createSession(id){
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
             this.state.idSession = '';
-            this.trainingStore.CollectInformationOfTrainingChosen();
-            this.GatherSessionsByTrainingFromDatabase();
+            this.trainingStore.collectInformationOfTrainingChosen();
+            this.gatherSessionsByTrainingFromDatabase();
         },
-        GatherSessionsByTrainingFromDatabase(){
+        gatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
                 function (response) {
                     this.state.listTrainingSession = response.data;
@@ -492,41 +515,40 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
-                          <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
-                              <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                                <table class="fix tabnonborder" >
-                                    <tbody>
-                                          <tr>
-                                              <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
-                                               <td>
-                                                   <template v-for="topicTraining in state.allTopicTraining">
-                                                        <table class="table table-borderless tabnonborder fix">                               
-                                                            <thead>
-                                                                <tr>
-                                                                    <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                                                                    <th width="25%"></th>
-                                                                    <th width="25%"></th>
-                                                                    <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr v-for="trainings in topicTraining">
-                                                                    <td  v-for="training in trainings" width="25%">
-                                                                        <button class="btn btn-toolbar btn-group" style="z-index:0" @click="CreateSession(training.id)">{{training.trainingTitle}}</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                           </tr>
-                                                        </table>
-                                                   </template>
-                                               </td>
-                                           </tr>
-                                    </tbody>
-                                </table>
-                               <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                           </div>
-                       </div>
-                </div>
+                            <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                                  <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                        <table class="fix tabnonborder" >
+                                            <tbody>
+                                                  <tr>
+                                                      <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                                                      <td>
+                                                           <template v-for="topicTraining in state.allTopicTraining">
+                                                                <table class="table table-borderless tabnonborder fix">                               
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                                            <th width="25%"></th>
+                                                                            <th width="25%"></th>
+                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr v-for="trainings in topicTraining">
+                                                                            <td  v-for="training in trainings" width="25%">
+                                                                                <button class="btn btn-toolbar btn-group" style="z-index:0" @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                           </template>
+                                                      </td>
+                                                  </tr>
+                                            </tbody>
+                                        </table>
+                                  <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                            </div>
+                      </div>
+                  </div>
              </div>`
 });
 
@@ -565,7 +587,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             canNotRegisterForm: false,
             listTrainingSessionSelected:[],
             allTrainings: [],
-
             trainingTitleInAddSession:'',
             isTrainingTitleInAddSessionValid:true,
             isBeginningDateValid:true,
@@ -588,11 +609,9 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             toDay:''
         }
     },
-
     mounted: function () {
         this.getDate();
     },
-
     watch:{
         trainingTitleInAddSession: function (trainingTitleValue) {
             this.verifyTrainingTitleInAddSession(trainingTitleValue, 'trainingTitleInAddSessionRegexErrorMessage');
@@ -612,13 +631,11 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isTrainingTitleInAddSessionValid = false;
             }
         },
-
         isTrainingTitleInAddSessionEmpty(){
             if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
         },
-
         verifyBeginningDate(beginningDate, errorMessage) {
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
                 if(this.testDate(beginningDate)){
@@ -634,19 +651,16 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isBeginningDateValid = false;
             }
         },
-
         isBeginningDateEmpty(){
             if (this.beginningDate == '' || this.beginningDate == undefined) {
                 this.beginningDateErrorMessage = true;
             }
         },
-
         isLocationEmpty(){
             if (this.location == '' || this.location == undefined) {
                 this.locationErrorMessage = true;
             }
         },
-
         activeFieldTrainingTitle(){
             if (this.isDisabledTrainingTitle == true) {
                 this.trainingTitleInAddSession = this.state.trainingTitle;
@@ -661,24 +675,19 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.trainingTitleInAddSession = this.state.trainingTitle;
             }
         },
-
         updateV1 (v) {
             this.trainingTitleInAddSession = v;
         },
-
         updateV2 (v) {
             this.beginningDate = v;
             this.beginningDateForTest = v;
         },
-
         updateV3 (v) {
             this.location = v;
         },
-
         updateV4 (v) {
             this.endingDate = v;
         },
-
         ReturnToPageTraining(){
             this.isDisabledTrainingTitle = true;
             this.state.changePageToTraining = true;
@@ -689,8 +698,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },
-
-
         ResetSessionForm(){
             this.beginningDate = '';
             this.endingDate = '';
@@ -700,9 +707,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.valueButtonSaveModify = 'Ajouter';
             this.state.idSession='';
         },
-
         VerifyFormBeforeSaveSession(){
-
             if(this.modifySessionButton){
                 this.ModifyTrainingSession();
             }
@@ -714,18 +719,15 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.session.beginningTime = this.beginningTime;
                 this.session.endingTime = this.endingTime;
                 this.session.location = this.location;
-
                 this.isTrainingTitleInAddSessionEmpty();
                 this.isBeginningDateEmpty();
                 this.isLocationEmpty();
-
                 if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                     this.SaveSessionIntoDatabase();
                 }
             }
         },
-
         ModifyTrainingTopic(){
             this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
             this.state.trainingTitle = this.trainingTitleInAddSession;
@@ -733,7 +735,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.confirmModification = true;
             setTimeout(function(){ this.confirmModification = false; }.bind(this), 1500);
         },
-
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
                 .then(
@@ -744,7 +745,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         this.state.changePageToSession = false;
                         this.state.changePageToTraining = true;
                         this.ResetSessionForm();
-                        this.GatherSessionsByTrainingFromDatabase();
+                        this.gatherSessionsByTrainingFromDatabase();
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -756,7 +757,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 );
         },
-
         GatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
@@ -765,7 +765,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.state.allTrainings = this.allTrainings;
-                    this.trainingStore.TopicwithTraining();
+                    this.trainingStore.topicwithTraining();
                     this.trainingStore.reorganizeAllTopicsAndTrainings();
                 },
                 function (response) {
@@ -774,7 +774,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 }
             );
         },
-        GatherSessionsByTrainingFromDatabase(){
+        gatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
                 function (response) {
                     this.state.listTrainingSession = response.data;
@@ -786,7 +786,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
-
         ModifyTrainingSession(){
             this.sessionToModify.id = this.state.idSession;
             this.sessionToModify.trainingDescription = this.state.trainingChosen;
@@ -806,7 +805,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
                     this.numberOfSessionSelected--;
                     this.ResetSessionForm();
-                    this.GatherSessionsByTrainingFromDatabase();
+                    this.gatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
                     this.confirmModification = false;
@@ -817,7 +816,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
-
         chooseSessionsToRemove(){
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
@@ -827,22 +825,19 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
             this.confirmSupression = true;
             setTimeout(function(){ this.confirmSupression = false; }.bind(this), 1500);
-
         },
-
         RemoveSession(sessionToRemove){
             this.$http.post("api/sessionstoremove", sessionToRemove).then(
                 function (response) {
                     console.log("success");
                     this.canNotRegisterForm = false;
                     this.ResetSessionForm();
-                    this.GatherSessionsByTrainingFromDatabase();
+                    this.gatherSessionsByTrainingFromDatabase();
                 },
                 function (response) {
                     console.error(response);
                 });
         },
-
         showSession(session){
             this.trainingTitleInAddSessionErrorMessage = false;
             this.beginningDateErrorMessage = false;
@@ -850,7 +845,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.isTrainingTitleInAddSessionValid = true;
             this.isBeginningDateValid = true;
             this.isSessionAlreadyPlanned = false;
-
             if( document.getElementById('circle'+session.id).className === 'circle') {
                 document.getElementById('circle' + session.id).className = 'full-circle';
                 this.numberOfSessionSelected++;
@@ -871,7 +865,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             else{
                 this.canNotRegisterForm = false;
             }
-
             if(this.numberOfSessionSelected === 1){
                 this.valueButtonSaveModify = "Modifier";
                 this.modifySessionButton = true;
@@ -884,7 +877,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.ResetSessionForm();
             }
         },
-
         CanNotUseButtonSupprimer(){
             if(this.numberOfSessionSelected>=1){
                 return false;
@@ -892,7 +884,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 return true;
             }
         },
-
         CalculateEndingDate(){
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(this.beginningDate)) {
                 var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
@@ -923,7 +914,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 return true;
             }
         },
-
         getDate(){
             var now = new Date();
             var day = now.getDate();
@@ -931,8 +921,41 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             var year = now.getFullYear();
             this.toDay = (year + "-" + month + "-" + day);
         },
-    },
+        resetVarialbesByDate(){
+            this.confirmSession = false;
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+        },
+        resetVariablesBySalle(){
+            this.confirmSession = false;
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+        },
+        showSuccessToCreateMessage(){
+            return this.confirmSession && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
+        showSuccessToModifyMessage(){
+            return this.confirmModification && !this.confirmSession && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
+        showSuccessToDeleteMessage(){
+            return this.confirmSupression && !this.confirmModification && !this.confirmSession && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
+        showEmptyInputMessage(){
+            return (this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
+        showInvalidateInputMessage(){
+            return !this.isBeginningDateValid && !this.beginningDateErrorMessage;
+        },
+        showExistInputMessage(){
+            return this.isSessionAlreadyPlanned && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
+        showFailToModifySessionMessage(){
+            return this.failureModification && !this.confirmSupression && !this.confirmModification && !this.confirmSession && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
+        },
 
+    },
     template: `
         <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
             <div class="row">
@@ -966,105 +989,104 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                 <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
                         </div>
-                        
-                            <hr>
+                        <hr>
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
-                            
-                        <nav>
-                            <ul>
-                                <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
-                                    <ul class="scrollbar" id="style-5">
-                                        <li v-show="state.isNoSession"><a>Aucune session</a></li>
-                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
-                                    </ul>
-                      
-                                </li>
-                            </ul>
-                        </nav>
-                        
-                            </div>     
-                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
-                                <div class = "row" style="margin-bottom: 20px;">
-                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
-                                        <datepicker  
-                                                    v-model = "beginningDate"
-                                                    :isValid = "isBeginningDateValid" 
-                                                    :disabled = "canNotRegisterForm"
-                                                    @blur = "CalculateEndingDate()"
-                                                    @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;"
-                                                    @input = "updateV2"
-                                                    :min = "toDay">                                                                                       
-                                        </datepicker>
-                                    </div>
-                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
-                                        <td width="15%">
-                                            <div class="form-group has-feedback ">
-                                                <label class="label-control">Salles</label><br/>
-                                                <select class="form-control" maxlength = "10" :disabled = "canNotRegisterForm" placeholder = "Salle" v-model="location"  
-                                                        @focus="confirmSession = false; trainingTitleInAddSessionErrorMessage = false; beginningDateErrorMessage = false; locationErrorMessage = false;">
-                                                    <option v-for="n in AllSalles">{{n}}</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                    </div>
+                            <nav>
+                                <ul>
+                                    <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
+                                        <ul class="scrollbar" id="style-5">
+                                            <li v-show="state.isNoSession"><a>Aucune session</a></li>
+                                            <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>     
+                        <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
+                            <div class = "row" style="margin-bottom: 20px;">
+                                <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
+                                    <datepicker  
+                                                v-model = "beginningDate"
+                                                :isValid = "isBeginningDateValid" 
+                                                :disabled = "canNotRegisterForm"
+                                                @blur = "CalculateEndingDate()"
+                                                @focus="resetVarialbesByDate()"
+                                                @input = "updateV2"
+                                                :min = "toDay">                                                                                       
+                                    </datepicker>
+                                </div>
+                                <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
+                                    <td width="15%">
+                                        <div class="form-group has-feedback ">
+                                            <label class="label-control">Salles</label><br/>
+                                            <select class="form-control" 
+                                                    maxlength = "10" 
+                                                    :disabled = "canNotRegisterForm" 
+                                                    placeholder = "Salle" 
+                                                    v-model="location"  
+                                                    @focus="resetVariablesBySalle()">
+                                                <option v-for="n in AllSalles">{{n}}</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </div>
+                            </div> 
+                            <div class = "row" style="margin-bottom: 30px;">
+                                <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
+                                    <input-text 
+                                        label = "Date de fin" 
+                                        :value = "endingDate" 
+                                        @input = "updateV4"
+                                        placeholder = "--/--/----"
+                                        maxlength = "10"
+                                        :isValid = "true"
+                                        icon = "glyphicon glyphicon-calendar"
+                                        :disabled = "true" 
+                                        type = 'input'>
+                                    </input-text>
+                                </div>
+                                <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
+                                    <table class = "errorMessageAddSession">
+                                        <tr>
+                                            <error-messages  
+                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                successMessage =" La session a été créée avec succès."
+                                                failureModification =" La modification n'est pas enregistrée."
+                                                successModificationMessage = "La modification est bien enregistrée."
+                                                successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
+                                                failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
+                                                :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                :emptyRegexError = "showInvalidateInputMessage()"
+                                                :emptyFailure = "showExistInputMessage()"
+                                                :emptySuccess = "showSuccessToCreateMessage()"
+                                                :emptySuccessModification = "showSuccessToModifyMessage()"
+                                                :emptySuccessSupression = "showSuccessToDeleteMessage()"
+                                                :emptyfailureModification = "showFailToModifySessionMessage()"
+                                                :emptyFillError = "showEmptyInputMessage()">                                                                       
+                                            <error-messages>
+                                        </tr>
+                                    </table> 
                                 </div> 
-                                <div class = "row" style="margin-bottom: 30px;">
-                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
-                                        <input-text 
-                                            label = "Date de fin" 
-                                            :value = "endingDate" 
-                                            @input = "updateV4"
-                                            placeholder = "--/--/----"
-                                            maxlength = "10"
-                                            :isValid = "true"
-                                            icon = "glyphicon glyphicon-calendar"
-                                            :disabled = "true" 
-                                            type = 'input'>
-                                        </input-text>
-                                    </div>
-                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
-                                        <table class = "errorMessageAddSession">
-                                            <tr>
-                                                <error-messages  
-                                                    fillFieldErrorMessage =" Veuillez remplir tous les champs." 
-                                                    successMessage =" La session a été créée avec succès."
-                                                    failureModification =" La modification n'est pas enregistrée."
-                                                    successModificationMessage = "La modification est bien enregistrée."
-                                                    successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
-                                                    failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
-                                                    :regexErrorMessage = "beginningDateRegexErrorMessage"
-                                                    :emptyRegexError = "!isBeginningDateValid && !beginningDateErrorMessage"
-                                                    :emptyFailure = "isSessionAlreadyPlanned && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                    :emptySuccess = "confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                    :emptySuccessModification = "confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                    :emptySuccessSupression = "confirmSupression && !confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                    :emptyfailureModification = "failureModification && !confirmSupression && !confirmModification && !confirmSession && !(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)"
-                                                    :emptyFillError = "(trainingTitleInAddSessionErrorMessage || beginningDateErrorMessage || locationErrorMessage)">                                                                       
-                                                <error-messages>
-                                            </tr>
-                                        </table> 
-                                    </div> 
-                                </div> 
-                                <div class = "row " style = "margin-bottom: 30px;">
-                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                        <input type = "submit" 
-                                               class = "btn btn-primary" 
-                                               :value = "valueButtonSaveModify" 
-                                               :disabled = "canNotRegisterForm" 
-                                               style = "width:100%"/>                                                                         
-                                    </div>
-                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                        <input type = "button" 
-                                               class = "btn btn-danger" 
-                                               value = "Supprimer" 
-                                               @click = "chooseSessionsToRemove()" 
-                                               :disabled = "CanNotUseButtonSupprimer()" 
-                                               style = "width:100%"/>                                                                        
-                                    </div>
-                                </div>                                                     
-                            </form>
-                        </div>
+                            </div> 
+                            <div class = "row " style = "margin-bottom: 30px;">
+                                <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                    <input type = "submit" 
+                                           class = "btn btn-primary" 
+                                           :value = "valueButtonSaveModify" 
+                                           :disabled = "canNotRegisterForm" 
+                                           style = "width:100%"/>                                                                         
+                                </div>
+                                <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                    <input type = "button" 
+                                           class = "btn btn-danger" 
+                                           value = "Supprimer" 
+                                           @click = "chooseSessionsToRemove()" 
+                                           :disabled = "CanNotUseButtonSupprimer()" 
+                                           style = "width:100%"/>                                                                        
+                                </div>
+                            </div>                                                     
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1072,7 +1094,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 });
 
 let DatePicker = Vue.component('datepicker', {
-
     template: `
          <div class="date-picker">
             <div class = "form-group has-feedback" @click="togglePanel"
@@ -1549,7 +1570,6 @@ let DatePicker = Vue.component('datepicker', {
 })
 
 class trainingStore {
-
     constructor () {
         this.state = {
             trainingsChosen:[],
@@ -1569,8 +1589,7 @@ class trainingStore {
             prenomUser:''
         }
     }
-
-    CollectInformationOfTrainingChosen(){
+    collectInformationOfTrainingChosen(){
         this.state.trainingChosen = {};
         for (var tmp in this.state.allTrainings) {
             if (this.state.allTrainings[tmp].id == this.state.idTraining) {
@@ -1579,7 +1598,6 @@ class trainingStore {
         }
         this.state.trainingTitle = this.state.trainingChosen.trainingTitle;
     }
-
     removeDuplicates(arr, prop) {
         var new_arr = [];
         var lookup = {};
@@ -1594,8 +1612,7 @@ class trainingStore {
 
         return new_arr;
     }
-
-    TopicwithTraining(){
+    topicwithTraining(){
         this.state.trainingsChosen = [];
         for (var tmp in this.state.allTrainings) {
             this.state.trainingsChosen.push(this.state.allTrainings[tmp].topicDescription);
@@ -1606,7 +1623,6 @@ class trainingStore {
         });
 
     }
-
     reorganizeTrainings(value){
         this.state.arrangeTrainings = [];
         var tmp = [];
@@ -1629,7 +1645,6 @@ class trainingStore {
         }
         return this.state.arrangeTrainings;
     }
-
     chooseAllTrainingsOfATopic(value){
         this.state.allTrainingsOfATopicChosen = [];
         for (var tmp in this.state.allTrainings) {
@@ -1639,14 +1654,12 @@ class trainingStore {
         }
         return this.state.allTrainingsOfATopicChosen;
     }
-
     reorganizeAllTopicsAndTrainings(){
         this.state.allTopicTraining = [];
         for (var tmp in this.state.trainingsChosen) {
             this.state.allTopicTraining.push(this.reorganizeTrainings(this.chooseAllTrainingsOfATopic(this.state.trainingsChosen[tmp].name)));
         }
     }
-
 }
 
 let training_store = new trainingStore();
