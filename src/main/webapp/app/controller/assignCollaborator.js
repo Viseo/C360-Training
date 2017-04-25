@@ -51,13 +51,13 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                  <div class="row">
                                      <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                                         <div class="checkbox col-sm-12 col-md-12 col-lg-12" >
-                                             <label><input type="checkbox" value="" v-model="checkedNames">Afficher les demandes</label>
+                                             <label><input type="checkbox" value="" v-model="checkedNames" disabled>Afficher les demandes</label>
                                              
                                         </div> 
                                         
                                            
                                  </div>
-                                 <div class="panel panel-default">
+                                 <div class="panel panel-default disabled">
                                     <div class="panel-body">
                                          <div class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
@@ -86,7 +86,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                      <label>Nombre de places disponibles : 15</label>
                                      </div>
                                     </div>
-                                     <div class="panel panel-default">
+                                     <div class="panel panel-default disabled">
                                         <div class="panel-body">
                                             <br/><br/>
                                              <div align="center">
@@ -102,7 +102,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                      </div>
                                  </div>
-                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()">Enregistrer</button>
+                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" disabled>Enregistrer</button>
                         </div>
                     </div>
                 </div>
