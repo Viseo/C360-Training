@@ -1,5 +1,6 @@
 package com.viseo.c360.formation.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -65,6 +67,9 @@ public class TrainingDAO {
     }
     @Transactional
     public Topic removeTopic(Topic topic) throws PersistenceException {
+        daoFacade.executeSQLRequest("Delete from trainingsession_collaborator tc where tc.trainingsession_id in (select ts.id from trainingsession ts where ts.training_id in (select t.id from training t where t.topic_id =:id))",param("id",topic.getId()));
+        daoFacade.executeSQLRequest("Delete from requesttraining_trainingsession rtt where rtt.requesttraining_id in (select rt.id from requesttraining rt where rt.training_id in (select t.id from training t where t.topic_id =:id))",param("id",topic.getId()));
+        daoFacade.executeRequest("Delete FROM RequestTraining rt WHERE rt.training.id in (SELECT t.id from Training t where t.topic.id =:id)",param("id",topic.getId()));
         daoFacade.executeRequest("Delete FROM TrainingSession ts WHERE ts.training.id in (SELECT t.id from Training t where t.topic.id =:id)",param("id",topic.getId()));
         daoFacade.executeRequest("Delete FROM Training t WHERE t.topic.id =:id",param("id",topic.getId()));
         daoFacade.remove(topic);
