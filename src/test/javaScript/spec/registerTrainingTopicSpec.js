@@ -666,7 +666,7 @@ describe('test registerTrainingTopic.js', function () {
         });
     });
 
-    describe('vmDatePicker2', function () {
+    describe('vmDatePicker', function () {
 
         it('Should check function handleFocus', function () {
             vmDatePicker.handleFocus();
@@ -727,9 +727,6 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.range = true;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
             expect(vmDatePicker.tmpYear).toEqual(2017);
-            /*
-             expect(vmDatePicker.item.valueOf()).toEqual(27);
-             */
             expect(vmDatePicker.tmpStartYear).toEqual(2017);
             expect(vmDatePicker.tmpStartMonth).toEqual(3);
             expect(vmDatePicker.tmpStartDate).toEqual(24);
@@ -753,7 +750,7 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.chYearRange(false);
         });
 
-        it('Should check prevMonthPreview', function () {
+        it('Should check function prevMonthPreview', function () {
             vmDatePicker.tmpMonth = 1;
             vmDatePicker.prevMonthPreview();
             expect(vmDatePicker.tmpMonth).toBe(0);
@@ -762,7 +759,7 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.tmpMonth).toBe(4);
         });
 
-        it('Should check nextMonthPreview', function () {
+        it('Should check function nextMonthPreview', function () {
             vmDatePicker.tmpMonth = 1;
             vmDatePicker.nextMonthPreview();
             expect(vmDatePicker.tmpMonth).toBe(2);
@@ -771,16 +768,16 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.tmpMonth).toBe(6);
         });
 
-        it('Should check selectYear', function () {
+        it('Should check function selectYear', function () {
             vmDatePicker.maxYear = 2018
             vmDatePicker.year = 2017;
-            vmDatePicker.selectYear(vmDatePicker.year);
             vmDatePicker.validateYear(vmDatePicker.year);
+            vmDatePicker.selectYear(vmDatePicker.year);
             expect(vmDatePicker.tmpYear).toBe(vmDatePicker.year);
             expect(vmDatePicker.panelType).toBe('month');
         });
 
-        it('Should check selectMonth', function () {
+        it('Should check function selectMonth', function () {
             vmDatePicker.month = 4;
             vmDatePicker.selectMonth(vmDatePicker.month);
             vmDatePicker.validateMonth(vmDatePicker.month);
@@ -788,7 +785,7 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.panelType).toBe('date');
         });
 
-        it('Should check  selectDate', function () {
+       /* it('Should check  selectDate', function () {
             setTimeout(function () {
                 vmDatePicker.date.value = 24;  //!this.range
                 vmDatePicker.selectDate(vmDatePicker.date.value);
@@ -817,6 +814,6 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmDatePicker.tmpEndMonth).toEqual(3);
                 expect(vmDatePicker.tmpEndDate).toEqual(24);
             })
-        })
+        })*/
     });
 });
