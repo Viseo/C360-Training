@@ -743,6 +743,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         this.state.changePageToTraining = true;
                         this.ResetSessionForm();
                         this.GatherSessionsByTrainingFromDatabase();
+                        this.GatherAllSessions();
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -782,6 +783,17 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     else{
                         this.state.isNoSession = false;
                     }
+                });
+        },
+        GatherAllSessions(){
+            this.$http.get("api/sessions").then(
+                function (response) {
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
                 });
         },
 
@@ -1503,7 +1515,8 @@ class trainingStore {
             isNoSession:true,
             idSession:'',
             nomUser:'',
-            prenomUser:''
+            prenomUser:'',
+            allSessions: []
         }
     }
 

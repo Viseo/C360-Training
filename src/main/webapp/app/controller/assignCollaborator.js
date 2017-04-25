@@ -7,7 +7,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     props: [],
     data: function () {
         return {
-            allSessions:[],
             sessionIdChosen:'',
             collaboratorsRequesting:[],
             requestedCollaborators:[],
@@ -23,7 +22,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             collaboratorsFound: [],
             displayCollaborators: false,
             noCollaboratorsFound: false,
-            numberAddedCollab: 0
+            numberAddedCollab: 0,
+            state: training_store.state
         }
     },
     template: `
@@ -37,11 +37,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="row">
                         <div id="assignCollaborator">
-                                <select 
+                                <select
                                         class="form-control" 
                                         v-model="sessionIdChosen"
                                         >
-                                        <option :value="session.id" v-for="session in allSessions" > {{session.trainingDescription.topicDescription.name}} - {{session.trainingDescription.trainingTitle}} -  {{session.beginning}} - {{session.location}}</option>
+                                        <option :value="session.id" v-for="session in state.allSessions" > {{session.trainingDescription.topicDescription.name}} - {{session.trainingDescription.trainingTitle}} -  {{session.beginning}} - {{session.location}}</option>
                                 </select>
                         <!--<select class="col-sm-10 col-md-10 col-lg-10">
                         </select>-->
@@ -119,7 +119,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/sessions").then(
         function (response) {
             console.log("success to get all sessions from database");
-            this.allSessions = response.data;
+            this.state.allSessions = response.data;
         },
         function(response) {
             console.log("Error: ", response);
