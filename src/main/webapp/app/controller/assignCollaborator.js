@@ -8,6 +8,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     data: function () {
         return {
             sessionIdChosen:0,
+            numberPlacesAvailable:15,
             collaboratorsRequesting:[],
             requestedCollaborators:[],
             requestedCollaboratorsMemo:[],
@@ -16,6 +17,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             collaboratorAlreadyInSession:false,
             allCollaboratorsIdChosen:[],
             checkedNames: true,
+            isRegistrationAvailable: true,
             validatedCollab: [],
             allCollaborators: [],
             allCollaboratorsName:[],
@@ -269,12 +271,15 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.validatedCollab.splice(this.validatedCollab.indexOf(nameCollab),1);
         },
         saveCollabInSessions(){
-            var i;
-            for (i = 0; i < this.validatedCollab.length; i++){
-                this.allCollaboratorsIdChosen.push(this.validatedCollab[i].id);
-            }
-            this.AddCollaboratorsToTrainingSession();
-            this.resetAssignCollaboratorsForm();
+            this.numberAddedCollabCounter();
+            if(this.isRegistrationAvailable) {
+                var i;
+                for (i = 0; i < this.validatedCollab.length; i++) {
+                    this.allCollaboratorsIdChosen.push(this.validatedCollab[i].id);
+                }
+                this.AddCollaboratorsToTrainingSession();
+                this.resetAssignCollaboratorsForm();
+            } //else message d'erreur
         },
         gatherCollaboratorsFromDatabase(){
          this.$http.get("api/collaborateurs").then(
@@ -314,7 +319,16 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             }
         },
         numberAddedCollabCounter (){
-            this.numberAddedCollab = this.allCollaboratorsAlreadyInSessions.length;
+
+            this.numberAddedCollab = this.validatedCollab.length;
+            this.numberPlacesAvailable = 15 - this.allCollaboratorsAlreadyInSessions.length;
+
+            if(this.numberAddedCollab <= this.numberPlacesAvailable){
+                this.isRegistrationAvailable = true;
+            }
+            else{
+                this.isRegistrationAvailable = false;
+            }
         },
         resetAssignCollaboratorsForm(){
             this.validatedCollab.splice(0,this.validatedCollab.length);
@@ -325,6 +339,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
             this.allCollaborators.splice(0,this.allCollaborators.length);
             this.requestedCollaborators.splice(0,this.requestedCollaborators.length);
+            this.isRegistrationAvailable = true;
         },
         clearGreyPanel(){
             this.isDisabled = false;
