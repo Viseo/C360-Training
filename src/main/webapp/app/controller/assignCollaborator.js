@@ -7,7 +7,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     props: [],
     data: function () {
         return {
-            sessionIdChosen:'',
+            sessionIdChosen:0,
             collaboratorsRequesting:[],
             requestedCollaborators:[],
             allCollaboratorsIdChosen:[],
@@ -23,6 +23,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             displayCollaborators: false,
             noCollaboratorsFound: false,
             numberAddedCollab: 0,
+            isDisabled: true,
             state: training_store.state
         }
     },
@@ -51,13 +52,13 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                  <div class="row">
                                      <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                                         <div class="checkbox col-sm-12 col-md-12 col-lg-12" >
-                                             <label><input type="checkbox" value="" v-model="checkedNames" disabled>Afficher les demandes</label>
+                                             <label ><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher les demandes</label>
                                              
                                         </div> 
                                         
                                            
                                  </div>
-                                 <div class="panel panel-default disabled">
+                                 <div class="panel panel-default" :class="{disabled : isDisabled}">
                                     <div class="panel-body">
                                          <div class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
@@ -81,12 +82,12 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                  
                                 <div class="col-sm-6 col-md-6 col-lg-6">
                                     <div class="row">
-                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{allCollaboratorsAlreadyInSessions.length}}</h4>
+                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
                                      <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                     <label>Nombre de places disponibles : 15</label>
+                                     <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
                                      </div>
                                     </div>
-                                     <div class="panel panel-default disabled">
+                                     <div class="panel panel-default" :class="{disabled : isDisabled}">
                                         <div class="panel-body">
                                             <br/><br/>
                                              <div align="center">
@@ -102,7 +103,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                      </div>
                                  </div>
-                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" disabled>Enregistrer</button>
+                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled}">Enregistrer</button>
                         </div>
                     </div>
                 </div>
@@ -283,14 +284,21 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.validatedCollab.splice(0,this.validatedCollab.length);
             this.allCollaboratorsIdChosen.splice(0,this.allCollaboratorsIdChosen.length);
             this.allCollaboratorsAlreadyInSessions.splice(0,this.allCollaboratorsAlreadyInSessions.length);
-            this.sessionIdChosen = "";
+            this.sessionIdChosen = 0;
+            this.isDisabled = true;
+        },
+        clearGreyPanel(){
+            this.isDisabled = false;
         }
 
 
     },
     watch: {
         sessionIdChosen: function(value) {
-            this.verifyCheckedNames(value);
+            if(value) {
+                this.verifyCheckedNames(value);
+                this.clearGreyPanel();
+            }
         },
         checkedNames: function(value) {
             this.verifyCheckedNames(value);
