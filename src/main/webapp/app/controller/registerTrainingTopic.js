@@ -3,7 +3,7 @@
  */
 
 Vue.use(VueResource);
-
+Vue.use(VueRouter);
 Vue.component('error-messages',{
     props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
            'emptyIdenticalError','emptyFillError','emptySuccess','emptyfailureModification','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],

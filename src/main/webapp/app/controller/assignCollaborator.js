@@ -2,6 +2,7 @@
  * Created by NBE3663 on 18/04/2017.
  */
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 let assignCollaborator = Vue.component('assign-collaborator', {
     props: [],

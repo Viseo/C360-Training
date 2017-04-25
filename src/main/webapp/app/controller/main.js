@@ -126,7 +126,7 @@ let Header = Vue.component('blue-header',{
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             //this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
             if (this.token == 'undefined') regexCookieToken = false;
-            if (regexCookieToken && regexCookieStayConnected) {
+            /*if (regexCookieToken && regexCookieStayConnected) {
                 if (this.$route.name != 'login')
                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
                 this.token = String(regexCookieToken.pop());
@@ -147,7 +147,7 @@ let Header = Vue.component('blue-header',{
                 if (this.$route.name != 'login'){
                     this.$router.push('/login');
                 }
-            }
+            }*/
         },
         disconnectUser(){
             this.$http.post("api/userdisconnect", this.token)

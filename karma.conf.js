@@ -27,7 +27,12 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/main/webapp/app/controller/registerTrainingCollaborator.js',
-            'src/test/javaScript/spec/*.js',
+            'src/main/webapp/app/controller/assignCollaborator.js',
+            'src/test/javaScript/spec/mainSpec.js',
+            //'src/test/javaScript/spec/registerCollaboratorSpec.js',
+            'src/test/javaScript/spec/registerTrainingTopicSpec.js',
+            'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
+
         ],
 
 
