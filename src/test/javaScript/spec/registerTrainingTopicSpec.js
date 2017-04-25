@@ -83,12 +83,9 @@ describe('test registerTrainingTopic.js', function () {
                 "endingTime": "18:00",
                 "location": "Salle Bali"
             };
-            console.log(vmAddSessionPanel.numberOfSessionSelected);
             vmAddSessionPanel.showSession(sessionSelected);
-            console.log(vmAddSessionPanel.numberOfSessionSelected);
             expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(1);
             vmAddSessionPanel.showSession(sessionSelected);
-            console.log(vmAddSessionPanel.numberOfSessionSelected);
             expect(vmAddSessionPanel.numberOfSessionSelected).toEqual(0);
         });
 
@@ -109,7 +106,6 @@ describe('test registerTrainingTopic.js', function () {
                 "endingTime": "18:00",
                 "location": "Salle Bali"
             }];
-            console.log(vmAddSessionPanel.listTrainingSessionSelected.length);
             vmAddSessionPanel.chooseSessionsToRemove();
             //expect(vmAddSessionPanel.listTrainingSessionSelected.length).toEqual(0);
 
@@ -737,53 +733,57 @@ describe('test registerTrainingTopic.js', function () {
         });
 
         it('should check function isSelected', function () {
+            let now = new Date();
+            let d = now.getDate();
+            let m = now.getMonth();
+            let y = now.getFullYear();
             vmDatePicker.type = "year";
-            vmDatePicker.item = 2017;
+            vmDatePicker.item = y;
             vmDatePicker.range = false;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.item).toEqual(2017);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
+            expect(vmDatePicker.item).toEqual(y);
+            expect(vmDatePicker.tmpYear).toEqual(y);
             vmDatePicker.range = true;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.item).toEqual(2017);
-            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.item).toEqual(y);
+            expect(vmDatePicker.tmpEndYear).toEqual(y);
             vmDatePicker.type = "month";
-            vmDatePicker.item = 2017;
+            vmDatePicker.item = y;
             vmDatePicker.range = false
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.item).toEqual(2017);
+            expect(vmDatePicker.item).toEqual(y);
             expect(vmDatePicker.tmpMonth).toEqual(3);
-            expect(vmDatePicker.year).toEqual(2017);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
+            expect(vmDatePicker.year).toEqual(y);
+            expect(vmDatePicker.tmpYear).toEqual(y);
             vmDatePicker.range = true;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
-            expect(vmDatePicker.item).toEqual(2017);
-            expect(vmDatePicker.tmpStartYear).toEqual(2017);
+            expect(vmDatePicker.tmpYear).toEqual(y);
+            expect(vmDatePicker.item).toEqual(y);
+            expect(vmDatePicker.tmpStartYear).toEqual(y);
             expect(vmDatePicker.tmpStartMonth).toEqual(3);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
-            expect(vmDatePicker.item).toEqual(2017);
-            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.tmpYear).toEqual(y);
+            expect(vmDatePicker.item).toEqual(y);
+            expect(vmDatePicker.tmpEndYear).toEqual(y);
             expect(vmDatePicker.tmpEndMonth).toEqual(3);
             vmDatePicker.type = "date";
-            vmDatePicker.item = 2017;
+            vmDatePicker.item = y;
             vmDatePicker.range = false;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.date).toEqual(25);
+            expect(vmDatePicker.date).toEqual(d);
             expect(vmDatePicker.month).toEqual(3);
             expect(vmDatePicker.tmpMonth).toEqual(3);
             vmDatePicker.type = "date";
-            vmDatePicker.item = 2017;
+            vmDatePicker.item = y;
             vmDatePicker.range = true;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
-            expect(vmDatePicker.tmpStartYear).toEqual(2017);
+            expect(vmDatePicker.tmpYear).toEqual(y);
+            expect(vmDatePicker.tmpStartYear).toEqual(y);
             expect(vmDatePicker.tmpStartMonth).toEqual(3);
-            expect(vmDatePicker.tmpStartDate).toEqual(25);
-            expect(vmDatePicker.tmpYear).toEqual(2017);
-            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.tmpStartDate).toEqual(d);
+            expect(vmDatePicker.tmpYear).toEqual(y);
+            expect(vmDatePicker.tmpEndYear).toEqual(y);
             expect(vmDatePicker.tmpEndMonth).toEqual(3);
-            expect(vmDatePicker.tmpEndDate).toEqual(25);
+            expect(vmDatePicker.tmpEndDate).toEqual(d);
         });
 
         it('Should check the selected component on the calendar', function () {
@@ -836,6 +836,38 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.tmpMonth).toEqual(3);
             expect(vmDatePicker.panelType).toBe('date');
         });
+
+/*
+        it('Should check  selectDate', function () {
+            vmDatePicker.date.value = 25;
+            vmDatePicker.previousMonth = 3;
+            vmDatePicker.selectDate(25);
+            vmDatePicker.validateDate(25);
+            vmDatePicker.range = true;
+            expect(vmDatePicker.year).toEqual(2017);
+            expect(vmDatePicker.month).toEqual(3);
+            expect(vmDatePicker.date).toEqual(25);
+            expect(vmDatePicker.panelState).toBe(false);
+
+            vmDatePicker.validateDate(vmDatePicker.date); // if (this.range && !this.rangeStart)
+            vmDatePicker.range = false;
+            vmDatePicker.rangeStart = false;
+            expect(vmDatePicker.tmpEndYear).toEqual(2017);
+            expect(vmDatePicker.tmpEndMonth).toEqual(3);
+            expect(vmDatePicker.tmpEndDate).toEqual(25);
+            expect(vmDatePicker.rangeStart).toBe(false);
+
+            vmDatePicker.validateDate(vmDatePicker.date); //if (this.range && this.rangeStart)
+            vmDatePicker.tmpEndYear = false;
+            expect(vmDatePicker.tmpEndMonth).toEqual(3);
+            expect(vmDatePicker.tmpEndDate).toBe(25);
+            expect(vmDatePicker.tmpEndYear).toEqual(false);
+            expect(vmDatePicker.tmpEndMonth).toEqual(3);
+            expect(vmDatePicker.tmpEndDate).toEqual(25);
+            expect(vmDatePicker.rangeStart).toBe(false);
+            expect(vmDatePicker.panelState).toBe(false);
+        });
+*/
 
     });
 });
