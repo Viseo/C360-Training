@@ -1,7 +1,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-Vue.component('blue-header',{
+let Header = Vue.component('blue-header',{
     template:
         `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
@@ -124,7 +124,7 @@ Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
+            //this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
             if (this.token == 'undefined') regexCookieToken = false;
             if (regexCookieToken && regexCookieStayConnected) {
                 if (this.$route.name != 'login')
@@ -218,19 +218,19 @@ new Vue({
 });
 
 $('#scroll-up').click(function() {
-    $('#scrollableTrainings').animate({scrollTop: "-=100"}, 500);
+    $('#test').animate({scrollTop: "-=100"}, 500);
 })
 
 $('#scroll-down').click(function() {
-    $('#scrollableTrainings').animate({scrollTop: "+=100"}, 500);
+    $('#test').animate({scrollTop: "+=100"}, 500);
 })
 
-$('#scrollableTrainings').bind('mousewheel DOMMouseScroll', function(event){
+$('#test').bind('mousewheel DOMMouseScroll', function(event){
     if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        $('#scrollableTrainings').animate({scrollTop: "-=100"}, 80);
+        $('#test').animate({scrollTop: "-=100"}, 80);
     }
     else{
-        $('#scrollableTrainings').animate({scrollTop: "+=100"}, 80);
+        $('#test').animate({scrollTop: "+=100"}, 80);
     }
 });
 

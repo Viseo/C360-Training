@@ -92,8 +92,10 @@ a.changecolor{
 table.fix{
     table-layout: fixed;
     border-collapse: collapse;
+}
 
-
+table.fix td {
+    padding:15px;
 }
 
 .roundedCorner{
