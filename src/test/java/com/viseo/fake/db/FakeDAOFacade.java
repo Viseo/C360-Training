@@ -253,7 +253,12 @@ public class FakeDAOFacade implements DAOFacade {
 
 	}
 
-	@SuppressWarnings("unchecked")
+    @Override
+    public <T> void executeSQLRequest(String request, Parameter... params) {
+
+    }
+
+    @SuppressWarnings("unchecked")
 	@Override
 	public <T> void persist(T entity) {
 		long value = getId(entity);
