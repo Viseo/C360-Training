@@ -45,7 +45,7 @@ Vue.component('error-messages',{
                            </td>`
 });
 
-Vue.component('input-text',{
+let InputText = Vue.component('input-text',{
     props:['width', 'label', 'value', 'placeholder','maxlength', 'isValid','type', 'icon', 'collection', 'printProp','disabled'],
     methods:{
         updateValue(value){
