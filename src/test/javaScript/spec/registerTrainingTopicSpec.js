@@ -719,7 +719,7 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.item = 2017;
             vmDatePicker.range = false;
             vmDatePicker.isSelected(vmDatePicker.type, vmDatePicker.item);
-            expect(vmDatePicker.date).toEqual(24);
+            expect(vmDatePicker.date).toEqual(25);
             expect(vmDatePicker.month).toEqual(3);
             expect(vmDatePicker.tmpMonth).toEqual(3);
             vmDatePicker.type = "date";
@@ -729,11 +729,11 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.tmpYear).toEqual(2017);
             expect(vmDatePicker.tmpStartYear).toEqual(2017);
             expect(vmDatePicker.tmpStartMonth).toEqual(3);
-            expect(vmDatePicker.tmpStartDate).toEqual(24);
+            expect(vmDatePicker.tmpStartDate).toEqual(25);
             expect(vmDatePicker.tmpYear).toEqual(2017);
             expect(vmDatePicker.tmpEndYear).toEqual(2017);
             expect(vmDatePicker.tmpEndMonth).toEqual(3);
-            expect(vmDatePicker.tmpEndDate).toEqual(24);
+            expect(vmDatePicker.tmpEndDate).toEqual(25);
         });
 
         it('Should check the selected component on the calendar', function () {
