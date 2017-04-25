@@ -3,6 +3,7 @@ beforeEach(function () {
     vmShowFormation = new ShowFormation().$mount();
     vmAddSessionPanel = new AddSessionPanel().$mount();
     vmDatePicker = new DatePicker().$mount();
+    vmInputText = new InputText().$mount();
 });
 
 afterEach(function () {
@@ -25,7 +26,26 @@ afterEach(function () {
         vmDatePicker = undefined;
 });
 
+
 describe('test registerTrainingTopic.js', function () {
+
+    describe("Test customInput", function() {
+        it('should check function updateValue', function() {
+            vmInputText.updateValue('HELLO');
+        });
+
+        it('should check function handleFocus', function() {
+            vmInputText.handleFocus();
+        });
+
+        it('should check function handleClick', function() {
+            vmInputText.handleClick();
+        });
+
+        it('should check function handleBlur', function() {
+            vmInputText.handleBlur();
+        });
+    })
 
     describe('vmAddSessionPanel', function () {
 
@@ -317,6 +337,25 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmShowFormation.state.allTopicTraining).toEqual([]);
         });
 
+        describe("Test customInput", function() {
+            it('should check function updateV1', function() {
+                vmAddFormationPanel.updateV1('HELLO');
+                expect(vmAddFormationPanel.trainingTitle).toBe('HELLO');
+            });
+            it('should check function updateV2', function() {
+                vmAddFormationPanel.updateV2('HELLO');
+                expect(vmAddFormationPanel.numberHalfDays).toBe('HELLO');
+            });
+            it('should check function updateV3', function() {
+                vmAddFormationPanel.updateV3('HELLO');
+                expect(vmAddFormationPanel.topicDescription).toBe('HELLO');
+            });
+            it('should check function updateV4', function() {
+                vmAddFormationPanel.updateV4('HELLO');
+                expect(vmAddFormationPanel.newTopic).toBe('HELLO');
+            });
+        })
+
         //verifyTrainingField
         it('should check verify field Training', function () {
             vmAddFormationPanel.verifyTrainingField('Formation', 'trainingTitleRegexErrorMessage');
@@ -409,7 +448,7 @@ describe('test registerTrainingTopic.js', function () {
         it('should add a topic', function () {
             var sessionDescription = TRAINING;
             vmAddFormationPanel.newTopic = 'PROGRAMMATION';
-            let resp = vmAddFormationPanel.saveTopicIntoDatabase();
+            let resp = vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
         });
         //removeDuplicates
         it('should check whether the function removeDuplicates can remove those duplicates', function () {
