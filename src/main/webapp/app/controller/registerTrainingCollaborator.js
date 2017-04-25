@@ -92,7 +92,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                             <center>
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
                                                                 <p style="color:blue" v-show="isNoSession"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="VerifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <button ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
                                                             </center>
                                                         </div>
@@ -119,7 +119,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>`,
     mounted: function () {
         this.gatherTrainingsFromDatabase();
-        this.GetCookies();
+        this.getCookies();
     },
     computed: {
         searchFormatted: function () {
@@ -181,12 +181,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = true;
                 }
+                this.disablingSessions();
             }
             else {
                 this.checkedSessions.splice(0, this.checkedSessions.length)
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = false;
                 }
+                this.disablingSessions();
             }
         },
         displayTrainingsFn(){
@@ -231,19 +233,19 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 }
             );
         },
-        GetCookies(){
+        getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-           try {
-               this.token = String(regexCookieToken.pop());
-               if (this.token != 'undefined'){
-                   this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                   this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-                   this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
-           }
-           } catch(e) {
-           }
+            if(regexCookieToken){
+                if (this.token != 'undefined'){
+                    this.token = String(regexCookieToken.pop());
+                    this.collaboratorIdentity.id = jwt_decode(this.token).id;
+                    console.log(this.collaboratorIdentity.id);
+                    this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+                    this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+                }
+            } 
         },
-        VerifyTrainingSessionCollaborator(){
+        verifyTrainingSessionCollaborator(){
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
             if (this.isNoSession == true || this.checkedSessions.length != 0) {
@@ -288,6 +290,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             });
         },
         storeSessionsByCollab(id){
+            console.log(this.collaboratorIdentity.id);
             this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
                 function (response){
                     this.sessionsByCollab = response.data;

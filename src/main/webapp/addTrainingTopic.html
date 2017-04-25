@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/addTrainingTopic.css">
+    <link rel="stylesheet" href="css/assignCollaborator.css">
     <script src="lib/vue.js"></script>
+    <script src="lib/vue-strap.js"></script>
+
     <script src="lib/vue-resource.js"></script>
     <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script src="lib/jwt-decode.js"></script>
@@ -17,13 +20,22 @@
 <body>
 <div id="newVue" v-cloak>
     <blue-header></blue-header>
+    <div class="container-fluid">
+    <div class="col-sm-12 col-md-7 col-lg-7">
     <add-formation-panel></add-formation-panel>
     <show-formation-panel></show-formation-panel>
     <add-session-panel></add-session-panel>
+    </div>
+    <div class="col-sm-12 col-md-5 col-lg-5">
+    <assign-collaborator></assign-collaborator>
+    </div>
+    </div>
 
 </div>
+<script src="app/controller/assignCollaborator.js"></script>
 <script src="app/controller/scroll.js"></script>
 <script src="app/controller/registerTrainingTopic.js"></script>
 <script src="app/controller/main.js"></script>
+
 </body>
 </html>

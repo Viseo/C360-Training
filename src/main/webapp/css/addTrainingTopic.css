@@ -19,12 +19,12 @@ legend{
 
 }
 
-table{
+table.borderRadius{
     border:1px solid #dcdcdc;
     border-radius: 10px;
 
 }
-table td {
+table.borderRadius td {
     padding-top:20px;
     padding-left:10px;
     padding-right:10px;
@@ -89,13 +89,13 @@ a.changecolor{
 .tabnonborder{
     border:none;
 }
-
 table.fix{
     table-layout: fixed;
-    margin:0;
     border-collapse: collapse;
+}
 
-
+table.fix td {
+    padding:15px;
 }
 
 .roundedCorner{
