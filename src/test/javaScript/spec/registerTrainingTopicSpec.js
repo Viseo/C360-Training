@@ -258,7 +258,7 @@ describe('test registerTrainingTopic.js', function () {
 
         it('should check whether we can connect to the database in order to get all trainings', function () {
                 vmAddSessionPanel.state.idTraining = 5;
-                vmAddSessionPanel.GatherSessionsByTrainingFromDatabase();
+                vmAddSessionPanel.gatherSessionsByTrainingFromDatabase();
             }
         );
 
@@ -267,6 +267,22 @@ describe('test registerTrainingTopic.js', function () {
                 vmAddSessionPanel.ModifyTrainingTopic();
             }
         );
+
+        it('should check if variables are reset by Input Date', function () {
+            vmAddSessionPanel.resetVarialbesByDate();
+            expect(vmAddSessionPanel.confirmSession).toBe(false);
+            expect(vmAddSessionPanel.trainingTitleInAddSessionErrorMessage).toBe(false);
+            expect(vmAddSessionPanel.beginningDateErrorMessage).toBe(false);
+            expect(vmAddSessionPanel.locationErrorMessage).toBe(false);
+        });
+
+        it('should check if variables are reset by Input Salle', function () {
+            vmAddSessionPanel.resetVariablesBySalle();
+            expect(vmAddSessionPanel.confirmSession).toBe(false);
+            expect(vmAddSessionPanel.trainingTitleInAddSessionErrorMessage).toBe(false);
+            expect(vmAddSessionPanel.beginningDateErrorMessage).toBe(false);
+            expect(vmAddSessionPanel.locationErrorMessage).toBe(false);
+        });
 
     });
 
@@ -446,7 +462,7 @@ describe('test registerTrainingTopic.js', function () {
                 {"id": 3, "version": 0, "name": "C"},
                 {"id": 4, "version": 0, "name": "C++"}
             ];
-            vmAddFormationPanel.trainingStore.TopicwithTraining();
+            vmAddFormationPanel.trainingStore.topicwithTraining();
             expect(JSON.stringify(vmAddFormationPanel.state.trainingsChosen)).toEqual(JSON.stringify(result));
         });
 
@@ -572,6 +588,40 @@ describe('test registerTrainingTopic.js', function () {
             vmAddFormationPanel.topicDescription = "C";
             vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
         });
+
+        it('should check if variables are reset by Input trainingTopic', function () {
+            vmAddFormationPanel.resetVarialbesByInputTrainingTitle();
+            expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.confirmFormation).toBe(false);
+            expect(vmAddFormationPanel.isNewTrainingTitle).toBe(true);
+            expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
+        });
+
+        it('should check if variables are reset by Input NumberHalfDays', function () {
+            vmAddFormationPanel.resetVariablesByInputNumberHalfDays();
+            expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.confirmFormation).toBe(false);
+            expect(vmAddFormationPanel.isNewTrainingTitle).toBe(true);
+            expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
+        });
+
+        it('should check if variables are reset by Input Topic', function () {
+            vmAddFormationPanel.resetVariablesByInputTopic();
+            expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.confirmFormation).toBe(false);
+            expect(vmAddFormationPanel.isNewTrainingTitle).toBe(true);
+            expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
+        });
+
+        it('should check if variables are reset by Input NameTopic', function () {
+            vmAddFormationPanel.resetVariablesByInputNameTopic();
+            expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.confirmTopic).toBe(false);
+            expect(vmAddFormationPanel.isNewTopic).toBe(true);
+            expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
+        });
     });
 
     describe('vmShowFormationPanel', function () {
@@ -654,7 +704,7 @@ describe('test registerTrainingTopic.js', function () {
                 }
             ];
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
-            vmShowFormation.CreateSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
+            vmShowFormation.createSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
             setTimeout(function () {
                 expect(vmShowFormation.state.changePageToSession).toBe(true);
                 expect(vmShowFormation.state.changePageToTraining).toBe(false);
