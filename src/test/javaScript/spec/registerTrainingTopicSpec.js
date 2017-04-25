@@ -795,27 +795,29 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.panelType).toBe('year');
         });
 
-        it('should check function chYearRange', function () {
-            vmDatePicker.chYearRange(true);
-            vmDatePicker.chYearRange(false);
+        it('should check  range of date', function () {
+            vmDatePicker.yearList = Array.from({length: 12}, (value, index) => new Date().getFullYear() + index);
+            vmDatePicker.chYearRange(1);
+            expect(vmDatePicker.yearList.map((i) => i + 2)).toEqual([ 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032 ]);
+
         });
 
         it('Should check function prevMonthPreview', function () {
             vmDatePicker.tmpMonth = 1;
             vmDatePicker.prevMonthPreview();
-            expect(vmDatePicker.tmpMonth).toBe(0);
+            expect(vmDatePicker.tmpMonth).toEqual(0);
             vmDatePicker.tmpMonth = 5;
             vmDatePicker.prevMonthPreview();
-            expect(vmDatePicker.tmpMonth).toBe(4);
+            expect(vmDatePicker.tmpMonth).toEqual(4);
         });
 
         it('Should check function nextMonthPreview', function () {
             vmDatePicker.tmpMonth = 1;
             vmDatePicker.nextMonthPreview();
-            expect(vmDatePicker.tmpMonth).toBe(2);
+            expect(vmDatePicker.tmpMonth).toEqual(2);
             vmDatePicker.tmpMonth = 5;
             vmDatePicker.nextMonthPreview();
-            expect(vmDatePicker.tmpMonth).toBe(6);
+            expect(vmDatePicker.tmpMonth).toEqual(6);
         });
 
         it('Should check function selectYear', function () {
@@ -831,39 +833,9 @@ describe('test registerTrainingTopic.js', function () {
             vmDatePicker.month = 4;
             vmDatePicker.selectMonth(vmDatePicker.month);
             vmDatePicker.validateMonth(vmDatePicker.month);
-            expect(vmDatePicker.tmpMonth).toBe(3);
+            expect(vmDatePicker.tmpMonth).toEqual(3);
             expect(vmDatePicker.panelType).toBe('date');
         });
 
-       /* it('Should check  selectDate', function () {
-            setTimeout(function () {
-                vmDatePicker.date.value = 24;  //!this.range
-                vmDatePicker.selectDate(vmDatePicker.date.value);
-                vmDatePicker.validateDate(vmDatePicker.date.value);
-                vmDatePicker.range = false;
-                expect(vmDatePicker.year).toEqual(2017);
-                expect(vmDatePicker.month).toEqual(3);
-                expect(vmDatePicker.date.value).toEqual(24);
-                expect(vmDatePicker.panelState).toBe(false);
-                vmDatePicker.validateDate(vmDatePicker.date); // if (this.range && !this.rangeStart)
-                vmDatePicker.range = false;
-                vmDatePicker.rangeStart = false;
-                expect(vmDatePicker.tmpEndYear).toEqual(2017);
-                expect(vmDatePicker.tmpStartYear).toEqual(2017);
-                expect(vmDatePicker.tmpYear).toEqual(2017);
-                expect(vmDatePicker.tmpEndMonth).toEqual(3);
-                expect(vmDatePicker.tmpStartMonth).toEqual(3);
-                expect(vmDatePicker.tmpMonth).toEqual(3);
-                expect(vmDatePicker.tmpEndDate).toEqual(24);
-                expect(vmDatePicker.tmpStartDate).toEqual(24);
-                expect(vmDatePicker.rangeStart).toBe(false);
-                vmDatePicker.validateDate(vmDatePicker.date); //if (this.range && this.rangeStart)
-                vmDatePicker.range = false;
-                vmDatePicker.rangeStart = false;
-                expect(vmDatePicker.tmpEndYear).toEqual(2017);
-                expect(vmDatePicker.tmpEndMonth).toEqual(3);
-                expect(vmDatePicker.tmpEndDate).toEqual(24);
-            })
-        })*/
     });
 });
