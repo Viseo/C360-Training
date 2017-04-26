@@ -558,16 +558,16 @@ let ConnexionForm = Vue.component('connexionForm', {
             this.$http.post("api/user", this.userToRegister)
                 .then(
                     function (userPersistedToken) {
-                        if (typeof userPersistedToken.data['userConnected'] == 'undefined') {
                             this.handleCookie(userPersistedToken.data['userConnected']);
+                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
                             if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
                                 this.$router.push('/addTrainingTopic');
-
                             }
                             else
                                 this.$router.push('/registerTrainingCollaborator');
+                            }
                         }
-                    }
+
                 ).catch(function () {
                 this.password = "";
                 this.user.password = "";

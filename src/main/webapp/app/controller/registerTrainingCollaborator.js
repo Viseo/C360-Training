@@ -123,6 +123,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.getCookies();
+        $('#scroll-up-2').click(function() {
+            $('#scroll').animate({scrollTop: "-=100"}, 500);
+        });
+
+        $('#scroll-down-2').click(function() {
+            $('#scroll').animate({scrollTop: "+=100"}, 500);
+        })
+
     },
     computed: {
         searchFormatted: function () {
@@ -143,10 +151,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         disablingSessions(){
             for(i in this.sessionsByCollab){
                 temp=document.getElementById(this.sessionsByCollab[i].id);
-                temp.disabled =true;
-                this.sessionAlreadyBookedMessage = true;
-                temp.nextElementSibling.innerHTML="";
-                $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                if(temp!=null) {
+                    temp.disabled =true;
+                    this.sessionAlreadyBookedMessage = true;
+                    temp.nextElementSibling.innerHTML="";
+                    $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                }
             }
         },
         renitialize(training){
@@ -238,8 +248,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            console.log("salut");
+            console.log(regexCookieToken);
             if(regexCookieToken){
+                console.log(!regexCookieToken[0].includes('undefined'));
                 if(!regexCookieToken[0].includes('undefined')) {
+                    console.log("hello");
                     if (this.token != 'undefined'){
                         this.token = String(regexCookieToken.pop());
                         this.collaboratorIdentity.id = jwt_decode(this.token).id;

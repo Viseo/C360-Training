@@ -71,6 +71,11 @@ let Header = Vue.component('blue-header',{
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
+        $('ul.nav li.dropdown').hover(function() {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+        }, function () {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+        });
     },
     methods: {
         setDisconnectedToTrue(){
@@ -124,8 +129,10 @@ let Header = Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
+            console.log("yo");
             if(regexCookieToken!=null) {
-                this.token = (regexCookieToken.indexOf('undefined')== -1) ? String(regexCookieToken.pop()) : 'undefined';
+                console.log(typeof regexCookieToken != 'undefined');
+                if(typeof regexCookieToken == 'undefined') this.token = 'undefined';
                 if (this.token == 'undefined') regexCookieToken = false;
                 if (regexCookieToken && regexCookieStayConnected) {
                  if (this.$route.name != 'login')
@@ -142,6 +149,7 @@ let Header = Vue.component('blue-header',{
                  this.$router.push('/addTrainingTopic');
                  }
                  this.lastName = jwt_decode(this.token).lastName;
+                 console.log(this.lastName);
                  this.firstName = jwt_decode(this.token).sub;
                  }
                  else {
@@ -220,34 +228,5 @@ new Vue({
     router
 });
 
-$('#scroll-up').click(function() {
-    $('#test').animate({scrollTop: "-=100"}, 500);
-})
 
-$('#scroll-down').click(function() {
-    $('#test').animate({scrollTop: "+=100"}, 500);
-})
-
-$('#test').bind('mousewheel DOMMouseScroll', function(event){
-    if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        $('#test').animate({scrollTop: "-=100"}, 80);
-    }
-    else{
-        $('#test').animate({scrollTop: "+=100"}, 80);
-    }
-});
-
-$('#scroll-up-2').click(function() {
-    $('#scroll').animate({scrollTop: "-=100"}, 500);
-})
-
-$('#scroll-down-2').click(function() {
-    $('#scroll').animate({scrollTop: "+=100"}, 500);
-})
-
-$('ul.nav li.dropdown').hover(function() {
-    $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-}, function () {
-    $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
-});
 
