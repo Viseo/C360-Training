@@ -238,14 +238,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            console.log(regexCookieToken);
             if(regexCookieToken){
-                if (this.token != 'undefined'){
-                    this.token = String(regexCookieToken.pop());
-                    this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                    console.log(this.collaboratorIdentity.id);
-                    this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-                    this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+                if(!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined'){
+                        this.token = String(regexCookieToken.pop());
+                        this.collaboratorIdentity.id = jwt_decode(this.token).id;
+                        console.log(this.collaboratorIdentity.id);
+                        this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+                        this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+                    }
                 }
             } 
         },
