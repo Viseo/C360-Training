@@ -124,30 +124,33 @@ let Header = Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            //this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
-            if (this.token == 'undefined') regexCookieToken = false;
-            /*if (regexCookieToken && regexCookieStayConnected) {
-                if (this.$route.name != 'login')
-                this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                this.token = String(regexCookieToken.pop());
-                if (regexCookieTimeConnected) {
-                    if (this.$route.name != 'login')
-                        this.timeconnected = parseInt(regexCookieTimeConnected.pop());
-                }
-                if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
-                    this.$router.push('/registerTrainingCollaborator');
-                }
-                if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
-                    this.$router.push('/addTrainingTopic');
-                }
-                    this.lastName = jwt_decode(this.token).lastName;
-                this.firstName = jwt_decode(this.token).sub;
+            if(regexCookieToken!=null) {
+                this.token = (regexCookieToken.indexOf('undefined')== -1) ? String(regexCookieToken.pop()) : 'undefined';
+                if (this.token == 'undefined') regexCookieToken = false;
+                if (regexCookieToken && regexCookieStayConnected) {
+                 if (this.$route.name != 'login')
+                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                 this.token = String(regexCookieToken.pop());
+                 if (regexCookieTimeConnected) {
+                 if (this.$route.name != 'login')
+                 this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                 }
+                 if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
+                 this.$router.push('/registerTrainingCollaborator');
+                 }
+                 if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
+                 this.$router.push('/addTrainingTopic');
+                 }
+                 this.lastName = jwt_decode(this.token).lastName;
+                 this.firstName = jwt_decode(this.token).sub;
+                 }
+                 else {
+                 if (this.$route.name != 'login'){
+                 this.$router.push('/login');
+                 }
+                 }
             }
-            else {
-                if (this.$route.name != 'login'){
-                    this.$router.push('/login');
-                }
-            }*/
+
         },
         disconnectUser(){
             this.$http.post("api/userdisconnect", this.token)

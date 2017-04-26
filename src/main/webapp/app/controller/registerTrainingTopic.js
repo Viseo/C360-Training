@@ -1606,6 +1606,7 @@ class trainingStore {
     }
     collectInformationOfTrainingChosen(){
         this.state.trainingChosen = {};
+        console.log(this.state.allTrainings);
         for (var tmp in this.state.allTrainings) {
             if (this.state.allTrainings[tmp].id == this.state.idTraining) {
                 this.state.trainingChosen = this.state.allTrainings[tmp];

@@ -238,6 +238,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            console.log(regexCookieToken);
             if(regexCookieToken){
                 if (this.token != 'undefined'){
                     this.token = String(regexCookieToken.pop());

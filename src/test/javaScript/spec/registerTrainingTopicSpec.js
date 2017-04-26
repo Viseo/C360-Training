@@ -680,7 +680,7 @@ describe('test registerTrainingTopic.js', function () {
     });
 
     describe('vmShowFormation', function () {
-        it('should check if the panel change from training panel to session panel when click on a training button', function () {
+        it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
             vmShowFormation.state.allTopicTraining = [
                 [
                     [{
@@ -748,9 +748,11 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmShowFormation.state.changePageToSession).toBe(true);
                 expect(vmShowFormation.state.changePageToTraining).toBe(false);
                 expect(vmShowFormation.state.idTraining).toEqual(5);
+//TODO
                 expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
                 expect(vmShowFormation.state.isNoSession).toBe(false);
                 expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
+                done();
             }, 600);
         });
     });
