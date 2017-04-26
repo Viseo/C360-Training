@@ -376,6 +376,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     },
     watch: {
         value: function (lastName) {
+            this.storeCollaboratorsFound();
             this.verifyLastName(lastName, 'lastNameRegexErrorMessage');
         },
         sessionIdChosen: function(value) {
