@@ -876,37 +876,19 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmDatePicker.panelType).toBe('date');
         });
 
-/*
-        it('Should check  selectDate', function () {
-            vmDatePicker.date.value = 25;
-            vmDatePicker.previousMonth = 3;
-            vmDatePicker.selectDate(25);
-            vmDatePicker.validateDate(25);
-            vmDatePicker.range = true;
-            expect(vmDatePicker.year).toEqual(2017);
-            expect(vmDatePicker.month).toEqual(3);
-            expect(vmDatePicker.date).toEqual(25);
-            expect(vmDatePicker.panelState).toBe(false);
-
-            vmDatePicker.validateDate(vmDatePicker.date); // if (this.range && !this.rangeStart)
+        it('Should check function selectDate', function () {
+            let now = new Date();
+            let d = now.getDate();
+            let m = now.getMonth();
+            let y = now.getFullYear();
+            vmDatePicker.selectDate(d);
+            vmDatePicker.validateDate(d);
             vmDatePicker.range = false;
-            vmDatePicker.rangeStart = false;
-            expect(vmDatePicker.tmpEndYear).toEqual(2017);
-            expect(vmDatePicker.tmpEndMonth).toEqual(3);
-            expect(vmDatePicker.tmpEndDate).toEqual(25);
-            expect(vmDatePicker.rangeStart).toBe(false);
-
-            vmDatePicker.validateDate(vmDatePicker.date); //if (this.range && this.rangeStart)
-            vmDatePicker.tmpEndYear = false;
-            expect(vmDatePicker.tmpEndMonth).toEqual(3);
-            expect(vmDatePicker.tmpEndDate).toBe(25);
-            expect(vmDatePicker.tmpEndYear).toEqual(false);
-            expect(vmDatePicker.tmpEndMonth).toEqual(3);
-            expect(vmDatePicker.tmpEndDate).toEqual(25);
-            expect(vmDatePicker.rangeStart).toBe(false);
+            expect(vmDatePicker.year).toEqual(y);
+            expect(vmDatePicker.month).toEqual(3);
+            expect(vmDatePicker.date).toEqual(d);
             expect(vmDatePicker.panelState).toBe(false);
         });
-*/
 
     });
 });
