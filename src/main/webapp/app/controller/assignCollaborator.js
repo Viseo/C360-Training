@@ -27,7 +27,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             noCollaboratorsFound: false,
             numberAddedCollab: 0,
             isDisabled: true,
-            state: training_store.state
+            state: training_store.state,
+            confirmCollaboratorAddedSession: false,
+            isSearchNameValid: true,
+            lastNameRegexErrorMessage: ''
         }
     },
     template: `
@@ -49,8 +52,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 </select>
                         <!--<select class="col-sm-10 col-md-10 col-lg-10">
                         </select>-->
-                        </br>
-                        </br>
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                  <div class="row">
                                      <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
@@ -107,6 +108,18 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                      </div>
                                  </div>
                             <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled}">Enregistrer</button>
+                            <error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
+                                            style="margin-left:153px;margin-top:10px;"
+                                            :height="80" 
+                                            :width="250"
+                                            successMessage="Vos modifications ont bien été enregistrées" 
+                                            :emptySuccess="confirmCollaboratorAddedSession"
+                                            fillFieldErrorMessage="Vous avez dépassé le nombre de places disponibles"
+                                            :emptyFillError="!isRegistrationAvailable"
+                                            :regexErrorMessage="lastNameRegexErrorMessage"
+                                            :emptyRegexError="!isSearchNameValid"
+                                            >
+                            </error-messages>
                         </div>
                     </div>
                 </div>
@@ -249,6 +262,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         verifyCheckedNames() {
             this.collaboratorsRequesting.splice(0,this.collaboratorsRequesting.length);
             this.requestedCollaborators.splice(0,this.requestedCollaborators.length);
+            this.validatedCollab.splice(0,this.validatedCollab.length);
             this.allCollaboratorsName = [];
 
             if (this.checkedNames === true) {
@@ -279,7 +293,9 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 }
                 this.AddCollaboratorsToTrainingSession();
                 this.resetAssignCollaboratorsForm();
-            } //else message d'erreur
+                this.confirmCollaboratorAddedSession = true;
+                setTimeout(function(){ this.confirmCollaboratorAddedSession = false; }.bind(this), 2000);
+            }
         },
         gatherCollaboratorsFromDatabase(){
          this.$http.get("api/collaborateurs").then(
@@ -343,11 +359,24 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         },
         clearGreyPanel(){
             this.isDisabled = false;
+        },
+
+        verifyLastName(lastName, errorMessage) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){0,125}$/.test(lastName)) {
+                this[errorMessage] = '';
+                this.isSearchNameValid = true;
+            } else {
+                this[errorMessage] = "Veuillez entrer un nom ou prénom valide";
+                this.isSearchNameValid = false;
+            }
         }
 
 
     },
     watch: {
+        value: function (lastName) {
+            this.verifyLastName(lastName, 'lastNameRegexErrorMessage');
+        },
         sessionIdChosen: function(value) {
             if(value) {
                 this.verifyCheckedNames();
@@ -366,6 +395,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             else {
                 this.noCollaboratorsFound = true;
             }
+        },
+        validatedCollab: function(){
+            this.numberAddedCollabCounter();
+
         }
     },
 });
