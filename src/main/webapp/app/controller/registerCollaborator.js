@@ -1,5 +1,5 @@
 Vue.use(VueResource);
-
+Vue.use(VueRouter);
 let NavigationMenu = Vue.component('connect-user', {
     data: function () {
         return {
@@ -39,7 +39,7 @@ let NavigationMenu = Vue.component('connect-user', {
                 .then(
                     function (response) {
                         if (response) {
-                            window.location.pathname = '/addTrainingTopic.html';
+                            this.$router.push('/registerTrainingCollaborator')
                         }
                         else {
                         }
@@ -558,14 +558,16 @@ let ConnexionForm = Vue.component('connexionForm', {
             this.$http.post("api/user", this.userToRegister)
                 .then(
                     function (userPersistedToken) {
-                        this.handleCookie(userPersistedToken.data['userConnected']);
-                        if(jwt_decode(userPersistedToken.data['userConnected']).roles) {
-                          window.location.pathname = '/addTrainingTopic.html';
+                            this.handleCookie(userPersistedToken.data['userConnected']);
+                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                            if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
+                                this.$router.push('/addTrainingTopic');
+                            }
+                            else
+                                this.$router.push('/registerTrainingCollaborator');
+                            }
+                        }
 
-                      }
-                        else
-                          window.location.pathname = '/registerTrainingCollaborator.html';
-                    }
                 ).catch(function () {
                 this.password = "";
                 this.user.password = "";

@@ -1,4 +1,5 @@
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 let Header = Vue.component('blue-header',{
     template:
@@ -39,23 +40,23 @@ let Header = Vue.component('blue-header',{
                     <div class="dialog-title">Oups....</div>
                     <div class="dialog-description">{{ firstName }} {{ lastName }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
                     <div class="dialog-buttons">
-                        <a href="/index.html" class="large blue button">Retour à la page de connexion</a>
+                        <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link>
                     </div>
                 </div>	
             </div>
         </div>
   `,
-    data: function(){
+    data: function () {
         return {
             lastName:'',
             firstName:'',
             token:'',
             disconnect:false,
             app: {
-                training:true,
-                skills:false,
-                mission:false,
-                leave:false
+                training: true,
+                skills: false,
+                mission: false,
+                leave: false
             },
             IDLE_TIMEOUT: 20, //seconds
             idleSecondsCounter: 0,
@@ -65,11 +66,16 @@ let Header = Vue.component('blue-header',{
             timeconnected: 0,
         }
     },
-    mounted: function(){
+    mounted: function () {
         this.getCookieInfos();
-        if(this.stayConnected===false) {
+        if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
+        $('ul.nav li.dropdown').hover(function() {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+        }, function () {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+        });
     },
     methods: {
         setDisconnectedToTrue(){
@@ -85,7 +91,7 @@ let Header = Vue.component('blue-header',{
             return this.disconnect && !this.dialog;
         },
         setIdleSecondsCounter(value){
-          this.idleSecondsCounter = value;
+            this.idleSecondsCounter = value;
         },
         checkIfUserInactive(){
             if (this.timeconnected != 0)
@@ -123,22 +129,36 @@ let Header = Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            this.token = (regexCookieToken != null) ? String(regexCookieToken.pop()) : 'undefined';
-            if (this.token == 'undefined') regexCookieToken = false;
-            if (regexCookieToken && regexCookieStayConnected) {
-                if (window.location.pathname != '/index.html')
-                    this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                if (regexCookieTimeConnected) {
-                    if (window.location.pathname != '/index.html')
-                        this.timeconnected = parseInt(regexCookieTimeConnected.pop());
-                }
-                this.lastName = jwt_decode(this.token).lastName;
-                this.firstName = jwt_decode(this.token).sub;
+            console.log("yo");
+            if(regexCookieToken!=null) {
+                console.log(typeof regexCookieToken != 'undefined');
+                if(typeof regexCookieToken == 'undefined') this.token = 'undefined';
+                if (this.token == 'undefined') regexCookieToken = false;
+                if (regexCookieToken && regexCookieStayConnected) {
+                 if (this.$route.name != 'login')
+                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                 this.token = String(regexCookieToken.pop());
+                 if (regexCookieTimeConnected) {
+                 if (this.$route.name != 'login')
+                 this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                 }
+                 if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
+                 this.$router.push('/registerTrainingCollaborator');
+                 }
+                 if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
+                 this.$router.push('/addTrainingTopic');
+                 }
+                 this.lastName = jwt_decode(this.token).lastName;
+                 console.log(this.lastName);
+                 this.firstName = jwt_decode(this.token).sub;
+                 }
+                 else {
+                 if (this.$route.name != 'login'){
+                 this.$router.push('/login');
+                 }
+                 }
             }
-            else {
-                if (window.location.pathname != '/index.html')
-                    window.location.pathname = '/index.html';
-            }
+
         },
         disconnectUser(){
             this.$http.post("api/userdisconnect", this.token)
@@ -154,45 +174,59 @@ let Header = Vue.component('blue-header',{
                                 if (getCookieTimeConnected)
                                     document.cookie = "timeconnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                             }
-                            if (!this.dialog) window.location.pathname = '/index.html';
+                            if (!this.dialog)
+                                this.$router.push('/login')
                         }
                     });
         }
     }
 });
+let router = new VueRouter({
+    mode: 'hash',
+    routes: [
+        {
+            path: "/addTrainingTopic",
+            component: {
+                template: `<div id="newVue" v-cloak>
+            <blue-header></blue-header>
+            <add-formation-panel></add-formation-panel>
+            <show-formation-panel></show-formation-panel>
+            <add-session-panel></add-session-panel>
 
+            </div>`
+            },
+            name:'addTrainingTopic'
+        },
+        {
+            path: "/registerTrainingCollaborator",
+            name:'registerTrainingCollaborator',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                            <blue-header></blue-header>
+                            <collaborator-formation></collaborator-formation>
+                            </div>`
+            }
+        },
+        {
+            path: "/login",
+            name:'login',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                               <blue-header></blue-header>
+                                       <connect-user></connect-user>
+                            </div>`
+            }
+        },
+        {
+            path: "/",
+            redirect :"/login"
+        }
+    ]
+});
 new Vue({
-    el: '#newVue'
+    el: '#newVue',
+    router
 });
 
-$('#scroll-up').click(function() {
-    $('#scrollableTrainings').animate({scrollTop: "-=100"}, 500);
-})
 
-$('#scroll-down').click(function() {
-    $('#scrollableTrainings').animate({scrollTop: "+=100"}, 500);
-})
-
-$('#scrollableTrainings').bind('mousewheel DOMMouseScroll', function(event){
-    if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        $('#scrollableTrainings').animate({scrollTop: "-=100"}, 80);
-    }
-    else{
-        $('#scrollableTrainings').animate({scrollTop: "+=100"}, 80);
-    }
-});
-
-$('#scroll-up-2').click(function() {
-    $('#scroll').animate({scrollTop: "-=100"}, 500);
-})
-
-$('#scroll-down-2').click(function() {
-    $('#scroll').animate({scrollTop: "+=100"}, 500);
-})
-
-$('ul.nav li.dropdown').hover(function() {
-    $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-}, function() {
-    $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
-});
 

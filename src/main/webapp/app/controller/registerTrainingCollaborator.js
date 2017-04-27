@@ -1,6 +1,9 @@
 /**
  * Created by CLH3623 on 10/04/2017.
  */
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
 let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
@@ -92,7 +95,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                             <center>
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
                                                                 <p style="color:blue" v-show="isNoSession"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="VerifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <button ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
                                                             </center>
                                                         </div>
@@ -119,7 +122,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>`,
     mounted: function () {
         this.gatherTrainingsFromDatabase();
-        this.GetCookies();
+        this.getCookies();
+        $('#scroll-up-2').click(function() {
+            $('#scroll').animate({scrollTop: "-=100"}, 500);
+        });
+
+        $('#scroll-down-2').click(function() {
+            $('#scroll').animate({scrollTop: "+=100"}, 500);
+        })
+
     },
     computed: {
         searchFormatted: function () {
@@ -140,10 +151,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         disablingSessions(){
             for(i in this.sessionsByCollab){
                 temp=document.getElementById(this.sessionsByCollab[i].id);
-                temp.disabled =true;
-                this.sessionAlreadyBookedMessage = true;
-                temp.nextElementSibling.innerHTML="";
-                $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                if(temp!=null) {
+                    temp.disabled =true;
+                    this.sessionAlreadyBookedMessage = true;
+                    temp.nextElementSibling.innerHTML="";
+                    $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                }
             }
         },
         renitialize(training){
@@ -181,12 +194,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = true;
                 }
+                this.disablingSessions();
             }
             else {
                 this.checkedSessions.splice(0, this.checkedSessions.length)
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = false;
                 }
+                this.disablingSessions();
             }
         },
         displayTrainingsFn(){
@@ -231,19 +246,25 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 }
             );
         },
-        GetCookies(){
+        getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-           try {
-               this.token = String(regexCookieToken.pop());
-               if (this.token != 'undefined'){
-                   this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                   this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-                   this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
-           }
-           } catch(e) {
-           }
+            console.log("salut");
+            console.log(regexCookieToken);
+            if(regexCookieToken){
+                console.log(!regexCookieToken[0].includes('undefined'));
+                if(!regexCookieToken[0].includes('undefined')) {
+                    console.log("hello");
+                    if (this.token != 'undefined'){
+                        this.token = String(regexCookieToken.pop());
+                        this.collaboratorIdentity.id = jwt_decode(this.token).id;
+                        console.log(this.collaboratorIdentity.id);
+                        this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
+                        this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
+                    }
+                }
+            } 
         },
-        VerifyTrainingSessionCollaborator(){
+        verifyTrainingSessionCollaborator(){
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
             if (this.isNoSession == true || this.checkedSessions.length != 0) {
@@ -288,6 +309,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             });
         },
         storeSessionsByCollab(id){
+            console.log(this.collaboratorIdentity.id);
             this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
                 function (response){
                     this.sessionsByCollab = response.data;

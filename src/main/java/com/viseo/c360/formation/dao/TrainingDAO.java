@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 
 import com.viseo.c360.formation.dao.db.DAOFacade;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -95,6 +96,12 @@ public class TrainingDAO {
         return daoFacade.getList("select s from TrainingSession s");
     }
 
+    public List<Collaborator> getCollaboratorsBySession(long sessionID){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select sc from TrainingSession s join s.collaborators sc where s.id = :sessionID",
+                param("sessionID", sessionID));
+    }
+
     @Transactional
     public TrainingSession getSessionTraining(long id) throws PersistentObjectNotFoundException{
             TrainingSession trainingSession = daoFacade.find(TrainingSession.class, id);
@@ -135,6 +142,16 @@ public class TrainingDAO {
         trainingSession.setBeginning(trainingSessionTemp.getBeginning());
         trainingSession.setEnding(trainingSessionTemp.getEnding());
         trainingSession.setLocation(trainingSessionTemp.getLocation());
+        daoFacade.flush();
+        return trainingSession;
+    }
+
+    @Transactional
+    public TrainingSession addCollaboratorToTrainingSession(TrainingSession trainingSession, List<Collaborator> collaborators){
+        trainingSession = daoFacade.merge(trainingSession);
+        for(int i=0;i<collaborators.size();i++){
+            trainingSession.addCollaborator(collaborators.get(i));
+        }
         daoFacade.flush();
         return trainingSession;
     }

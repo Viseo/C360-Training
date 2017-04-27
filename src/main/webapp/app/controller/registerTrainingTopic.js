@@ -3,7 +3,7 @@
  */
 
 Vue.use(VueResource);
-
+Vue.use(VueRouter);
 Vue.component('error-messages',{
     props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
            'emptyIdenticalError','emptyFillError','emptySuccess','emptyfailureModification','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
@@ -85,7 +85,7 @@ let InputText = Vue.component('input-text',{
                                         :value="value" 
                                         @input="updateValue($event.target.value)"
                                         @focus="handleFocus">
-                                        <option selected disabled hidden style='display: none' value=''></option>
+                                        <option disabled selected value></option>
                                         <option v-for="item in collection" >{{printProp ? item[printProp] : item }}</option>
                                 </select>
                             </div>
@@ -141,6 +141,22 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     mounted: function(){
         this.gatherTopicsFromDatabase();
         this.gatherTrainingsFromDatabase();
+        $('#scroll-up').click(function() {
+            $('#test').animate({scrollTop: "-=100"}, 500);
+        });
+
+        $('#scroll-down').click(function() {
+            $('#test').animate({scrollTop: "+=100"}, 500);
+        });
+
+        $('#test').bind('mousewheel DOMMouseScroll', function(event){
+            if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+                $('#test').animate({scrollTop: "-=100"}, 80);
+            }
+            else{
+                $('#test').animate({scrollTop: "+=100"}, 80);
+            }
+        });
     },
     methods: {
         updateV1 (v) {
@@ -377,7 +393,7 @@ template:`
                              </div>
                         </div>
                         <form @submit.prevent="verifyTrainingFormBeforeSubmit">
-                            <table>
+                            <table class="borderRadius">
                                 <tr>
                                     <input-text 
                                         width="20%"
@@ -506,10 +522,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
     },
     template: `
-             <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation">
-                  <div class="row" >
-                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
-                      <div class="col-sm-12 col-md-10 col-lg-7">
+             <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
+                                    <div class="row"> 
+                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div> 
+                      <div class="col-sm-12 col-md-10 col-lg-7"> 
                             <div class="row">
                                 <div class="col-lg-7 col-md-7 text-center">
                                      <legend>Formation ajoutées</legend>
@@ -957,16 +973,16 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 
     },
     template: `
-        <div v-show="state.changePageToSession" class="container-fluid" id="addSession">
-            <div class="row">
-                <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div>
+    <div v-show="state.changePageToSession" class="container-fluid" id="addSession ">
+        <div class="row">
+            <div class="col-md-12 col-lg-7 col-sm-12" style="padding:10px;"></div>
                 <div class="col-sm-12 col-md-10 col-lg-7">
                     <div class="row">
                         <div class="col-lg-7 col-md-7 text-center">
                             <legend>Gérer une session</legend>
                         </div>
                     </div>
-                    <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">
+                    <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
                         <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
                         <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
@@ -992,105 +1008,107 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         <hr>
                         <div class = "row">
                             <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
-                            <nav>
-                                <ul>
-                                    <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
-                                        <ul class="scrollbar" id="style-5">
-                                            <li v-show="state.isNoSession"><a>Aucune session</a></li>
-                                            <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>     
-                        <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
-                            <div class = "row" style="margin-bottom: 20px;">
-                                <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
-                                    <datepicker  
-                                                v-model = "beginningDate"
-                                                :isValid = "isBeginningDateValid" 
-                                                :disabled = "canNotRegisterForm"
-                                                @blur = "CalculateEndingDate()"
-                                                @focus="resetVarialbesByDate()"
-                                                @input = "updateV2"
-                                                :min = "toDay">                                                                                       
-                                    </datepicker>
-                                </div>
-                                <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
-                                    <td width="15%">
-                                        <div class="form-group has-feedback ">
-                                            <label class="label-control">Salles</label><br/>
-                                            <select class="form-control" 
+                                <nav>
+                                    <ul>
+                                        <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
+                                            <ul class="scrollbar" id="style-5">
+                                                <li v-show="state.isNoSession"><a>Aucune session</a></li>
+                                                <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>     
+                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
+                                <div class = "row" style="margin-bottom: 20px;">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
+                                        <datepicker  
+                                            v-model = "beginningDate"
+                                            :isValid = "isBeginningDateValid" 
+                                            :disabled = "canNotRegisterForm"
+                                            @blur = "CalculateEndingDate()"
+                                            @focus="resetVarialbesByDate()"
+                                            @input = "updateV2"
+                                            :min = "toDay">                                                                                       
+                                        </datepicker>
+                                    </div>
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
+                                        <td width="15%">
+                                            <div class="form-group has-feedback ">
+                                                <label class="label-control">Salles</label><br/>
+                                                <select class="form-control" 
                                                     maxlength = "10" 
                                                     :disabled = "canNotRegisterForm" 
                                                     placeholder = "Salle" 
                                                     v-model="location"  
                                                     @focus="resetVariablesBySalle()">
-                                                <option v-for="n in AllSalles">{{n}}</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                </div>
-                            </div> 
-                            <div class = "row" style="margin-bottom: 30px;">
-                                <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
-                                    <input-text 
-                                        label = "Date de fin" 
-                                        :value = "endingDate" 
-                                        @input = "updateV4"
-                                        placeholder = "--/--/----"
-                                        maxlength = "10"
-                                        :isValid = "true"
-                                        icon = "glyphicon glyphicon-calendar"
-                                        :disabled = "true" 
-                                        type = 'input'>
-                                    </input-text>
-                                </div>
-                                <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
-                                    <table class = "errorMessageAddSession">
-                                        <tr>
-                                            <error-messages  
-                                                fillFieldErrorMessage =" Veuillez remplir tous les champs." 
-                                                successMessage =" La session a été créée avec succès."
-                                                failureModification =" La modification n'est pas enregistrée."
-                                                successModificationMessage = "La modification est bien enregistrée."
-                                                successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
-                                                failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
-                                                :regexErrorMessage = "beginningDateRegexErrorMessage"
-                                                :emptyRegexError = "showInvalidateInputMessage()"
-                                                :emptyFailure = "showExistInputMessage()"
-                                                :emptySuccess = "showSuccessToCreateMessage()"
-                                                :emptySuccessModification = "showSuccessToModifyMessage()"
-                                                :emptySuccessSupression = "showSuccessToDeleteMessage()"
-                                                :emptyfailureModification = "showFailToModifySessionMessage()"
-                                                :emptyFillError = "showEmptyInputMessage()">                                                                       
-                                            <error-messages>
-                                        </tr>
-                                    </table> 
+                                                        <option v-for="n in AllSalles">{{n}}</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </div>
                                 </div> 
-                            </div> 
-                            <div class = "row " style = "margin-bottom: 30px;">
-                                <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                    <input type = "submit" 
-                                           class = "btn btn-primary" 
-                                           :value = "valueButtonSaveModify" 
-                                           :disabled = "canNotRegisterForm" 
-                                           style = "width:100%"/>                                                                         
-                                </div>
-                                <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
-                                    <input type = "button" 
-                                           class = "btn btn-danger" 
-                                           value = "Supprimer" 
-                                           @click = "chooseSessionsToRemove()" 
-                                           :disabled = "CanNotUseButtonSupprimer()" 
-                                           style = "width:100%"/>                                                                        
-                                </div>
-                            </div>                                                     
-                        </form>
+                                <div class = "row" style="margin-bottom: 30px;">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
+                                        <input-text 
+                                            label = "Date de fin" 
+                                            :value = "endingDate" 
+                                            @input = "updateV4"
+                                            placeholder = "--/--/----"
+                                            maxlength = "10"
+                                            :isValid = "true"
+                                            icon = "glyphicon glyphicon-calendar"
+                                            :disabled = "true" 
+                                            type = 'input'>
+                                        </input-text>
+                                    </div>
+                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
+                                        <table class = "errorMessageAddSession">
+                                            <tr>
+                                                <error-messages  
+                                                        fillFieldErrorMessage =" Veuillez remplir tous les champs." 
+                                                        successMessage =" La session a été créée avec succès."
+                                                        failureModification =" La modification n'est pas enregistrée."
+                                                        successModificationMessage = "La modification est bien enregistrée."
+                                                        successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
+                                                        failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
+                                                        :regexErrorMessage = "beginningDateRegexErrorMessage"
+                                                        :emptyRegexError = "showInvalidateInputMessage()"
+                                                        :emptyFailure = "showExistInputMessage()"
+                                                        :emptySuccess = "showSuccessToCreateMessage()"
+                                                        :emptySuccessModification = "showSuccessToModifyMessage()"
+                                                        :emptySuccessSupression = "showSuccessToDeleteMessage()"
+                                                        :emptyfailureModification = "showFailToModifySessionMessage()"
+                                                        :emptyFillError = "showEmptyInputMessage()">                                                                       
+                                                <error-messages>
+                                            </tr>
+                                        </table> 
+                                    </div> 
+                                </div> 
+                                <div class = "row " style = "margin-bottom: 30px;">
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                        <input type = "submit" 
+                                                   class = "btn btn-primary" 
+                                                   :value = "valueButtonSaveModify" 
+                                                   :disabled = "canNotRegisterForm" 
+                                                   style = "width:100%"/>                                                                         
+                                    </div>
+                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                        <input type = "button" 
+                                                   class = "btn btn-danger" 
+                                                   value = "Supprimer" 
+                                                   @click = "chooseSessionsToRemove()" 
+                                                   :disabled = "CanNotUseButtonSupprimer()" 
+                                                   style = "width:100%"/>                                                                        
+                                    </div>
+                                </div>                                                     
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>`,
+        </div>
+    </div>`,
 });
 
 let DatePicker = Vue.component('datepicker', {
@@ -1604,6 +1622,7 @@ class trainingStore {
     }
     collectInformationOfTrainingChosen(){
         this.state.trainingChosen = {};
+        console.log(this.state.allTrainings);
         for (var tmp in this.state.allTrainings) {
             if (this.state.allTrainings[tmp].id == this.state.idTraining) {
                 this.state.trainingChosen = this.state.allTrainings[tmp];

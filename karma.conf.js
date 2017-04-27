@@ -20,13 +20,19 @@ module.exports = function (config) {
             'src/main/webapp/lib/vue-strap.js',
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-resource-mock.min.js',
+            'src/main/webapp/lib/vue-router.js',
             'src/main/webapp/lib/jwt-decode.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
             'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/main/webapp/app/controller/registerTrainingCollaborator.js',
-            'src/test/javaScript/spec/*.js',
+            'src/main/webapp/app/controller/assignCollaborator.js',
+            'src/test/javaScript/spec/mainSpec.js',
+            'src/test/javaScript/spec/registerCollaboratorSpec.js',
+            'src/test/javaScript/spec/registerTrainingTopicSpec.js',
+            'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
+
         ],
 
 

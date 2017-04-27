@@ -2,6 +2,7 @@
  * Created by XME3612 on 10/04/2017.
  */
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
@@ -19,6 +20,8 @@ Vue.http.interceptors.unshift((request, next) => {
         );
     }
 });
+
+
 
 describe('Header test', function () {
 
@@ -82,7 +85,6 @@ describe('Header test', function () {
     it('should checkIdleTime', function () {
         vmHeader.checkIdleTime();
     });
-
 
 
 });

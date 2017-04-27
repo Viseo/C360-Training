@@ -114,7 +114,7 @@ describe('test registerTrainingCollaborator', function () {
     it('should verify and save training request', function (done) {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
         vmCollaboratorFormation.isNoSession = true;
-        vmCollaboratorFormation.VerifyTrainingSessionCollaborator();
+        vmCollaboratorFormation.verifyTrainingSessionCollaborator();
         expect(JSON.stringify(vmCollaboratorFormation.RequestToRegister)).toEqual(JSON.stringify({
             "trainingDescription": {
                 "id": 5,
@@ -134,7 +134,7 @@ describe('test registerTrainingCollaborator', function () {
     it('should check when no session selected', function (done) {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
         vmCollaboratorFormation.isNoSession = false;
-        vmCollaboratorFormation.VerifyTrainingSessionCollaborator();
+        vmCollaboratorFormation.verifyTrainingSessionCollaborator();
         setTimeout(function () {
             expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
             done();
