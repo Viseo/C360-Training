@@ -288,7 +288,11 @@ describe('assign collaborator test', function () {
 
     });
     it('should check if error message is displayed when there are  type error in search field ', function (done) {
+        setTimeout(function() {
         vmAssignCollaborator.value = "@";
+        done();
+        }, 600);
+
         setTimeout(function() {
         expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
         expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
@@ -306,8 +310,13 @@ describe('assign collaborator test', function () {
             password:"123456",
             version:0
         }];
+
         expect(vmAssignCollaborator.requestedCollaboratorsMemo.length).toBe(1);
-        vmAssignCollaborator.value = "Batista";
+        setTimeout(function() {
+
+            vmAssignCollaborator.value = "Batista";
+        }, 600);
+
         setTimeout(function() {
 
             expect(vmAssignCollaborator.requestedCollaborators.length).toEqual(0);
@@ -326,8 +335,12 @@ describe('assign collaborator test', function () {
             version:0
         }];
         expect(vmAssignCollaborator.requestedCollaboratorsMemo.length).toBe(1);
-        vmAssignCollaborator.value = "Batista";
         setTimeout(function() {
+
+            vmAssignCollaborator.value = "Batista";
+    }, 600);
+
+    setTimeout(function() {
 
         expect(vmAssignCollaborator.requestedCollaborators).toEqual([{
             email:"benjamin.batista@viseo.com",
