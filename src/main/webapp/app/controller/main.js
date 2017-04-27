@@ -129,7 +129,7 @@ let Header = Vue.component('blue-header',{
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            console.log("yo");
+            console.log(regexCookieToken);
             if(regexCookieToken!=null) {
                 console.log(typeof regexCookieToken != 'undefined');
                 if(typeof regexCookieToken == 'undefined') this.token = 'undefined';
@@ -151,13 +151,14 @@ let Header = Vue.component('blue-header',{
                  this.lastName = jwt_decode(this.token).lastName;
                  console.log(this.lastName);
                  this.firstName = jwt_decode(this.token).sub;
-                 }
+                 }}
                  else {
-                 if (this.$route.name != 'login'){
+                    console.log("salut");
+                    if (this.$route.name != 'login'){
                  this.$router.push('/login');
                  }
                  }
-            }
+
 
         },
         disconnectUser(){
