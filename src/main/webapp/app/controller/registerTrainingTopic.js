@@ -505,7 +505,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     console.error(response);
                 });
         },
-        CreateSession(id){
+        createSession(id){
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
