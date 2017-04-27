@@ -46,7 +46,7 @@ public class sendMessage {
         }
         generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
         generateMailMessage.setSubject("Reset password");
-        String emailBody = "Please follow the link below to reset your password" + "<br> <a href='http://localhost:8080/resetPassword.html?id="+id +"'>Reset Password</a>" + "<br><br> Regards, <br>C360 Admin";
+        String emailBody = "Please follow the link below to reset your password" + "<br> <a href='http://c360-dev.viseolab.com/#/resetPassword.html?id="+id +"'>Reset Password</a>" + "<br><br> Regards, <br>C360 Admin";
         generateMailMessage.setContent(emailBody, "text/html");
         System.out.println("Mail Session has been created successfully..");
 
