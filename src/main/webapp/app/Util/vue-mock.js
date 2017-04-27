@@ -317,6 +317,26 @@ let routes = [
             "numberHalfDays": 1,
             "topicDescription": {"id": 3, "version": 0, "name": "C"}
         }
+    },
+    {
+        method: 'PUT',
+        url: 'api/sessions/15/15,10,18,4,4/collaborators',
+        response: [{
+            "id": 15,
+            "version": 0,
+            "trainingDescription": {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            },
+            "beginning": "13/05/2017",
+            "ending": "13/05/2017",
+            "beginningTime": "09:00",
+            "endingTime": "18:00",
+            "location": "Salle Bora Bora"
+        }]
     }
 
 ];

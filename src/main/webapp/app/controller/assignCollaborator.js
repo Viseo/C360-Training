@@ -166,29 +166,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     console.error(response);
                 });
         },
-        VerifyFormBeforeSubmit(){
-            this.$http.get("api/sessions/" + this.sessionIdChosen + "/collaborators").then(
-                function (response) {
-                    console.log("success to get all collaborators from the table trainingsession_collaborator");
-                    console.log(response.data);
-                    this.collaboratorAlreadyInSession = false;
-                    this.allCollaboratorsAlreadyInSessions = response.data;
-                    for (var tmp1 in this.allCollaboratorsIdChosen) {
-                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions){
-                            if (this.allCollaboratorsIdChosen[tmp1] == this.allCollaboratorsAlreadyInSessions[tmp2].id){
-                                this.collaboratorAlreadyInSession = true;
-                            }
-                        }
-                    }
-                    if(!this.collaboratorAlreadyInSession){
-                        this.AddCollaboratorsToTrainingSession();
-                    }
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
-        },
         gatherCollaboratorsRequestingBySession(){
             this.$http.get("api/requests/session/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
