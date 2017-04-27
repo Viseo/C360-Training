@@ -60,6 +60,8 @@ let args;
             vmFormulaire.personnalIdNumber = '';
             vmFormulaire.isLoginEmpty();
             expect(vmFormulaire.loginEmpty).toBe(true);
+            vmFormulaire.setLoginEmptyToFalse();
+            expect(vmFormulaire.loginEmpty).toBe(false);
         });
 
         it('Test lastName', function () {
@@ -72,6 +74,8 @@ let args;
             vmFormulaire.lastName = '';
             vmFormulaire.isLastNameEmpty();
             expect(vmFormulaire.lastNameEmpty).toBe(true);
+            vmFormulaire.setLastNameEmptyToFalse();
+            expect(vmFormulaire.lastNameEmpty).toBe(false);
         });
 
         it('Test firstName', function () {
@@ -84,6 +88,8 @@ let args;
             vmFormulaire.firstName = '';
             vmFormulaire.isFirstNameEmpty();
             expect(vmFormulaire.firstNameEmpty).toBe(true);
+            vmFormulaire.setFirstNameEmptyToFalse();
+            expect(vmFormulaire.firstNameEmpty).toBe(false);
         });
 
         it('Test email', function () {
@@ -96,18 +102,26 @@ let args;
             vmFormulaire.email = '';
             vmFormulaire.isEmailEmpty();
             expect(vmFormulaire.emailEmpty).toBe(true);
+            vmFormulaire.setEmailAlreadyExistToTrue();
+            expect(vmFormulaire.emailEmpty).toBe(false);
+            expect(vmFormulaire.emailAlreadyExist).toBe(true);
         });
 
         it('Test password',function () {
             vmFormulaire.verifyPassword('123456');
             expect(vmFormulaire.isPasswordValid).toBe(true);
             expect(vmFormulaire.errorMessagePassword).toBe('');
-           vmFormulaire.verifyPassword('12345');
+            vmFormulaire.verifyPassword('12345');
+            vmFormulaire.showPass = false;
+            vmFormulaire.toggleShowPassword();
+            vmFormulaire.showPass = true;
             expect(vmFormulaire.isPasswordValid).toBe(false);
             expect(vmFormulaire.errorMessagePassword).toBe('Le mot de passe doit avoir au minimum 6 caractères');
             vmFormulaire.password = '';
             vmFormulaire.isPasswordEmpty();
             expect(vmFormulaire.passwordEmpty).toBe(true);
+            vmFormulaire.setPasswordEmptyToFalse();
+            expect(vmFormulaire.passwordEmpty).toBe(false);
 
         });
 
@@ -119,6 +133,9 @@ let args;
             expect(vmFormulaire.errorMessageConfirmPassword).toBe('');
             vmFormulaire.password = '123456';
             vmFormulaire.confirmPassword = '12345';
+            vmFormulaire.showPassConf = false;
+            vmFormulaire.toggleShowPasswordConfirmation();
+            vmFormulaire.showPassConf = true;
             vmFormulaire.verifyConfirmPassword();
             expect(vmFormulaire.isConfirmPasswordValid).toBe(false);
             expect(vmFormulaire.errorMessageConfirmPassword).toBe('La confirmation du mot de passe n\'est pas valide');

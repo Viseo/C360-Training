@@ -2,6 +2,7 @@
  * Created by XME3612 on 10/04/2017.
  */
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
@@ -20,6 +21,8 @@ Vue.http.interceptors.unshift((request, next) => {
     }
 });
 
+
+
 describe('Header test', function () {
 
     beforeEach(function () {
@@ -31,15 +34,14 @@ describe('Header test', function () {
     });
 
     it('should check variable initialization from Header component', function () {
-        expect(vmHeader.nom).toBe('');
-        expect(vmHeader.prenom).toBe('');
-        expect(vmHeader.token).toBe('');
+        expect(vmHeader.lastName).toBe('');
+        expect(vmHeader.firstName).toBe('');
+        //expect(vmHeader.token).toBe('');
         expect(vmHeader.disconnect).toBe(false);
         expect(vmHeader.app).toEqual({training:true, skills:false, mission:false, leave:false});
         expect(vmHeader.IDLE_TIMEOUT).toBe(20);
         expect(vmHeader.idleSecondsCounter).toBe(0);
         expect(vmHeader.myInterval).toBe('');
-        expect(vmHeader.test).toBe(50);
         expect(vmHeader.stayConnected).toBe(true);
         expect(vmHeader.dialog).toBe(false);
         expect(vmHeader.timeconnected).toBe(0);
@@ -83,7 +85,6 @@ describe('Header test', function () {
     it('should checkIdleTime', function () {
         vmHeader.checkIdleTime();
     });
-
 
 
 });
