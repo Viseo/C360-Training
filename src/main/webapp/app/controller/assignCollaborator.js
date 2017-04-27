@@ -44,6 +44,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         </div>
                     </div>
                     <div class="row">
+                    <div class="row">
                         <div id="assignCollaborator">
                                 <select
                                         class="form-control" 
