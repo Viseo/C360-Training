@@ -385,8 +385,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     },
 template:`
          <div class="container-fluid">
-              <div class="row">
-                   <div class="col-sm-12 col-md-10 col-lg-7">
                         <div class="row">
                              <div class="col-lg-7 col-md-7 text-center">
                                   <legend>Ajouter une formation</legend>
@@ -476,8 +474,6 @@ template:`
                                 </tr>
                             </table>
                         </form>
-                   </div>
-              </div>
          </div>
         `
 });
@@ -500,7 +496,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
-        createSession(id){
         RemoveTopic(topicToRemove){
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
@@ -533,9 +528,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
     },
     template: `
              <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
-                                    <div class="row"> 
-                      <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;"></div> 
-                      <div class="col-sm-12 col-md-10 col-lg-7"> 
                             <div class="row">
                                 <div class="col-lg-7 col-md-7 text-center">
                                      <legend>Formation ajoutées</legend>
@@ -555,7 +547,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                             <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                             <th width="25%"></th>
                                                                             <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span  @click="RemoveTopic(topicTraining[0][0].topicDescription) class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span  @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -572,9 +564,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                             </tbody>
                                         </table>
                                   <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
-                            </div>
-                      </div>
-                  </div>
              </div>`
 });
 
@@ -997,10 +986,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     },
     template: `
     <div v-show="state.changePageToSession" class="container-fluid" id="addSession ">
-        <div class="row">
-            <div class="col-md-12 col-lg-7 col-sm-12" style="padding:10px;"></div>
-                <div class="col-sm-12 col-md-10 col-lg-7">
-                    <div class="row">
+                    <div class="row" style="margin-top: 10px;">
                         <div class="col-lg-7 col-md-7 text-center">
                             <legend>Gérer une session</legend>
                         </div>
@@ -1127,10 +1113,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                 </div>                                                     
                             </form>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>`,
 });
 
