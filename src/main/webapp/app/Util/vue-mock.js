@@ -264,6 +264,11 @@ let routes = [
     },
     {
         method: 'POST',
+        url: 'api/removetopic',
+        response: {id: "2", version: "0", name: "PROGRAMMATION"}
+    },
+    {
+        method: 'POST',
         url: 'api/sessions',
         response: {
             "id": 6,

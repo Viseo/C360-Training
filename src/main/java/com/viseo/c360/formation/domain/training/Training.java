@@ -3,7 +3,8 @@ package com.viseo.c360.formation.domain.training;
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.dto.training.TopicDescription;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
-
+import org.hibernate.annotations.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -26,7 +27,7 @@ public class Training extends BaseEntity {
 	int numberHalfDays;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne()
 	Topic topic;
 
 	public Training() {

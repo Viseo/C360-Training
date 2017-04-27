@@ -660,6 +660,10 @@ describe('test registerTrainingTopic.js', function () {
     });
 
     describe('vmShowFormationPanel', function () {
+        it('should delete topic and its formations',function (){
+            var topicToRemove = {id: "2", version: "0", name: "PROGRAMMATION"};
+            vmShowFormation.RemoveTopic(topicToRemove);
+        }),
         //showChevrons
         it('should check whether the chevrons can be hidden', function () {
             vmShowFormation.state.trainingsChosen = [];
