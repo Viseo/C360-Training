@@ -108,7 +108,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                      </div>
                                  </div>
-                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled}">Enregistrer</button>
+                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer</button>
                             <error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
                                             style="margin-left:153px;margin-top:10px;"
                                             :height="80" 
@@ -287,7 +287,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         },
         saveCollabInSessions(){
             this.numberAddedCollabCounter();
-            if(this.isRegistrationAvailable) {
+            if(this.isRegistrationAvailable && this.validatedCollab.length>0) {
                 var i;
                 for (i = 0; i < this.validatedCollab.length; i++) {
                     this.allCollaboratorsIdChosen.push(this.validatedCollab[i].id);
