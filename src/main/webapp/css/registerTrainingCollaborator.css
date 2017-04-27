@@ -36,7 +36,7 @@ button + p {
     margin:10px 0 0;
 }
 
-.dropdown-menu {
+#trainingContainer .dropdown-menu {
     min-width: 200px;
     left: 0%;
     top: 100%;
