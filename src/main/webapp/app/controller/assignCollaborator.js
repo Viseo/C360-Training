@@ -63,7 +63,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                            
                                  </div>
-                                 <div class="panel panel-default" :class="{disabled : isDisabled}">
+                                 <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                                     <div class="panel-body">
                                          <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
@@ -92,7 +92,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                      <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
                                      </div>
                                     </div>
-                                     <div class="panel panel-default" :class="{disabled : isDisabled}">
+                                     <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                                         <div class="panel-body">
                                             <br/><br/>
                                              <div align="center" style="overflow: auto; position:fixed; height:33vh;">
