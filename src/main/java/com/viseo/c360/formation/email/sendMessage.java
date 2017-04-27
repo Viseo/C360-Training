@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.email;
 
 import javax.mail.Message;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -38,9 +39,14 @@ public class sendMessage {
         System.out.println("\n\n 2nd ===> get Mail Session..");
         getMailSession = Session.getDefaultInstance(mailServerProperties, null);
         generateMailMessage = new MimeMessage(getMailSession);
+        try {
+            generateMailMessage.setFrom(new InternetAddress("collab360mdpoublie@gmail.com", "Collab360"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
         generateMailMessage.setSubject("Reset password");
-        String emailBody = "Please follow the link below to reset your password" + "<br> <a href='http://localhost:8080/resetPassword.html?id="+id +"'>Reset Password</a>" + "<br><br> Regards, <br>C360 Admin";
+        String emailBody = "Please follow the link below to reset your password" + "<br> <a href='http://c360-dev.viseolab.com/#/resetPassword.html?id="+id +"'>Reset Password</a>" + "<br><br> Regards, <br>C360 Admin";
         generateMailMessage.setContent(emailBody, "text/html");
         System.out.println("Mail Session has been created successfully..");
 

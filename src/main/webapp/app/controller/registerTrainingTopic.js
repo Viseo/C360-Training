@@ -487,7 +487,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
     },
     computed: {
         showChevrons(){
-            if (this.state.trainingsChosen.length > 0) {
+            if (this.state.allTopicTraining.length > 0) {
                 return true;
             }
             else {
@@ -547,7 +547,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                             <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                             <th width="25%"></th>
                                                                             <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span  @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                            <th class="deletetopic" width="25%"><a href="#" @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>

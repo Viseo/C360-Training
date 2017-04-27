@@ -337,6 +337,26 @@ let routes = [
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }]
+    },
+    {
+        method: 'GET',
+        url: 'api/sessions',
+        response: [{
+            "id": 6,
+            "version": 0,
+            "trainingDescription": {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            },
+            "beginning": "13/05/2017",
+            "ending": "13/05/2017",
+            "beginningTime": "09:00",
+            "endingTime": "18:00",
+            "location": "Salle Bora Bora"
+        }]
     }
 
 ];

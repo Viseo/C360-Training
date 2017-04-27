@@ -399,6 +399,8 @@ let Formulaire = Vue.component('inscription-form', {
                             this.personalIdNumberAlreadyExist = true;
                         } else {
                             console.error(response);
+                            this.personalIdNumberAlreadyExist = false;
+                            this.emailAlreadyExist = false;
                         }
                     }
                 );

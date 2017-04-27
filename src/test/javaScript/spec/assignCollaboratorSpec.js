@@ -31,14 +31,40 @@ describe('assign collaborator test', function () {
     });
 
     it('should check if all available sessions are in the drop-down ', function () {
+       vmAssignCollaborator.GatherAllSessions();
+       var response = [{
+           "id": 6,
+           "version": 0,
+           "trainingDescription": {
+               "id": 5,
+               "version": 0,
+               "trainingTitle": "FORMATION1",
+               "numberHalfDays": 1,
+               "topicDescription": {"id": 3, "version": 0, "name": "C"}
+           },
+           "beginning": "13/05/2017",
+           "ending": "13/05/2017",
+           "beginningTime": "09:00",
+           "endingTime": "18:00",
+           "location": "Salle Bora Bora"
+       }];
+       expect(vmAssignCollaborator.state.allSessions).toEqual(response);
 
     });
 
     it('should check if fields are greys when there are no sessions selected ', function () {
 
+        expect(vmAssignCollaborator.isDisabled).toBe(true);
+        expect(vmAssignCollaborator.sessionIdChosen).toBe(0);
+
     });
 
     it('should check if fields are not greys when sessions are selected ', function () {
+        vmAssignCollaborator.sessionIdChosen = 15;
+        expect(vmAssignCollaborator.sessionIdChosen).toBe(15);
+
+        vmAssignCollaborator.clearGreyPanel();
+        expect(vmAssignCollaborator.isDisabled).toBe(false);
 
     });
 

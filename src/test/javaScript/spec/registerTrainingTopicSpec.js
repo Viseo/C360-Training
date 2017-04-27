@@ -666,12 +666,12 @@ describe('test registerTrainingTopic.js', function () {
         }),
         //showChevrons
         it('should check whether the chevrons can be hidden', function () {
-            vmShowFormation.state.trainingsChosen = [];
+            vmShowFormation.state.allTopicTraining = [];
             expect(vmShowFormation.showChevrons).toBe(false);
         });
 
         it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
-            vmShowFormation.state.trainingsChosen = [
+            vmShowFormation.state.allTopicTraining = [
                 {"id": 3, "version": 0, "name": "C"},
                 {"id": 4, "version": 0, "name": "C++"}
             ];

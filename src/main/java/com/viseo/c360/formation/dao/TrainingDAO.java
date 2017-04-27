@@ -138,6 +138,8 @@ public class TrainingDAO {
 
     @Transactional
     public TrainingSession removeTrainingSession(TrainingSession trainingSession){
+        daoFacade.executeSQLRequest("Delete FROM trainingsession_collaborator tc where tc.trainingsession_id = :id",param("id",trainingSession.getId()));
+        daoFacade.executeSQLRequest("Delete FROM requesttraining_trainingsession rtt where rtt.sessions_id = :id",param("id",trainingSession.getId()));
         daoFacade.remove(trainingSession);
         daoFacade.flush();
         return trainingSession;
