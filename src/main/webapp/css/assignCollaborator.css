@@ -6,18 +6,18 @@
     padding:20px;
     margin-left:15px;
 }
-#searchCollab .panel-body {
+.searchCollab .panel-body {
     height:300px;
     width: 100%;
 }
-#searchCollab .searchField .glyphicon-search {
+.searchCollab .searchField .glyphicon-search {
     right: 35px;
     position: absolute;
     top: 11px;
     cursor:pointer;
     z-index: 1000;
 }
-#searchCollab .searchField{
+.searchCollab .searchField{
     margin-left: -42px;
     width: 138%;
 }
