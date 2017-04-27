@@ -32,7 +32,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
             'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
-
+            'src/test/javaScript/spec/assignCollaboratorSpec.js',
         ],
 
 
