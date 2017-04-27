@@ -499,7 +499,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
         RemoveTopic(topicToRemove){
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
-                    window.location.reload();
+                    window.location.replace();
                 },
                 function (response) {
                     console.error(response);
@@ -834,6 +834,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.numberOfSessionSelected--;
                     this.ResetSessionForm();
                     this.gatherSessionsByTrainingFromDatabase();
+                    this.GatherAllSessions();
                 },
                 function (response) {
                     this.confirmModification = false;
@@ -861,6 +862,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.canNotRegisterForm = false;
                     this.ResetSessionForm();
                     this.gatherSessionsByTrainingFromDatabase();
+                    this.GatherAllSessions();
                 },
                 function (response) {
                     console.error(response);

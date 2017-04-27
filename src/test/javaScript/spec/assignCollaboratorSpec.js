@@ -65,6 +65,7 @@ describe('assign collaborator test', function () {
 
     });
     it('should check if confirmation message appear and fields are greys when collaborators are saved ', function () {
+       vmAssignCollaborator.saveCollabInSessions();
 
     });
 
