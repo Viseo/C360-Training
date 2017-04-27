@@ -108,6 +108,19 @@ public class TrainingWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.removetopic}", method = RequestMethod.POST)
+    @ResponseBody
+    public TopicDescription removeTopic(@RequestBody TopicDescription topicDescription) {
+        try {
+            Topic topic = trainingDAO.getTopic(topicDescription.getId());
+            if (topic == null)
+                throw new PersistentObjectNotFoundException(topicDescription.getId(), Topic.class);
+            topic = trainingDAO.removeTopic(topic);
+            return new TopicToDescription().convert(topic);
+        } catch (PersistentObjectNotFoundException e) {
+            throw new C360Exception(e);
+        }
+    }
     @RequestMapping(value = "${endpoint.topics}", method = RequestMethod.GET)
     @ResponseBody
     public List<TopicDescription> getAllTopics() {

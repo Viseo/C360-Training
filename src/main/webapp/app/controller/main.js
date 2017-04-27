@@ -188,12 +188,19 @@ let router = new VueRouter({
             path: "/addTrainingTopic",
             component: {
                 template: `<div id="newVue" v-cloak>
-            <blue-header></blue-header>
-            <add-formation-panel></add-formation-panel>
-            <show-formation-panel></show-formation-panel>
-            <add-session-panel></add-session-panel>
+    <blue-header></blue-header>
+    <div class="container-fluid">
+    <div class="col-sm-12 col-md-7 col-lg-7">
+    <add-formation-panel></add-formation-panel>
+    <show-formation-panel></show-formation-panel>
+    <add-session-panel></add-session-panel>
+    </div>
+    <div class="col-sm-12 col-md-5 col-lg-5">
+    <assign-collaborator></assign-collaborator>
+    </div>
+    </div>
 
-            </div>`
+</div>`
             },
             name:'addTrainingTopic'
         },

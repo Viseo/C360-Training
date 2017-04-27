@@ -15,6 +15,9 @@ public interface DAOFacade {
 
 	<T> void remove(T entity);
 
+	<T> void executeRequest(String request,Parameter... params);
+	<T> void executeSQLRequest(String request,Parameter... params);
+
 	<T> void persist(T entity);
 
 	void clear();

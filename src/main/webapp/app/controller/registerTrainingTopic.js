@@ -501,6 +501,16 @@ let ShowFormation = Vue.component('show-formation-panel', {
     },
     methods:{
         createSession(id){
+        RemoveTopic(topicToRemove){
+            this.$http.post("api/removetopic", topicToRemove).then(
+                function (response) {
+                    window.location.reload();
+                },
+                function (response) {
+                    console.error(response);
+                });
+        },
+        CreateSession(id){
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
             this.state.idTraining = id;
@@ -545,7 +555,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                             <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                             <th width="25%"></th>
                                                                             <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                            <th class="deletetopic" width="25%"><a href="#" class="changecolor"><span  @click="RemoveTopic(topicTraining[0][0].topicDescription) class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -762,6 +772,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         this.state.changePageToTraining = true;
                         this.ResetSessionForm();
                         this.gatherSessionsByTrainingFromDatabase();
+                        this.GatherAllSessions();
                     },
                     function (response) {
                         console.log("Error: ",response);
@@ -802,6 +813,18 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
+        GatherAllSessions(){
+            this.$http.get("api/sessions").then(
+                function (response) {
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
+
         ModifyTrainingSession(){
             this.sessionToModify.id = this.state.idSession;
             this.sessionToModify.trainingDescription = this.state.trainingChosen;
@@ -1617,12 +1640,12 @@ class trainingStore {
             isNoSession:true,
             idSession:'',
             nomUser:'',
-            prenomUser:''
+            prenomUser:'',
+            allSessions: []
         }
     }
     collectInformationOfTrainingChosen(){
         this.state.trainingChosen = {};
-        console.log(this.state.allTrainings);
         for (var tmp in this.state.allTrainings) {
             if (this.state.allTrainings[tmp].id == this.state.idTraining) {
                 this.state.trainingChosen = this.state.allTrainings[tmp];
