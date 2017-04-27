@@ -992,7 +992,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         </div>
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
-                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:2%; top:10%; z-index:1;">
+                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:5%; top:45%; z-index:1;">
                         <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
