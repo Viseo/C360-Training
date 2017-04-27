@@ -44,3 +44,7 @@ div.disabled
     background: #CCC;
 }
 
+#typeahead .dropdown-menu
+{
+display:none;
+}
