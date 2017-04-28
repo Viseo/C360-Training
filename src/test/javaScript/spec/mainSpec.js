@@ -21,12 +21,19 @@ Vue.http.interceptors.unshift((request, next) => {
     }
 });
 
-
+//let vmHeader = new Header().$mount();
+var vm = new Vue({
+    template: '<div><blue-header></blue-header></div>',
+    router: router,
+    components: {
+        'blueHeader': Header
+    }
+}).$mount();
 
 describe('Header test', function () {
 
     beforeEach(function () {
-        vmHeader = new Header().$mount();
+
     });
 
     afterEach(function () {
@@ -34,28 +41,28 @@ describe('Header test', function () {
     });
 
     it('should check variable initialization from Header component', function () {
-        expect(vmHeader.lastName).toBe('');
-        expect(vmHeader.firstName).toBe('');
-        //expect(vmHeader.token).toBe('');
-        expect(vmHeader.disconnect).toBe(false);
-        expect(vmHeader.app).toEqual({training:true, skills:false, mission:false, leave:false});
-        expect(vmHeader.IDLE_TIMEOUT).toBe(20);
-        expect(vmHeader.idleSecondsCounter).toBe(0);
-        expect(vmHeader.myInterval).toBe('');
-        expect(vmHeader.stayConnected).toBe(true);
-        expect(vmHeader.dialog).toBe(false);
-        expect(vmHeader.timeconnected).toBe(0);
+        expect(vm.$children[0].lastName).toBe('');
+        expect(vm.$children[0].firstName).toBe('');
+        //expect(vm.$children[0].token).toBe('');
+        expect(vm.$children[0].disconnect).toBe(false);
+        expect(vm.$children[0].app).toEqual({training:true, skills:false, mission:false, leave:false});
+        expect(vm.$children[0].IDLE_TIMEOUT).toBe(20);
+        expect(vm.$children[0].idleSecondsCounter).toBe(0);
+        expect(vm.$children[0].myInterval).toBe('');
+        expect(vm.$children[0].stayConnected).toBe(true);
+        expect(vm.$children[0].dialog).toBe(false);
+        expect(vm.$children[0].timeconnected).toBe(0);
     });
 
     it('should set an value to the variable idleSecondsCounter', function () {
-        vmHeader.setIdleSecondsCounter(10);
-        expect(vmHeader.idleSecondsCounter).toEqual(10);
+        vm.$children[0].setIdleSecondsCounter(10);
+        expect(vm.$children[0].idleSecondsCounter).toEqual(10);
 
     });
 
     it('should check whether the user disconnect', function () {
-        vmHeader.token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
-        vmHeader.disconnectUser();
+        vm.$children[0].token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+        vm.$children[0].disconnectUser();
     });
 
     //to continue
@@ -72,18 +79,18 @@ describe('Header test', function () {
             }
         };
         document.cookie = "token=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg; stayconnected=true";
-        vmHeader.getCookieInfos();
-        expect(vmHeader.stayConnected).toBe(true);
+        vm.$children[0].getCookieInfos();
+        expect(vm.$children[0].stayConnected).toBe(true);
     });
 
     it('should checkIfUserInactive', function () {
-        vmHeader.stayConnected = false;
-        vmHeader.checkIfUserInactive();
+        vm.$children[0].stayConnected = false;
+        vm.$children[0].checkIfUserInactive();
     });
 
 
     it('should checkIdleTime', function () {
-        vmHeader.checkIdleTime();
+        vm.$children[0].checkIdleTime();
     });
 
 
