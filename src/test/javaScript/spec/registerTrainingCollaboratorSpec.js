@@ -11,7 +11,8 @@ beforeEach(function () {
         firstName: 'Eric'
     };
     vmCollaboratorFormation.idTraining = 5;
-
+});
+afterEach(function () {
 });
 
 describe('test registerTrainingCollaborator', function () {
@@ -61,8 +62,8 @@ describe('test registerTrainingCollaborator', function () {
     });
 
     it('should find no trainings', function (done) {
+        console.log("bonjour");
         vmCollaboratorFormation.value = 'gezrg5z5';
-        vmCollaboratorFormation.$refs.btnLoadTrainings.click();
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(true);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(0);
@@ -72,7 +73,7 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should find and load all trainings', function (done) {
         vmCollaboratorFormation.value = '';
-        vmCollaboratorFormation.$refs.btnLoadTrainings.click();
+
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(3);
@@ -82,7 +83,6 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should find trainings having inserted value', function (done) {
         vmCollaboratorFormation.value = 'FOR';
-        vmCollaboratorFormation.$refs.btnLoadTrainings.click();
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(2);
