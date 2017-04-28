@@ -30,20 +30,6 @@ describe('assign collaborator test', function () {
     afterEach(function () {
 
     });
-    it('should check if error message is displayed when there are  type error in search field ', function (done) {
-
-            vmAssignCollaborator.value = "@";
-
-
-        setTimeout(function () {
-            expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
-            expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
-        done();
-    }, 600);
-
-
-
-    });
 
     it('should check if there are few results when collaborators exists ', function (done) {
 
@@ -138,23 +124,43 @@ describe('assign collaborator test', function () {
 
     });
 
-    it('should check if collaborators are displayed when checkbox is checked ', function () {
-        vmAssignCollaborator.allCollaboratorsName = [{
-            "email": 'eric.dupon@viseo.com',
-            "firstName": 'Eric',
-            "id": 5,
-            "lastName": 'Dupond',
-            "password": '123456',
-            "version": 0
-        }];
+    it('should check if collaborators are displayed when checkbox is checked true', function () {
+        //vmAssignCollaborator.verifyCheckedNames();
+        //expect(vmAssignCollaborator.checkedNames).toBe(true);
+        //vmAssignCollaborator.checkedNames = false;
         vmAssignCollaborator.verifyCheckedNames();
-        expect(vmAssignCollaborator.checkedNames).toBe(true);
-        vmAssignCollaborator.gatherCollaboratorsRequestingBySession();
+        // vmAssignCollaborator.allCollaborators = [
+        //     {
+        //         "email": 'eric.dupon@viseo.com',
+        //         "firstName": 'Eric',
+        //         "id": 5,
+        //         "lastName": 'Dupond',
+        //         "password": '123456',
+        //         "version": 0
+        //     }
+        // ];
+        //vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+    });
+    it('should check if collaborators are displayed when checkbox is checked false', function () {
+        //vmAssignCollaborator.verifyCheckedNames();
+        vmAssignCollaborator.sessionIdChosen = 6;
+        //expect(vmAssignCollaborator.checkedNames).toBe(true);
         vmAssignCollaborator.checkedNames = false;
         vmAssignCollaborator.verifyCheckedNames();
-        expect(vmAssignCollaborator.checkedNames).toBe(false);
-        vmAssignCollaborator.gatherCollaboratorsFromDatabase()
+        vmAssignCollaborator.allCollaborators = [
+            {
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            }
+        ];
+        vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+
     });
+
     it('should check if counter is increased when collaborators has been added', function () {
         vmAssignCollaborator.validatedCollab = [{
             "email": 'eric.dupon@viseo.com',
@@ -390,5 +396,18 @@ describe('assign collaborator test', function () {
             expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
         }, 2000);
     });
+    it('should check if error message is displayed when there are  type error in search field ', function (done) {
+        setTimeout(function () {
+            vmAssignCollaborator.value = "@";
+            done();
+        }, 600);
 
+        setTimeout(function () {
+            expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
+            expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
+            done();
+        }, 600);
+
+
+    });
 });
