@@ -123,7 +123,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.getCookies();
-        //this.storeTrainingsFound();
+        this.storeTrainingsFound();
         $('#scroll-up-2').click(function() {
             $('#scroll').animate({scrollTop: "-=100"}, 500);
         });
