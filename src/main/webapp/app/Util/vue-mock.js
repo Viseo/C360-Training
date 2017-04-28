@@ -340,6 +340,11 @@ let routes = [
     },
     {
         method: 'GET',
+        url: 'api/sessions/15/collaborators',
+        response: {}
+    },
+    {
+        method: 'GET',
         url: 'api/sessions',
         response: [{
             "id": 6,
