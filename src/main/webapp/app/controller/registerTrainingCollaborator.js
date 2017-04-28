@@ -123,7 +123,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.getCookies();
-        this.storeTrainingsFound();
+        //this.storeTrainingsFound();
         $('#scroll-up-2').click(function() {
             $('#scroll').animate({scrollTop: "-=100"}, 500);
         });
@@ -207,12 +207,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         displayTrainingsFn(){
             this.emptyTraining = this.selectedTraining ? false : true;
-            this.trainingsFound.splice(0, this.trainingsFound.length);
             if (!this.emptyTraining) {
                 let selectedTraining = this.selectedTraining;
                 this.$http.get("api/formations/" + this.selectedTraining + "/sessions").then(
                     function (response) {
                         this.listTrainingSession = response.data;
+                        this.trainingsFound.splice(0, this.trainingsFound.length);
                         for (key in this.allTrainings) {
                             if (this.allTrainings[key].id == selectedTraining) {
                                 this.trainingsFound.push(this.allTrainings[key]);

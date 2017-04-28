@@ -1,4 +1,5 @@
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 Vue.component('form-reset-password', {
     template: `
@@ -35,6 +36,7 @@ Vue.component('form-reset-password', {
                         <span v-show="!isConfirmPasswordValid && !confirmPasswordEmpty" class="color-red">{{ errorMessageConfirmPassword }}</span>
                     </div>
                 </div>
+                <br/>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
@@ -121,29 +123,14 @@ Vue.component('form-reset-password', {
             this.isPasswordEmpty(); this.isConfirmPasswordEmpty();
             if( !this.passwordEmpty && !this.confirmPasswordEmpty && this.isConfirmPasswordValid){
                 this.$http.put("api/collaborateurs/"+ this.password +"/collaborateursid/"+this.idParameter);
-                window.location.pathname = '/index.html';
+                this.$router.push('/login');
             }
         },
 
         getParameterFromUrl(){
-
-
-                var str = window.location.search;
-                var objURL = {};
-
-                str.replace(
-                    new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
-                    function( $0, $1, $2, $3 ){
-                        objURL[ $1 ] = $3;
-                    }
-                );
-
-                this.idParameter=objURL["id"];
+                var str = this.$route.params.id;
+                this.idParameter=str;
 
         }
     }
-})
-
-new Vue({
-    el: '#app',
 });

@@ -155,7 +155,8 @@ let Header = Vue.component('blue-header',{
                  else {
                     console.log("salut");
                     if (this.$route.name != 'login'){
-                 this.$router.push('/login');
+                        if(this.$route.name != 'resetPassword'){
+                 this.$router.push('/login');}
                  }
                  }
 
@@ -223,6 +224,34 @@ let router = new VueRouter({
                                <blue-header></blue-header>
                                        <connect-user></connect-user>
                             </div>`
+            }
+        },{
+            path: "/resetPassword/:id",
+            name:'resetPassword',
+            component: {
+                template: `<div class="container-fluid" id="newVue" v-cloak>
+    <div class="row">
+                                      <blue-header></blue-header>
+
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
+                            <form-reset-password></form-reset-password>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<div id="newVue" v-cloak>
+                                       <form-reset-password></form-reset-password>
+                            </div>-->`
             }
         },
         {
