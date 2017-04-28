@@ -116,8 +116,8 @@ describe('assign collaborator test', function () {
     });
 
     it('should check if fields are not greys when sessions are selected ', function () {
-        vmAssignCollaborator.sessionIdChosen = 15;
-        expect(vmAssignCollaborator.sessionIdChosen).toBe(15);
+        vmAssignCollaborator.sessionIdChosen = 6;
+        expect(vmAssignCollaborator.sessionIdChosen).toBe(6);
 
         vmAssignCollaborator.clearGreyPanel();
         expect(vmAssignCollaborator.isDisabled).toBe(false);
@@ -132,8 +132,8 @@ describe('assign collaborator test', function () {
             "lastName": 'Dupond',
             "password": '123456',
             "version": 0
-        }],
-            vmAssignCollaborator.verifyCheckedNames();
+        }];
+        vmAssignCollaborator.verifyCheckedNames();
         expect(vmAssignCollaborator.checkedNames).toBe(true);
         vmAssignCollaborator.gatherCollaboratorsRequestingBySession();
         vmAssignCollaborator.checkedNames = false;

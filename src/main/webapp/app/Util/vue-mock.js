@@ -308,6 +308,35 @@ let routes = [
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }]
+    },
+    {
+        method: 'GET',
+        url: 'api/requests/session/6/collaborators',
+        response: [
+            {
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            }
+        ]
+    },
+
+    {
+        method: 'GET',
+        url: 'api/sessions/6/collaborators',
+        response: [
+            {
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            }
+        ]
     }
 
 ];
