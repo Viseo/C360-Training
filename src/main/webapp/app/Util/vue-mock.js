@@ -340,11 +340,6 @@ let routes = [
     },
     {
         method: 'GET',
-        url: 'api/sessions/15/collaborators',
-        response: {}
-    },
-    {
-        method: 'GET',
         url: 'api/sessions',
         response: [{
             "id": 6,
@@ -362,6 +357,17 @@ let routes = [
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }]
+    },
+    {
+        method: 'GET',
+        url: 'api/requests/session/15/collaborators',
+        response: []
+    },
+
+    {
+        method: 'GET',
+        url: 'api/sessions/15/collaborators',
+        response: []
     }
 
 ];
