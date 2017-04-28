@@ -143,19 +143,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             console.log("Error: ", response);
             console.error(response);
         });
-},
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
-                function (response) {
-                    console.log("success to get all requests from database");
-                    console.log(response.data);
-                    this.collaboratorsRequesting = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
-        },
+    },
+
         AddCollaboratorsToTrainingSession(){
             this.$http.put("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                 function (response) {
