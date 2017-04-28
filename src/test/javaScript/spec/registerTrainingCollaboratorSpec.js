@@ -85,12 +85,12 @@ describe('test registerTrainingCollaborator', function () {
         vmCollaboratorFormation.$refs.btnLoadTrainings.click();
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
-            expect(vmCollaboratorFormation.trainingsFound.length).toBe(3);
+            expect(vmCollaboratorFormation.trainingsFound.length).toBe(2);
             expect(vmCollaboratorFormation.trainingsFound[0].trainingTitle).toBe("FORMATION1");
             done();
         }, 600);
 
-    })
+    });
     it('should find sessions that are booked by collab', function (done) {
         vmCollaboratorFormation.renitialize(trainingSelected);
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);

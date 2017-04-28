@@ -64,7 +64,7 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmAddSessionPanel.isDisabledSupprimer).toBe = true;
                 expect(vmAddSessionPanel.valueButtonSaveModify).toEqual('Ajouter');
                 expect(vmAddSessionPanel.state.idSession).toEqual('');
-                var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"FORMATION3","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
+                var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"JAVA","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
                 expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
                 done();
             }, 600);
