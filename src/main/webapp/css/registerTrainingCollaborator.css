@@ -47,6 +47,17 @@ button + p {
     padding-right: 30px;
 }
 
+@media screen and (min-width: 992px){
+    #trainingContainer #upperContainer {
+        height: 52px;
+        margin-bottom:0px;
+    }
+}
+
+#trainingContainer #upperContainer div {
+    margin-bottom:10px;
+}
+
 .panel-primary{
     border-color: rgb(210, 210, 210);
 }

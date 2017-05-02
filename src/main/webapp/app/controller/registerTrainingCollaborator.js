@@ -55,7 +55,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                 </div>
                                 <div class="row">
                                     <div id="trainingContainer">
-                                        <div class="row" style="margin-bottom: 15px; height: 52px;">
+                                        <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
                                             <div class="col-lg-4 col-md-4 col-sm-12">
                                                 <select required class="form-control" v-model="selectedTraining">
                                                     <option  value="" disabled hidden>Formations disponibles</option>
@@ -68,15 +68,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
-                                                <div v-show="!isSearchValid" class="errorMessage">{{ searchNotValidErrorMessage }}</div>
-                                                <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
+                                                <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
+                                                <div clas="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
                                             </div>
                                         </div>
                                         <div class="row">
                                             <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-12" style="margin-bottom:30px">
+                                            <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
                                                   <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                             </div>
                                         </div>
@@ -347,7 +347,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 });
         },
         verifySearch(search) {
-          if  (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(search))  {
+          if  (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+# ]*$/.test(search))  {
               this.isSearchValid = true;
               $("#trainingContainer div div div").removeClass("has-error");
 
