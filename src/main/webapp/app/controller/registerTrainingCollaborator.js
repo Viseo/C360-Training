@@ -38,7 +38,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
             isNoSession: true,
-            displayTrainings: false
+            displayTrainings: false,
         }
     },
     template: `<div class="container-fluid">
