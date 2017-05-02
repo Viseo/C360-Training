@@ -258,6 +258,7 @@ public class FakeDAOFacade implements DAOFacade {
 
     }
 
+
     @SuppressWarnings("unchecked")
 	@Override
 	public <T> void persist(T entity) {

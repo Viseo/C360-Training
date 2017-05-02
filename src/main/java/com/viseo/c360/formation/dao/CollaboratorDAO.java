@@ -15,6 +15,7 @@ import com.viseo.c360.formation.domain.collaborator.Collaborator;
 
 import javax.inject.Inject;
 import javax.persistence.FlushModeType;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 @Repository
@@ -51,6 +52,18 @@ public class CollaboratorDAO {
 
     public List<Collaborator> getAllCollaborators() {
         return daoFacade.getList("select c from Collaborator c");
+    }
+
+    public List<RequestTraining> getRequestTrainings(long training_id,long collab_id){
+        List<RequestTraining> result = new ArrayList<>();
+        try{
+            result =
+        daoFacade.getList("select r from RequestTraining r where r.training.id =:training_id and r.collaborator.id =:collab_id",
+                param("training_id",training_id),param("collab_id",collab_id));
+        } catch (NoResultException e){
+            System.out.println(e);
+        }
+        return result;
     }
 
     public Collaborator getCollaborator(long id) {

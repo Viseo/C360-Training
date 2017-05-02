@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.services;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,6 +187,12 @@ public class CollaboratorWS {
         RequestTraining requestTraining = new DescriptionToRequestTraining().convert(requestTrainingDescription, collaborator, topic);
         requestTraining = collaboratorDAO.addRequestTraining(requestTraining);
         return new RequestTrainingToDescription().convert(requestTraining);
+    }
+
+    @RequestMapping(value = "${endpoint.listrequests}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<RequestTrainingDescription> getRequestTrainings(@PathVariable Long training_id,@PathVariable Long collab_id) {
+        return new RequestTrainingToDescription().convert(collaboratorDAO.getRequestTrainings(training_id,collab_id));
     }
 
     @RequestMapping(value = "${endpoint.collaboratorsbysession}", method = RequestMethod.POST)

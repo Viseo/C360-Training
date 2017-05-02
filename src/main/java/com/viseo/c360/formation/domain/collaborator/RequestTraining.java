@@ -26,7 +26,7 @@ public class RequestTraining extends BaseEntity {
 
     @NotNull
     @Valid
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     List<TrainingSession> sessions;
 
     boolean doesNotMatter = false;

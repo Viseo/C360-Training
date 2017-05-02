@@ -75,6 +75,7 @@ public class JPAFacade implements DAOFacade {
 		query.executeUpdate();
 	}
 
+
 	@Override
 	public <T> void persist(T entity) {
 		entityManager.persist(entity);

@@ -33,6 +33,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             allTrainingTitles: [],
             value: '',
             selectedTraining: '',
+            trainingrequested:false,
             trainingSelected: {},
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
@@ -94,8 +95,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                         <div class="col-lg-12">
                                                             <center>
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
-                                                                <p style="color:blue" v-show="isNoSession"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
+                                                                <button v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <p style="color:orange" v-show="!trainingrequested"> Vous avez déjà effectué une demande pour cette formation </p>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
                                                             </center>
                                                         </div>
@@ -161,6 +163,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
         renitialize(training){
+            this.trainingalreadyrequested(training.id);
             this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
             this.trainingSelected = training;
@@ -324,6 +327,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.displayTrainings= true;
                         this.isNoSession = false;
                     }
+                });
+        },
+        trainingalreadyrequested(training_id){
+            this.$http.get("api/listrequests/" + training_id + "/" + this.collaboratorIdentity.id).then(
+                function (response) {
+                    this.trainingrequested = true;
+                    if (response.data.length != 0) {
+                        this.trainingrequested = false;
+                     }
                 });
         },
     }
