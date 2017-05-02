@@ -64,7 +64,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                            
                                  </div>
-                                 <div class="searchCollab panel panel-default col-lg-12" :class="{disabled : isDisabled}">
+                                 <div class="searchCollab panel panel-default col-lg-12" :class="{disabled : false}">
                                     <div class="panel-body container">
                                          <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
@@ -87,13 +87,13 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                  
                                  
                                 <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="row">
-                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
-                                     <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                     <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
+                                     <div class="row">
+                                         <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
+                                         <div class="checkbox col-sm-12 col-md-12 col-lg-12">
+                                            <label style = "padding-left:0px;">Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
+                                         </div>
                                      </div>
-                                    </div>
-                                     <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
+                                     <div class="searchCollab panel panel-default" :class="{disabled : false}">
                                         <div class="panel-body">
                                             <br/><br/>
                                              <div align="center" style="overflow: auto; position:fixed; height:33vh;">
