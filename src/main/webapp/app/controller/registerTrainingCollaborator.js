@@ -249,16 +249,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            console.log("salut");
-            console.log(regexCookieToken);
             if(regexCookieToken){
-                console.log(!regexCookieToken[0].includes('undefined'));
                 if(!regexCookieToken[0].includes('undefined')) {
-                    console.log("hello");
                     if (this.token != 'undefined'){
                         this.token = String(regexCookieToken.pop());
                         this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                        console.log(this.collaboratorIdentity.id);
                         this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
                         this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
                     }
@@ -305,12 +300,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     }
                 }
                 this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
-                console.log(this.noTrainingFound);
                 this.value = null;
             });
         },
         storeSessionsByCollab(id){
-            console.log(this.collaboratorIdentity.id);
             this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
                 function (response){
                     this.sessionsByCollab = response.data;
