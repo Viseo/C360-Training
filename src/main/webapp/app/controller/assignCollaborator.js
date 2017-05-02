@@ -64,11 +64,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                            
                                  </div>
-                                 <div class="searchCollab panel panel-default col-lg-12" :class="{disabled : isDisabled}">
-                                    <div class="panel-body container">
+                                 <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
+                                    <div class="panel-body">
                                          <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
-                                                <typeahead class="col-sm-12 col-md-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
+                                                <typeahead class="col-sm-12 col-dm-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
                                                                                
                                          </div><br/><br/>
                                          
@@ -143,8 +143,19 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             console.log("Error: ", response);
             console.error(response);
         });
-    },
-
+},
+        GatherAllRequestsBySession(){
+            this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
+                function (response) {
+                    console.log("success to get all requests from database");
+                    console.log(response.data);
+                    this.collaboratorsRequesting = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
         AddCollaboratorsToTrainingSession(){
             this.$http.put("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                 function (response) {

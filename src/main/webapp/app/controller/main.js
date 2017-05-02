@@ -211,9 +211,13 @@ let router = new VueRouter({
             name:'registerTrainingCollaborator',
             component: {
                 template: `<div id="newVue" v-cloak>
-                            <blue-header></blue-header>
-                            <collaborator-formation></collaborator-formation>
-                            </div>`
+                                <blue-header></blue-header>
+                                <collaborator-formation></collaborator-formation>
+                                <div >
+                                    <training-to-come></training-to-come>
+                                </div>
+                           </div>
+                            `
             }
         },
         {
