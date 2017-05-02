@@ -58,7 +58,7 @@ let Header = Vue.component('blue-header',{
                 mission: false,
                 leave: false
             },
-            IDLE_TIMEOUT: 20, //seconds
+            IDLE_TIMEOUT: 60, //seconds
             idleSecondsCounter: 0,
             myInterval:'',
             stayConnected: true,
