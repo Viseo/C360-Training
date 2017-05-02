@@ -68,8 +68,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                     <div class="panel-body container">
                                          <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
-                                                <typeahead class="col-sm-12 col-md-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
-                                                                               
+                                                <typeahead class="col-sm-12 col-md-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead>                             
                                          </div><br/><br/>
                                          
                                          <div align="center" style="overflow: auto; position:fixed; height:33vh;">
@@ -338,8 +337,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.isSearchNameValid = false;
             }
         }
-
-
     },
     watch: {
         value: function (lastName) {

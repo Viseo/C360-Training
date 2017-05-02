@@ -60,6 +60,12 @@ button + p {
     z-index: 5;
 }
 
+.errorMessage {
+    margin-top:4px;
+    font-size: 0.9em;
+    color:#B22222;
+}
+
 .showmeonhover { display: none; }
 
 .alwaysshowme:hover .showmeonhover {

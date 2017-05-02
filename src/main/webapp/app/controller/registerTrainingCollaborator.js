@@ -7,6 +7,8 @@ Vue.use(VueRouter);
 let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
+            isSearchValid: true,
+            searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
             sessionAlreadybooked:[],
             trainingsFound: [],
             sessionAlreadyBookedMessage:false,
@@ -53,7 +55,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                 </div>
                                 <div class="row">
                                     <div id="trainingContainer">
-                                        <div class="row" style="margin-bottom:35px">
+                                        <div class="row" style="margin-bottom: 15px; height: 52px;">
                                             <div class="col-lg-4 col-md-4 col-sm-12">
                                                 <select required class="form-control" v-model="selectedTraining">
                                                     <option  value="" disabled hidden>Formations disponibles</option>
@@ -66,6 +68,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
+                                                <div v-show="!isSearchValid" class="errorMessage">{{ searchNotValidErrorMessage }}</div>
                                                 <div v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
                                             </div>
                                         </div>
@@ -134,6 +137,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             $('#scroll').animate({scrollTop: "+=100"}, 500);
         })
 
+    },
+    watch: {
+      value: function() {
+          this.verifySearch(this.value);
+      }
     },
     computed: {
         searchFormatted: function () {
@@ -338,6 +346,17 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                      }
                 });
         },
+        verifySearch(search) {
+          if  (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(search))  {
+              this.isSearchValid = true;
+              $("#trainingContainer div div div").removeClass("has-error");
+
+          } else {
+                this.isSearchValid = false;
+              $("#trainingContainer div div div").addClass("has-error");
+
+          }
+        }
     }
 });
 Vue.component('typeahead', VueStrap.typeahead);
