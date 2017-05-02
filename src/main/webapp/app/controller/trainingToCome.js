@@ -20,10 +20,9 @@ Vue.component('training-to-come', {
                                 <div>
                                     Coucou coucou
                                     <table >
-                                        <tr>
-                                            <!-- <td @click="moveCollabRight(collaborator)" >{{collaborator.lastName}} {{collaborator.firstName}} </td>  
-                                            <td @click="moveCollabRight(collaborator)"><span  class="glyphicon glyphicon-circle-arrow-right green" style="top:2px"></span></td>
-                                        -->
+                                        <tr v-for = "n in 10">
+                                            <td style="border-bottom 1px grey solid">{{n}} {{coucou}} </td>  
+                                                                                    
                                         </tr>
                                     </table>
                                 </div>
