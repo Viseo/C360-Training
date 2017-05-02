@@ -676,20 +676,24 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.locationErrorMessage = true;
             }
         },
+
         activeFieldTrainingTitle(){
             if (this.isDisabledTrainingTitle == true) {
                 this.trainingTitleInAddSession = this.state.trainingTitle;
                 this.isDisabledTrainingTitle = false;
             } else if ((this.isDisabledTrainingTitle == false) && (this.isTrainingTitleInAddSessionValid == true)) {
                 this.isDisabledTrainingTitle = true;
-                if(this.trainingTitleInAddSession != this.state.trainingTitle){
+                if (this.trainingTitleInAddSession != this.state.trainingTitle) {
                     this.trainingTitleInAddSession = this.state.trainingTitle;
                     this.failureModification = true;
-                    setTimeout(function(){ this.failureModification = false; }.bind(this), 2000);
+                    setTimeout(function () {
+                        this.failureModification = false;
+                    }.bind(this), 2000);
                 }
                 this.trainingTitleInAddSession = this.state.trainingTitle;
             }
         },
+
         updateV1 (v) {
             this.trainingTitleInAddSession = v;
         },
@@ -743,13 +747,19 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 }
             }
         },
+
         ModifyTrainingTopic(){
-            this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
-            this.state.trainingTitle = this.trainingTitleInAddSession;
-            this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
-            this.confirmModification = true;
-            setTimeout(function(){ this.confirmModification = false; }.bind(this), 1500);
+            if (this.isDisabledTrainingTitle == false) {
+                this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
+                this.state.trainingTitle = this.trainingTitleInAddSession;
+                this.$http.put("api/formations/" + this.state.trainingTitle + "/formationid/" + this.state.idTraining);
+                this.confirmModification = true;
+                setTimeout(function () {
+                    this.confirmModification = false;
+                }.bind(this), 1500);
+            }
         },
+
         SaveSessionIntoDatabase(){
             this.$http.post("api/sessions", this.sessionToRegister)
                 .then(
@@ -1081,7 +1091,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                         successMessage =" La session a été créée avec succès."
                                                         failureModification =" La modification n'est pas enregistrée."
                                                         successModificationMessage = "La modification est bien enregistrée."
-                                                        successSupressionMessage = "Vous avez bien supprimé ce(s) session(s)."
+                                                        successSupressionMessage = "Vous avez bien supprimé cette session."
                                                         failureMessage ="Ce créneau horaire est déjà occupé par une autre session."
                                                         :regexErrorMessage = "beginningDateRegexErrorMessage"
                                                         :emptyRegexError = "showInvalidateInputMessage()"
