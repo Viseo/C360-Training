@@ -192,14 +192,14 @@ let router = new VueRouter({
                 template: `<div id="newVue" v-cloak>
     <blue-header></blue-header>
     <div class="container-fluid">
-    <div class="col-sm-12 col-md-7 col-lg-7">
-    <add-formation-panel></add-formation-panel>
-    <show-formation-panel></show-formation-panel>
-    <add-session-panel></add-session-panel>
-    </div>
-    <div class="col-sm-12 col-md-5 col-lg-5">
-    <assign-collaborator></assign-collaborator>
-    </div>
+        <div class="col-sm-12 col-md-7 col-lg-7">
+            <add-formation-panel></add-formation-panel>
+            <show-formation-panel></show-formation-panel>
+            <add-session-panel></add-session-panel>
+        </div>
+        <div class="col-sm-12 col-md-5 col-lg-5">
+            <assign-collaborator></assign-collaborator>
+        </div>
     </div>
 
 </div>`
@@ -212,9 +212,13 @@ let router = new VueRouter({
             component: {
                 template: `<div id="newVue" v-cloak>
                                 <blue-header></blue-header>
-                                <collaborator-formation></collaborator-formation>
-                                <div >
-                                    <training-to-come></training-to-come>
+                                <div class="container-fluid">
+                                    <div class="col-sm-12 col-md-7 col-lg-7">
+                                        <collaborator-formation></collaborator-formation>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5 col-lg-5">
+                                        <training-to-come></training-to-come>
+                                    </div>
                                 </div>
                            </div>
                             `
