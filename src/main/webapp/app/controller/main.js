@@ -1,9 +1,8 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-let Header = Vue.component('blue-header',{
-    template:
-        `<div id="wrap">
+let Header = Vue.component('blue-header', {
+    template: `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
                 <div class="container-fluid">
                     <div class="row">
@@ -46,12 +45,12 @@ let Header = Vue.component('blue-header',{
             </div>
         </div>
   `,
-    data: function () {
+    data: function() {
         return {
-            lastName:'',
-            firstName:'',
-            token:'',
-            disconnect:false,
+            lastName: '',
+            firstName: '',
+            token: '',
+            disconnect: false,
             app: {
                 training: true,
                 skills: false,
@@ -60,20 +59,20 @@ let Header = Vue.component('blue-header',{
             },
             IDLE_TIMEOUT: 20, //seconds
             idleSecondsCounter: 0,
-            myInterval:'',
+            myInterval: '',
             stayConnected: true,
             dialog: false,
             timeconnected: 0,
         }
     },
-    mounted: function () {
+    mounted: function() {
         this.getCookieInfos();
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
         $('ul.nav li.dropdown').hover(function() {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-        }, function () {
+        }, function() {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
         });
     },
@@ -99,16 +98,16 @@ let Header = Vue.component('blue-header',{
                     this.dialog = true;
                     this.disconnectUser();
                 }
-            document.onclick = function () {
+            document.onclick = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onmousemove = function () {
+            document.onmousemove = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onkeypress = function () {
+            document.onkeypress = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            window.onbeforeunload = function () {
+            window.onbeforeunload = function() {
                 if (!this.disconnect && !this.dialog)
                     document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
@@ -130,42 +129,44 @@ let Header = Vue.component('blue-header',{
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             console.log(regexCookieToken);
-            if(regexCookieToken!=null) {
+            if (regexCookieToken != null) {
                 console.log(typeof regexCookieToken != 'undefined');
-                if(typeof regexCookieToken == 'undefined') this.token = 'undefined';
+                if (typeof regexCookieToken == 'undefined') this.token = 'undefined';
                 if (this.token == 'undefined') regexCookieToken = false;
                 if (regexCookieToken && regexCookieStayConnected) {
-                 if (this.$route.name != 'login')
-                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                 this.token = String(regexCookieToken.pop());
-                 if (regexCookieTimeConnected) {
-                 if (this.$route.name != 'login')
-                 this.timeconnected = parseInt(regexCookieTimeConnected.pop());
-                 }
-                 if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
-                 this.$router.push('/registerTrainingCollaborator');
-                 }
-                 if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
-                 this.$router.push('/addTrainingTopic');
-                 }
-                 this.lastName = jwt_decode(this.token).lastName;
-                 console.log(this.lastName);
-                 this.firstName = jwt_decode(this.token).sub;
-                 }}
-                 else {
-                    console.log("salut");
-                    if (this.$route.name != 'login'){
-                        if(this.$route.name != 'resetPassword'){
-                 this.$router.push('/login');}
-                 }
-                 }
+                    if (this.$route.name != 'login')
+                        this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                    this.token = String(regexCookieToken.pop());
+                    if (regexCookieTimeConnected) {
+                        if (this.$route.name != 'login')
+                            this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                    }
+                    if (!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator') {
+                        this.$router.push('/registerTrainingCollaborator');
+                    }
+                    if (jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic') {
+                        this.$router.push('/addTrainingTopic');
+                    }
+                    this.lastName = jwt_decode(this.token).lastName;
+                    console.log(this.lastName);
+                    this.firstName = jwt_decode(this.token).sub;
+                }
+            }
+            else {
+                console.log("salut");
+                if (this.$route.name != 'login') {
+                    if (this.$route.name != 'resetPassword') {
+                        this.$router.push('/login');
+                    }
+                }
+            }
 
 
         },
         disconnectUser(){
             this.$http.post("api/userdisconnect", this.token)
                 .then(
-                    function (response) {
+                    function(response) {
                         if (response) {
                             let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                             let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
@@ -204,30 +205,37 @@ let router = new VueRouter({
 
 </div>`
             },
-            name:'addTrainingTopic'
+            name: 'addTrainingTopic'
         },
         {
             path: "/registerTrainingCollaborator",
-            name:'registerTrainingCollaborator',
+            name: 'registerTrainingCollaborator',
             component: {
                 template: `<div id="newVue" v-cloak>
                             <blue-header></blue-header>
-                            <collaborator-formation></collaborator-formation>
+                            <div class="container-fluid">
+                                 <div class="col-sm-12 col-md-7 col-lg-7">
+                                    <collaborator-formation></collaborator-formation>
+                                 </div>
+                                 <div class="col-sm-12 col-md-5 col-lg-5">
+                                    <state-request></state-request>
+                                </div>
+                            </div>
                             </div>`
             }
         },
         {
             path: "/login",
-            name:'login',
+            name: 'login',
             component: {
                 template: `<div id="newVue" v-cloak>
                                <blue-header></blue-header>
                                        <connect-user></connect-user>
                             </div>`
             }
-        },{
+        }, {
             path: "/resetPassword/:id",
-            name:'resetPassword',
+            name: 'resetPassword',
             component: {
                 template: `<div class="container-fluid" id="newVue" v-cloak>
     <div class="row">
@@ -256,7 +264,7 @@ let router = new VueRouter({
         },
         {
             path: "/",
-            redirect :"/login"
+            redirect: "/login"
         }
     ]
 });

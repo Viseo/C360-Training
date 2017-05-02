@@ -43,10 +43,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
     template: `<div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
-                            <div class="col-sm-12 col-md-10 col-lg-7">
+                        <div class="col-md-12 col-lg-8 col-sm-8" style="padding:10px;" ></div>
+                            
                                 <div class="row">
-                                    <div class="col-lg-7 col-md-7 text-center">
+                                    <div class="col-lg-8 col-md-8 text-center">
                                         <legend>Demande de formation</legend>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                         /center>
                                     </div>
                                 </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>`,
