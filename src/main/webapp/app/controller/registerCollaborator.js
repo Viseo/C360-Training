@@ -284,7 +284,7 @@ let Formulaire = Vue.component('inscription-form', {
                 this.errorMessageLogin = '';
                 this.isLoginValid = true;
             } else {
-                this.errorMessageLogin = 'Veuillez entrer  code de login valide';
+                this.errorMessageLogin = 'Veuillez entrer code de login valide';
                 this.isLoginValid = false;
             }
         },
@@ -316,7 +316,7 @@ let Formulaire = Vue.component('inscription-form', {
                 this.errorMessageFirstName = '';
                 this.isFirstNameValid = true;
             } else {
-                this.errorMessageFirstName = 'Veuillez entrer un Prénom valide';
+                this.errorMessageFirstName = 'Veuillez entrer un prénom valide';
                 this.isFirstNameValid = false;
             }
         },

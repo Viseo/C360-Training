@@ -48,3 +48,7 @@ div.disabled
 {
 display:none;
 }
+#typeahead input {
+    padding-right:25px;
+    font-size:0.85em;
+}

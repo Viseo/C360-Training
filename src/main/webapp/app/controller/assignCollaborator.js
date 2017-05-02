@@ -64,11 +64,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                         
                                            
                                  </div>
-                                 <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
-                                    <div class="panel-body">
+                                 <div class="searchCollab panel panel-default col-lg-12" :class="{disabled : isDisabled}">
+                                    <div class="panel-body container">
                                          <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
                                                 <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
-                                                <typeahead class="col-sm-12 col-dm-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
+                                                <typeahead class="col-sm-12 col-md-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
                                                                                
                                          </div><br/><br/>
                                          

@@ -43,6 +43,10 @@ button + p {
     z-index:6;
 }
 
+#trainingContainer input {
+    padding-right: 30px;
+}
+
 .panel-primary{
     border-color: rgb(210, 210, 210);
 }
