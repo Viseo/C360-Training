@@ -24,7 +24,7 @@ let NavigationMenu = Vue.component('connect-user', {
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
-                            <inscription-form ref="insc" @test="showConnexionForm()" v-if="newCollab"></inscription-form>
+                            <inscription-form ref="insc" v-if="newCollab"></inscription-form>
                             <connexion-form ref="conn" v-else></connexion-form>
                         </div>
                     </div>
@@ -178,6 +178,11 @@ let Formulaire = Vue.component('inscription-form', {
                 password: '',
                 confirmPassword: '',
             },
+            user: {
+                email: '',
+                password: ""
+            },
+            userToConnect:'',
             personnalIdNumber: '',
             lastName: '',
             firstName: '',
@@ -375,6 +380,10 @@ let Formulaire = Vue.component('inscription-form', {
                 this.confirmPasswordEmpty = true;
             }
         },
+        handleCookie(token) {
+                document.cookie = "token=" + token;
+                document.cookie = "stayconnected=false";
+        },
 
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete password confirmation
@@ -384,7 +393,10 @@ let Formulaire = Vue.component('inscription-form', {
                     function (response) {
                         this.emailAlreadyExist = true;
                         this.personalIdNumberAlreadyExist = true;
-                        this.$emit('test');
+                        this.user.email = this.collaborator.email;
+                        this.user.password = this.collaborator.password;
+                        this.userToConnect = JSON.parse(JSON.stringify(this.user));
+                        this.verifyUserToConnectByDatabase();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -405,6 +417,21 @@ let Formulaire = Vue.component('inscription-form', {
                     }
                 );
         },
+        verifyUserToConnectByDatabase(){
+            this.$http.post("api/user", this.userToConnect)
+                .then(
+                    function (userPersistedToken) {
+                        this.handleCookie(userPersistedToken.data['userConnected']);
+                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                            if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
+                                this.$router.push('/addTrainingTopic');
+                            }
+                            else {
+                                this.$router.push('/registerTrainingCollaborator');
+                            }
+                        }
+                    }
+                )},
 
         verifyForm (){
             this.lastName = this.lastName.replace(/ +/g, " ").replace(/ +$/, "");
@@ -558,11 +585,11 @@ let ConnexionForm = Vue.component('connexionForm', {
                 this.user.email = this.email;
                 this.user.password = this.password;
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
-                this.VerifyUserByDatabase();
+                this.verifyUserByDatabase();
             }
         },
 
-        VerifyUserByDatabase(){
+        verifyUserByDatabase(){
             this.$http.post("api/user", this.userToRegister)
                 .then(
                     function (userPersistedToken) {
