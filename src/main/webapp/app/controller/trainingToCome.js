@@ -17,13 +17,16 @@ Vue.component('training-to-come', {
                 </div>
                     <div class="row">                     
                         <div class="row">
-                            <div id="training-to-come" style="border: 1px red solid;">
+                            <div id="training-to-come" style="border: 1px grey solid;">
                             
-                                <div>
+                                <div >
                                     Coucou coucou
-                                    <table >
+                                    <table style="width: 500px; padding-left: 5%;">
                                         <tr v-for = "n in 10">
-                                            <td style="border-bottom 1px grey solid">{{n}} {{coucou}} </td>  
+                                            <td style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin; " > 
+                                                <div style="text-align: left"> <b>{{n}} </b><br/>  coucou .............................</div>
+                                                <div style="text-align: right">0 places disponibles  </div>
+                                            </td>  
                                                                                     
                                         </tr>
                                     </table>
