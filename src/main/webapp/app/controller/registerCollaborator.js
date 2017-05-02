@@ -447,7 +447,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                     </td></tr>
                     <tr><td style="height: 20px;">
                         <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
-                        <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Veuillez renseigner votre Email</span>
+                        <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Cet email n'est associé à aucun compte</span>
                     </td></tr>
                     </div>
                 </div>
@@ -470,10 +470,16 @@ let ConnexionForm = Vue.component('connexionForm', {
                     </td></tr>
                     </div>
                 </div>
-                <div class="checkbox">
-                     <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
-                     <a href="#" ref="forgotPassword" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a>
-                     <br><span v-show="isErrorAuthentification" class="color-red">Connexion refusée: veuillez entrer une adresse e-mail et un mot de passe valide</span>
+                <div class="checkbox">                 
+                     <div class = "row">
+                         <div class = "col-lg-6 col-md-6 col-sm-6 col-xs-6">   
+                             <label><input type="checkbox" value="" v-model="stayConnected">Rester Connecté</label>
+                         </div>
+                         <div class = "col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                             <a href="#" ref="forgotPassword" @click="showPopupFn" class="forgotPassword">Mot de passe oublié</a><br>
+                         </div>   
+                     </div>
+                     <span v-show="isErrorAuthentification" class="color-red text-justify">Connexion refusée: veuillez entrer une adresse e-mail et un mot de passe valide</span>
                      <div class="popup col-md-12 col-sm-12 col-lg-12" v-show="showPopup">
                         <span class="popuptext animated slideInUp" id="myPopup">Le mot de passe a été envoyé à {{email}}</span>
                      </div>
