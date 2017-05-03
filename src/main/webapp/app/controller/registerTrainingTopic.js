@@ -983,14 +983,26 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
         CalculateEndingDate(){
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(this.beginningDate)) {
-                var nbDays = Math.floor(this.state.trainingChosen.numberHalfDays / 2);
+                if(this.state.trainingChosen.numberHalfDays !=1)
+                var nbDays = Math.ceil(this.state.trainingChosen.numberHalfDays / 2)-1;
+                else
+                    nbDays = 0;
                 var beginningDate = this.beginningDate;
                 var dateParts = beginningDate.split("/");
                 var dateObject = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
+                var debut = new Date(dateParts[1] + "/"+dateParts[0]+"/"+dateParts[2]);
                 var dayOfMonth = dateObject.getDate();
+                var fin = dateObject;
+                fin.setDate(dayOfMonth+nbDays)
+                for (var d = debut; d <= fin; d.setDate(d.getDate() + 1)) {
+                    if(d.getDay() == 6 || d.getDay() == 0){
+                        nbDays++;
+                    }
+                }
                 dateObject.setDate(dayOfMonth + nbDays);
                 function pad(s) { return (s < 10) ? '0' + s : s; }
                 this.endingDate = [pad(dateObject.getDate()), pad(dateObject.getMonth()+1), dateObject.getFullYear()].join('/');
+
             }else{
                 this.endingDate = '';
             }
