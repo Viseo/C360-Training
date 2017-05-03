@@ -122,7 +122,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             isTrainingTitleValid: true,
             isNewTopicValid:true,
             selectOptionsOfTraining:[],
-            selectOptionsOfTopic: [],
             topicsChosen:[],
             arrangeTrainings:undefined,
             allTrainingsOfATopicChosen:[],
@@ -218,9 +217,9 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
                 this.training.trainingTitle = this.trainingTitle;
                 this.training.numberHalfDays = this.numberHalfDays;
-                for (var tmp in this.selectOptionsOfTopic){
-                    if(this.topicDescription == this.selectOptionsOfTopic[tmp].name){
-                        this.training.topicDescription = this.selectOptionsOfTopic[tmp];
+                for (var tmp in this.state.selectOptionsOfTopic){
+                    if(this.topicDescription == this.state.selectOptionsOfTopic[tmp].name){
+                        this.training.topicDescription = this.state.selectOptionsOfTopic[tmp];
                     }
                 }
                 this.isTrainingTitleEmpty();
@@ -302,8 +301,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
-                    this.selectOptionsOfTopic = response.data;
-                    this.selectOptionsOfTopic.sort(function (a, b) {
+                    this.state.selectOptionsOfTopic = response.data;
+                    this.state.selectOptionsOfTopic.sort(function (a, b) {
                         return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
                     });
                     this.resetTopicForm();
@@ -420,7 +419,7 @@ template:`
                                             <br/>
                                             <select class="form-control" v-model="topicDescription"
                                                 @focus="resetVariablesByInputTopic()">
-                                                <option v-for="option in selectOptionsOfTopic">{{ option.name }}</option>
+                                                <option v-for="option in state.selectOptionsOfTopic">{{ option.name }}</option>
                                             </select>
                                         </div>
                                     </td>
@@ -499,6 +498,21 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+        gatherTopicsFromDatabase(){
+            this.$http.get("api/themes").then(
+                function (response) {
+                    this.state.selectOptionsOfTopic = response.data;
+                    this.state.selectOptionsOfTopic.sort(function (a, b) {
+                        return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                    });
+                    this.resetTopicForm();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
         GatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
@@ -521,6 +535,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 function (response) {
                     this.GatherTrainingsFromDatabase();
                     this.GatherAllSessions();
+                    this.gatherTopicsFromDatabase();
                 },
                 function (response) {
                     console.error(response);
@@ -1692,7 +1707,8 @@ class trainingStore {
             idSession:'',
             nomUser:'',
             prenomUser:'',
-            allSessions: []
+            allSessions: [],
+            selectOptionsOfTopic: [],
         }
     }
     collectInformationOfTrainingChosen(){
