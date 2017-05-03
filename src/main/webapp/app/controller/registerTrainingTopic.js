@@ -520,6 +520,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
                     this.GatherTrainingsFromDatabase();
+                    this.GatherAllSessions();
                 },
                 function (response) {
                     console.error(response);
@@ -528,7 +529,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
         removeTraining(trainingToRemove){
             this.$http.post("api/removetraining", trainingToRemove).then(
                 function (response) {
-                    this.GatherTrainingsFromDatabase()
+                    this.GatherTrainingsFromDatabase();
+                    this.GatherAllSessions();
                 },
                 function (response) {
                     console.error(response);
@@ -567,7 +569,18 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 return true;
 
                 return false;
-        }
+        },
+        GatherAllSessions(){
+            this.$http.get("api/sessions").then(
+                function (response) {
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
     },
     template: `
              <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
