@@ -501,7 +501,17 @@ let ShowFormation = Vue.component('show-formation-panel', {
         RemoveTopic(topicToRemove){
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
-                    window.location.replace();
+                    this.$router.push("/login");
+                },
+                function (response) {
+                    console.error(response);
+                });
+        },
+        removeTraining(trainingToRemove){
+            this.$http.post("api/removetraining", trainingToRemove).then(
+                function (response) {
+                    console.log("haha");
+                    this.$router.push("/login");
                 },
                 function (response) {
                     console.error(response);
