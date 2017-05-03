@@ -482,7 +482,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,
-            trainingStore: training_store
+            trainingStore: training_store,
+            upHere: false
         }
     },
     computed: {
@@ -553,7 +554,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                     <tbody>
                                                                         <tr v-for="trainings in topicTraining">
                                                                             <td  v-for="training in trainings" width="25%">
-                                                                                <button class="btn btn-toolbar btn-group" style="z-index:0" @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                                <a @mouseover="upHere = true" @mouseleave="upHere = false" class="boxclose" id="boxclose" v-show="upHere"></a>
+                                                                                <button  @mouseover="upHere = true" @mouseleave="upHere = false" class="btn btn-toolbar btn-group" style="z-index:0; " @click="createSession(training.id)">{{training.trainingTitle}}</button>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>

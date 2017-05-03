@@ -997,3 +997,27 @@ ul {
 .fade-leave-active {
     transition: all ease .1s;
 }
+
+a.boxclose{
+    position:absolute;
+    margin-left:160px;
+    margin-top:-10px;
+    cursor:pointer;
+    color: #fff;
+    border-radius: 50%;
+    height:25px;
+    width: 25px;
+    background: #4b9bdf;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;
+    z-index: 4;
+    text-align: center;
+    text-decoration: none;
+}
+
+.boxclose:before {
+    content: "×";
+
+}
