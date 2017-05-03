@@ -482,7 +482,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
     data: function() {
         return {
             state: training_store.state,
-            trainingStore: training_store
+            trainingStore: training_store,
+            upHere: false,
+            trainingIdSelected:'',
+            allTrainings: []
         }
     },
     computed: {
@@ -496,10 +499,38 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+        GatherTrainingsFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.allTrainings.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    this.state.allTrainings = this.allTrainings;
+                    this.trainingStore.topicwithTraining();
+                    this.trainingStore.reorganizeAllTopicsAndTrainings();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
         RemoveTopic(topicToRemove){
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
-                    window.location.replace();
+                    this.GatherTrainingsFromDatabase();
+                    this.GatherAllSessions();
+                },
+                function (response) {
+                    console.error(response);
+                });
+        },
+        removeTraining(trainingToRemove){
+            this.$http.post("api/removetraining", trainingToRemove).then(
+                function (response) {
+                    this.GatherTrainingsFromDatabase();
+                    this.GatherAllSessions();
                 },
                 function (response) {
                     console.error(response);
@@ -525,6 +556,31 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     }
                 });
         },
+        showCloseButton(trainingId){
+            this.upHere = true;
+            this.trainingIdSelected = trainingId;
+        },
+        hideCloseButton(){
+            this.upHere = false;
+            this.trainingIdSelected = null;
+        },
+        verifyShowButtonOrNot(trainingId){
+            if(this.upHere == true && this.trainingIdSelected == trainingId)
+                return true;
+
+                return false;
+        },
+        GatherAllSessions(){
+            this.$http.get("api/sessions").then(
+                function (response) {
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
     },
     template: `
              <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
@@ -547,13 +603,14 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                             <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                             <th width="25%"></th>
                                                                             <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a href="#" @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                            <th class="deletetopic" width="25%"><a style="cursor: pointer;" @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr v-for="trainings in topicTraining">
                                                                             <td  v-for="training in trainings" width="25%">
-                                                                                <button class="btn btn-toolbar btn-group" style="z-index:0" @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                                <a @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
+                                                                                <button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="btn btn-toolbar btn-group" style="z-index:0; " @click="createSession(training.id)">{{training.trainingTitle}}</button>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>

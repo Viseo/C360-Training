@@ -215,6 +215,11 @@ let routes = [
     },
     {
         method: 'POST',
+        url: 'api/removetraining',
+        response: {"id": 3, "version": 0, "name": "C"}
+    },
+    {
+        method: 'POST',
         url: 'api/sessions',
         response: {
             "id": 6,
