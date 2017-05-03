@@ -484,7 +484,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
             state: training_store.state,
             trainingStore: training_store,
             upHere: false,
-            trainingIdSelected:''
+            trainingIdSelected:'',
+            allTrainings: []
         }
     },
     computed: {
@@ -498,10 +499,27 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+        GatherTrainingsFromDatabase(){
+            this.$http.get("api/formations").then(
+                function (response) {
+                    this.allTrainings = response.data;
+                    this.allTrainings.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    this.state.allTrainings = this.allTrainings;
+                    this.trainingStore.topicwithTraining();
+                    this.trainingStore.reorganizeAllTopicsAndTrainings();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
         RemoveTopic(topicToRemove){
             this.$http.post("api/removetopic", topicToRemove).then(
                 function (response) {
-                    this.$router.push("/login");
+                    this.GatherTrainingsFromDatabase();
                 },
                 function (response) {
                     console.error(response);
@@ -510,8 +528,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
         removeTraining(trainingToRemove){
             this.$http.post("api/removetraining", trainingToRemove).then(
                 function (response) {
-                    console.log("haha");
-                    this.$router.push("/login");
+                    this.GatherTrainingsFromDatabase()
                 },
                 function (response) {
                     console.error(response);
