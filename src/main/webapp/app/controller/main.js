@@ -2,14 +2,15 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 let Header = Vue.component('blue-header',{
+    props: ['title'],
     template:
         `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
-                <div class="container-fluid">
+                <div class="container-fluid" id="blue-header">
                     <div class="row">
                         <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                             <p id="navbar-title" href="#">Collaborateur 360</p>
-                            <p id="navbar-subtitle">Gestion des formations</p>
+                            <p id="navbar-subtitle">{{title}}</p>
                         </div>
                         <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user">
@@ -48,10 +49,10 @@ let Header = Vue.component('blue-header',{
   `,
     data: function () {
         return {
-            lastName:'',
-            firstName:'',
-            token:'',
-            disconnect:false,
+            lastName: '',
+            firstName: '',
+            token: '',
+            disconnect: false,
             app: {
                 training: true,
                 skills: false,
@@ -60,7 +61,7 @@ let Header = Vue.component('blue-header',{
             },
             IDLE_TIMEOUT: 60, //seconds
             idleSecondsCounter: 0,
-            myInterval:'',
+            myInterval: '',
             stayConnected: true,
             dialog: false,
             timeconnected: 0,
@@ -71,7 +72,7 @@ let Header = Vue.component('blue-header',{
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
-        $('ul.nav li.dropdown').hover(function() {
+        $('ul.nav li.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
         }, function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
@@ -130,35 +131,37 @@ let Header = Vue.component('blue-header',{
             let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
             let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
             console.log(regexCookieToken);
-            if(regexCookieToken!=null) {
+            if (regexCookieToken != null) {
                 console.log(typeof regexCookieToken != 'undefined');
-                if(typeof regexCookieToken == 'undefined') this.token = 'undefined';
+                if (typeof regexCookieToken == 'undefined') this.token = 'undefined';
                 if (this.token == 'undefined') regexCookieToken = false;
                 if (regexCookieToken && regexCookieStayConnected) {
-                 if (this.$route.name != 'login')
-                 this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                 this.token = String(regexCookieToken.pop());
-                 if (regexCookieTimeConnected) {
-                 if (this.$route.name != 'login')
-                 this.timeconnected = parseInt(regexCookieTimeConnected.pop());
-                 }
-                 if(!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator'){
-                 this.$router.push('/registerTrainingCollaborator');
-                 }
-                 if(jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic'){
-                 this.$router.push('/addTrainingTopic');
-                 }
-                 this.lastName = jwt_decode(this.token).lastName;
-                 console.log(this.lastName);
-                 this.firstName = jwt_decode(this.token).sub;
-                 }}
-                 else {
-                    console.log("salut");
-                    if (this.$route.name != 'login'){
-                        if(this.$route.name != 'resetPassword'){
-                 this.$router.push('/login');}
-                 }
-                 }
+                    if (this.$route.name != 'login')
+                        this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
+                    this.token = String(regexCookieToken.pop());
+                    if (regexCookieTimeConnected) {
+                        if (this.$route.name != 'login')
+                            this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+                    }
+                    if (!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator') {
+                        this.$router.push('/registerTrainingCollaborator');
+                    }
+                    if (jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic') {
+                        this.$router.push('/addTrainingTopic');
+                    }
+                    this.lastName = jwt_decode(this.token).lastName;
+                    console.log(this.lastName);
+                    this.firstName = jwt_decode(this.token).sub;
+                }
+            }
+            else {
+                console.log("salut");
+                if (this.$route.name != 'login') {
+                    if (this.$route.name != 'resetPassword') {
+                        this.$router.push('/login');
+                    }
+                }
+            }
 
 
         },
@@ -189,77 +192,72 @@ let router = new VueRouter({
         {
             path: "/addTrainingTopic",
             component: {
-                template: `<div id="newVue" v-cloak>
-    <blue-header></blue-header>
-    <div class="container-fluid">
-    <div class="col-sm-12 col-md-7 col-lg-7">
-    <add-formation-panel></add-formation-panel>
-    <show-formation-panel></show-formation-panel>
-    <add-session-panel></add-session-panel>
-    </div>
-    <div class="col-sm-12 col-md-5 col-lg-5">
-    <assign-collaborator></assign-collaborator>
-    </div>
-    </div>
-
-</div>`
+                template: `
+                <div id="newVue" v-cloak>
+                    <blue-header title="Gestion des formations"></blue-header>
+                    <div class="container-fluid">
+                        <div class="col-sm-12 col-md-7 col-lg-7">
+                            <add-formation-panel></add-formation-panel>
+                            <show-formation-panel></show-formation-panel>
+                            <add-session-panel></add-session-panel>
+                        </div>
+                        <div class="col-sm-12 col-md-5 col-lg-5">
+                            <assign-collaborator></assign-collaborator>
+                        </div>
+                    </div>
+                </div>`
             },
-            name:'addTrainingTopic'
+            name: 'addTrainingTopic'
         },
         {
             path: "/registerTrainingCollaborator",
-            name:'registerTrainingCollaborator',
+            name: 'registerTrainingCollaborator',
             component: {
                 template: `<div id="newVue" v-cloak>
-                            <blue-header></blue-header>
-                            <collaborator-formation></collaborator-formation>
-                            </div>`
+                                <blue-header title="Gestion des formations"></blue-header>
+                                <collaborator-formation></collaborator-formation>
+                           </div>`
             }
         },
         {
             path: "/login",
-            name:'login',
+            name: 'login',
             component: {
                 template: `<div id="newVue" v-cloak>
                                <blue-header></blue-header>
-                                       <connect-user></connect-user>
-                            </div>`
+                               <connect-user></connect-user>
+                           </div>`
             }
-        },{
+        }, {
             path: "/resetPassword/:id",
-            name:'resetPassword',
+            name: 'resetPassword',
             component: {
-                template: `<div class="container-fluid" id="newVue" v-cloak>
-    <div class="row">
-                                      <blue-header></blue-header>
-
-        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
-                            <form-reset-password></form-reset-password>
+                template: `
+                <div class="container-fluid" id="newVue" v-cloak>
+                   <div class="row">
+                        <blue-header></blue-header>
+                        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xm-12 col-md-6 cold-lg-6 col-offset-3 col-md-offset-3">
+                                            <form-reset-password></form-reset-password>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!--<div id="newVue" v-cloak>
-                                       <form-reset-password></form-reset-password>
-                            </div>-->`
+                </div>`
             }
         },
         {
             path: "/",
-            redirect :"/login"
+            redirect: "/login"
         }
     ]
 });
+
 new Vue({
     el: '#newVue',
     router
