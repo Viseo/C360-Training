@@ -6,40 +6,36 @@ Vue.use(VueRouter);
 
 Vue.component('training-to-come', {
     template: `
-        <div class="container-fluid">
-            <button @click="gatherTrainingsAlreadyHaveSessionsFromDatabase()">get all trainings</button><br>
-            <button @click="gatherTrainingSessionsByTrainingFromDatabase(4)">get all training sessions by trainings</button><br>
-            <button @click="VerifyCollaboratorRequestsExistence(7)">VerifyCollaboratorRequestsExistence</button><br>
-            <div class="row">
+            <div class="container-fluid">
+                <!--<button @click="gatherTrainingsAlreadyHaveSessionsFromDatabase()">get all trainings</button><br>
+                <button @click="gatherTrainingSessionsByTrainingFromDatabase(4)">get all training sessions by trainings</button><br>
+                <button @click="VerifyCollaboratorRequestsExistence(7)">VerifyCollaboratorRequestsExistence</button><br>-->
                 <div class="row">
-                    <div class="col-lg-9 col-md-9 text-center">
-                        <legend>Formation à venir</legend>
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7 text-center">
+                            <legend>Formation à venir</legend>
+                        </div>
                     </div>
-                </div>
                     <div class="row">                     
                         <div class="row">
-                            <div id="training-to-come" style="border: 1px grey solid;">
+                            <div id="training-to-come" style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                                <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                <table style="width: 500px; padding-left: 5%;">
+                                    <tr v-for = "n in 10">
+                                        <td style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin;"> 
+                                            <div style="text-align: left"> <b>{{n}} </b><br/>  coucou .............................</div>
+                                            <div style="text-align: right">0 places disponibles  </div>
+                                        </td>  
+                                    </tr>
+                                </table>
+                                  <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                             
-                                <div >
-                                    Coucou coucou
-                                    <table style="width: 500px; padding-left: 5%;">
-                                        <tr v-for = "n in 10">
-                                            <td style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin; " > 
-                                                <div style="text-align: left"> <b>{{n}} </b><br/>  coucou .............................</div>
-                                                <div style="text-align: right">0 places disponibles  </div>
-                                            </td>  
-                                                                                    
-                                        </tr>
-                                    </table>
-                                </div>
-                               
                             </div>
                         </div>
                     </div>                
-            </div>
-        </div>    
+                </div>
+            </div>`,
 
-    `,
     data: function () {
         return {
             collaborator_id:10,
@@ -50,6 +46,32 @@ Vue.component('training-to-come', {
             existCollaboratorRequest:false,
         }
     },
+
+    computed: {
+        showChevrons(){
+            return true;
+        }
+    },
+
+    mounted:function () {
+        $('#scroll-up').click(function() {
+            $('#test').animate({scrollTop: "-=100"}, 500);
+        });
+
+        $('#scroll-down').click(function() {
+            $('#test').animate({scrollTop: "+=100"}, 500);
+        });
+
+        $('#test').bind('mousewheel DOMMouseScroll', function(event){
+            if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+                $('#test').animate({scrollTop: "-=100"}, 80);
+            }
+            else{
+                $('#test').animate({scrollTop: "+=100"}, 80);
+            }
+        });
+    },
+
     methods: {
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
             this.$http.get("api/formations/sessions").then(
