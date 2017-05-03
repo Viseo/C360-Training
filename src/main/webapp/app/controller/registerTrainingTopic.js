@@ -483,7 +483,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
         return {
             state: training_store.state,
             trainingStore: training_store,
-            upHere: false
+            upHere: false,
+            trainingIdSelected:''
         }
     },
     computed: {
@@ -526,6 +527,20 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     }
                 });
         },
+        showCloseButton(trainingId){
+            this.upHere = true;
+            this.trainingIdSelected = trainingId;
+        },
+        hideCloseButton(){
+            this.upHere = false;
+            this.trainingIdSelected = null;
+        },
+        verifyShowButtonOrNot(trainingId){
+            if(this.upHere == true && this.trainingIdSelected == trainingId)
+                return true;
+
+                return false;
+        }
     },
     template: `
              <div v-show="state.changePageToTraining" class="container-fluid" id="addFormation"  style="margin-top: 10px;">
@@ -554,8 +569,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                     <tbody>
                                                                         <tr v-for="trainings in topicTraining">
                                                                             <td  v-for="training in trainings" width="25%">
-                                                                                <a @mouseover="upHere = true" @mouseleave="upHere = false" class="boxclose" id="boxclose" v-show="upHere"></a>
-                                                                                <button  @mouseover="upHere = true" @mouseleave="upHere = false" class="btn btn-toolbar btn-group" style="z-index:0; " @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                                <a @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
+                                                                                <button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="btn btn-toolbar btn-group" style="z-index:0; " @click="createSession(training.id)">{{training.trainingTitle}}</button>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
