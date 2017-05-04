@@ -23,8 +23,8 @@ Vue.component('training-to-come', {
                                         <td  v-for = "m in n" style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin;"> 
                                             <div style="text-align: left">
                                                 {{m.beginning}} - {{m.location}}
-                                                <!--<div>{{calculate(m.id)}} places disponibles</div>-->
-                                                <div>{{ m.numberOfAvailablePlaces }} places disponibles</div>
+                                                <div>{{calculate(m.id)}} places disponibles</div>
+                                                <!--<div>{{ m.numberOfAvailablePlaces }} places disponibles</div>-->
                                             </div>
                                             <br>
                                         </td>
@@ -105,8 +105,11 @@ Vue.component('training-to-come', {
                     console.log("success to get training sessions by training");
                     this.trainingSessions = response.data;
                     this.trainingSessions = this.reorganizeTrainingSessionsByTraining(this.trainingSessions);
-                    for(var tmp in this.trainingSessions){
+                    /*for(var tmp in this.trainingSessions){
                         this.calculateNumberOfAvailablePlaces(tmp,this.trainingSessions[tmp].id);
+                    }*/
+                    for(var tmp in this.trainingSessions){
+
                     }
                     this.allTrainingsAndSessions.push(this.trainingSessions);
                     this.allTrainingsAndSessions.sort(function (a, b) {
@@ -143,14 +146,14 @@ Vue.component('training-to-come', {
                 });
         },
         calculate(session_id){
-            var numberOfAvailablePlaces = 15;
+            var numberOfAvailablePlaces = 10;
             this.allCollaboratorsAlreadyInSessions = [];
             this.$http.get("api/sessions/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator in order to calculate numbers of available places");
                     this.allCollaboratorsAlreadyInSessions = response.data;
                     numberOfAvailablePlaces = 15 - this.allCollaboratorsAlreadyInSessions.length;
-                    console.log(this.numberOfAvailablePlaces);
+                    console.log(numberOfAvailablePlaces);
                 });
             return numberOfAvailablePlaces;
         },
