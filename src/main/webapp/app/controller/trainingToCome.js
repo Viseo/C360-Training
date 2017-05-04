@@ -11,20 +11,21 @@ Vue.component('training-to-come', {
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                     </div>
                                 <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
-                                    <table style="width: 500px;">
-                                        <tr v-for = "n in allTrainingsAndSessions">
-                                            <td style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin;">
+                                    <table v-for = "n in allTrainingsAndSessions" style="width: 500px;">
+                                        <tr>
+                                            <td>
                                                 <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                                             </td>
-                                            <td  v-for = "m in n" style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin;">
+                                        </tr>
+                                        <tr v-for = "m in n">
+                                            <td>
                                                 <div style="text-align: left">
-                                                    {{m.beginning}} - {{m.location}}
-                                                <div>{{calculate(m.id)}} places disponibles</div>
+                                                    {{m.beginning}} - {{m.location}} - {{ m.numberOfAvailablePlaces }} places disponibles
+                                                <!--<div>{{calculate(m.id)}} places disponibles</div>-->
                                                 <!--<div>{{ m.numberOfAvailablePlaces }} places disponibles</div>-->
                                                 </div>
-                                                <br>
                                             </td>
-                                        </tr>
+                                        </tr><hr>
                                     </table>
                                 </div>
                                 <div class="row">
@@ -121,9 +122,9 @@ Vue.component('training-to-come', {
                     console.log("success to get training sessions by training");
                     this.trainingSessions = response.data;
                     this.trainingSessions = this.reorganizeTrainingSessionsByTraining(this.trainingSessions);
-                    /*for(var tmp in this.trainingSessions){
+                    for(var tmp in this.trainingSessions){
                         this.calculateNumberOfAvailablePlaces(tmp,this.trainingSessions[tmp].id);
-                    }*/
+                    }
                     for(var tmp in this.trainingSessions){
 
                     }
