@@ -70,6 +70,9 @@ Vue.component('training-to-come', {
             collaboratorsRequesting:[],
             numberOfAvailablePlaces:15,
             existCollaboratorRequest:false,
+            trainingAndSessions:[],
+            allTrainingsAndSessions:[],
+            allCollaboratorsAlreadyInSessions:[],
         }
     },
 
@@ -107,6 +110,10 @@ Vue.component('training-to-come', {
                     this.allTrainingsAlreadyHaveSessions.sort(function (a, b) {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
+                    for(var tmp in this.allTrainingsAlreadyHaveSessions){
+                        var training_id = this.allTrainingsAlreadyHaveSessions[tmp].id;
+                        this.gatherTrainingSessionsByTrainingFromDatabase(training_id);
+                    }
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -116,6 +123,7 @@ Vue.component('training-to-come', {
         },
         gatherTrainingSessionsByTrainingFromDatabase(training_id){
             this.trainingSessions = [];
+            this.trainingAndSessions = [];
             this.$http.get("api/formations/"+ training_id +"/sessions").then(
                 function (response) {
                     console.log("success to get training sessions by training");
@@ -124,6 +132,10 @@ Vue.component('training-to-come', {
                     for(var tmp in this.trainingSessions){
                         this.calculateNumberOfAvailablePlaces(tmp,this.trainingSessions[tmp].id);
                     }
+                    this.allTrainingsAndSessions.push(this.trainingSessions);
+                    this.allTrainingsAndSessions.sort(function (a, b) {
+                        return (a[0].trainingDescription.trainingTitle > b[0].trainingDescription.trainingTitle) ? 1 : ((b[0].trainingDescription.trainingTitle > a[0].trainingDescription.trainingTitle) ? -1 : 0);
+                    });
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -153,6 +165,18 @@ Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 });
+        },
+        calculate(session_id){
+            var numberOfAvailablePlaces = 15;
+            this.allCollaboratorsAlreadyInSessions = [];
+            this.$http.get("api/sessions/" + session_id + "/collaborators").then(
+                function (response) {
+                    console.log("success to get all collaborators from the table trainingsession_collaborator in order to calculate numbers of available places");
+                    this.allCollaboratorsAlreadyInSessions = response.data;
+                    numberOfAvailablePlaces = 15 - this.allCollaboratorsAlreadyInSessions.length;
+                    console.log(this.numberOfAvailablePlaces);
+                });
+            return numberOfAvailablePlaces;
         },
         VerifyCollaboratorRequestsExistence(session_id){
             this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
