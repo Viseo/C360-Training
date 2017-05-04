@@ -25,8 +25,8 @@ Vue.component('training-to-come', {
                                         <td  v-for = "m in n" style="border-bottom-style: solid; border-bottom-color: grey; border-bottom-width: thin;"> 
                                             <div style="text-align: left">
                                                 {{m.beginning}} - {{m.location}}
-                                                <div>{{ calculate(m.id) }} places disponibles</div>
-                                                <!--<div>{{ m.numberOfAvailablePlaces }} places disponibles</div>-->
+                                                <!--<div>{{calculate(m.id)}} places disponibles</div>-->
+                                                <div>{{ m.numberOfAvailablePlaces }} places disponibles</div>
                                             </div>
                                             <br>
                                         </td>
@@ -50,7 +50,8 @@ Vue.component('training-to-come', {
             numberOfAvailablePlaces:15,
             existCollaboratorRequest:false,
             trainingAndSessions:[],
-            allTrainingsAndSessions:[]
+            allTrainingsAndSessions:[],
+            allCollaboratorsAlreadyInSessions:[],
         }
     },
 
@@ -108,9 +109,9 @@ Vue.component('training-to-come', {
                     console.log("success to get training sessions by training");
                     this.trainingSessions = response.data;
                     this.trainingSessions = this.reorganizeTrainingSessionsByTraining(this.trainingSessions);
-                    /*for(var tmp in this.trainingSessions){
+                    for(var tmp in this.trainingSessions){
                         this.calculateNumberOfAvailablePlaces(tmp,this.trainingSessions[tmp].id);
-                    }*/
+                    }
                     this.allTrainingsAndSessions.push(this.trainingSessions);
                     this.allTrainingsAndSessions.sort(function (a, b) {
                         return (a[0].trainingDescription.trainingTitle > b[0].trainingDescription.trainingTitle) ? 1 : ((b[0].trainingDescription.trainingTitle > a[0].trainingDescription.trainingTitle) ? -1 : 0);
@@ -131,7 +132,7 @@ Vue.component('training-to-come', {
             });
             return trainingSessions;
         },
-        /*calculateNumberOfAvailablePlaces(indice,session_id){
+        calculateNumberOfAvailablePlaces(indice,session_id){
             this.numberOfAvailablePlaces = 15;
             this.$http.get("api/sessions/" + session_id + "/collaborators").then(
                 function (response) {
@@ -144,22 +145,18 @@ Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 });
-        },*/
+        },
         calculate(session_id){
-            this.numberOfAvailablePlaces = 15;
+            var numberOfAvailablePlaces = 15;
+            this.allCollaboratorsAlreadyInSessions = [];
             this.$http.get("api/sessions/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator in order to calculate numbers of available places");
-                    var allCollaboratorsAlreadyInSessions = response.data;
-                    this.numberOfAvailablePlaces = 15 - allCollaboratorsAlreadyInSessions.length;
+                    this.allCollaboratorsAlreadyInSessions = response.data;
+                    numberOfAvailablePlaces = 15 - this.allCollaboratorsAlreadyInSessions.length;
                     console.log(this.numberOfAvailablePlaces);
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                    this.numberOfAvailablePlaces = 0;
                 });
-
+            return numberOfAvailablePlaces;
         },
         VerifyCollaboratorRequestsExistence(session_id){
             this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
