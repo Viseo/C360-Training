@@ -6,6 +6,11 @@ Vue.use(VueRouter);
 
 Vue.component('training-to-come', {
     template: `<div class="row" >
+                        <div class="row">
+                            <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
+                                <legend>Formation à venir</legend>
+                            </div>
+                        </div>
                             <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
