@@ -10,14 +10,12 @@ Vue.component('training-to-come', {
                 <!--<button @click="gatherTrainingsAlreadyHaveSessionsFromDatabase()">get all trainings</button><br>
                 <button @click="gatherTrainingSessionsByTrainingFromDatabase(4)">get all training sessions by trainings</button><br>
                 <button @click="VerifyCollaboratorRequestsExistence(7)">VerifyCollaboratorRequestsExistence</button><br>-->
-                <div class="row">
+                                <div class="col-sm-12 col-md-5 col-lg-5" ></div>
                     <div class="row">
                         <div class="col-lg-7 col-md-7 text-center">
                             <legend>Formation à venir</legend>
                         </div>
                     </div>
-                    <div class="row">                     
-                        <div class="row">
                             <div id="training-to-come" style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
                                 <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                 <table style="width: 500px; padding-left: 5%;">
@@ -30,9 +28,7 @@ Vue.component('training-to-come', {
                                 </table>
                                   <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                             
-                            </div>
-                        </div>
-                    </div>                
+                            </div>               
                 </div>
             </div>`,
 
