@@ -1,0 +1,15 @@
+/*#trainingToCome {
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
+    height: 360px;
+    width: 550px;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    z-index: -1;
+}*/
+
+#test{
+    height: 420px;
+    overflow: hidden;
+    z-index: 5;
+}
