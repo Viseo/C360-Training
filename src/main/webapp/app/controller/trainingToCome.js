@@ -13,8 +13,6 @@ Vue.component('training-to-come', {
                             <legend>Formation à venir</legend>
                         </div>
                     </div>
-                    <div class="row">                     
-                        <div class="row">
                             <div id="training-to-come" style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
                                 <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                 <table style="width: 500px; padding-left: 5%;">
@@ -34,9 +32,7 @@ Vue.component('training-to-come', {
                                 </table>
                                   <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                             
-                            </div>
-                        </div>
-                    </div>                
+                            </div>               
                 </div>
                 <!--<pre>{{$data|json}}</pre>-->
             </div>`,
