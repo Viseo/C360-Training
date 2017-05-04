@@ -7,21 +7,17 @@ Vue.use(VueRouter);
 Vue.component('training-to-come', {
     template: `
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
-                    <div class="col-sm-12 col-md-10 col-lg-7">
+                <div class="col-sm-12 col-md-5 col-lg-5" ></div>
                         <div class="row">
                             <div class="col-lg-7 col-md-7 text-center">
                                 <legend>Formation à venir</legend>
                             </div>
                         </div>
                         <div class="row" >
-                            <div style="width: 550px;border:1px solid #dcdcdc;border-radius: 10px;">  
-                                <div class="row">
+                            <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                     </div>
-                                </div>
                                 <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
                                     <table style="width: 500px;">
                                         <tr v-for = "n in 20">
@@ -57,8 +53,6 @@ Vue.component('training-to-come', {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
             </div>
             `,
 
