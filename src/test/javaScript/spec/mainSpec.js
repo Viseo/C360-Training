@@ -46,7 +46,7 @@ describe('Header test', function () {
         //expect(vm.$children[0].token).toBe('');
         expect(vm.$children[0].disconnect).toBe(false);
         expect(vm.$children[0].app).toEqual({training:true, skills:false, mission:false, leave:false});
-        expect(vm.$children[0].IDLE_TIMEOUT).toBe(20);
+        expect(vm.$children[0].IDLE_TIMEOUT).toBe(60);
         expect(vm.$children[0].idleSecondsCounter).toBe(0);
         expect(vm.$children[0].myInterval).toBe('');
         expect(vm.$children[0].stayConnected).toBe(true);
