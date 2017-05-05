@@ -214,7 +214,7 @@ let router = new VueRouter({
                                 <blue-header></blue-header>
                                 <div class="container-fluid">
                                     <div class="col-sm-12 col-md-7 col-lg-7">
-                                        <collaborator-formation></collaborator-formation>
+                                        <collaborator-formation ref="myComponent" ></collaborator-formation>
                                     </div>
                                     <div class="col-sm-12 col-md-5 col-lg-5">
                                         <training-to-come></training-to-come>

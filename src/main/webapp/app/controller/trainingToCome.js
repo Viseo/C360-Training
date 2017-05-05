@@ -22,7 +22,7 @@ Vue.component('training-to-come', {
                                                 <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                                             </td>
                                         </tr>
-                                        <tr v-for = "m in n">
+                                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)" v-for = "m in n">
                                             <td>
                                                 <div style="text-align: left">
                                                     {{m.beginning}} - {{m.location}} - {{ m.numberOfAvailablePlaces }} places disponibles
@@ -69,7 +69,7 @@ Vue.component('training-to-come', {
             existCollaboratorRequest:false,
             trainingAndSessions:[],
             allTrainingsAndSessions:[],
-            allCollaboratorsAlreadyInSessions:[],
+            allCollaboratorsAlreadyInSessions:[]
         }
     },
 
@@ -90,8 +90,7 @@ Vue.component('training-to-come', {
         });
 
         // $('#scroll').bind('mousewheel DOMMouseScroll', function(event){
-        //     if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        //         $('#scroll').animate({scrollTop: "-=100"}, 80);
+        //     if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0)         //         $('#scroll').animate({scrollTop: "-=100"}, 80);
         //     }
         //     else{
         //         $('#scroll').animate({scrollTop: "+=100"}, 80);
@@ -100,6 +99,13 @@ Vue.component('training-to-come', {
     },
 
     methods: {
+
+        showTrainingAndSessionsSelected(training){
+            this.$parent.$children[1].storeTrainingsFound(training.trainingTitle.toUpperCase());
+            this.$parent.$children[1].renitialize(training);
+            this.$parent.$children[1].openPanel = true;
+        },
+
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
             this.$http.get("api/formations/sessions").then(
                 function (response) {
