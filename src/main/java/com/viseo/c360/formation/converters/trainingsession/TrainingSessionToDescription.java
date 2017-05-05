@@ -25,6 +25,7 @@ public class TrainingSessionToDescription {
         dto.setEnding(formatterDate.format(source.getEnding()));
         dto.setEndingTime(formatterTime.format(source.getEnding()));
         dto.setLocation(source.getLocation());
+        dto.setCollaborators(source.getCollaborators());
         return dto;
     }
 

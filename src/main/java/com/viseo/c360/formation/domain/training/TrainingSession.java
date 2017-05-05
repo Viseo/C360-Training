@@ -6,11 +6,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -35,7 +32,7 @@ public class TrainingSession extends BaseEntity {
 
 	@NotNull
 	@Valid
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	List<Collaborator> collaborators;
 
 	public TrainingSession() {

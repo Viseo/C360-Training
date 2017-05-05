@@ -1,6 +1,9 @@
 package com.viseo.c360.formation.dto.training;
 
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.dto.BaseDTO;
+
+import java.util.List;
 
 public class TrainingSessionDescription extends BaseDTO {
 
@@ -23,6 +26,8 @@ public class TrainingSessionDescription extends BaseDTO {
 
     String location;
 
+    List<Collaborator> collaborators;
+
     public TrainingSessionDescription() {
     }
 
@@ -43,6 +48,15 @@ public class TrainingSessionDescription extends BaseDTO {
     public String getEnding() {
         return ending;
     }
+
+    public List<Collaborator> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<Collaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
+
     public void setEnding(String ending) {
         this.ending = ending;
     }
@@ -58,4 +72,5 @@ public class TrainingSessionDescription extends BaseDTO {
     public void setLocation(String location) {
         this.location = location;
     }
+
 }

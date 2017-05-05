@@ -232,4 +232,10 @@ public class TrainingWS {
     public List<TrainingDescription> getTrainingBySession() {
         return new TrainingToDescription().convert(trainingDAO.getTrainingBySession());
     }
+
+    @RequestMapping(value = "${endpoint.sessioncollabs}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TrainingSessionDescription> getSessionCollaborators() {
+        return new TrainingSessionToDescription().convert(trainingDAO.getSessionCollaborators());
+    }
 }

@@ -101,6 +101,11 @@ public class TrainingDAO {
         return daoFacade.getList("select distinct s.training from TrainingSession s");
     }
 
+    public List<TrainingSession> getSessionCollaborators() {
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select s from TrainingSession s");
+    }
+
     public List<TrainingSession> getRequestedSessionByTraining(long myTrainingId, long byCollabId) {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         return daoFacade.getList("select s from RequestTraining t join t.sessions s where t.training.id=:myTrainingId and t.collaborator.id=:byCollabId",
