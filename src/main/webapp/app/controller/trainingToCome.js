@@ -13,7 +13,7 @@ Vue.component('training-to-come', {
                         </div>
                             <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
-                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
                                     </div>
                                 <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
                                     <table v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
@@ -35,11 +35,11 @@ Vue.component('training-to-come', {
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12" style="margin-top:10px">
-                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
                                     </div>
                                 </div>
-                                <div style="margin-top:20px; margin-left: 25px">
-                                    <table style="width: 530px">
+                                <div style="margin-top:20px; margin-left: 25px;">
+                                    <table style="width: 530px;">
                                         <tr>
                                             <td> 
                                                 <p>
@@ -47,9 +47,9 @@ Vue.component('training-to-come', {
                                                 </p>
                                             </td>  
                                             <td >
-                                                    <p >
-                                                        <span class="glyphicon glyphicon-pencil"></span> Vous ne trouver pas la formation qui vous convient?
-                                                    </p>
+                                                <p >
+                                                    <span class="glyphicon glyphicon-pencil"></span> Vous ne trouver pas la formation qui vous convient?
+                                                </p>
                                         </tr>
                                     </table>
                                     
@@ -71,6 +71,7 @@ Vue.component('training-to-come', {
             allTrainingsAndSessions:[],
             allCollaboratorsAlreadyInSessions:[],
             test123:[]
+            allCollaboratorsAlreadyInSessions:[]
         }
     },
 
@@ -91,6 +92,13 @@ Vue.component('training-to-come', {
         });
     },
     methods: {
+
+        showTrainingAndSessionsSelected(training){
+            this.$parent.$children[1].storeTrainingsFound(training.trainingTitle.toUpperCase());
+            this.$parent.$children[1].renitialize(training);
+            this.$parent.$children[1].openPanel = true;
+        },
+
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
             this.$http.get("api/formations/sessions").then(
                 function (response) {
