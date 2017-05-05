@@ -25,9 +25,9 @@ Vue.component('training-to-come', {
                                         <tr v-for = "m in n">
                                             <td>
                                                 <div style="text-align: left">
-                                                    {{m.beginning}} - {{m.location}} - {{ m.numberOfAvailablePlaces }} places disponibles
-                                                <!--<div>{{calculate(m.id)}} places disponibles</div>-->
-                                                <!--<div>{{ m.numberOfAvailablePlaces }} places disponibles</div>-->
+                                                    {{m.beginning}} - {{m.location}}
+                                                <!--<div>{{ calculate(m.id) }} places disponibles</div>-->
+                                                <div>{{ m.numberOfAvailablePlaces }} places disponibles</div>
                                                 </div>
                                             </td>
                                         </tr><hr>
@@ -65,11 +65,12 @@ Vue.component('training-to-come', {
             allTrainingsAlreadyHaveSessions:[],
             trainingSessions:[],
             collaboratorsRequesting:[],
-            numberOfAvailablePlaces:15,
+            numberOfAvailablePlaces:undefined,
             existCollaboratorRequest:false,
             trainingAndSessions:[],
             allTrainingsAndSessions:[],
             allCollaboratorsAlreadyInSessions:[],
+            test123:[]
         }
     },
 
@@ -98,7 +99,6 @@ Vue.component('training-to-come', {
         //     }
         // });
     },
-
     methods: {
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
             this.$http.get("api/formations/sessions").then(
@@ -129,9 +129,6 @@ Vue.component('training-to-come', {
                     this.trainingSessions = this.reorganizeTrainingSessionsByTraining(this.trainingSessions);
                     for(var tmp in this.trainingSessions){
                         this.calculateNumberOfAvailablePlaces(tmp,this.trainingSessions[tmp].id);
-                    }
-                    for(var tmp in this.trainingSessions){
-
                     }
                     this.allTrainingsAndSessions.push(this.trainingSessions);
                     this.allTrainingsAndSessions.sort(function (a, b) {
@@ -168,16 +165,15 @@ Vue.component('training-to-come', {
                 });
         },
         calculate(session_id){
-            var numberOfAvailablePlaces = 10;
+            this.numberOfAvailablePlaces = 15;
             this.allCollaboratorsAlreadyInSessions = [];
             this.$http.get("api/sessions/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator in order to calculate numbers of available places");
                     this.allCollaboratorsAlreadyInSessions = response.data;
-                    numberOfAvailablePlaces = 15 - this.allCollaboratorsAlreadyInSessions.length;
-                    console.log(numberOfAvailablePlaces);
+                    this.numberOfAvailablePlaces = 15 - this.allCollaboratorsAlreadyInSessions.length;
+                    console.log(15 - this.allCollaboratorsAlreadyInSessions.length);
                 });
-            return numberOfAvailablePlaces;
         },
         VerifyCollaboratorRequestsExistence(session_id){
             this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
