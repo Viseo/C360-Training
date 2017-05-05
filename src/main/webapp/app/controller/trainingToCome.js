@@ -22,7 +22,7 @@ Vue.component('training-to-come', {
                                                 <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                                             </td>
                                         </tr>
-                                        <tr v-for = "m in n" >
+                                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"  v-for = "m in n" >
                                             <td style="text-align: left">
                                                     {{m.beginning}} - {{m.location}} 
                                             </td>
@@ -70,8 +70,6 @@ Vue.component('training-to-come', {
             trainingAndSessions:[],
             allTrainingsAndSessions:[],
             allCollaboratorsAlreadyInSessions:[],
-            test123:[]
-            allCollaboratorsAlreadyInSessions:[]
         }
     },
 
