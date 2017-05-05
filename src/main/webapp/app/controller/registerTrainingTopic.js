@@ -1038,8 +1038,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 var fin = dateObject;
                 fin.setDate(dayOfMonth+nbDays)
                 for (var d = debut; d <= fin; d.setDate(d.getDate() + 1)) {
-                    console.log(this.JoursFeries(d.getFullYear()));
-                    console.log(d);
                     if(d.getDay() == 6 || d.getDay() == 0 || this.JoursFeries(d.getFullYear()).filter(function(e) { return e.getTime() === d.getTime(); }).length > 0){
                         nbDays++;
                         fin.setDate(fin.getDate() + 1);

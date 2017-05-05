@@ -148,7 +148,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.put("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to modify the table trainingsession_collaborator");
-                    console.log(response.data);
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -159,7 +158,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/requests/session/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table requesttraining_trainingsession");
-                    console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                     this.VerifyCollaboratorsRequestingNotYetAccepted();
                 },
@@ -172,7 +170,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/sessions/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator");
-                    console.log(response.data);
                     this.allCollaboratorsAlreadyInSessions = response.data;
                     var collaborators = this.collaboratorsRequesting;
                     this.collaboratorsRequesting=[];
@@ -200,7 +197,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/sessions/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator");
-                    console.log(response.data);
                     this.allCollaboratorsAlreadyInSessions = response.data;
                     var collaborators = this.allCollaborators;
                     this.allCollaborators=[];

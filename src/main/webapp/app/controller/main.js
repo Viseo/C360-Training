@@ -152,7 +152,6 @@ let Header = Vue.component('blue-header', {
 
             let retrieveUserInfoFromToken = ()=>{
                 this.lastName = jwt_decode(this.token).lastName;
-                console.log(this.lastName);
                 this.firstName = jwt_decode(this.token).sub;
             };
 
