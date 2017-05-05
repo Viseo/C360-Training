@@ -47,7 +47,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.displayTrainings).toBe(true);
             expect(vmCollaboratorFormation.isNoSession).toBe(false);
             done();
-        }, 600);
+        }, 0);
     });
 
     it('should display the selected formation with no sessions', function(done) {
@@ -58,7 +58,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.displayTrainings).toBe(true);
             expect(vmCollaboratorFormation.isNoSession).toBe(true);
             done();
-        }, 600);
+        }, 0);
     });
 
     it('should find no trainings', function (done) {
@@ -68,7 +68,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(true);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(0);
             done();
-        }, 600);
+        }, 0);
     });
 
     it('should find and load all trainings', function (done) {
@@ -78,7 +78,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(3);
             done();
-        }, 600)
+        }, 0)
     });
 
     it('should find trainings having inserted value', function (done) {
@@ -88,7 +88,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(2);
             expect(vmCollaboratorFormation.trainingsFound[0].trainingTitle).toBe("FORMATION1");
             done();
-        }, 600);
+        }, 0);
 
     });
     it('should find sessions that are booked by collab', function (done) {
@@ -99,7 +99,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.isNoSession).toBe(false);
             expect(vmCollaboratorFormation.sessionsByCollab.length).toBe(1);
             done();
-        }, 600);
+        }, 0);
     })
     it('should not find any session booked', function (done) {
         vmCollaboratorFormation.renitialize(trainingSelectedWithoutSessions);
@@ -109,7 +109,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.isNoSession).toBe(true);
             expect(vmCollaboratorFormation.sessionsByCollab.length).toBe(0);
             done();
-        }, 600);
+        }, 0);
     });
     it('should verify and save training request', function (done) {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
@@ -129,7 +129,7 @@ describe('test registerTrainingCollaborator', function () {
         setTimeout(function () {
             expect(vmCollaboratorFormation.addingRequestSucceeded).toBe(true);
             done();
-        }, 600);
+        }, 0);
     });
     it('should check when no session selected', function (done) {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
@@ -138,7 +138,7 @@ describe('test registerTrainingCollaborator', function () {
         setTimeout(function () {
             expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
             done();
-        }, 600);
+        }, 0);
     });
 
     it('should disable all session when indiferent is checked', function (done) {
@@ -148,6 +148,6 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.checkedSessions.length).not.toBe(0);
             expect(vmCollaboratorFormation.isNoSession).toBe(false);
             done();
-        },600);
+        },0);
     })
 });

@@ -1,10 +1,9 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-let Header = Vue.component('blue-header',{
+let Header = Vue.component('blue-header', {
     props: ['title'],
-    template:
-        `<div id="wrap">
+    template: `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
                 <div class="container-fluid" id="blue-header">
                     <div class="row">
@@ -64,10 +63,11 @@ let Header = Vue.component('blue-header',{
             myInterval: '',
             stayConnected: true,
             dialog: false,
-            timeconnected: 0,
+            timeConnected: 0,
         }
     },
     mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getCookieInfos();
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
@@ -95,8 +95,8 @@ let Header = Vue.component('blue-header',{
             this.idleSecondsCounter = value;
         },
         checkIfUserInactive(){
-            if (this.timeconnected != 0)
-                if ((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeconnected)) >= 1) {
+            if (this.timeConnected != 0)
+                if ((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeConnected)) >= 1) {
                     this.dialog = true;
                     this.disconnectUser();
                 }
@@ -111,7 +111,7 @@ let Header = Vue.component('blue-header',{
             }.bind(this);
             window.onbeforeunload = function () {
                 if (!this.disconnect && !this.dialog)
-                    document.cookie = "timeconnected=" + new Date().getHours() + new Date().getMinutes();
+                    document.cookie = "timeConnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
             this.myInterval = window.setInterval(this.checkIdleTime, 1000);
         },
@@ -127,62 +127,93 @@ let Header = Vue.component('blue-header',{
             }
         },
         getCookieInfos() {
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            let regexCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
-            let regexCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-            console.log(regexCookieToken);
-            if (regexCookieToken != null) {
-                console.log(typeof regexCookieToken != 'undefined');
-                if (typeof regexCookieToken == 'undefined') this.token = 'undefined';
-                if (this.token == 'undefined') regexCookieToken = false;
-                if (regexCookieToken && regexCookieStayConnected) {
-                    if (this.$route.name != 'login')
-                        this.stayConnected = JSON.parse(regexCookieStayConnected.pop());
-                    this.token = String(regexCookieToken.pop());
-                    if (regexCookieTimeConnected) {
-                        if (this.$route.name != 'login')
-                            this.timeconnected = parseInt(regexCookieTimeConnected.pop());
+            let isAdmin = ()=> jwt_decode(this.token).roles;
+
+            let retrieveTimeOfExit = ()=>{
+                let timeOfExit = document.cookie.match('(^|;)\\s*' + "timeConnected" + '\\s*=\\s*([^;]+)');
+                if (timeOfExit) {
+                    if (this.getPageName() != 'login') {
+                        this.timeConnected = parseInt(timeOfExit.pop());
                     }
-                    if (!jwt_decode(this.token).roles && this.$route.name != 'registerTrainingCollaborator') {
-                        this.$router.push('/registerTrainingCollaborator');
-                    }
-                    if (jwt_decode(this.token).roles && this.$route.name != 'addTrainingTopic') {
-                        this.$router.push('/addTrainingTopic');
-                    }
-                    this.lastName = jwt_decode(this.token).lastName;
-                    console.log(this.lastName);
-                    this.firstName = jwt_decode(this.token).sub;
                 }
+            };
+
+            let preventCollaboratorToGoToAdminPage = ()=>{
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator') {
+                    this.goTo('registerTrainingCollaborator');
+                }
+            };
+
+            let preventAdminToGoToCollaboratorPage = ()=>{
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic') {
+                    this.goTo('addTrainingTopic');
+                }
+            };
+
+            let retrieveUserInfoFromToken = ()=>{
+                this.lastName = jwt_decode(this.token).lastName;
+                console.log(this.lastName);
+                this.firstName = jwt_decode(this.token).sub;
+            };
+
+            let isConnected = ()=> {
+                    let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                    let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+
+                    if (!isTokenPresent) delete this.token;
+                    if (this.token == 'undefined') isTokenPresent = false;
+                    if (isTokenPresent && stayConnectedDefined) {
+                        this.token = String(isTokenPresent.pop());
+                        return true;
+                    }
+                    return false;
+            };
+
+            let redirectToLoginPage = ()=> {
+                if (this.getPageName()!= 'login') {
+                    if (this.getPageName() != 'resetPassword') {
+                        this.goTo('login');
+                    }
+                }
+            };
+
+            let retrieveStayConnected = ()=> {
+                let stayConnectedChecked = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+                if (this.getPageName() != 'login'){
+                    this.stayConnected = JSON.parse(stayConnectedChecked.pop());
+                }
+            };
+
+            if (isConnected()) {
+                retrieveStayConnected();
+                retrieveTimeOfExit();
+                preventCollaboratorToGoToAdminPage();
+                preventAdminToGoToCollaboratorPage();
+                retrieveUserInfoFromToken();
             }
             else {
-                console.log("salut");
-                if (this.$route.name != 'login') {
-                    if (this.$route.name != 'resetPassword') {
-                        this.$router.push('/login');
-                    }
-                }
+                redirectToLoginPage();
             }
-
-
         },
+
         disconnectUser(){
-            this.$http.post("api/userdisconnect", this.token)
-                .then(
-                    function (response) {
-                        if (response) {
-                            let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-                            let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
-                            let getCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeconnected" + '\\s*=\\s*([^;]+)');
-                            if (getCookieToken && getCookieStayConnected) {
-                                document.cookie = "token=" + this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                                document.cookie = "stayconnected=" + this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                                if (getCookieTimeConnected)
-                                    document.cookie = "timeconnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
-                            }
-                            if (!this.dialog)
-                                this.$router.push('/login')
-                        }
-                    });
+            let disconnect = (response)=>{
+                if (response) {
+                    let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                    let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+                    let getCookieTimeConnected = document.cookie.match('(^|;)\\s*' + "timeConnected" + '\\s*=\\s*([^;]+)');
+                    if (getCookieToken && getCookieStayConnected) {
+                        document.cookie = "token=" + this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                        document.cookie = "stayconnected=" + this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                        if (getCookieTimeConnected)
+                            document.cookie = "timeConnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                    }
+                    if (!this.dialog)
+                        this.$router.push('/login')
+                }
+            };
+
+            this.post("api/userdisconnect", this.token,disconnect);
         }
     }
 });
