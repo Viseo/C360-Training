@@ -44,6 +44,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             displayTrainings: false
         }
     },
+
     template: `<div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
@@ -125,29 +126,27 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         </div>
                     </div>
                 </div>`,
+
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.getCookies();
         this.storeTrainingsFound();
-        $('#scroll-up-2').click(function() {
-            $('#scroll').animate({scrollTop: "-=100"}, 500);
-        });
-
-        $('#scroll-down-2').click(function() {
-            $('#scroll').animate({scrollTop: "+=100"}, 500);
-        })
-
+        this.activateScrollUp('#scroll-up-2','#scroll');
+        this.activeScrollDown('#scroll-down-2','#scroll');
     },
+
     watch: {
       value: function() {
           this.verifySearch(this.value);
       }
     },
+
     computed: {
         searchFormatted: function () {
             if(this.value) return this.value.toUpperCase();
             else return '';
         },
+
         showChevrons(){
             if(this.trainingsFound.length >0){
                 return true;

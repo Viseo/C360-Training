@@ -8,7 +8,6 @@ function BaseComponent(prototype) {
             return this.$route.name;
         },
 
-
         goTo: function(pageName){
             this.$router.push("/"+pageName);
         },
@@ -16,6 +15,18 @@ function BaseComponent(prototype) {
         post: function(url,data,success){
             this.$http.post(url, data)
                 .then(success);
+        },
+
+        activateScrollUp: function(idChevronUp, idComponentToScroll){
+            $(idChevronUp).click(function() {
+                $(idComponentToScroll).animate({scrollTop: "-=100"}, 500);
+            });
+        },
+
+        activeScrollDown: function(idChevronDown, idComponentToScroll){
+            $(idChevronDown).click(function() {
+                $(idComponentToScroll).animate({scrollTop: "+=100"}, 500);
+            })
         }
     };
     result.__proto__ = prototype;
