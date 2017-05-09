@@ -331,6 +331,33 @@ let routes = [
                 "version": 0
             }
         ]
+    },
+    {
+        method: 'GET',
+        url: 'api/formations/sessions',
+        response: [
+            {   "id":3,
+                "version":0,
+                "trainingTitle":"SWIFT",
+                "numberHalfDays":4,
+                "topicDescription":{"id":1,"version":0,"name":"MOBILE"}
+            }
+            ]
+    },
+    {
+        method: 'GET',
+        url: 'api/formations/sessions/collaborators',
+        response: [
+            {   "id":4,
+                "version":0,
+                "trainingDescription":
+                    {"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":
+                        {"id":1,"version":0,"name":"MOBILE"}
+                    },"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},
+                    {"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},
+                        "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
+                    }
+                    ]
     }
 
 ];
