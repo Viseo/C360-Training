@@ -53,4 +53,14 @@ describe('training to come Panel test', function () {
         expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
         }, 0);
     });
+
+    it('should check if seats available text is red when there is only or less than 3 seats available', function(){
+        numberSeatsAvailable = 3;
+        expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(true);
+    });
+
+    it('should check if seats available text is green when there is more than 3 seats available', function(){
+        numberSeatsAvailable = 10;
+        expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
+    });
 });

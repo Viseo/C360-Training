@@ -26,7 +26,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                             <td style="text-align: left">
                                                     {{m.beginning}} - {{m.location}} 
                                             </td>
-                                            <td style="text-align: right">
+                                            <td style="text-align: right" :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
                                                      {{ 15 - m.collaborators.length }} places disponibles
                                             </td>
                                         </tr>
@@ -221,5 +221,12 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                     console.error(response);
                 });
         },
+
+        displayRedTextWhenOnly3SeatsAvailable(seatsAvailable){
+            if(seatsAvailable > 3){
+                return false;
+            }
+            return true;
+        }
     }
 });
