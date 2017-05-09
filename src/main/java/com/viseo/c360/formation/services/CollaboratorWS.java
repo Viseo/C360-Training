@@ -138,6 +138,7 @@ public class CollaboratorWS {
         try {
             Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
             wishDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
+            wishDescription.setChecked(false);
             wishDescription.setVote_ok(new ArrayList<>());
             wishDescription.setVote_ko(new ArrayList<>());
             Wish wish = collaboratorDAO.addWish(new DescriptionToWish().convert(wishDescription));

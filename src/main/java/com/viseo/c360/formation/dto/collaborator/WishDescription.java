@@ -15,6 +15,8 @@ public class WishDescription extends BaseDTO{
 
     CollaboratorDescription collaborator;
 
+    Boolean isChecked;
+
     List<CollaboratorDescription> vote_ok;
 
     List<CollaboratorDescription> vote_ko;
@@ -36,6 +38,14 @@ public class WishDescription extends BaseDTO{
 
     public void setCollaborator(CollaboratorDescription collaborator) {
         this.collaborator = collaborator;
+    }
+
+    public Boolean getChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(Boolean checked) {
+        isChecked = checked;
     }
 
     public List<CollaboratorDescription> getVote_ok() {

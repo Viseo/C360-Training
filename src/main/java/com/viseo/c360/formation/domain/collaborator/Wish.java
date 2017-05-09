@@ -38,6 +38,9 @@ public class Wish extends BaseEntity{
     @JoinTable(name="wish_vote_ko")
     List<Collaborator> vote_ko;
 
+    @NotNull
+    Boolean isChecked;
+
     public Wish() {
         super();
         this.vote_ok = new ArrayList<>();
@@ -85,5 +88,13 @@ public class Wish extends BaseEntity{
     }
     public void removeVote_kos(){
         this.vote_ko.clear();
+    }
+
+    public Boolean getChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(Boolean checked) {
+        isChecked = checked;
     }
 }

@@ -14,6 +14,7 @@ public class DescriptionToWish {
         domain.setId(dto.getId());
         domain.setVersion(dto.getVersion());
         domain.setLabel(dto.getLabel());
+        domain.setChecked(dto.getChecked());
         domain.setCollaborator(new DescriptionToCollaborator().convert(dto.getCollaborator()));
         return domain;
 
