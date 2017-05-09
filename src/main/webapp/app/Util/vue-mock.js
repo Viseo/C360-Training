@@ -358,8 +358,12 @@ let routes = [
                         "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
                     }
                     ]
+    },
+    {
+        method: 'GET',
+        url: 'api/requests/session/3/collaborators',
+        response: [{"id":1,"version":0,"lastName":"Wayne","firstName":"John","email":"John.Wayne@viseo.com","password":"123456"}]
     }
-
 ];
 
 

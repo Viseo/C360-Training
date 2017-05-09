@@ -6,6 +6,8 @@ describe('training to come Panel test', function () {
 
     beforeEach(function () {
         vmTrainingToCome = new trainingToComeComponent().$mount();
+        vmTrainingToCome.$parent = new Vue();
+        vmTrainingToCome.$parent.$children[1] = vmCollaboratorFormation;
     });
 
     afterEach(function () {
@@ -22,9 +24,6 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if session selected is open on the acordeon (left panel) when the collaborator click on the session (right panel)', function () {
-
-        vmTrainingToCome.$parent = new Vue();
-        vmTrainingToCome.$parent.$children[1] = vmCollaboratorFormation;
         var trainingSelected = {
             id: 3,
             version: 0,
@@ -33,11 +32,25 @@ describe('training to come Panel test', function () {
             topicDescription: {id: 1, version: 0, name: "MOBILE"}
         };
             expect(vmCollaboratorFormation.openPanel).toBe(false);
-
         setTimeout(function () {
             vmTrainingToCome.showTrainingAndSessionsSelected(trainingSelected);
             expect(vmCollaboratorFormation.openPanel).toBe(true);
         }, 0);
     });
 
+    it('should check if message "Désolé vous avez déjà effectué une demande" is displayed when collaborator put the mouse over a session and is already register in this session', function (){
+        actualCollaboratorOnline = {id:1,version:0,lastName:"Wayne",firstName:"John",email:"John.Wayne@viseo.com",password:"123456"};
+        var trainingSelected = {
+            id: 3,
+            version: 0,
+            trainingTitle: "SWIFT",
+            numberHalfDays: 4,
+            topicDescription: {id: 1, version: 0, name: "MOBILE"}
+        };
+        vmTrainingToCome.collaborator_id = actualCollaboratorOnline.id;
+        setTimeout(function () {
+        vmTrainingToCome.VerifyCollaboratorRequestsExistence(trainingSelected.id);
+        expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
+        }, 0);
+    });
 });

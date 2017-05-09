@@ -207,7 +207,6 @@ let trainingToComeComponent = Vue.component('training-to-come', {
             this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all requests from database");
-                    console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                     this.existCollaboratorRequest = false;
                     for(var tmp in this.collaboratorsRequesting){
