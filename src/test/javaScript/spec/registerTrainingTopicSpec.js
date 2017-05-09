@@ -67,7 +67,7 @@ describe('test registerTrainingTopic.js', function () {
                 var resultApiFormations = '[[[{"id":5,"version":0,"trainingTitle":"FORMATION1","numberHalfDays":1,"topicDescription":{"id":3,"version":0,"name":"C"}},{"id":6,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":2,"topicDescription":{"id":3,"version":0,"name":"C"}}]],[[{"id":7,"version":0,"trainingTitle":"JAVA","numberHalfDays":3,"topicDescription":{"id":4,"version":0,"name":"C++"}}]]]';
                 expect(JSON.stringify(vmAddSessionPanel.state.allTopicTraining)).toEqual(resultApiFormations);
                 done();
-            }, 600);
+            }, 0);
         });
 
         it('should check if ending date is calculated when user choose beginning date', function () {
@@ -150,7 +150,7 @@ describe('test registerTrainingTopic.js', function () {
                 setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
-                }, 600);
+                }, 0);
             }
         );
 
@@ -174,7 +174,7 @@ describe('test registerTrainingTopic.js', function () {
                 setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
-                }, 600);
+                }, 0);
             }
         );
 
@@ -767,7 +767,7 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmShowFormation.state.isNoSession).toBe(false);
                 expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
                 done();
-            }, 1200);
+            }, 0);
         });
     });
 

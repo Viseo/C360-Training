@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-Vue.component('training-to-come', {
+let trainingToComeComponent = Vue.component('training-to-come', {
     template: `<div class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
