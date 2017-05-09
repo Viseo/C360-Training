@@ -1,0 +1,56 @@
+package com.viseo.c360.formation.dto.collaborator;
+import com.viseo.c360.formation.dto.BaseDTO;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
+
+import java.util.List;
+import java.util.StringJoiner;
+
+public class WishDescription extends BaseDTO{
+
+    public static class Regex{
+        public static final String LABEL = "[a-zA-Z0-9+#'-. áàâäãåçéèêëíìîïñóòôöõúùûüýÿæ\u0153ÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝ\u0178Æ\u0152]";
+    }
+
+    String label;
+
+    CollaboratorDescription collaborator;
+
+    List<CollaboratorDescription> vote_ok;
+
+    List<CollaboratorDescription> vote_ko;
+
+    public WishDescription() {
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public CollaboratorDescription getCollaborator() {
+        return collaborator;
+    }
+
+    public void setCollaborator(CollaboratorDescription collaborator) {
+        this.collaborator = collaborator;
+    }
+
+    public List<CollaboratorDescription> getVote_ok() {
+        return vote_ok;
+    }
+
+    public void setVote_ok(List<CollaboratorDescription> vote_ok) {
+        this.vote_ok = vote_ok;
+    }
+
+    public List<CollaboratorDescription> getVote_ko() {
+        return vote_ko;
+    }
+
+    public void setVote_ko(List<CollaboratorDescription> vote_ko) {
+        this.vote_ko = vote_ko;
+    }
+}
