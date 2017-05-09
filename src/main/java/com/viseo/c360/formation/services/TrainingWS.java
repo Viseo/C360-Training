@@ -1,7 +1,6 @@
 package com.viseo.c360.formation.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -16,6 +15,7 @@ import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDesc
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -189,6 +189,7 @@ public class TrainingWS {
                 collaborators.add(collaboratorDAO.getCollaborator(id_collaborators.get(i)));
             }
             TrainingSession trainingSession = trainingDAO.getSessionTraining(id_session);
+//            trainingDAO.getRequestedSessionByTraining(trainingSession.getTraining().getId(),)
             return new TrainingSessionToDescription().convert(trainingDAO.addCollaboratorToTrainingSession(trainingSession, collaborators));
         } catch (PersistentObjectNotFoundException e) {
             throw new C360Exception(e);
@@ -226,5 +227,20 @@ public class TrainingWS {
     public List<TrainingSessionDescription> getRequestedSessionByTraining(@PathVariable String trainingId, @PathVariable String collabId) {
         return new TrainingSessionToDescription().convert(trainingDAO.getRequestedSessionByTraining(Long.parseLong(trainingId),Long.parseLong(collabId)));
     }
+
+    @RequestMapping(value = "${endpoint.getRequestedSessions}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, List<TrainingSession>> getRequestedTrainings(@PathVariable String collaborator_id) throws PersistentObjectNotFoundException {
+        List<Training> trainings = new ArrayList <> (trainingDAO.getTrainings(Long.parseLong(collaborator_id)));
+        Map<String, List<TrainingSession>> requestTrainingsMap = new HashMap<>();
+        for (Training training: trainings){
+            List<TrainingSession> requestTrainings = new ArrayList <> (trainingDAO.getRequestedSessionByTrainingForCollaborator(Long.parseLong(collaborator_id), training.getId()));
+
+            requestTrainingsMap.put(training.getTrainingTitle(), requestTrainings);
+        }
+
+        return requestTrainingsMap;
+    }
+
 
 }

@@ -185,4 +185,17 @@ public class TrainingDAO {
                 param("ending", trainingSession.getEnding()));
         return !list.isEmpty();
     }
+
+    public List<Training> getTrainings(Long collaborator_id){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select r.training from RequestTraining r where r.collaborator.id =:collaborator_id",
+                param("collaborator_id", collaborator_id));
+    }
+
+    public List<TrainingSession> getRequestedSessionByTrainingForCollaborator(Long collaborator_id, Long training_id){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select rs from RequestTraining r join r.sessions rs where r.collaborator.id =:collaborator_id and r.training.id =:training_id",
+                param("collaborator_id", collaborator_id),
+                param("training_id", training_id));
+    }
 }

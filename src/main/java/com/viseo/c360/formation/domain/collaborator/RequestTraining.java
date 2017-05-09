@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.domain.collaborator;
 
 import com.viseo.c360.formation.domain.BaseEntity;
+import com.viseo.c360.formation.domain.training.RequestTrainingStatus;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 
@@ -30,6 +31,7 @@ public class RequestTraining extends BaseEntity {
     List<TrainingSession> sessions;
 
     boolean doesNotMatter = false;
+    private RequestTrainingStatus requestTrainingStatus = RequestTrainingStatus.PENDING;
 
     public RequestTraining() {
         super();
@@ -67,4 +69,12 @@ public class RequestTraining extends BaseEntity {
     public boolean isDoesNotMatter() {return doesNotMatter;}
 
     public void setDoesNotMatter(boolean doesNotMatter) {this.doesNotMatter = doesNotMatter;}
+
+    public RequestTrainingStatus getRequestTrainingStatus() {
+        return requestTrainingStatus;
+    }
+
+    public void setRequestTrainingStatus(RequestTrainingStatus requestTrainingStatus) {
+        this.requestTrainingStatus = requestTrainingStatus;
+    }
 }
