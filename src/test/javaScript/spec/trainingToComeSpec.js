@@ -39,28 +39,30 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if message "Désolé vous avez déjà effectué une demande" is displayed when collaborator put the mouse over a session and is already register in this session', function (){
-        actualCollaboratorOnline = {id:1,version:0,lastName:"Wayne",firstName:"John",email:"John.Wayne@viseo.com",password:"123456"};
-        var trainingSelected = {
-            id: 3,
-            version: 0,
-            trainingTitle: "SWIFT",
-            numberHalfDays: 4,
-            topicDescription: {id: 1, version: 0, name: "MOBILE"}
-        };
-        vmTrainingToCome.collaborator_id = actualCollaboratorOnline.id;
         setTimeout(function () {
-        vmTrainingToCome.VerifyCollaboratorRequestsExistence(trainingSelected.id);
-        expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
+            actualCollaboratorOnline = {id:1,version:0,lastName:"Wayne",firstName:"John",email:"John.Wayne@viseo.com",password:"123456"};
+            var trainingSelected = {
+                id: 3,
+                version: 0,
+                trainingTitle: "SWIFT",
+                numberHalfDays: 4,
+                topicDescription: {id: 1, version: 0, name: "MOBILE"}
+            };
+            vmTrainingToCome.collaborator_id = actualCollaboratorOnline.id;
+            setTimeout(function () {
+            vmTrainingToCome.VerifyCollaboratorRequestsExistence(trainingSelected.id);
+            expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
+            }, 0);
         }, 0);
     });
 
     it('should check if seats available text is red when there is only or less than 3 seats available', function(){
-        numberSeatsAvailable = 3;
+        var numberSeatsAvailable = 3;
         expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(true);
     });
 
     it('should check if seats available text is green when there is more than 3 seats available', function(){
-        numberSeatsAvailable = 10;
+        var numberSeatsAvailable = 10;
         expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
     });
 });
