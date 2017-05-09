@@ -100,6 +100,7 @@ let stateRequest = Vue.component('state-request', {
                 }
             },
             fetchTrainingsTitles(){
+                this.requestedTrainingByCollaborator.splice(0,this.requestedTrainingByCollaborator.length);
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
@@ -109,7 +110,9 @@ let stateRequest = Vue.component('state-request', {
                                sessions: this.requestedTraining[index]
                            });
                         }
+                        console.log("lalala");
                         console.log(this.requestedTrainingByCollaborator);
+                       this.orderSessions();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -117,11 +120,11 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
-            fetchTrainigTitle(){
-                this.$http.get()
+            orderSessions(){
+                this.requestedTrainingByCollaborator.sort(function(a, b) {
+                    return parseFloat(a.sessions[0].beginning) - parseFloat(b.sessions[0].beginning);
+                });
             }
-
-
         }
     }
 )
