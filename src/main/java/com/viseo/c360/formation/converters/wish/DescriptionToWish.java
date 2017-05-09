@@ -9,25 +9,21 @@ import java.util.List;
 
 
 public class DescriptionToWish {
-    public Wish convert(WishDescription dto, Collaborator collaborator, List<Collaborator> vote_ok, List<Collaborator> vote_ko) {
+    public Wish convert(WishDescription dto) {
         Wish domain = new Wish();
         domain.setId(dto.getId());
         domain.setVersion(dto.getVersion());
         domain.setLabel(dto.getLabel());
-        domain.setCollaborator(collaborator);
+        domain.setCollaborator(new DescriptionToCollaborator().convert(dto.getCollaborator()));
         return domain;
 
     }
 
-    public List<Wish> convert(List<WishDescription> listDto, Collaborator collaborator, List<Collaborator> vote_ok, List<Collaborator> vote_ko) {
+    public List<Wish> convert(List<WishDescription> listDto) {
         List<Wish> listWish = new ArrayList<Wish>();
         for (WishDescription myWishDescription : listDto) {
             listWish.add(
-                    convert(myWishDescription,
-                            new DescriptionToCollaborator().convert(myWishDescription.getCollaborator()),
-                            new DescriptionToCollaborator().convert(myWishDescription.getVote_ok()),
-                            new DescriptionToCollaborator().convert(myWishDescription.getVote_ko())
-                    )
+                    convert(myWishDescription)
             );
         }
         return listWish;

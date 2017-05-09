@@ -5,14 +5,12 @@ import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.WishDescription;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,18 +28,22 @@ public class Wish extends BaseEntity{
     @ManyToOne
     Collaborator collaborator;
 
-    @NotNull
     @Valid
     @ManyToMany
+    @JoinTable(name="wish_vote_ok")
     List<Collaborator> vote_ok;
 
-    @NotNull
     @Valid
     @ManyToMany
+    @JoinTable(name="wish_vote_ko")
     List<Collaborator> vote_ko;
 
     public Wish() {
+        super();
+        this.vote_ok = new ArrayList<>();
+        this.vote_ko = new ArrayList<>();
     }
+
 
     public String getLabel() {
         return label;

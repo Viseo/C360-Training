@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.services;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,11 @@ import javax.persistence.PersistenceException;
 
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
+import com.viseo.c360.formation.converters.wish.DescriptionToWish;
+import com.viseo.c360.formation.converters.wish.WishToDescription;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
+import com.viseo.c360.formation.domain.collaborator.Wish;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
@@ -22,6 +26,7 @@ import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescriptio
 import com.viseo.c360.formation.converters.requestTraining.DescriptionToRequestTraining;
 import com.viseo.c360.formation.converters.requestTraining.RequestTrainingToDescription;
 import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDescription;
+import com.viseo.c360.formation.dto.collaborator.WishDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
 import com.viseo.c360.formation.email.sendMessage;
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
@@ -124,6 +129,23 @@ public class CollaboratorWS {
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.wish}", method = RequestMethod.POST)
+    @ResponseBody
+    public WishDescription addWish(@RequestBody WishDescription wishDescription,@PathVariable Long collaborator_id) {
+        try {
+            Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
+            wishDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
+            wishDescription.setVote_ok(new ArrayList<>());
+            wishDescription.setVote_ko(new ArrayList<>());
+            Wish wish = collaboratorDAO.addWish(new DescriptionToWish().convert(wishDescription));
+            return new WishToDescription().convert(wish);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if(uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
     }
 

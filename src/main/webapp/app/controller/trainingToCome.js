@@ -48,24 +48,29 @@ Vue.component('training-to-come', {
                                                     <span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits
                                                 </p>
                                             </td>  
-                                            <td >
-                                                    <p>
-                                                                             <input-text 
-                                                                            v-show="!showWish"
-                                                                            :value = "wish" 
-                                                                            style ="width:310px"
-                                                                            @input = "updateV1"
-                                                                            placeholder = "Ex : javascript (50 caractères maximum)"
-                                                                            maxlength = "50"
-                                                                            icon = "glyphicon glyphicon-floppy-disk"
-                                                                            type = 'input'
-                                                                            @click="sendWish">
-                                                                        </input-text>
-                                                        <span v-show="showWish" class="glyphicon glyphicon-pencil"></span> <a v-show="showWish" @click="showWish = !showWish" style="color: #0f0f0f;cursor: pointer">Vous ne trouver pas la formation qui vous convient?</a>
-                            
-                                                    </p>
-                                                                     
+                                            <td>
+                                              <p>
+                                                 <input-text 
+                                                    v-show="!showWish"
+                                                    :value = "wish" 
+                                                    style ="width:310px"
+                                                    @input = "updateV1"
+                                                    placeholder = "Ex : javascript (50 caractères maximum)"
+                                                    maxlength = "50"
+                                                    icon = "glyphicon glyphicon-floppy-disk"
+                                                    type = 'input'
+                                                    @click="sendWish">
+                                                 </input-text>
+                                                 <span v-show="showWish" class="glyphicon glyphicon-pencil"></span> <a v-show="showWish" @click="showWish = !showWish" style="color: #0f0f0f;cursor: pointer">Vous ne trouver pas la formation qui vous convient?</a>
+                                              </p>
+                                            </td>                         
                                         </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
+                                                <center><span v-show="wishAlreadyExisted"><a @click='' class="text-center color-red">Le souhait a déjà été émis. Cliquez ici pour voter pour ce souhait.</a></span></center>
+                                            </td>
+                                         </tr>
                                     </table>
                                     
                                 </div>
@@ -78,7 +83,7 @@ Vue.component('training-to-come', {
         return {
             showWish:true,
             wish:'',
-            collaborator_id:10,
+            collaborator_id:'',
             allTrainingsAlreadyHaveSessions:[],
             trainingSessions:[],
             collaboratorsRequesting:[],
@@ -87,6 +92,10 @@ Vue.component('training-to-come', {
             trainingAndSessions:[],
             allTrainingsAndSessions:[],
             allCollaboratorsAlreadyInSessions:[],
+            token:'',
+            wishToRegister:{},
+            wishAlreadyExisted:false,
+            wishSuccess:false
         }
     },
 
@@ -97,6 +106,7 @@ Vue.component('training-to-come', {
     },
 
     mounted:function () {
+        this.getCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         $('#scroll-up-3').click(function() {
             $('#test').animate({scrollTop: "-=100"}, 500);
@@ -110,9 +120,34 @@ Vue.component('training-to-come', {
         updateV1 (v) {
             this.wish = v
         },
+        getCookies(){
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(regexCookieToken){
+                if(!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined'){
+                        this.token = String(regexCookieToken.pop());
+                        this.collaborator_id = jwt_decode(this.token).id;
+                    }
+                }
+            }
+        },
         sendWish(){
-            //à remplir
-            this.showWish = !this.showWish;
+            this.wishToRegister.label = this.wish;
+            this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
+                function (response) {
+                    console.log("success to send a wish");
+                    this.wishAlreadyExisted=false;
+                    this.wishSuccess = true;
+                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
+                },
+                function (response) {
+                    this.wishAlreadyExisted=true;
+                    this.showWish = !this.showWish;
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+
         },
 
         showTrainingAndSessionsSelected(training){
