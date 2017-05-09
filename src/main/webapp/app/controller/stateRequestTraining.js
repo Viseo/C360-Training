@@ -3,6 +3,10 @@
  */
 Vue.use(VueResource);
 Vue.use(VueRouter);
+Date.prototype.getMonthName = function() {
+    var monthNames = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    return monthNames[this.getMonth()];
+}
 
 let stateRequest = Vue.component('state-request', {
         props: [],
@@ -13,6 +17,7 @@ let stateRequest = Vue.component('state-request', {
                     lastName: '',
                     firstName: ''
                 },
+                requestedTrainingByCollaborator:[],
                 requestedTraining:[]
             }
         },
@@ -34,22 +39,18 @@ let stateRequest = Vue.component('state-request', {
                         <div id="scrollMyTrainings">
                             <div>
                                 <strong></strong>
-                                <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em">
-                                    <div v-for="(training, index) in requestedTraining" >
-                                    <strong> {{requestedTraining}}</strong>
+                                <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
+                                    <div v-for="training in requestedTrainingByCollaborator" >
+                                        <strong> {{training.title}}</strong>
+                                        <div v-for="session in training.sessions">
+                                            {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
+                                            <span class="glyphicon glyphicon-ok-circle alignIcon" style="color: green"></span>
+                                        </div>
                                     </div>
                                     <div>
                                         09 Mai 2017 - 11 Mai 2017 salle Bora Bora
-                                        <span class="glyphicon glyphicon-ok-circle alignIcon" style="color: green; font-size: x-large; "></span>
+                                        <span class="glyphicon glyphicon-time alignIcon""></span>
                                     </div>
-                                    <div>
-                                        09 Mai 2017 - 11 Mai 2017 salle Bora Bora
-                                        <span class="glyphicon glyphicon-time alignIcon" style="font-size: x-large;"></span>
-                                    </div>
-                                   
-                                  
-                                   
-                                   
                                 </div>
                             </div>
                         </div>
@@ -76,10 +77,14 @@ let stateRequest = Vue.component('state-request', {
     },
 
         methods: {
+            getDate(date){
+                dateToConvert = new Date(date);
+                formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
+                return formattedDate;
+            },
+
             getCookies(){
                 let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-                console.log("stateRequestTraining");
-                console.log(regexCookieToken);
                 if(regexCookieToken){
                     console.log(!regexCookieToken[0].includes('undefined'));
                     if(!regexCookieToken[0].includes('undefined')) {
@@ -98,15 +103,13 @@ let stateRequest = Vue.component('state-request', {
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
-                        let tab = [];
-                            tab.trainingTitle=(Object.keys(this.requestedTraining));
-                            console.log[tab.trainingTitle];
-                        for(let index2 in this.requestedTraining) {
-                            tab.session.push(this.requestedTraining[tab.trainingTitle[index2]]);
+                       for (let index in this.requestedTraining) {
+                           this.requestedTrainingByCollaborator.push({
+                               title: index,
+                               sessions: this.requestedTraining[index]
+                           });
                         }
-                        console.log(tab);
-                        console.log(Object.keys(this.requestedTraining));
-
+                        console.log(this.requestedTrainingByCollaborator);
                     },
                     function (response) {
                         console.log("Error: ", response);

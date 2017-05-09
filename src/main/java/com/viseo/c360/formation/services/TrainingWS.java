@@ -238,7 +238,6 @@ public class TrainingWS {
 
             requestTrainingsMap.put(training.getTrainingTitle(), requestTrainings);
         }
-
         return requestTrainingsMap;
     }
 
