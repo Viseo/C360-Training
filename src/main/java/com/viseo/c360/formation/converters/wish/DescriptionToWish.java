@@ -4,10 +4,6 @@ import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborato
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.Wish;
 import com.viseo.c360.formation.dto.collaborator.WishDescription;
-import org.springframework.core.convert.ConversionFailedException;
-import org.springframework.core.convert.TypeDescriptor;
-
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
