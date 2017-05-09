@@ -284,7 +284,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 function (response) {
                     this.addingRequestSucceeded = true;
                     console.log(this.$parent);
-                    this.$parent.$children[2].fetchTrainingsTitles();
+                    this.$parent.$children[2].fetchTrainingsSessions();
                 },
                 function (response) {
                     console.log("Error: ", response);
