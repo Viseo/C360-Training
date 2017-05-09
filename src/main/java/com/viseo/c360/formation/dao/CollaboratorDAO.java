@@ -71,6 +71,12 @@ public class CollaboratorDAO {
         return wish;
     }
 
+    public List<Wish> getIsNotCheckedWishes(){
+        List<Wish> listWish = daoFacade.getList(
+                "select w from Wish w where w.isChecked = false");
+        return listWish;
+    }
+
     //collaborateur
     @Transactional
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {

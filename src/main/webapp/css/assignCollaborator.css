@@ -1,7 +1,7 @@
 #assignCollaborator {
     border:1px solid #dcdcdc;
     border-radius: 10px;
-    height:555px;
+    height:620px;
     width: 95%;
     padding:20px;
     margin-left:15px;
@@ -51,4 +51,23 @@ display:none;
 #typeahead input {
     padding-right:25px;
     font-size:0.85em;
+}
+
+a.boxclose{
+    position:absolute;
+    margin-left:10px;
+    margin-top:-10px;
+    cursor:pointer;
+    color: #fff;
+    border-radius: 50%;
+    height:20px;
+    width: 20px;
+    background: #4b9bdf ;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;
+    z-index: 1;
+    text-align: center;
+    text-decoration: none;
 }

@@ -150,6 +150,17 @@ public class CollaboratorWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.wish}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WishDescription> getIsNotCheckedWishes(@PathVariable Long collaborator_id) {
+        try {
+            return new WishToDescription().convert(collaboratorDAO.getIsNotCheckedWishes());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
     @RequestMapping(value = "${endpoint.collaborators}", method = RequestMethod.POST)
     @ResponseBody
     public CollaboratorDescription addCollaborator(@RequestBody CollaboratorDescription collaboratorDescription) {

@@ -31,108 +31,148 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             state: training_store.state,
             confirmCollaboratorAddedSession: false,
             isSearchNameValid: true,
-            lastNameRegexErrorMessage: ''
+            lastNameRegexErrorMessage: '',
+            token:'',
+            collaborator_id:'',
+            numberOfWishesNotChecked:''
         }
     },
     template: `
-        <div class="container-fluid">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-lg-12">
             <div class="row">
-                <div class="col-sm-12 col-md-10 col-lg-12"></div>
-                    <div class="row">
-                        <div class="col-lg-9 col-md-9 text-center">
-                            <legend>Affecter un collaborateur</legend>
-                        </div>
-                    </div>
-                    <div class="row">
-                    <div class="row">
-                        <div id="assignCollaborator">
-                                <select
-                                        class="form-control" 
-                                        v-model="sessionIdChosen"
-                                        >
-                                        <option :value="session.id" v-for="session in state.allSessions" > {{session.trainingDescription.topicDescription.name}} - {{session.trainingDescription.trainingTitle}} -  {{session.beginning}} - {{session.location}}</option>
-                                </select>
-                        <!--<select class="col-sm-10 col-md-10 col-lg-10">
-                        </select>-->
-                            <div class="col-sm-6 col-md-6 col-lg-6">
-                                 <div class="row">
-                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
-                                        <div class="checkbox col-sm-12 col-md-12 col-lg-12" >
-                                             <label ><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher les demandes</label>
-                                             
-                                        </div> 
-                                        
-                                           
-                                 </div>
-                                 <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
-                                    <div class="panel-body">
-                                         <div id="typeahead" v-show="!isDisabled" class=" col-sm-12 col-md-12 col-lg-12 searchField">
-                                                <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound" value=""></span>
-                                                <typeahead class="col-sm-12 col-dm-12 col-lg-12" v-model="value" v-bind:data="allCollaboratorsName" placeholder="Nom ou prénom du collaborateur"></typeahead> 
-                                                                               
-                                         </div><br/><br/>
-                                         
-                                         <div align="center" style="overflow: auto; position:fixed; height:33vh;">
-                                           <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé </div>
-                                             <table class="tabCentring">
-                                                 <tr v-for="collaborator in requestedCollaborators">
-                                                     <td @click="moveCollabRight(collaborator)" >{{collaborator.lastName}} {{collaborator.firstName}} </td>  
-                                                     <td @click="moveCollabRight(collaborator)"><span  class="glyphicon glyphicon-circle-arrow-right green" style="top:2px"></span></td>
-                                                 </tr>
-                                             </table>
-                                         </div>
-                                    </div>
-                                 </div>
-                            </div>
-                                 
-                                 
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="row">
-                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
-                                     <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                     <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
-                                     </div>
-                                    </div>
-                                     <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
-                                        <div class="panel-body">
-                                            <br/><br/>
-                                             <div align="center" style="overflow: auto; position:fixed; height:33vh;">
-                                                 <table class="tabCentring">
-                                                     <tr v-for="collaborator in validatedCollab">
-                                                      <td @click="moveCollabLeft(collaborator)"><span  class="glyphicon glyphicon-circle-arrow-left blue" style="top:2px"></span></td>
-                                                         <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}} {{collaborator.firstName}} </td>  
-                                                     </tr>
-                                                 </table>
-                                             </div>
-                                            
-                                        </div>
-                                        
-                                     </div>
-                                 </div>
-                            <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer</button>
-                            <error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
-                                            style="margin-left:153px;margin-top:10px;"
-                                            :height="80" 
-                                            :width="250"
-                                            successMessage="Vos modifications ont bien été enregistrées" 
-                                            :emptySuccess="confirmCollaboratorAddedSession"
-                                            fillFieldErrorMessage="Vous avez dépassé le nombre de places disponibles"
-                                            :emptyFillError="!isRegistrationAvailable"
-                                            :regexErrorMessage="lastNameRegexErrorMessage"
-                                            :emptyRegexError="!isSearchNameValid"
-                                            >
-                            </error-messages>
-                        </div>
-                    </div>
+                <div class="col-lg-9 col-md-9 text-center">
+                    <legend>Affecter un collaborateur</legend>
                 </div>
             </div>
-            
-
-`,
+            <div class="row">
+                <div id="assignCollaborator">
+                    <select class="form-control"
+                            v-model="sessionIdChosen">
+                        <option :value="session.id" v-for="session in state.allSessions">
+                            {{session.trainingDescription.topicDescription.name}} -
+                            {{session.trainingDescription.trainingTitle}} - {{session.beginning}} - {{session.location}}
+                        </option>
+                    </select>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="row">
+                            <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
+                            <div class="checkbox col-sm-12 col-md-12 col-lg-12">
+                                <label><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher
+                                    les demandes</label>
+                            </div>
+                        </div>
+                        <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
+                            <div class="panel-body">
+                                <div id="typeahead" v-show="!isDisabled"
+                                     class=" col-sm-12 col-md-12 col-lg-12 searchField">
+                                    <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound"
+                                          value=""></span>
+                                    <typeahead class="col-sm-12 col-dm-12 col-lg-12" v-model="value"
+                                               v-bind:data="allCollaboratorsName"
+                                               placeholder="Nom ou prénom du collaborateur"></typeahead>
+                                </div>
+                                <br/><br/>
+                                <div align="center" style="overflow: auto; position:fixed; height:33vh;">
+                                    <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
+                                    </div>
+                                    <table class="tabCentring">
+                                        <tr v-for="collaborator in requestedCollaborators">
+                                            <td @click="moveCollabRight(collaborator)">{{collaborator.lastName}}
+                                                {{collaborator.firstName}}
+                                            </td>
+                                            <td @click="moveCollabRight(collaborator)"><span
+                                                    class="glyphicon glyphicon-circle-arrow-right green"
+                                                    style="top:2px"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                                           
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="row">
+                            <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés:
+                                {{validatedCollab.length}}</h4>
+                            <div class="checkbox col-sm-12 col-md-12 col-lg-12">
+                                <label>Nombre de places disponibles : {{15 -
+                                    allCollaboratorsAlreadyInSessions.length}}</label>
+                            </div>
+                        </div>
+                        <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
+                            <div class="panel-body">
+                                <br/><br/>
+                                <div align="center" style="overflow: auto; position:fixed; height:33vh;">
+                                    <table class="tabCentring">
+                                        <tr v-for="collaborator in validatedCollab">
+                                            <td @click="moveCollabLeft(collaborator)"><span
+                                                    class="glyphicon glyphicon-circle-arrow-left blue"
+                                                    style="top:2px"></span></td>
+                                            <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}}
+                                                {{collaborator.firstName}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary"
+                            @click="saveCollabInSessions()"
+                            :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
+                    </button></div>
+                    <div class="row"><error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
+                                    style="margin-left:153px;margin-top:10px;"
+                                    :height="80"
+                                    :width="250"
+                                    successMessage="Vos modifications ont bien été enregistrées"
+                                    :emptySuccess="confirmCollaboratorAddedSession"
+                                    fillFieldErrorMessage="Vous avez dépassé le nombre de places disponibles"
+                                    :emptyFillError="!isRegistrationAvailable"
+                                    :regexErrorMessage="lastNameRegexErrorMessage"
+                                    :emptyRegexError="!isSearchNameValid">
+                    </error-messages></div>
+                    <div class="row">
+                            <a class="boxclose" id="boxclose">{{numberOfWishesNotChecked}}</a>
+                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                    </div>
+                </div>
+     
+            </div>
+        </div>
+    </div>
+</div>`,
     mounted: function () {
+        this.getCookies();
+        this.getIsNotCheckedWishes();
         this.GatherAllSessions();
     },
     methods: {
+        getCookies(){
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(regexCookieToken){
+                if(!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined'){
+                        this.token = String(regexCookieToken.pop());
+                        this.collaborator_id = jwt_decode(this.token).id;
+                    }
+                }
+            }
+        },
+        getIsNotCheckedWishes(){
+            this.$http.get("api/wish/"+this.collaborator_id).then(
+                function (response) {
+                    console.log("success to get all wishes which are not checked");
+                    this.numberOfWishesNotChecked = response.data.length;
+                },
+                function(response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
         GatherAllSessions(){
             this.$http.get("api/sessions").then(
         function (response) {
