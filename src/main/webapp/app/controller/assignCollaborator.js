@@ -46,23 +46,20 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     <div class="row">
                     <div class="row">
                         <div id="assignCollaborator">
-                                <select
-                                        class="form-control" 
-                                        v-model="sessionIdChosen"
-                                        >
-                                        <option :value="session.id" v-for="session in state.allSessions" > {{session.trainingDescription.topicDescription.name}} - {{session.trainingDescription.trainingTitle}} -  {{session.beginning}} - {{session.location}}</option>
-                                </select>
-                        <!--<select class="col-sm-10 col-md-10 col-lg-10">
-                        </select>-->
+                            <select
+                                    class="form-control" 
+                                    v-model="sessionIdChosen"
+                                    >
+                                    <option :value="session.id" v-for="session in state.allSessions" > {{session.trainingDescription.topicDescription.name}} - {{session.trainingDescription.trainingTitle}} -  {{session.beginning}} - {{session.location}}</option>
+                            </select>
+                            <!--<select class="col-sm-10 col-md-10 col-lg-10">
+                            </select>-->
                             <div class="col-sm-6 col-md-6 col-lg-6">
                                  <div class="row">
                                      <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                                         <div class="checkbox col-sm-12 col-md-12 col-lg-12" >
-                                             <label ><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher les demandes</label>
-                                             
-                                        </div> 
-                                        
-                                           
+                                             <label ><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher les demandes</label>    
+                                        </div>           
                                  </div>
                                  <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                                     <div class="panel-body">
@@ -85,34 +82,34 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                  </div>
                             </div>
                                  
-                                 
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="row">
-                                     <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
-                                     <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                     <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
-                                     </div>
-                                    </div>
-                                     <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
-                                        <div class="panel-body">
-                                            <br/><br/>
-                                             <div align="center" style="overflow: auto; position:fixed; height:33vh;">
-                                                 <table class="tabCentring">
-                                                     <tr v-for="collaborator in validatedCollab">
-                                                      <td @click="moveCollabLeft(collaborator)"><span  class="glyphicon glyphicon-circle-arrow-left blue" style="top:2px"></span></td>
-                                                         <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}} {{collaborator.firstName}} </td>  
-                                                     </tr>
-                                                 </table>
-                                             </div>
-                                            
-                                        </div>
-                                        
-                                     </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="row">
+                                 <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés: {{validatedCollab.length}}</h4>
+                                 <div class="checkbox col-sm-12 col-md-12 col-lg-12">
+                                 <label>Nombre de places disponibles : {{15 - allCollaboratorsAlreadyInSessions.length}}</label>
                                  </div>
+                                </div>
+                                 <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
+                                    <div class="panel-body">
+                                        <br/><br/>
+                                         <div align="center" style="overflow: auto; position:fixed; height:33vh;">
+                                             <table class="tabCentring">
+                                                 <tr v-for="collaborator in validatedCollab">
+                                                  <td @click="moveCollabLeft(collaborator)"><span  class="glyphicon glyphicon-circle-arrow-left blue" style="top:2px"></span></td>
+                                                     <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}} {{collaborator.firstName}} </td>  
+                                                 </tr>
+                                             </table>
+                                         </div>
+                                        
+                                    </div>
+                                    
+                                 </div>
+                            </div>  
                             <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary" @click="saveCollabInSessions()" :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer</button>
+                            
                             <error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
                                             style="margin-left:153px;margin-top:10px;"
-                                            :height="80" 
+                                            :height="20" 
                                             :width="250"
                                             successMessage="Vos modifications ont bien été enregistrées" 
                                             :emptySuccess="confirmCollaboratorAddedSession"
@@ -121,13 +118,26 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                             :regexErrorMessage="lastNameRegexErrorMessage"
                                             :emptyRegexError="!isSearchNameValid"
                                             >
-                            </error-messages>
+                            </error-messages>  
+                            <!-- <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top:20px;">
+                                <table style="width: 530px;">
+                                    <tr>
+                                        <td> 
+                                            <p>
+                                                <span class="glyphicon glyphicon-eye-open"></span> Classemments des formations
+                                            </p>
+                                        </td>  
+                                        <td >
+                                            <p >
+                                                <span class="glyphicon glyphicon-pencil"></span> Souhaits de formation 
+                                            </p>
+                                    </tr>
+                                </table>   
+                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
-            
-
 `,
     mounted: function () {
         this.GatherAllSessions();

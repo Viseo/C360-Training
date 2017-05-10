@@ -16,20 +16,26 @@ Vue.component('training-to-come', {
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
                                     </div>
                                 <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
-                                    <table v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
-                                        <tr>
-                                            <td>
+                                    <table  v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
+                                        <tr >
+                                            <td>                                                
                                                 <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                                             </td>
                                         </tr>
-                                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"  v-for = "m in n" >
-                                            <td style="text-align: left">
+                                        <tr style="cursor:pointer;"   @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)" v-for = "m in n" >
+                                            <td  style="text-align: left;">
                                                     {{m.beginning}} - {{m.location}} 
                                             </td>
-                                            <td style="text-align: right">
-                                                     {{ 15 - m.collaborators.length }} places disponibles
+                                            <td style="text-align: right;">
+                                                {{ 15 - m.collaborators.length }} places disponibles
                                             </td>
+                                            <div class="boxMessage">
+                                                
+                                            <br/>
+                                                <p v-show="verifyShowMessageOrNot(m)" style="background-color: #b8b8b8;margin-left: 10px">{{ MouseOverMessage }}</p>
+                                            </div>
                                         </tr>
+                                        
                                         <tr><td colspan="2"><hr></td></tr>
                                     </table>
                                 </div>
@@ -61,15 +67,19 @@ Vue.component('training-to-come', {
 
     data: function () {
         return {
-            collaborator_id:10,
-            allTrainingsAlreadyHaveSessions:[],
-            trainingSessions:[],
-            collaboratorsRequesting:[],
-            numberOfAvailablePlaces:undefined,
-            existCollaboratorRequest:false,
-            trainingAndSessions:[],
-            allTrainingsAndSessions:[],
-            allCollaboratorsAlreadyInSessions:[],
+            collaborator_id: '',
+            allTrainingsAlreadyHaveSessions: [],
+            trainingSessions: [],
+            collaboratorsRequesting: [],
+            numberOfAvailablePlaces: undefined,
+            existCollaboratorRequest: false,
+            trainingAndSessions: [],
+            allTrainingsAndSessions: [],
+            allCollaboratorsAlreadyInSessions: [],
+            showMouseOverMessage: false,
+            MouseOverMessage: "Désolé! Vous avez déja effectuer une demande",
+            trainingSessionIdMouseOver: ''
+
         }
     },
 
@@ -79,22 +89,60 @@ Vue.component('training-to-come', {
         }
     },
 
-    mounted:function () {
+    mounted: function () {
+        this.getIdCollaboratorWithTokenCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
-        $('#scroll-up-3').click(function() {
+        $('#scroll-up-3').click(function () {
             $('#test').animate({scrollTop: "-=100"}, 500);
         });
 
-        $('#scroll-down-3').click(function() {
+        $('#scroll-down-3').click(function () {
             $('#test').animate({scrollTop: "+=100"}, 500);
         });
+
+
     },
     methods: {
 
+        getIdCollaboratorWithTokenCookies() {
+            let cookiesToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(cookiesToken) {
+                let token = String(cookiesToken.pop());
+                let tokenIdCollaborator = jwt_decode(token).id;
+                this.collaborator_id = tokenIdCollaborator;
+            }
+        },
+
+        showInformationsMessage(trainingSession){
+            let seatsAvailable = 15 - trainingSession.collaborators.length;
+            if (trainingSession.isCollaboratorDidRequest == true) {
+                this.showMouseOverMessage = true;
+                this.trainingSessionIdMouseOver = trainingSession.id;
+                this.MouseOverMessage = "Désolé! Vous avez déja effectué une demande"
+            }
+            else if (seatsAvailable == 0) {
+                this.showMouseOverMessage = true;
+                this.trainingSessionIdMouseOver = trainingSession.id;
+                this.MouseOverMessage = "Désolé! Vous ne pouvez pas effectuer de demande"
+            }
+        },
+
+        hideInformationsMessage(){
+            this.showMouseOverMessage = false;
+        },
+
+        verifyShowMessageOrNot(trainingSession){
+            if (this.showMouseOverMessage == true && this.trainingSessionIdMouseOver == trainingSession.id) {
+                return true;
+            }
+            return false;
+        },
+
         showTrainingAndSessionsSelected(training){
-            this.$parent.$children[1].storeTrainingsFound(training.trainingTitle.toUpperCase());
-            this.$parent.$children[1].renitialize(training);
-            this.$parent.$children[1].openPanel = true;
+            let formationRequestsComponent = this.$parent.$children[1];
+            formationRequestsComponent.storeTrainingsFound(training.trainingTitle.toUpperCase());
+            formationRequestsComponent.renitialize(training);
+            formationRequestsComponent.openPanel = true;
         },
 
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
@@ -113,15 +161,18 @@ Vue.component('training-to-come', {
                 }
             );
         },
+
         gatherAllSessionsAndCollaboratorsFromDatabase(){
             this.$http.get("api/formations/sessions/collaborators").then(
                 function (response) {
                     console.log("success to get all trainings sessions and collaborators");
                     this.trainingAndSessions = response.data;
-                    for(var tmp1 in this.allTrainingsAlreadyHaveSessions){
+                    this.allTrainingsAndSessions.splice(0,this.allTrainingsAndSessions.length);
+                    for (var tmp1 in this.allTrainingsAlreadyHaveSessions) {
                         var tmp3 = [];
-                        for(var tmp2 in this.trainingAndSessions){
-                            if(this.allTrainingsAlreadyHaveSessions[tmp1].id == this.trainingAndSessions[tmp2].trainingDescription.id){
+                        for (var tmp2 in this.trainingAndSessions) {
+                            if (this.allTrainingsAlreadyHaveSessions[tmp1].id == this.trainingAndSessions[tmp2].trainingDescription.id) {
+                                this.VerifyCollaboratorRequestsExistence(this.trainingAndSessions[tmp2].id, this.trainingAndSessions[tmp2]);
                                 tmp3.push(this.trainingAndSessions[tmp2]);
                             }
                         }
@@ -135,25 +186,30 @@ Vue.component('training-to-come', {
                 }
             );
         },
+
         reorganizeTrainingSessionsByTraining(sessions){
             var trainingSessions = sessions;
-            trainingSessions.sort(function(a,b) {
+            trainingSessions.sort(function (a, b) {
                 var x = a.beginning.split('/').reverse().join('');
                 var y = b.beginning.split('/').reverse().join('');
                 return x > y ? 1 : x < y ? -1 : 0;
             });
             return trainingSessions;
         },
-        VerifyCollaboratorRequestsExistence(session_id){
-            this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
+
+        VerifyCollaboratorRequestsExistence(session_id, trainingAndSessions){
+            this.$http.get("api/requests/session/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all requests from database");
                     console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                     this.existCollaboratorRequest = false;
-                    for(var tmp in this.collaboratorsRequesting){
-                        if(this.collaborator_id == this.collaboratorsRequesting[tmp].id){
+                    trainingAndSessions.isCollaboratorDidRequest = this.existCollaboratorRequest;
+                    for (var tmp in this.collaboratorsRequesting) {
+                        console.log(this.collaborator_id + " " + this.collaboratorsRequesting[tmp].id);
+                        if (this.collaborator_id == this.collaboratorsRequesting[tmp].id) {
                             this.existCollaboratorRequest = true;
+                            trainingAndSessions.isCollaboratorDidRequest = this.existCollaboratorRequest;
                             break;
                         }
                     }
@@ -162,6 +218,7 @@ Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 });
-        },
+        }
+
     }
 });
