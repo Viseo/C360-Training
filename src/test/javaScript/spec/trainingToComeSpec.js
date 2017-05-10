@@ -13,6 +13,46 @@ describe('training to come Panel test', function () {
     afterEach(function () {
 
     });
+    it('should check if collaborator requests training session', function(done){
+
+        var trainingSession = {
+            "beginning":"11/05/2017",
+            "beginningTime":"09:00",
+            "collaborators":{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },
+            "ending":"13/05/2017",
+            "endingTime":"18:00",
+            "id":6,
+            "isCollaboratorDidRequest":true,
+            "location":"Salle Bali",
+            "trainingDescription":[{
+                "id":6,
+                "numberHalfDays":4,
+                "topicDescription":[{
+                    "id":4,
+                    "name":"JAVA",
+                    "version":0
+                }],
+                "trainingTitle":"JEE2",
+                "version":0
+            }],
+            "version":1,
+        };
+        vmTrainingToCome.collaborator_id = 5;
+        vmTrainingToCome.VerifyCollaboratorRequestsExistence(6,trainingSession);
+        setTimeout(function () {
+
+            expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
+        done();
+        }, 0);
+
+    });
 
     it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function (done) {
         var allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]]
@@ -31,28 +71,10 @@ describe('training to come Panel test', function () {
             numberHalfDays: 4,
             topicDescription: {id: 1, version: 0, name: "MOBILE"}
         };
-            expect(vmCollaboratorFormation.openPanel).toBe(false);
+        expect(vmCollaboratorFormation.openPanel).toBe(false);
         setTimeout(function () {
             vmTrainingToCome.showTrainingAndSessionsSelected(trainingSelected);
             expect(vmCollaboratorFormation.openPanel).toBe(true);
-        }, 0);
-    });
-
-    it('should check if message "Désolé vous avez déjà effectué une demande" is displayed when collaborator put the mouse over a session and is already register in this session', function (){
-        setTimeout(function () {
-            actualCollaboratorOnline = {id:1,version:0,lastName:"Wayne",firstName:"John",email:"John.Wayne@viseo.com",password:"123456"};
-            var trainingSelected = {
-                id: 3,
-                version: 0,
-                trainingTitle: "SWIFT",
-                numberHalfDays: 4,
-                topicDescription: {id: 1, version: 0, name: "MOBILE"}
-            };
-            vmTrainingToCome.collaborator_id = actualCollaboratorOnline.id;
-            setTimeout(function () {
-            vmTrainingToCome.VerifyCollaboratorRequestsExistence(trainingSelected.id);
-            expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
-            }, 0);
         }, 0);
     });
 
@@ -65,4 +87,7 @@ describe('training to come Panel test', function () {
         var numberSeatsAvailable = 10;
         expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
     });
+
+
+
 });

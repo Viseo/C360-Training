@@ -127,7 +127,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
     },
     methods: {
         updateV1 (v) {
-            this.wish = v
+            this.wish = v;
         },
 
         sendWish(){
