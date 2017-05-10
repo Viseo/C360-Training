@@ -15,7 +15,7 @@ describe('training to come Panel test', function () {
     });
     it('should check if collaborator requests training session', function(done){
 
-        var trainingSession = {
+        let trainingSession = {
             "beginning":"11/05/2017",
             "beginningTime":"09:00",
             "collaborators":{
@@ -55,7 +55,7 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function (done) {
-        var allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]]
+        let allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]]
 
         setTimeout(function () {
             expect(vmTrainingToCome.allTrainingsAndSessions).toEqual(allTrainingAndSessionsThatShouldBeDisplayedJSON);
@@ -64,7 +64,7 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if session selected is open on the acordeon (left panel) when the collaborator click on the session (right panel)', function () {
-        var trainingSelected = {
+        let trainingSelected = {
             id: 3,
             version: 0,
             trainingTitle: "SWIFT",
@@ -84,10 +84,49 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if seats available text is green when there is more than 3 seats available', function(){
-        var numberSeatsAvailable = 10;
+        let numberSeatsAvailable = 10;
         expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
     });
 
+    it('should check if the application identify the collaborator id thanks to the token cookies', function(){
+        let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+        let collaboratorId = 1;
+        document = {
+            value_: '',
 
+            get cookie() {
+                return this.value_;
+            },
+
+            set cookie(value) {
+                this.value_ += value + ';';
+            }
+        };
+        document.cookie = "token="+ collaboratorToken;
+        vmTrainingToCome.getIdCollaboratorWithTokenCookies();
+        expect(vmTrainingToCome.collaborator_id).toBe(collaboratorId);
+    });
+
+    it('should check if the message disappear when the collaborator mouseleave the session', function() {
+        vmTrainingToCome.hideInformationsMessage();
+        expect(vmTrainingToCome.showMouseOverMessage).toBe(false);
+    });
+
+    it('should check if the message should not appear when the collaborator mouseover a session', function() {
+        expect(vmTrainingToCome.verifyShowMessageOrNot()).toBe(false);
+    });
+
+    it('should check if the message should not appear when the collaborator mouseover a session', function() {
+        vmTrainingToCome.showMouseOverMessage = true;
+        vmTrainingToCome.trainingSessionIdMouseOver = 6;
+        let trainingSelected = {
+            id: 6,
+            version: 0,
+            trainingTitle: "SWIFT",
+            numberHalfDays: 4,
+            topicDescription: {id: 1, version: 0, name: "MOBILE"}
+        };
+            expect(vmTrainingToCome.verifyShowMessageOrNot(trainingSelected)).toBe(true);
+    });
 
 });
