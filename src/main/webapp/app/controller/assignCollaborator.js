@@ -120,27 +120,22 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         </div>
                     </div>
                     <div class="row">
-                    <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary"
-                            @click="saveCollabInSessions()"
-                            :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
-                    </button></div>
-                    <div class="row"><error-messages class="col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4"
-                                    style="margin-left:153px;margin-top:10px;"
-                                    :height="80"
-                                    :width="250"
-                                    successMessage="Vos modifications ont bien été enregistrées"
-                                    :emptySuccess="confirmCollaboratorAddedSession"
-                                    fillFieldErrorMessage="Vous avez dépassé le nombre de places disponibles"
-                                    :emptyFillError="!isRegistrationAvailable"
-                                    :regexErrorMessage="lastNameRegexErrorMessage"
-                                    :emptyRegexError="!isSearchNameValid">
-                    </error-messages></div>
-                    <div class="row">
-                            <a class="boxclose" id="boxclose">{{numberOfWishesNotChecked}}</a>
-                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary"
+                                @click="saveCollabInSessions()"
+                                :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
+                        </button>
+                    </div>
+                    <br>
+                    <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
+                        <a class="boxclose" id="boxclose">{{numberOfWishesNotChecked}}</a>
+                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                    </div>
+                    <div class="row col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4 ">
+                        <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
+                        <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
+                        <span v-show="confirmCollaboratorAddedSession" class="text-center color-green" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vos modifications ont bien été enregistrées</span>
                     </div>
                 </div>
-     
             </div>
         </div>
     </div>
