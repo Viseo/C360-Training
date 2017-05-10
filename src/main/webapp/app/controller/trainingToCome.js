@@ -5,13 +5,13 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 let trainingToComeComponent = Vue.component('training-to-come', {
-    template: `<div class="row" >
+    template: `<div v-show = "!changePageToVote" class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
                                 <legend>Formation à venir</legend>
                             </div>
                         </div>
-                            <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
+                            <div style="margin-left:30px; height: 400px; width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
                                     </div>
@@ -38,14 +38,14 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                         <img v-show="showChevrons" src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
                                     </div>
                                 </div>
+                                <br>
                                 <div style="margin-top:20px; margin-left: 25px;">
                                     <table style="width: 530px;">
                                         <tr>
                                             <td> 
-                                            <br v-show="!showWish"/>
-
+                                                <!--<br v-show="!showWish"/><br v-show="!showWish"/>-->
                                                 <p>
-                                                    <span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits
+                                                    <span @click="changePage()" style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
                                                 </p>
                                             </td>  
                                             <td>
@@ -53,7 +53,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                                  <input-text 
                                                     v-show="!showWish"
                                                     :value = "wish" 
-                                                    style ="width:310px"
+                                                    style ="width:310px;position:absolute; left:40%; top:80%;"
                                                     @input = "updateV1"
                                                     placeholder = "Ex : javascript (50 caractères maximum)"
                                                     maxlength = "50"
@@ -61,14 +61,15 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                                     type = 'input'
                                                     @click="sendWish">
                                                  </input-text>
-                                                 <span v-show="showWish" class="glyphicon glyphicon-pencil"></span> <a v-show="showWish" @click="showWish = !showWish" style="color: #0f0f0f;cursor: pointer">Vous ne trouver pas la formation qui vous convient?</a>
+                                                 <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
                                               </p>
                                             </td>                         
                                         </tr>
                                         <tr>
                                             <td colspan="2">
+                                                <br>
                                                 <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
-                                                <center><span v-show="wishAlreadyExisted"><a @click='' class="text-center color-red">Le souhait a déjà été émis. Cliquez ici pour voter pour ce souhait.</a></span></center>
+                                                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
                                             </td>
                                          </tr>
                                     </table>
@@ -95,7 +96,8 @@ let trainingToComeComponent = Vue.component('training-to-come', {
             token:'',
             wishToRegister:{},
             wishAlreadyExisted:false,
-            wishSuccess:false
+            wishSuccess:false,
+            changePageToVote:false
         }
     },
 
@@ -119,6 +121,9 @@ let trainingToComeComponent = Vue.component('training-to-come', {
     methods: {
         updateV1 (v) {
             this.wish = v
+        },
+        changePage(){
+            this.changePageToVote=true;
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');

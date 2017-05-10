@@ -204,15 +204,15 @@ public class CollaboratorWS {
         }
     }
 
-    @RequestMapping(value = "${endpoint.kowishtoremove}", method = RequestMethod.PUT)
+    @RequestMapping(value = "${endpoint.kowishtochange}", method = RequestMethod.PUT)
     @ResponseBody
-    public WishDescription removeKoWish(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+    public WishDescription changeKoToOk(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
         try {
             Wish wishToUpdate = new DescriptionToWish().convert(Wish);
             if(wishToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
             Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
             if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
-            wishToUpdate = collaboratorDAO.removeVoteKoToWish(wishToUpdate, collaboratorToUpdate);
+            wishToUpdate = collaboratorDAO.changeVoteKoToOk(wishToUpdate, collaboratorToUpdate);
             return new WishToDescription().convert(wishToUpdate);
         } catch (PersistentObjectNotFoundException e) {
             e.printStackTrace();
@@ -220,15 +220,15 @@ public class CollaboratorWS {
         }
     }
 
-    @RequestMapping(value = "${endpoint.okwishtoremove}", method = RequestMethod.PUT)
+    @RequestMapping(value = "${endpoint.okwishtochange}", method = RequestMethod.PUT)
     @ResponseBody
-    public WishDescription removeOkWish(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+    public WishDescription changeOkToKo(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
         try {
             Wish wishOkToUpdate = new DescriptionToWish().convert(Wish);
             if(wishOkToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
             Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
             if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
-            wishOkToUpdate = collaboratorDAO.removeVoteOkToWish(wishOkToUpdate, collaboratorToUpdate);
+            wishOkToUpdate = collaboratorDAO.changeVoteOkToKo(wishOkToUpdate, collaboratorToUpdate);
             return new WishToDescription().convert(wishOkToUpdate);
         } catch (PersistentObjectNotFoundException e) {
             e.printStackTrace();

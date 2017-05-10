@@ -49,8 +49,8 @@ public class Wish extends BaseEntity{
 
     public Wish() {
         super();
-        this.vote_ok = new ArrayList<Collaborator>();
-        this.vote_ko = new ArrayList<Collaborator>();
+        this.vote_ok = new ArrayList<>();
+        this.vote_ko = new ArrayList<>();
     }
 
 
@@ -73,6 +73,11 @@ public class Wish extends BaseEntity{
     public List<Collaborator> getVote_ok() {
         return Collections.unmodifiableList(vote_ok);
     }
+
+    public void setVote_ok(List<Collaborator> vote_ok) {
+        this.vote_ok = vote_ok;
+    }
+
     public void addVote_ok(Collaborator collaborator) {
         System.out.println(this.vote_ok);
         this.vote_ok.add(collaborator);
@@ -86,6 +91,10 @@ public class Wish extends BaseEntity{
 
     public List<Collaborator> getVote_ko() {
         return Collections.unmodifiableList(vote_ko);
+    }
+
+    public void setVote_ko(List<Collaborator> vote_ko) {
+        this.vote_ko = vote_ko;
     }
     public void addVote_ko(Collaborator collaborator) {
         this.vote_ko.add(collaborator);

@@ -2,21 +2,31 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 let wishToVoteComponent = Vue.component('wish-to-vote', {
-    template: `<div class="row" >
+    template: `<div v-show="$parent.$children[2].changePageToVote" class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
                                 <legend>Voter</legend>
                             </div>
                         </div>
-                            <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
+                            <div style="margin-left:30px;height: 360px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
-                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
+                                         <span class="glyphicon glyphicon-remove-sign" style="color:darkred; position:absolute; margin-top:10px; left:95%;" @click="changePage()"></span>
                                     </div>
-                                <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
+                                    <div class="col-lg-12" style="margin-bottom:30px">
+                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-4" width="60" height="20" style="position: absolute; left:45%; margin-top:5px; z-index:1;">
+                                    </div>
+                                <div id="test1" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
                                     <table v-for = "wish in allWishes" style=" width: 100%;" >
                                         <tr>
                                             <td>
-                                                <div style="text-align: left"> <b>{{wish.label}} - <span @click="addVoteOk(wish)">{{wish.vote_ok.length}}</span> - <span @click="addVoteKo(wish)">{{wish.vote_ko.length}}</span> </b></div>
+                                                <div > 
+                                                    <b style="text-align: left">{{wish.label}}</b> 
+                                                    <span @mouseover="userAlreadyVotedOk(wish)" @mouseleave="hideMessage()" @click="addVoteOk(wish)"><img src="css/vote_ok.png" width="40" height="40" style="position: absolute; left:70%; z-index:1;"></span>
+                                                    <span @mouseover="userAlreadyVotedKo(wish)" @mouseleave="hideMessage()" @click="addVoteKo(wish)"><img src="css/vote_ko.png" width="40" height="40" style="position: absolute; left:80%; z-index:1;"></span>
+                                                    <br><br>
+                                                    <b><span @click="addVoteOk(wish)" style="position: absolute; left:71%;" class="color-green">+ {{wish.vote_ok.length}}</span><span @click="addVoteKo(wish)" style="position: absolute; left:81%;" class="color-red">- {{wish.vote_ko.length}}</span> </b>
+                                                    <span style="position: absolute; left:65%;" class = "sc-notification sc-info" v-show="collaboratorAlreadyVotedTheSameVote && wish_id == wish.id">Vous avez déjà voté.</span>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr><td colspan="2"><hr></td></tr>
@@ -24,7 +34,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12" style="margin-top:10px">
-                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
+                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-4" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 10px; z-index:1;">
                                     </div>
                                 </div>
                             </div>
@@ -38,7 +48,9 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             collaborator_id:'',
             token:'',
             collaboratorAlreadyVotedTheSameVote:false,
-            collaboratorAlreadyVotedTheOppositeVote:false
+            collaboratorAlreadyVotedTheOppositeVote:false,
+            wish_id:'',
+            changePageToTraining:false
 
         }
     },
@@ -48,19 +60,21 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             return true;
         }
     },
-
     mounted:function () {
         this.getCookies();
         this.getAllWishes();
-        $('#scroll-up-3').click(function() {
-            $('#test').animate({scrollTop: "-=100"}, 500);
+        $('#scroll-up-4').click(function() {
+            $('#test1').animate({scrollTop: "-=100"}, 500);
         });
 
-        $('#scroll-down-3').click(function() {
-            $('#test').animate({scrollTop: "+=100"}, 500);
+        $('#scroll-down-4').click(function() {
+            $('#test1').animate({scrollTop: "+=100"}, 500);
         });
     },
     methods: {
+        changePage(){
+            this.$parent.$children[2].changePageToVote = false;
+        },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken){
@@ -69,6 +83,41 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                         this.token = String(regexCookieToken.pop());
                         this.collaborator_id = jwt_decode(this.token).id;
                     }
+                }
+            }
+        },
+        userAlreadyVotedOk(wish){
+            this.wish_id = wish.id;
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
+            for(var tmp1 in wish.vote_ok){
+                if(this.collaborator_id == wish.vote_ok[tmp1].id){
+                    this.collaboratorAlreadyVotedTheSameVote = true;
+                }
+            }
+            for(var tmp2 in wish.vote_ko){
+                if(this.collaborator_id == wish.vote_ko[tmp2].id){
+                    this.collaboratorAlreadyVotedTheOppositeVote = true;
+                }
+            }
+        },
+        hideMessage(){
+            this.wish_id = '';
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
+        },
+        userAlreadyVotedKo(wish){
+            this.wish_id = wish.id;
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
+            for(var tmp1 in wish.vote_ko){
+                if(this.collaborator_id == wish.vote_ko[tmp1].id){
+                    this.collaboratorAlreadyVotedTheSameVote = true;
+                }
+            }
+            for(var tmp2 in wish.vote_ok){
+                if(this.collaborator_id == wish.vote_ok[tmp2].id){
+                    this.collaboratorAlreadyVotedTheOppositeVote = true;
                 }
             }
         },
@@ -87,35 +136,22 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 });
         },
         addVoteOk(wish){
-            for(var tmp1 in wish.vote_ok){
-                if(this.collaborator_id == wish.vote_ok[tmp1].id){
-                    this.collaboratorAlreadyVotedTheSameVote = true;
-                }
-            }
-            this.collaboratorAlreadyVotedTheSameVote = false;
-            for(var tmp2 in wish.vote_ko){
-                if(this.collaborator_id == wish.vote_ko[tmp2].id){
-                    this.collaboratorAlreadyVotedTheOppositeVote = true;
-                }
-            }
-            this.collaboratorAlreadyVotedTheOppositeVote = false;
+            this.userAlreadyVotedOk(wish);
             if(!this.collaboratorAlreadyVotedTheSameVote && !this.collaboratorAlreadyVotedTheOppositeVote){
                 this.$http.put("api/okwishtoupdate/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to add ok wish");
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
                         console.error(response);
                     });
             }else if(!this.collaboratorAlreadyVotedTheSameVote && this.collaboratorAlreadyVotedTheOppositeVote) {
-                this.$http.put("api/kowishtoremove"+this.collaborator_id,wish).then(
+                this.$http.put("api/kowishtochange/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to remove ko wish");
-                        this.$http.put("api/okwishtoupdate/"+this.collaborator_id,wish).then(
-                            function (response) {
-                                console.log("success to add ok wish");
-                            });
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -124,22 +160,39 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             }
         },
         addVoteKo(wish){
+            this.userAlreadyVotedKo(wish);
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
             for(var tmp1 in wish.vote_ko){
                 if(this.collaborator_id == wish.vote_ko[tmp1].id){
                     this.collaboratorAlreadyVotedTheSameVote = true;
                 }
             }
-            this.collaboratorAlreadyVotedTheSameVote = false;
             for(var tmp2 in wish.vote_ok){
                 if(this.collaborator_id == wish.vote_ok[tmp2].id){
                     this.collaboratorAlreadyVotedTheOppositeVote = true;
                 }
             }
-            this.collaboratorAlreadyVotedTheOppositeVote = false;
             if(!this.collaboratorAlreadyVotedTheSameVote && !this.collaboratorAlreadyVotedTheOppositeVote){
-                //add KO
+                this.$http.put("api/kowishtoupdate/"+this.collaborator_id,wish).then(
+                    function (response) {
+                        console.log("success to add ko wish");
+                        this.getAllWishes();
+                    },
+                    function(response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    });
             }else if(!this.collaboratorAlreadyVotedTheSameVote && this.collaboratorAlreadyVotedTheOppositeVote) {
-                //remove OK add KO
+                this.$http.put("api/okwishtochange/"+this.collaborator_id,wish).then(
+                    function (response) {
+                        console.log("success to remove ok wish");
+                        this.getAllWishes();
+                    },
+                    function(response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    });
             }
         }
     }
