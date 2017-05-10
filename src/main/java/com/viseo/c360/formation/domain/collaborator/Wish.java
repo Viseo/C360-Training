@@ -4,6 +4,10 @@ import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.WishDescription;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -30,11 +34,13 @@ public class Wish extends BaseEntity{
 
     @Valid
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="wish_vote_ok")
     List<Collaborator> vote_ok;
 
     @Valid
     @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="wish_vote_ko")
     List<Collaborator> vote_ko;
 
@@ -43,8 +49,8 @@ public class Wish extends BaseEntity{
 
     public Wish() {
         super();
-        this.vote_ok = new ArrayList<>();
-        this.vote_ko = new ArrayList<>();
+        this.vote_ok = new ArrayList<Collaborator>();
+        this.vote_ko = new ArrayList<Collaborator>();
     }
 
 
@@ -68,6 +74,7 @@ public class Wish extends BaseEntity{
         return Collections.unmodifiableList(vote_ok);
     }
     public void addVote_ok(Collaborator collaborator) {
+        System.out.println(this.vote_ok);
         this.vote_ok.add(collaborator);
     }
     public void removeVote_ok(Collaborator collaborator) {

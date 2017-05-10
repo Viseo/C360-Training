@@ -77,6 +77,12 @@ public class CollaboratorDAO {
         return listWish;
     }
 
+    public List<Wish> getAllWishes(){
+        List<Wish> listWish = daoFacade.getList(
+                "select w from Wish w");
+        return listWish;
+    }
+
     //collaborateur
     @Transactional
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {

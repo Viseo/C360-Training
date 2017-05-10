@@ -17,9 +17,9 @@ public class WishDescription extends BaseDTO{
 
     Boolean isChecked;
 
-    List<CollaboratorDescription> vote_ok;
+    List<Collaborator> vote_ok;
 
-    List<CollaboratorDescription> vote_ko;
+    List<Collaborator> vote_ko;
 
     public WishDescription() {
     }
@@ -48,19 +48,20 @@ public class WishDescription extends BaseDTO{
         isChecked = checked;
     }
 
-    public List<CollaboratorDescription> getVote_ok() {
+    public List<Collaborator> getVote_ok() {
         return vote_ok;
     }
 
-    public void setVote_ok(List<CollaboratorDescription> vote_ok) {
+    public void setVote_ok(List<Collaborator> vote_ok) {
+
         this.vote_ok = vote_ok;
     }
 
-    public List<CollaboratorDescription> getVote_ko() {
+    public List<Collaborator> getVote_ko() {
         return vote_ko;
     }
 
-    public void setVote_ko(List<CollaboratorDescription> vote_ko) {
+    public void setVote_ko(List<Collaborator> vote_ko) {
         this.vote_ko = vote_ko;
     }
 }
