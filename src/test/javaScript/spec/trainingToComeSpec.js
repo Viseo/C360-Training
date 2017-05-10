@@ -5,6 +5,19 @@
 describe('training to come Panel test', function () {
 
     beforeEach(function () {
+        let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+        document = {
+            value_: '',
+
+            get cookie() {
+                return this.value_;
+            },
+
+            set cookie(value) {
+                this.value_ += value + ';';
+            }
+        };
+        document.cookie = "token="+ collaboratorToken;
         vmTrainingToCome = new trainingToComeComponent().$mount();
         vmTrainingToCome.$parent = new Vue();
         vmTrainingToCome.$parent.$children[1] = vmCollaboratorFormation;
@@ -260,20 +273,7 @@ describe('training to come Panel test', function () {
     });
 
     it('should check if the application identify the collaborator id thanks to the token cookies', function(){
-        let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
         let collaboratorId = 1;
-        document = {
-            value_: '',
-
-            get cookie() {
-                return this.value_;
-            },
-
-            set cookie(value) {
-                this.value_ += value + ';';
-            }
-        };
-        document.cookie = "token="+ collaboratorToken;
         vmTrainingToCome.getIdCollaboratorWithTokenCookies();
         expect(vmTrainingToCome.collaborator_id).toBe(collaboratorId);
     });

@@ -129,6 +129,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>`,
 
     mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.gatherTrainingsFromDatabase();
         this.getCookies();
         this.storeTrainingsFound(this.searchFormatted);

@@ -13,7 +13,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                         </div>
                             <div style="margin-left:30px;width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
                                     <div class="col-lg-12" style="margin-bottom:30px">
-                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
+                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-training-to-come" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
                                     </div>
                                 <div id="sessionsPanel" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
                                     <table  v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
@@ -39,7 +39,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12" style="margin-top:10px">
-                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
+                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
                                     </div>
                                 </div>
                                 <div style="margin-top:20px; margin-left: 25px;">
@@ -113,15 +113,11 @@ let trainingToComeComponent = Vue.component('training-to-come', {
     },
 
     mounted:function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getIdCollaboratorWithTokenCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
-        $('#scroll-up-3').click(function () {
-            $('#sessionsPanel').animate({scrollTop: "-=100"}, 500);
-        });
-
-        $('#scroll-down-3').click(function () {
-            $('#sessionsPanel').animate({scrollTop: "+=100"}, 500);
-        });
+        this.activateScrollUp('#scroll-up-training-to-come','#sessionsPanel');
+        this.activeScrollDown('#scroll-down-training-to-come','#sessionsPanel');
     },
     methods: {
         updateV1 (v) {
