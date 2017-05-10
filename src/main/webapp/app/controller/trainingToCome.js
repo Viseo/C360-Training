@@ -98,7 +98,6 @@ let trainingToComeComponent = Vue.component('training-to-come', {
             trainingAndSessions:[],
             allTrainingsAndSessions:[],
             allCollaboratorsAlreadyInSessions:[],
-            token:'',
             wishToRegister:{},
             wishAlreadyExisted:false,
             wishSuccess:false,
@@ -116,7 +115,6 @@ let trainingToComeComponent = Vue.component('training-to-come', {
     },
 
     mounted:function () {
-        this.getCookies();
         this.getIdCollaboratorWithTokenCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         $('#scroll-up-3').click(function () {
@@ -126,24 +124,12 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         $('#scroll-down-3').click(function () {
             $('#test').animate({scrollTop: "+=100"}, 500);
         });
-
-
     },
     methods: {
         updateV1 (v) {
             this.wish = v
         },
-        getCookies(){
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
-                        this.token = String(regexCookieToken.pop());
-                        this.collaborator_id = jwt_decode(this.token).id;
-                    }
-                }
-            }
-        },
+
         sendWish(){
             this.wishToRegister.label = this.wish;
             this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
@@ -276,8 +262,6 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 });
-        }
-
         },
 
         displayRedTextWhenOnly3SeatsAvailable(seatsAvailable){
@@ -286,4 +270,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
             }
             return true;
         }
+
+        },
+
 });
