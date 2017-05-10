@@ -18,14 +18,14 @@ describe('training to come Panel test', function () {
         var trainingSession = {
             "beginning":"11/05/2017",
             "beginningTime":"09:00",
-            "collaborators":{
+            "collaborators":[{
                 "email": 'eric.dupon@viseo.com',
                 "firstName": 'Eric',
                 "id": 5,
                 "lastName": 'Dupond',
                 "password": '123456',
                 "version": 0
-            },
+            }],
             "ending":"13/05/2017",
             "endingTime":"18:00",
             "id":6,
@@ -87,6 +87,178 @@ describe('training to come Panel test', function () {
         var numberSeatsAvailable = 10;
         expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
     });
+
+    it('should check if message "Désolé vous avez déjà effectué une demande" is displayed when collaborator put the mouse over a session and is already register in this session', function (){
+        var trainingSession = {
+            "beginning":"11/05/2017",
+            "beginningTime":"09:00",
+            "collaborators":[{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            }],
+            "ending":"13/05/2017",
+            "endingTime":"18:00",
+            "id":6,
+            "isCollaboratorDidRequest":true,
+            "location":"Salle Bali",
+            "trainingDescription":[{
+                "id":6,
+                "numberHalfDays":4,
+                "topicDescription":[{
+                    "id":4,
+                    "name":"JAVA",
+                    "version":0
+                }],
+                "trainingTitle":"JEE2",
+                "version":0
+            }],
+            "version":1,
+        };
+        vmTrainingToCome.showInformationsMessage(trainingSession);
+        expect(vmTrainingToCome.MouseOverMessage).toEqual("Désolé! Vous avez déja effectué une demande");
+    });
+
+    it('should check if seats available text is green when there is more than 3 seats available', function(){
+        var numberSeatsAvailable = 10;
+        expect(vmTrainingToCome.displayRedTextWhenOnly3SeatsAvailable(numberSeatsAvailable)).toBe(false);
+    });
+
+    it('should check if message "Désolé! Vous ne pouvez pas effectuer de demande" is displayed when collaborator put the mouse over a session and there is no seat available', function (){
+        var trainingSession = {
+            "beginning":"11/05/2017",
+            "beginningTime":"09:00",
+            "collaborators":[{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 1,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 2,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 3,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 4,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 5,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 6,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 7,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 8,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 9,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 10,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 11,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 12,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 13,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 14,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            },{
+                "email": 'eric.dupon@viseo.com',
+                "firstName": 'Eric',
+                "id": 15,
+                "lastName": 'Dupond',
+                "password": '123456',
+                "version": 0
+            }],
+            "ending":"13/05/2017",
+            "endingTime":"18:00",
+            "id":6,
+            "isCollaboratorDidRequest":false,
+            "location":"Salle Bali",
+            "trainingDescription":[{
+                "id":6,
+                "numberHalfDays":4,
+                "topicDescription":[{
+                    "id":4,
+                    "name":"JAVA",
+                    "version":0
+                }],
+                "trainingTitle":"JEE2",
+                "version":0
+            }],
+            "version":1,
+        };
+        vmTrainingToCome.showInformationsMessage(trainingSession);
+        expect(vmTrainingToCome.MouseOverMessage).toEqual("Désolé! Vous ne pouvez pas effectuer de demande");
+    });
+
 
 
 
