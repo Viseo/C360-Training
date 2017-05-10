@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
+import com.viseo.c360.formation.domain.collaborator.Wish;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,53 @@ public class CollaboratorDAO {
 
     @Inject
     DAOFacade daoFacade;
+
+    //wish
+    @Transactional
+    public Wish addWish(Wish wish) throws PersistenceException {
+        daoFacade.persist(wish);
+        daoFacade.flush();
+        return wish;
+    }
+
+    @Transactional
+    public Wish removeWish(Wish wish){
+        daoFacade.remove(wish);
+        daoFacade.flush();
+        return wish;
+    }
+
+    @Transactional
+    public Wish addVoteOkToWish(Wish wish, Collaborator collaborator){
+        wish = daoFacade.merge(wish);
+        wish.addVote_ok(collaborator);
+        daoFacade.flush();
+        return wish;
+    }
+
+    @Transactional
+    public Wish addVoteKoToWish(Wish wish, Collaborator collaborator){
+        wish = daoFacade.merge(wish);
+        wish.addVote_ko(collaborator);
+        daoFacade.flush();
+        return wish;
+    }
+
+    @Transactional
+    public Wish removeVoteOkToWish(Wish wish, Collaborator collaborator){
+        wish = daoFacade.merge(wish);
+        wish.removeVote_ok(collaborator);
+        daoFacade.flush();
+        return wish;
+    }
+
+    @Transactional
+    public Wish removeVoteKoToWish(Wish wish, Collaborator collaborator){
+        wish = daoFacade.merge(wish);
+        wish.removeVote_ko(collaborator);
+        daoFacade.flush();
+        return wish;
+    }
 
     //collaborateur
     @Transactional

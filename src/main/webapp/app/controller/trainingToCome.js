@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-Vue.component('training-to-come', {
+let trainingToComeComponent = Vue.component('training-to-come', {
     template: `<div class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
@@ -26,8 +26,8 @@ Vue.component('training-to-come', {
                                             <td  style="text-align: left;">
                                                     {{m.beginning}} - {{m.location}} 
                                             </td>
-                                            <td style="text-align: right;">
-                                                {{ 15 - m.collaborators.length }} places disponibles
+                                            <td style="text-align: right" :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
+                                                     {{ 15 - m.collaborators.length }} places disponibles
                                             </td>
                                             <div class="boxMessage">
                                                 
@@ -48,15 +48,35 @@ Vue.component('training-to-come', {
                                     <table style="width: 530px;">
                                         <tr>
                                             <td> 
+                                            <br v-show="!showWish"/>
+
                                                 <p>
                                                     <span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits
                                                 </p>
                                             </td>  
-                                            <td >
-                                                <p >
-                                                    <span class="glyphicon glyphicon-pencil"></span> Vous ne trouver pas la formation qui vous convient?
-                                                </p>
+                                            <td>
+                                              <p>
+                                                 <input-text 
+                                                    v-show="!showWish"
+                                                    :value = "wish" 
+                                                    style ="width:310px"
+                                                    @input = "updateV1"
+                                                    placeholder = "Ex : javascript (50 caractères maximum)"
+                                                    maxlength = "50"
+                                                    icon = "glyphicon glyphicon-floppy-disk"
+                                                    type = 'input'
+                                                    @click="sendWish">
+                                                 </input-text>
+                                                 <span v-show="showWish" class="glyphicon glyphicon-pencil"></span> <a v-show="showWish" @click="showWish = !showWish" style="color: #0f0f0f;cursor: pointer">Vous ne trouver pas la formation qui vous convient?</a>
+                                              </p>
+                                            </td>                         
                                         </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
+                                                <center><span v-show="wishAlreadyExisted"><a @click='' class="text-center color-red">Le souhait a déjà été émis. Cliquez ici pour voter pour ce souhait.</a></span></center>
+                                            </td>
+                                         </tr>
                                     </table>
                                     
                                 </div>
@@ -67,15 +87,21 @@ Vue.component('training-to-come', {
 
     data: function () {
         return {
-            collaborator_id: '',
-            allTrainingsAlreadyHaveSessions: [],
-            trainingSessions: [],
-            collaboratorsRequesting: [],
-            numberOfAvailablePlaces: undefined,
-            existCollaboratorRequest: false,
-            trainingAndSessions: [],
-            allTrainingsAndSessions: [],
-            allCollaboratorsAlreadyInSessions: [],
+            showWish:true,
+            wish:'',
+            collaborator_id:'',
+            allTrainingsAlreadyHaveSessions:[],
+            trainingSessions:[],
+            collaboratorsRequesting:[],
+            numberOfAvailablePlaces:undefined,
+            existCollaboratorRequest:false,
+            trainingAndSessions:[],
+            allTrainingsAndSessions:[],
+            allCollaboratorsAlreadyInSessions:[],
+            token:'',
+            wishToRegister:{},
+            wishAlreadyExisted:false,
+            wishSuccess:false,
             showMouseOverMessage: false,
             MouseOverMessage: "Désolé! Vous avez déja effectuer une demande",
             trainingSessionIdMouseOver: ''
@@ -89,7 +115,8 @@ Vue.component('training-to-come', {
         }
     },
 
-    mounted: function () {
+    mounted:function () {
+        this.getCookies();
         this.getIdCollaboratorWithTokenCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         $('#scroll-up-3').click(function () {
@@ -103,6 +130,38 @@ Vue.component('training-to-come', {
 
     },
     methods: {
+        updateV1 (v) {
+            this.wish = v
+        },
+        getCookies(){
+            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+            if(regexCookieToken){
+                if(!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined'){
+                        this.token = String(regexCookieToken.pop());
+                        this.collaborator_id = jwt_decode(this.token).id;
+                    }
+                }
+            }
+        },
+        sendWish(){
+            this.wishToRegister.label = this.wish;
+            this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
+                function (response) {
+                    console.log("success to send a wish");
+                    this.wishAlreadyExisted=false;
+                    this.wishSuccess = true;
+                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
+                },
+                function (response) {
+                    this.wishAlreadyExisted=true;
+                    this.showWish = !this.showWish;
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+
+        },
 
         getIdCollaboratorWithTokenCookies() {
             let cookiesToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
@@ -201,7 +260,6 @@ Vue.component('training-to-come', {
             this.$http.get("api/requests/session/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all requests from database");
-                    console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                     this.existCollaboratorRequest = false;
                     trainingAndSessions.isCollaboratorDidRequest = this.existCollaboratorRequest;
@@ -220,5 +278,12 @@ Vue.component('training-to-come', {
                 });
         }
 
-    }
+        },
+
+        displayRedTextWhenOnly3SeatsAvailable(seatsAvailable){
+            if(seatsAvailable > 3){
+                return false;
+            }
+            return true;
+        }
 });

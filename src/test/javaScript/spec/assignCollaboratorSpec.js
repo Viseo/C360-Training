@@ -45,7 +45,7 @@ describe('assign collaborator test', function () {
         setTimeout(function () {
 
             vmAssignCollaborator.value = "Batista";
-        }, 600);
+        }, 0);
 
         setTimeout(function () {
 
@@ -58,7 +58,7 @@ describe('assign collaborator test', function () {
                 version: 0
             }]);
             done();
-        }, 600);
+        }, 0);
 
     });
 
@@ -76,13 +76,13 @@ describe('assign collaborator test', function () {
         setTimeout(function () {
 
             vmAssignCollaborator.value = "Batista";
-        }, 600);
+        }, 0);
 
         setTimeout(function () {
 
             expect(vmAssignCollaborator.requestedCollaborators.length).toEqual(0);
             done();
-        }, 600);
+        }, 0);
 
     });
 
@@ -378,7 +378,7 @@ describe('assign collaborator test', function () {
             vmAssignCollaborator.sessionIdChosen = 15;
             vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
             done();
-        }, 600);
+        }, 0);
         vmAssignCollaborator.saveCollabInSessions();
 
         expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(true);
@@ -394,19 +394,17 @@ describe('assign collaborator test', function () {
         expect(vmAssignCollaborator.value).toBe('');
         setTimeout(function () {
             expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
-        }, 2000);
+        }, 0);
     });
     it('should check if error message is displayed when there are  type error in search field ', function (done) {
-        setTimeout(function () {
+
             vmAssignCollaborator.value = "@";
-            done();
-        }, 600);
 
         setTimeout(function () {
             expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
             expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
             done();
-        }, 600);
+        }, 0);
 
 
     });
