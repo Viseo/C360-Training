@@ -81,21 +81,21 @@ let trainingToComeComponent = Vue.component('training-to-come', {
 
     data: function () {
         return {
-            showWish:true,
-            wish:'',
-            collaborator_id:'',
-            allTrainingsAlreadyHaveSessions:[],
-            trainingSessions:[],
-            collaboratorsRequesting:[],
-            numberOfAvailablePlaces:undefined,
-            existCollaboratorRequest:false,
-            trainingAndSessions:[],
-            allTrainingsAndSessions:[],
-            allCollaboratorsAlreadyInSessions:[],
-            token:'',
-            wishToRegister:{},
-            wishAlreadyExisted:false,
-            wishSuccess:false
+            showWish: true,
+            wish: '',
+            collaborator_id: '',
+            allTrainingsAlreadyHaveSessions: [],
+            trainingSessions: [],
+            collaboratorsRequesting: [],
+            numberOfAvailablePlaces: undefined,
+            existCollaboratorRequest: false,
+            trainingAndSessions: [],
+            allTrainingsAndSessions: [],
+            allCollaboratorsAlreadyInSessions: [],
+            token: '',
+            wishToRegister: {},
+            wishAlreadyExisted: false,
+            wishSuccess: false
         }
     },
 
@@ -105,49 +105,53 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         }
     },
 
-    mounted:function () {
+    mounted: function () {
         this.getCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
-        $('#scroll-up-3').click(function() {
+        $('#scroll-up-3').click(function () {
             $('#test').animate({scrollTop: "-=100"}, 500);
         });
 
-        $('#scroll-down-3').click(function() {
+        $('#scroll-down-3').click(function () {
             $('#test').animate({scrollTop: "+=100"}, 500);
         });
     },
+
     methods: {
         updateV1 (v) {
             this.wish = v
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
+            if (regexCookieToken) {
+                if (!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined') {
                         this.token = String(regexCookieToken.pop());
                         this.collaborator_id = jwt_decode(this.token).id;
                     }
                 }
             }
         },
+
         sendWish(){
             this.wishToRegister.label = this.wish;
-            this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
+            this.$http.post("api/wish/" + this.collaborator_id, this.wishToRegister).then(
                 function (response) {
                     console.log("success to send a wish");
-                    this.wishAlreadyExisted=false;
+                    this.wishAlreadyExisted = false;
                     this.wishSuccess = true;
-                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
+                    setTimeout(function () {
+                        this.wishSuccess = false;
+                        this.showWish = !this.showWish;
+                    }.bind(this), 2000);
                 },
                 function (response) {
-                    this.wishAlreadyExisted=true;
+                    this.wishAlreadyExisted = true;
                     this.showWish = !this.showWish;
                     console.log("Error: ", response);
                     console.error(response);
                 }
             );
-
         },
 
         showTrainingAndSessionsSelected(training){
@@ -172,15 +176,16 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                 }
             );
         },
+
         gatherAllSessionsAndCollaboratorsFromDatabase(){
             this.$http.get("api/formations/sessions/collaborators").then(
                 function (response) {
                     console.log("success to get all trainings sessions and collaborators");
                     this.trainingAndSessions = response.data;
-                    for(var tmp1 in this.allTrainingsAlreadyHaveSessions){
+                    for (var tmp1 in this.allTrainingsAlreadyHaveSessions) {
                         var tmp3 = [];
-                        for(var tmp2 in this.trainingAndSessions){
-                            if(this.allTrainingsAlreadyHaveSessions[tmp1].id == this.trainingAndSessions[tmp2].trainingDescription.id){
+                        for (var tmp2 in this.trainingAndSessions) {
+                            if (this.allTrainingsAlreadyHaveSessions[tmp1].id == this.trainingAndSessions[tmp2].trainingDescription.id) {
                                 tmp3.push(this.trainingAndSessions[tmp2]);
                             }
                         }
@@ -194,24 +199,26 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                 }
             );
         },
+
         reorganizeTrainingSessionsByTraining(sessions){
             var trainingSessions = sessions;
-            trainingSessions.sort(function(a,b) {
+            trainingSessions.sort(function (a, b) {
                 var x = a.beginning.split('/').reverse().join('');
                 var y = b.beginning.split('/').reverse().join('');
                 return x > y ? 1 : x < y ? -1 : 0;
             });
             return trainingSessions;
         },
+
         VerifyCollaboratorRequestsExistence(session_id){
-            this.$http.get("api/requests/session/"+ session_id + "/collaborators").then(
+            this.$http.get("api/requests/session/" + session_id + "/collaborators").then(
                 function (response) {
                     console.log("success to get all requests from database");
                     console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                     this.existCollaboratorRequest = false;
-                    for(var tmp in this.collaboratorsRequesting){
-                        if(this.collaborator_id == this.collaboratorsRequesting[tmp].id){
+                    for (var tmp in this.collaboratorsRequesting) {
+                        if (this.collaborator_id == this.collaboratorsRequesting[tmp].id) {
                             this.existCollaboratorRequest = true;
                             break;
                         }
