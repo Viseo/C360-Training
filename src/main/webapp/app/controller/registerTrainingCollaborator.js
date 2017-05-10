@@ -41,16 +41,18 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
             listTrainingSession: [],
             isNoSession: true,
-            displayTrainings: false
+            displayTrainings: false,
+            openPanel: false,
+            state: training_store.state
         }
     },
 
     template: `<div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-sm-12" style="padding:10px;" ></div>
-                            <div class="col-sm-12 col-md-10 col-lg-7">
+                        <div class="col-md-12 col-lg-8 col-sm-8" ></div>
+                            
                                 <div class="row">
-                                    <div class="col-lg-7 col-md-7 text-center">
+                                    <div class="col-lg-8 col-md-8 text-center">
                                         <legend>Demande de formation</legend>
                                     </div>
                                 </div>
@@ -67,7 +69,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                 <input ref="btnValidateSearch" @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
                                             <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound" value=""></span>
+                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(searchFormatted)" value=""></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
                                                 <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
                                                 <div clas="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
@@ -84,7 +86,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                         <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                                             <accordion id="accordionId" :one-at-atime="true" type="info">
                                                 <div v-for="training in trainingsFound">
-                                                    <panel ref="selectingTraining" @openPanel="renitialize(training)"type="primary">
+                                                    <panel :is-open="openPanel" ref="selectingTraining" @openPanel="renitialize(training)"type="primary">
                                                         <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
                                                         <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                                         <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
@@ -122,7 +124,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                         /center>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>`,
@@ -130,7 +131,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     mounted: function () {
         this.gatherTrainingsFromDatabase();
         this.getCookies();
-        this.storeTrainingsFound();
+        this.storeTrainingsFound(this.searchFormatted);
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
     },
@@ -279,6 +280,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
                 this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
                 this.SaveTrainingSessionCollaborator();
+                let trainingToComeComponent = this.$parent.$children[2];
+                trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
             } else {
                 this.noSessionsSelectedError = true;
             }
@@ -300,16 +303,18 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.allTrainingTitles.push(this.allTrainings[index].trainingTitle)
             }
         },
-        storeTrainingsFound(){
+        storeTrainingsFound(trainingTitle){
             this.trainingsFound.splice(0, this.trainingsFound.length);
             this.displayTrainings = true;
             this.$http.get("api/formations").then(function(response){
                 for (index in this.allTrainings) {
-                    if (this.allTrainings[index].trainingTitle.indexOf(this.searchFormatted) != -1) {
+                    if (this.allTrainings[index].trainingTitle.indexOf(trainingTitle) != -1) {
                         this.trainingsFound.push(this.allTrainings[index]);
                     }
                 }
                 this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
+                if(this.trainingsFound.length!=1)
+                    this.openPanel = false;
                 this.value = null;
             });
         },

@@ -119,7 +119,7 @@ option {
     color: black;
 }
 
-.glyphicon-pencil{
+#glyphiconpencil .glyphicon-pencil{
     position: absolute;
     right: 97%;
     top: 56%;

@@ -241,4 +241,15 @@ public class TrainingWS {
         return new TrainingSessionToDescription().convert(trainingDAO.getRequestedSessionByTraining(Long.parseLong(trainingId),Long.parseLong(collabId)));
     }
 
+    @RequestMapping(value = "${endpoint.trainingsbysessions}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TrainingDescription> getTrainingBySession() {
+        return new TrainingToDescription().convert(trainingDAO.getTrainingBySession());
+    }
+
+    @RequestMapping(value = "${endpoint.sessioncollabs}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TrainingSessionDescription> getSessionCollaborators() {
+        return new TrainingSessionToDescription().convert(trainingDAO.getSessionCollaborators());
+    }
 }

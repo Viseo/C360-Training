@@ -771,7 +771,7 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmShowFormation.state.isNoSession).toBe(false);
                 expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
                 done();
-            }, 1200);
+            }, 0);
         });
     });
 
