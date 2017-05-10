@@ -10,7 +10,9 @@ public interface DAOFacade {
 	<T> List<T> getList(String request, Parameter... params);
 
 	<T> T getSingle(String request, Parameter... params);
-	
+
+	void updateSingle(String request, Parameter... params);
+
 	<T> T merge(T entity);
 
 	<T> void remove(T entity);

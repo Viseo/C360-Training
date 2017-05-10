@@ -15,11 +15,9 @@ import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDesc
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
-import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
-import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
@@ -182,7 +180,8 @@ public class TrainingWS {
 
     @RequestMapping(value = "${endpoint.addcollaboratortotrainingsession}", method = RequestMethod.PUT)
     @ResponseBody
-    public TrainingSessionDescription addCollaboratorToTrainingSession(@PathVariable Long id_session,@PathVariable List<Long> id_collaborators) {
+    public TrainingSessionDescription addCollaboratorToTrainingSession(@PathVariable Long id_session,
+                                                                       @PathVariable List<Long> id_collaborators) {
         List<Collaborator> collaborators=new ArrayList<>();
         try {
             for(int i=0;i<id_collaborators.size();i++){
@@ -234,12 +233,16 @@ public class TrainingWS {
         List<Training> trainings = new ArrayList <> (trainingDAO.getTrainings(Long.parseLong(collaborator_id)));
         Map<String, List<TrainingSession>> requestTrainingsMap = new HashMap<>();
         for (Training training: trainings){
-            List<TrainingSession> requestTrainings = new ArrayList <> (trainingDAO.getRequestedSessionByTrainingForCollaborator(Long.parseLong(collaborator_id), training.getId()));
+            List<TrainingSession> requestTrainings = new ArrayList <> (trainingDAO.getTrainingSession(Long.parseLong(collaborator_id), training.getId()));
 
             requestTrainingsMap.put(training.getTrainingTitle(), requestTrainings);
         }
         return requestTrainingsMap;
     }
-
+    @RequestMapping(value = "${endpoint.sessioncollabs}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TrainingSessionDescription> getSessionCollaborators() {
+        return new TrainingSessionToDescription().convert(trainingDAO.getSessionCollaborators());
+    }
 
 }

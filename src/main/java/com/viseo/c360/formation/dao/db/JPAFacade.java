@@ -45,6 +45,17 @@ public class JPAFacade implements DAOFacade {
 		return (T) query.getSingleResult();
 	}
 
+
+	@Override
+	public void updateSingle(String request, Parameter... params) {
+		entityManager.setFlushMode(FlushModeType.COMMIT);
+		Query query = entityManager.createQuery(request);
+		for(Parameter param : params){
+			query.setParameter(param.getName(), param.getValue());
+		}
+		query.executeUpdate();
+	}
+
 	@Override
 	public <T> T merge(T entity) {
 		return entityManager.merge(entity);

@@ -162,13 +162,23 @@ public class TrainingDAO {
     }
 
     @Transactional
-    public TrainingSession addCollaboratorToTrainingSession(TrainingSession trainingSession, List<Collaborator> collaborators){
+    public TrainingSession addCollaboratorToTrainingSession(TrainingSession trainingSession,
+                                                            List<Collaborator> collaborators){
         trainingSession = daoFacade.merge(trainingSession);
         for(int i=0;i<collaborators.size();i++){
             trainingSession.addCollaborator(collaborators.get(i));
+            setIsValidated(collaborators.get(i),trainingSession.getTraining());
         }
         daoFacade.flush();
         return trainingSession;
+    }
+
+    public void setIsValidated(Collaborator collaborator, Training training){
+        daoFacade.updateSingle("UPDATE RequestTraining ts SET ts.isValidated = 'true' WHERE ts.collaborator.id =:collaborator_id " +
+                        "AND ts.training.id =:training_id",
+                param("collaborator_id",collaborator.getId()),
+                param("training_id",training.getId()));
+        daoFacade.flush();
     }
 
     public boolean isThereOneSessionTrainingAlreadyPlanned(TrainingSession trainingSession) {
@@ -192,10 +202,16 @@ public class TrainingDAO {
                 param("collaborator_id", collaborator_id));
     }
 
-    public List<TrainingSession> getRequestedSessionByTrainingForCollaborator(Long collaborator_id, Long training_id){
+    public List<TrainingSession> getTrainingSession(Long collaborator_id, Long training_id){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         return daoFacade.getList("select rs from RequestTraining r join r.sessions rs where r.collaborator.id =:collaborator_id and r.training.id =:training_id ",
                 param("collaborator_id", collaborator_id),
                 param("training_id", training_id));
+    }
+
+    // TODO : Check this method if it REALLY is used unless DELETE it
+    public List<TrainingSession> getSessionCollaborators() {
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select s from TrainingSession s");
     }
 }

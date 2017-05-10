@@ -1,18 +1,16 @@
 package com.viseo.c360.formation.domain.training;
 
 
+import com.viseo.c360.formation.domain.BaseEntity;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
+
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import com.viseo.c360.formation.domain.BaseEntity;
-import com.viseo.c360.formation.domain.collaborator.Collaborator;
 
 @Entity
 public class TrainingSession extends BaseEntity {

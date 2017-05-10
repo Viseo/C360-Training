@@ -329,6 +329,11 @@ public class FakeDAOFacade implements DAOFacade {
 	}
 
 	@Override
+	synchronized public void updateSingle(String request, Parameter... params) {
+		// TODO: Implement this method
+	}
+
+	@Override
 	public void flush() {
 
 	}

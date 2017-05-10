@@ -31,7 +31,8 @@ public class RequestTraining extends BaseEntity {
     List<TrainingSession> sessions;
 
     boolean doesNotMatter = false;
-    private RequestTrainingStatus requestTrainingStatus = RequestTrainingStatus.PENDING;
+
+    boolean isValidated = false;
 
     public RequestTraining() {
         super();
@@ -70,11 +71,11 @@ public class RequestTraining extends BaseEntity {
 
     public void setDoesNotMatter(boolean doesNotMatter) {this.doesNotMatter = doesNotMatter;}
 
-    public RequestTrainingStatus getRequestTrainingStatus() {
-        return requestTrainingStatus;
+    public boolean isValidated() {
+        return isValidated;
     }
 
-    public void setRequestTrainingStatus(RequestTrainingStatus requestTrainingStatus) {
-        this.requestTrainingStatus = requestTrainingStatus;
+    public void setValidated(boolean validated) {
+        isValidated = validated;
     }
 }

@@ -18,7 +18,12 @@ let stateRequest = Vue.component('state-request', {
                     firstName: ''
                 },
                 requestedTrainingByCollaborator:[],
-                requestedTraining:[]
+                requestedTraining:[],
+                allTrainingsAlreadyHaveSessions:[],
+                allTrainingsAndSessions:[{
+                    collaborators: []
+                }],
+                trainingAndSessions:[]
             }
         },
         template: `
@@ -73,6 +78,7 @@ let stateRequest = Vue.component('state-request', {
         $('#scroll-down-3').click(function() {
             $('#scrollMyTrainings').animate({scrollTop: "+=100"}, 500);
         });
+        this.gatherAllSessionsAndCollaboratorsFromDatabase();
 
     },
 
@@ -104,15 +110,34 @@ let stateRequest = Vue.component('state-request', {
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
-                       for (let index in this.requestedTraining) {
-                           this.requestedTrainingByCollaborator.push({
-                               title: index,
-                               sessions: this.requestedTraining[index]
-                           });
-                        }
-                        console.log("lalala");
+                        console.log(Object.keys(this.requestedTraining)[0]);
+                        for (let i =0;i<Object.keys(this.requestedTraining).length;i++) {
+                            this.requestedTrainingByCollaborator.push({
+                                title: Object.keys(this.requestedTraining)[i],
+                                sessions: Object.values(this.requestedTraining)[i]
+                            });
+                         }
+
+                        // for (let index in this.requestedTraining) {
+                       //     this.requestedTrainingByCollaborator.push({
+                       //         title: index,
+                       //         sessions: this.requestedTraining[index]
+                       //     });
+                       //  }
                         console.log(this.requestedTrainingByCollaborator);
                        this.orderSessions();
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            gatherAllSessionsAndCollaboratorsFromDatabase(){
+                this.$http.get("api/formations/sessions/collaborators").then(
+                    function (response) {
+                        console.log("success to get all trainings sessions and collaborators");
+                        this.trainingAndSessions = response.data;
                     },
                     function (response) {
                         console.log("Error: ", response);
