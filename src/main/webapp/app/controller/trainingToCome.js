@@ -161,12 +161,12 @@ let trainingToComeComponent = Vue.component('training-to-come', {
             if (trainingSession.isCollaboratorDidRequest == true) {
                 this.showMouseOverMessage = true;
                 this.trainingSessionIdMouseOver = trainingSession.id;
-                this.MouseOverMessage = "Désolé! Vous avez déja effectué une demande"
+                this.MouseOverMessage = "Désolé! Vous avez déja effectué une demande";
             }
             else if (seatsAvailable == 0) {
                 this.showMouseOverMessage = true;
                 this.trainingSessionIdMouseOver = trainingSession.id;
-                this.MouseOverMessage = "Désolé! Vous ne pouvez pas effectuer de demande"
+                this.MouseOverMessage = "Désolé! Vous ne pouvez pas effectuer de demande";
             }
         },
 
