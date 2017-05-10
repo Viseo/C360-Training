@@ -15,24 +15,22 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                     <div class="col-lg-12" style="margin-bottom:30px">
                                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
                                     </div>
-                                <div id="test" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
+                                <div id="sessionsPanel" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
                                     <table  v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
                                         <tr >
                                             <td>                                                
                                                 <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                                             </td>
                                         </tr>
-                                        <tr style="cursor:pointer;"   @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)" v-for = "m in n" >
-                                            <td  style="text-align: left;">
+                                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)" v-for = "m in n" >
+                                            <td  @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" style="text-align: left;">
                                                     {{m.beginning}} - {{m.location}} 
                                             </td>
-                                            <td style="text-align: right" :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
+                                            <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" style="text-align: right" :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
                                                      {{ 15 - m.collaborators.length }} places disponibles
                                             </td>
-                                            <div class="boxMessage">
-                                                
-                                            <br/>
-                                                <p v-show="verifyShowMessageOrNot(m)" style="background-color: #b8b8b8;margin-left: 10px">{{ MouseOverMessage }}</p>
+                                            <div  v-show="verifyShowMessageOrNot(m)" class="sc-notification sc-info">
+                                                <p><span class="glyphicon glyphicon-info-sign">&nbsp</span>{{ MouseOverMessage }}</p>
                                             </div>
                                         </tr>
                                         
@@ -118,11 +116,11 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         this.getIdCollaboratorWithTokenCookies();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         $('#scroll-up-3').click(function () {
-            $('#test').animate({scrollTop: "-=100"}, 500);
+            $('#sessionsPanel').animate({scrollTop: "-=100"}, 500);
         });
 
         $('#scroll-down-3').click(function () {
-            $('#test').animate({scrollTop: "+=100"}, 500);
+            $('#sessionsPanel').animate({scrollTop: "+=100"}, 500);
         });
     },
     methods: {
