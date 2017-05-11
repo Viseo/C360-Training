@@ -5,7 +5,7 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 let trainingToComeComponent = Vue.component('training-to-come', {
-    template: `<div v-show = "!changePageToVote" class="row" >
+    template: `<div class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
                                 <legend>Formation à venir</legend>
@@ -126,7 +126,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         },
 
         changePage(){
-            this.changePageToVote=true;
+            this.$router.push('/WishToVote')
         },
 
         sendWish(){

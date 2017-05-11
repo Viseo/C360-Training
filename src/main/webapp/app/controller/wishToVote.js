@@ -2,7 +2,7 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 
 let wishToVoteComponent = Vue.component('wish-to-vote', {
-    template: `<div v-show="$parent.$children[2].changePageToVote" class="row" >
+    template: `<div class="row" >
                         <div class="row">
                             <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
                                 <legend>Voter</legend>
@@ -66,14 +66,13 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         $('#scroll-up-4').click(function() {
             $('#test1').animate({scrollTop: "-=100"}, 500);
         });
-
         $('#scroll-down-4').click(function() {
             $('#test1').animate({scrollTop: "+=100"}, 500);
         });
     },
     methods: {
         changePage(){
-            this.$parent.$children[2].changePageToVote = false;
+            this.$router.push('/registerTrainingCollaborator');
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');

@@ -74,7 +74,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                placeholder="Nom ou prénom du collaborateur"></typeahead>
                                 </div>
                                 <br/><br/>
-                                <div align="center" style="overflow: auto; position:fixed; height:33vh;">
+                                <div align="center" style="overflow-y: auto; overflow-x: hidden; height:33vh;">
                                     <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
                                     </div>
                                     <table class="tabCentring">

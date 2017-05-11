@@ -139,7 +139,7 @@ let Header = Vue.component('blue-header', {
             };
 
             let preventCollaboratorToGoToAdminPage = ()=>{
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
@@ -251,6 +251,20 @@ let router = new VueRouter({
                                     </div>
                                     <div class="col-sm-12 col-md-5 col-lg-5">
                                         <training-to-come></training-to-come>
+                                    </div>
+                                </div>                           </div>`
+            }
+        },        {
+            path: "/WishToVote",
+            name: 'WishToVote',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                                <blue-header title="Gestion des formations"></blue-header>
+ <div class="container-fluid">
+                                    <div class="col-sm-12 col-md-7 col-lg-7">
+                                        <collaborator-formation ref="myComponent" ></collaborator-formation>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5 col-lg-5">
                                         <wish-to-vote></wish-to-vote>
                                     </div>
                                 </div>                           </div>`
