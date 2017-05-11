@@ -2,9 +2,8 @@
     border:1px solid #dcdcdc;
     border-radius: 10px;
     height:100%;
-    width: 95%;
+    width: 100%;
     padding:20px;
-    margin-left:15px;
 }
 .searchCollab .panel-body {
     height:300px;
@@ -41,7 +40,7 @@ div.disabled
     pointer-events: none;
     /* for "disabled" effect */
     opacity: 0.5;
-    background: #CCC;
+    background: #ffffff;
 }
 
 #typeahead .dropdown-menu
@@ -53,7 +52,7 @@ display:none;
     font-size:0.85em;
 }
 
-a.boxclose{
+#box{
     position:absolute;
     margin-left:10px;
     margin-top:-10px;
@@ -71,3 +70,4 @@ a.boxclose{
     text-align: center;
     text-decoration: none;
 }
+

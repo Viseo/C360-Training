@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class TrainingSession extends BaseEntity {
@@ -32,7 +34,8 @@ public class TrainingSession extends BaseEntity {
 
 	@NotNull
 	@Valid
-	@ManyToMany(fetch = FetchType.EAGER)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
 	List<Collaborator> collaborators;
 
 	public TrainingSession() {

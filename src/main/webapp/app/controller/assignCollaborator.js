@@ -97,7 +97,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                             <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés:
                                 {{validatedCollab.length}}</h4>
                             <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                <label>Nombre de places disponibles : {{15 -
+                                <label style = "padding-left:0px;">Nombre de places disponibles : {{15 -
                                     allCollaboratorsAlreadyInSessions.length}}</label>
                             </div>
                         </div>
@@ -127,10 +127,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <br>
                     <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
-                        <a class="boxclose" id="boxclose">{{numberOfWishesNotChecked}}</a>
+                        <a id="box">{{numberOfWishesNotChecked}}</a>
                         <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
                     </div>
-                    <div class="row col-sm-offset-3 col-dm-offset-3 col-lg-offset-3 col-sm-4 col-md-4 col-lg-4 ">
+                    <div class="row ">
                         <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
                         <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
                         <span v-show="confirmCollaboratorAddedSession" class="text-center color-green" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vos modifications ont bien été enregistrées</span>

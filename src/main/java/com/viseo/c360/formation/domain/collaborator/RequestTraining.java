@@ -3,6 +3,8 @@ package com.viseo.c360.formation.domain.collaborator;
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -26,7 +28,8 @@ public class RequestTraining extends BaseEntity {
 
     @NotNull
     @Valid
-    @ManyToMany(fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany
     List<TrainingSession> sessions;
 
     boolean doesNotMatter = false;
