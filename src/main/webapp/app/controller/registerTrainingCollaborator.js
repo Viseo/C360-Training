@@ -283,7 +283,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.$http.post("api/requests", this.RequestToRegister).then(
                 function (response) {
                     this.addingRequestSucceeded = true;
-                    console.log(this.$parent);
                     this.$parent.$children[2].fetchTrainingsSessions();
                 },
                 function (response) {

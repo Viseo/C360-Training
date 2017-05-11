@@ -118,7 +118,8 @@ let stateRequest = Vue.component('state-request', {
                     }
                 });
             },
-            fetchTrainingsTitles(){
+            fetchTrainingsSessions(){
+                this.requestedTrainingByCollaborator.splice(0,this.requestedTrainingByCollaborator.length);
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
