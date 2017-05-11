@@ -140,7 +140,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/okwishtoupdate/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to add ok wish");
-                        this.getAllWishes();
+                        window.location.reload();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -150,7 +150,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/kowishtochange/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to remove ko wish");
-                        this.getAllWishes();
+                        window.location.reload();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -176,7 +176,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/kowishtoupdate/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to add ko wish");
-                        this.getAllWishes();
+                        window.location.reload();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -186,7 +186,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/okwishtochange/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to remove ok wish");
-                        this.getAllWishes();
+                        window.location.reload();
                     },
                     function(response) {
                         console.log("Error: ", response);
