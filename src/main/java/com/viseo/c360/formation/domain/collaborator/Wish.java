@@ -19,7 +19,11 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-public class Wish extends BaseEntity{
+public class Wish{
+
+    @Id
+    @GeneratedValue
+    long id;
 
     @NotNull
     @Size(min = 3,max = 50)
@@ -53,6 +57,13 @@ public class Wish extends BaseEntity{
         this.vote_ko = new ArrayList<>();
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getLabel() {
         return label;

@@ -15,7 +15,6 @@ public class WishToDescription {
     public WishDescription convert(Wish source) {
         WishDescription dto = new WishDescription();
         dto.setId(source.getId());
-        dto.setVersion(source.getVersion());
         dto.setLabel(source.getLabel());
         dto.setChecked(source.getChecked());
         dto.setCollaborator(new CollaboratorToDescription().convert(source.getCollaborator()));
