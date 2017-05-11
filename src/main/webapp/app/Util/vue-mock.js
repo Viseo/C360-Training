@@ -363,7 +363,20 @@ let routes = [
                         "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
                     }
                     ]
-    }
+    },
+    {
+        method: 'POST',
+        url: 'api/wish/1',
+        response: [{
+            "id": 1,
+            "version": 0,
+            "ischecked": "false",
+            "label": "PHP",
+            "collaborator_id": 1,
+        },
+        ]
+    },
+
 ];
 
 

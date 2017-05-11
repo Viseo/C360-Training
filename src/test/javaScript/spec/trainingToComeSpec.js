@@ -300,4 +300,13 @@ describe('training to come Panel test', function () {
             expect(vmTrainingToCome.verifyShowMessageOrNot(trainingSelected)).toBe(true);
     });
 
+    it('Should check sending wishes in the database', function () {
+        setTimeout(function () {
+            vmTrainingToCome.wish = "PHP";
+            vmTrainingToCome.collaborator_id = 1;
+            vmTrainingToCome.sendWish()
+            expect(vmTrainingToCome.wishAlreadyExisted).toBe(false);
+            expect(vmTrainingToCome.wishSuccess).toBe(true);
+        }, 0);
+    });
 });
