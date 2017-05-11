@@ -60,6 +60,7 @@ public class CollaboratorDAO {
     public Wish changeVoteOkToKo(Wish wish, Collaborator collaborator){
         wish = daoFacade.merge(wish);
         wish.removeVote_ok(collaborator);
+        daoFacade.flush();
         wish.addVote_ko(collaborator);
         daoFacade.flush();
         return wish;
@@ -69,6 +70,7 @@ public class CollaboratorDAO {
     public Wish changeVoteKoToOk(Wish wish, Collaborator collaborator){
         wish = daoFacade.merge(wish);
         wish.removeVote_ko(collaborator);
+        daoFacade.flush();
         wish.addVote_ok(collaborator);
         daoFacade.flush();
         return wish;

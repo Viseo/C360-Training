@@ -140,7 +140,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/okwishtoupdate/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to add ok wish");
-                        window.location.reload();
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -150,7 +150,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/kowishtochange/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to remove ko wish");
-                        window.location.reload();
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -160,23 +160,11 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         },
         addVoteKo(wish){
             this.userAlreadyVotedKo(wish);
-            this.collaboratorAlreadyVotedTheSameVote = false;
-            this.collaboratorAlreadyVotedTheOppositeVote = false;
-            for(var tmp1 in wish.vote_ko){
-                if(this.collaborator_id == wish.vote_ko[tmp1].id){
-                    this.collaboratorAlreadyVotedTheSameVote = true;
-                }
-            }
-            for(var tmp2 in wish.vote_ok){
-                if(this.collaborator_id == wish.vote_ok[tmp2].id){
-                    this.collaboratorAlreadyVotedTheOppositeVote = true;
-                }
-            }
             if(!this.collaboratorAlreadyVotedTheSameVote && !this.collaboratorAlreadyVotedTheOppositeVote){
                 this.$http.put("api/kowishtoupdate/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to add ko wish");
-                        window.location.reload();
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
@@ -186,7 +174,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 this.$http.put("api/okwishtochange/"+this.collaborator_id,wish).then(
                     function (response) {
                         console.log("success to remove ok wish");
-                        window.location.reload();
+                        this.getAllWishes();
                     },
                     function(response) {
                         console.log("Error: ", response);
