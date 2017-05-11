@@ -66,7 +66,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                 </select>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-12">
-                                                <input ref="btnValidateSearch" @click="displayTrainingsFn" type="submit" class="btn btn-primary" value="Valider"/>
+                                                <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
                                             <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
                                                 <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(searchFormatted)" value=""></span>
@@ -172,6 +172,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
         renitialize(training){
+            this.trainingrequested = false;
             this.trainingalreadyrequested(training.id);
             this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
@@ -217,7 +218,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.disablingSessions();
             }
         },
-        displayTrainingsFn(){
+        displayTrainingsFn(selectedTraining){
+            this.selectedTraining = selectedTraining;
             this.emptyTraining = this.selectedTraining ? false : true;
             if (!this.emptyTraining) {
                 let selectedTraining = this.selectedTraining;

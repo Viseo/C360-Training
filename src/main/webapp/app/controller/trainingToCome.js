@@ -184,7 +184,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
 
         showTrainingAndSessionsSelected(training){
             let formationRequestsComponent = this.$parent.$children[1];
-            formationRequestsComponent.storeTrainingsFound(training.trainingTitle.toUpperCase());
+            formationRequestsComponent.displayTrainingsFn(training.id);
             formationRequestsComponent.renitialize(training);
             formationRequestsComponent.openPanel = true;
         },
