@@ -15,6 +15,7 @@ import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDesc
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -229,20 +230,12 @@ public class TrainingWS {
 
     @RequestMapping(value = "${endpoint.getRequestedSessions}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, List<TrainingSession>> getRequestedTrainings(@PathVariable String collaborator_id) throws PersistentObjectNotFoundException {
+    public Map<String, CollaboratorRequestTraining> getRequestedTrainings(@PathVariable String collaborator_id) throws PersistentObjectNotFoundException {
         List<Training> trainings = new ArrayList <> (trainingDAO.getTrainings(Long.parseLong(collaborator_id)));
-        Map<String, List<TrainingSession>> requestTrainingsMap = new HashMap<>();
+        Map<String, CollaboratorRequestTraining> requestTrainingsMap = new HashMap<>();
         for (Training training: trainings){
-            List<TrainingSession> requestTrainings = new ArrayList <> (trainingDAO.getTrainingSession(Long.parseLong(collaborator_id), training.getId()));
-
-            requestTrainingsMap.put(training.getTrainingTitle(), requestTrainings);
+            requestTrainingsMap.put(training.getTrainingTitle(), trainingDAO.getTrainingSession(Long.parseLong(collaborator_id), training.getId()));
         }
         return requestTrainingsMap;
     }
-    @RequestMapping(value = "${endpoint.sessioncollabs}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<TrainingSessionDescription> getSessionCollaborators() {
-        return new TrainingSessionToDescription().convert(trainingDAO.getSessionCollaborators());
-    }
-
 }

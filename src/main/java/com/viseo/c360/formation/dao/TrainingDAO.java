@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
+import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -198,20 +199,24 @@ public class TrainingDAO {
 
     public List<Training> getTrainings(Long collaborator_id){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select r.training from RequestTraining r where r.collaborator.id =:collaborator_id",
-                param("collaborator_id", collaborator_id));
+        return daoFacade.getList("select ts.training from TrainingSession ts  ");
     }
 
-    public List<TrainingSession> getTrainingSession(Long collaborator_id, Long training_id){
+    @Transactional
+    public CollaboratorRequestTraining getTrainingSession(Long collaborator_id, Long training_id){
+        CollaboratorRequestTraining collaboratorRequestTraining = new CollaboratorRequestTraining();
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select rs from RequestTraining r join r.sessions rs where r.collaborator.id =:collaborator_id and r.training.id =:training_id ",
+        collaboratorRequestTraining.setTrainingSessions(daoFacade.getList("select ts from TrainingSession ts join ts.collaborators c" +
+                        " where c.id =:collaborator_id and ts.training.id =:training_id ",
                 param("collaborator_id", collaborator_id),
-                param("training_id", training_id));
+                param("training_id", training_id)) );
+        collaboratorRequestTraining.setRequestTrainingList(daoFacade.getList("SELECT rt.sessions FROM RequestTraining rt WHERE" +
+                        " rt.collaborator.id =:collaborator_id" +
+                        " AND rt.training.id =:training_id" +
+                        " AND rt.isValidated = 'false'",
+                param("collaborator_id", collaborator_id),
+                param("training_id", training_id)));
+        return collaboratorRequestTraining;
     }
 
-    // TODO : Check this method if it REALLY is used unless DELETE it
-    public List<TrainingSession> getSessionCollaborators() {
-        daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select s from TrainingSession s");
-    }
 }

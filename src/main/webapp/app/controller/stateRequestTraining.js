@@ -18,7 +18,11 @@ let stateRequest = Vue.component('state-request', {
                     firstName: ''
                 },
                 requestedTrainingByCollaborator:[],
-                requestedTraining:[],
+                requestedTraining:[{
+                    requestTrainingList: [],
+                    trainingSessions: [],
+                    title:''
+                }],
                 allTrainingsAlreadyHaveSessions:[],
                 allTrainingsAndSessions:[{
                     collaborators: []
@@ -47,14 +51,15 @@ let stateRequest = Vue.component('state-request', {
                                 <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
                                     <div v-for="training in requestedTrainingByCollaborator" >
                                         <strong> {{training.title}}</strong>
-                                        <div v-for="session in training.sessions">
+                                        <div v-for="session in training.sessionsPending">
+                                            {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
+                                            <span class="glyphicon glyphicon-time alignIcon"></span>
+                                        </div>
+                                        <div v-for="session in training.sessionsValidated">
                                             {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
                                             <span class="glyphicon glyphicon-ok-circle alignIcon" style="color: green"></span>
                                         </div>
-                                    </div>
-                                    <div>
-                                        09 Mai 2017 - 11 Mai 2017 salle Bora Bora
-                                        <span class="glyphicon glyphicon-time alignIcon""></span>
+                                        <hr style="margin:4.5px"/>
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +83,6 @@ let stateRequest = Vue.component('state-request', {
         $('#scroll-down-3').click(function() {
             $('#scrollMyTrainings').animate({scrollTop: "+=100"}, 500);
         });
-        this.gatherAllSessionsAndCollaboratorsFromDatabase();
-
     },
 
         methods: {
@@ -105,25 +108,31 @@ let stateRequest = Vue.component('state-request', {
                     }
                 }
             },
-            fetchTrainingsSessions(){
-                this.requestedTrainingByCollaborator.splice(0,this.requestedTrainingByCollaborator.length);
+            orderSessions(){
+                this.requestedTrainingByCollaborator.sort(function(a, b) {
+                    if(a.sessionsValidated[0] && b.sessionsValidated[0]){
+                        return parseFloat(a.sessionsValidated[0].beginning) - parseFloat(b.sessionsValidated[0].beginning);
+                    }
+                    else if(a.sessionsPending[0] && b.sessionsPending[0]){
+                        return parseFloat(a.sessionsPending[0].beginning) - parseFloat(b.sessionsPending[0].beginning);
+                    }
+                });
+            },
+            fetchTrainingsTitles(){
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
                         console.log(Object.keys(this.requestedTraining)[0]);
                         for (let i =0;i<Object.keys(this.requestedTraining).length;i++) {
-                            this.requestedTrainingByCollaborator.push({
+                            if(Object.values(this.requestedTraining)[i].requestTrainingList.length!=0 || Object.values(this.requestedTraining)[i].trainingSessions.length!=0){
+                                this.requestedTrainingByCollaborator.push({
                                 title: Object.keys(this.requestedTraining)[i],
-                                sessions: Object.values(this.requestedTraining)[i]
-                            });
-                         }
+                                sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
+                                sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
+                            });}
+                            this.orderSessions();
 
-                        // for (let index in this.requestedTraining) {
-                       //     this.requestedTrainingByCollaborator.push({
-                       //         title: index,
-                       //         sessions: this.requestedTraining[index]
-                       //     });
-                       //  }
+                         }
                         console.log(this.requestedTrainingByCollaborator);
                        this.orderSessions();
                     },
@@ -133,23 +142,6 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
-            gatherAllSessionsAndCollaboratorsFromDatabase(){
-                this.$http.get("api/formations/sessions/collaborators").then(
-                    function (response) {
-                        console.log("success to get all trainings sessions and collaborators");
-                        this.trainingAndSessions = response.data;
-                    },
-                    function (response) {
-                        console.log("Error: ", response);
-                        console.error(response);
-                    }
-                );
-            },
-            orderSessions(){
-                this.requestedTrainingByCollaborator.sort(function(a, b) {
-                    return parseFloat(a.sessions[0].beginning) - parseFloat(b.sessions[0].beginning);
-                });
-            }
         }
     }
 )
