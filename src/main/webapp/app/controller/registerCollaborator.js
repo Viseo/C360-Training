@@ -442,7 +442,7 @@ let Formulaire = Vue.component('inscription-form', {
             this.isEmailEmpty();
             this.isPasswordEmpty();
             this.isConfirmPasswordEmpty();
-            if (!this.loginEmpty && !this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.passwordEmpty && !this.confirmPasswordEmpty && this.isConfirmPasswordValid) {
+            if (!this.loginEmpty && !this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.passwordEmpty && !this.confirmPasswordEmpty && this.isPasswordValid && this.isConfirmPasswordValid) {
                 this.personalIdNumberAlreadyExist = true;
                 this.emailAlreadyExist = true;
                 this.collaborator.personnalIdNumber = this.personnalIdNumber;
