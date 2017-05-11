@@ -19,6 +19,8 @@ public class WishToDescription {
         dto.setLabel(source.getLabel());
         dto.setChecked(source.getChecked());
         dto.setCollaborator(new CollaboratorToDescription().convert(source.getCollaborator()));
+        dto.setVote_ok(source.getVote_ok());
+        dto.setVote_ko(source.getVote_ko());
         return dto;
     }
 

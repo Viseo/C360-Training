@@ -251,6 +251,7 @@ let router = new VueRouter({
                                     </div>
                                     <div class="col-sm-12 col-md-5 col-lg-5">
                                         <training-to-come></training-to-come>
+                                        <wish-to-vote></wish-to-vote>
                                     </div>
                                 </div>                           </div>`
             }

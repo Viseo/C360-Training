@@ -365,6 +365,14 @@ let routes = [
                     ]
     },
     {
+        method: 'GET',
+        url: 'api/wish/1',
+        response: [
+            {"id":10, "version":0,"label":"SSS","collaborator":{"id":5,"version":0,"personnalIdNumber":"BBB1234","lastName":"nrjek","firstName":"rnrejk","email":"mxzsdef@163.com","password":"123456","isAdmin":false},"vote_ok":null,"vote_ko":null,"checked":false},
+            {"id":11,"version":0,"label":"SSSFFF","collaborator":{"id":5,"version":0,"personnalIdNumber":"BBB1234","lastName":"nrjek","firstName":"rnrejk","email":"mxzsdef@163.com","password":"123456","isAdmin":false},"vote_ok":null,"vote_ko":null,"checked":true}
+        ]
+    },
+    {
         method: 'POST',
         url: 'api/wish/1',
         response: [{

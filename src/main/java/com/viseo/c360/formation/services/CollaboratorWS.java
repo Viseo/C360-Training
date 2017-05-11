@@ -150,6 +150,92 @@ public class CollaboratorWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.wish}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WishDescription> getIsNotCheckedWishes(@PathVariable Long collaborator_id) {
+        try {
+            return new WishToDescription().convert(collaboratorDAO.getIsNotCheckedWishes());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.allwishes}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WishDescription> getAllWishes() {
+        try {
+            return new WishToDescription().convert(collaboratorDAO.getAllWishes());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.kowishtoadd}", method = RequestMethod.PUT)
+    @ResponseBody
+    public WishDescription updateKoWish(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+        try {
+            Wish wishToUpdate = new DescriptionToWish().convert(Wish);
+            if(wishToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
+            Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
+            if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+            wishToUpdate = collaboratorDAO.addVoteKoToWish(wishToUpdate, collaboratorToUpdate);
+            return new WishToDescription().convert(wishToUpdate);
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.okwishtoadd}", method = RequestMethod.PUT)
+    @ResponseBody
+    public WishDescription updateOkWish(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+        try {
+            Wish wishOkToUpdate = new DescriptionToWish().convert(Wish);
+            if(wishOkToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
+            Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
+            if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+            wishOkToUpdate = collaboratorDAO.addVoteOkToWish(wishOkToUpdate, collaboratorToUpdate);
+            return new WishToDescription().convert(wishOkToUpdate);
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.kowishtochange}", method = RequestMethod.PUT)
+    @ResponseBody
+    public WishDescription changeKoToOk(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+        try {
+            Wish wishToUpdate = new DescriptionToWish().convert(Wish);
+            if(wishToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
+            Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
+            if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+            wishToUpdate = collaboratorDAO.changeVoteKoToOk(wishToUpdate, collaboratorToUpdate);
+            return new WishToDescription().convert(wishToUpdate);
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.okwishtochange}", method = RequestMethod.PUT)
+    @ResponseBody
+    public WishDescription changeOkToKo(@RequestBody WishDescription Wish, @PathVariable Long collaborator_id) {
+        try {
+            Wish wishOkToUpdate = new DescriptionToWish().convert(Wish);
+            if(wishOkToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
+            Collaborator collaboratorToUpdate = collaboratorDAO.getCollaborator(collaborator_id);
+            if(collaboratorToUpdate == null) throw new PersistentObjectNotFoundException(15,Collaborator.class);
+            wishOkToUpdate = collaboratorDAO.changeVoteOkToKo(wishOkToUpdate, collaboratorToUpdate);
+            return new WishToDescription().convert(wishOkToUpdate);
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
     @RequestMapping(value = "${endpoint.collaborators}", method = RequestMethod.POST)
     @ResponseBody
     public CollaboratorDescription addCollaborator(@RequestBody CollaboratorDescription collaboratorDescription) {

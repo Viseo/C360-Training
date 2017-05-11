@@ -16,6 +16,8 @@ public class DescriptionToWish {
         domain.setLabel(dto.getLabel());
         domain.setChecked(dto.getChecked());
         domain.setCollaborator(new DescriptionToCollaborator().convert(dto.getCollaborator()));
+        domain.setVote_ok(dto.getVote_ok());
+        domain.setVote_ko(dto.getVote_ko());
         return domain;
 
     }
