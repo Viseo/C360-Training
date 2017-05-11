@@ -76,12 +76,14 @@ public class CollaboratorDAO {
         return wish;
     }
 
+    @Transactional
     public List<Wish> getIsNotCheckedWishes(){
         List<Wish> listWish = daoFacade.getList(
                 "select w from Wish w where w.isChecked = false");
         return listWish;
     }
 
+    @Transactional
     public List<Wish> getAllWishes(){
         List<Wish> listWish = daoFacade.getList(
                 "select w from Wish w");
