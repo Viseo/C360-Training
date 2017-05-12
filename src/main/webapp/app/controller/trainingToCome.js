@@ -2,83 +2,99 @@
  * Created by SJO3662 on 02/05/2017.
  */
 let trainingToComeComponent = Vue.component('training-to-come', {
-    template: `<div class="row" >
-                        <div class="row">
-                            <div style="margin-left:30px;" class="col-lg-7 col-md-7 text-center">
-                                <legend>Formation à venir</legend>
+    template: `
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-7 col-md-7 col-sm-7 text-center" style="width:200px">
+            <legend>Formation à venir</legend>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-default" style="margin-left:10px; ">
+            <div class="panel-body" style="padding:5px;">
+                <div class="row">
+                    <div class="col-lg-12" style="margin-bottom:30px">
+                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-training-to-come" width="60" height="20"
+                             style="position: absolute; left:50%; z-index:1;">
+                    </div>
+                </div>
+                <div id="sessionsPanel" style=" height: 190px; overflow-y:hidden; overflow-x:hidden;"
+                     class="col-lg-12 col-md-12 col-sm-12">
+                    <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
+                        <tr>
+                            <td>
+                                <div style="text-align: left"><b>{{n[0].trainingDescription.trainingTitle}} </b></div>
+                            </td>
+                        </tr>
+                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"
+                            v-for="m in n">
+                            <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()"
+                                style="text-align: left;">
+                                {{m.beginning}} - {{m.location}}
+                            </td>
+                            <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()"
+                                style="text-align: right"
+                                :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
+                                {{ 15 - m.collaborators.length }} places disponibles
+                            </td>
+                            <div v-show="verifyShowMessageOrNot(m)" class="sc-notification sc-info">
+                                <p><span class="glyphicon glyphicon-info-sign">&nbsp</span>{{ MouseOverMessage }}</p>
                             </div>
-                        </div>
-                            <div style="margin-left:30px; height: 400px; width: 550px;border:1px solid #dcdcdc;border-radius: 10px;"> 
-                                    <div class="col-lg-12" style="margin-bottom:30px">
-                                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-training-to-come" width="60" height="20" style="position: absolute; left:45%; margin-top:10px; z-index:1;">
-                                    </div>
-                                <div id="sessionsPanel" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
-                                    <table  v-for = "n in allTrainingsAndSessions" style=" width: 100%;" >
-                                        <tr >
-                                            <td>                                                
-                                                <div style="text-align: left"> <b>{{n[0].trainingDescription.trainingTitle}} </b></div>
-                                            </td>
-                                        </tr>
-                                        <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)" v-for = "m in n" >
-                                            <td  @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" style="text-align: left;">
-                                                    {{m.beginning}} - {{m.location}} 
-                                            </td>
-                                            <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()" style="text-align: right" :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
-                                                     {{ 15 - m.collaborators.length }} places disponibles
-                                            </td>
-                                            <div  v-show="verifyShowMessageOrNot(m)" class="sc-notification sc-info">
-                                                <p><span class="glyphicon glyphicon-info-sign">&nbsp</span>{{ MouseOverMessage }}</p>
-                                            </div>
-                                        </tr>
-                                        
-                                        <tr><td colspan="2"><hr></td></tr>
-                                    </table>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12" style="margin-top:10px">
-                                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 20px; top:95%; z-index:1;">
-                                    </div>
-                                </div>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-12" style="margin-top:10px">
+                    <img src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+                </div>
+                <br>
+                <div style="margin-top:20px;">
+                    <table style="width: 530px;">
+                        <tr>
+                            <td>
+                                <!--<br v-show="!showWish"/><br v-show="!showWish"/>-->
+                                <p>
+                                    <span @click="changePage()"
+                                          style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span
+                                            class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    <input-text
+                                            v-show="!showWish"
+                                            :value="wish"
+                                            style="width:310px;position:absolute; left:40%; top:80%;"
+                                            @input="updateV1"
+                                            placeholder="Ex : javascript (50 caractères maximum)"
+                                            maxlength="50"
+                                            icon="glyphicon glyphicon-floppy-disk"
+                                            type='input'
+                                            @click="sendWish">
+                                    </input-text>
+                                    <span v-show="showWish" @click="showWish = !showWish"
+                                          style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span
+                                            class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
                                 <br>
-                                <div style="margin-top:20px; margin-left: 25px;">
-                                    <table style="width: 530px;">
-                                        <tr>
-                                            <td> 
-                                                <!--<br v-show="!showWish"/><br v-show="!showWish"/>-->
-                                                <p>
-                                                    <span @click="changePage()" style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
-                                                </p>
-                                            </td>  
-                                            <td>
-                                              <p>
-                                                 <input-text 
-                                                    v-show="!showWish"
-                                                    :value = "wish" 
-                                                    style ="width:310px;position:absolute; left:40%; top:80%;"
-                                                    @input = "updateV1"
-                                                    placeholder = "Ex : javascript (50 caractères maximum)"
-                                                    maxlength = "50"
-                                                    icon = "glyphicon glyphicon-floppy-disk"
-                                                    type = 'input'
-                                                    @click="sendWish">
-                                                 </input-text>
-                                                 <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
-                                              </p>
-                                            </td>                         
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <br>
-                                                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
-                                                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
-                                            </td>
-                                         </tr>
-                                    </table>
-                                    
-                                </div>
-                            </div>
-                        </div>
+                                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span>
+                                </center>
+                                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
+        </div>
             `,
 
     data: function () {

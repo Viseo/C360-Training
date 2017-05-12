@@ -31,7 +31,7 @@ let stateRequest = Vue.component('state-request', {
             }
         },
         template: `
-        <div class="container-fluid" style="margin-top:18px;">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-7 col-md-7 col-sm-7 text-center" style="width:200px">
                     <legend> Mes formations </legend>
@@ -39,8 +39,8 @@ let stateRequest = Vue.component('state-request', {
             </div>
             <div class="row">
                 <div class="panel panel-default" style="margin-left:10px; ">
-                     <div class="panel-body">
-                         <div class="row">
+                     <div class="panel-body" style="padding:5px;">
+                        <div class="row">
                             <div class="col-lg-12" style="margin-bottom:30px">
                                 <img src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                             </div>
@@ -74,15 +74,11 @@ let stateRequest = Vue.component('state-request', {
 
 `,
     mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+        this.activateScrollUp('#scroll-up-3','#scrollMyTraining');
+        this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
         this.getCookies();
         this.fetchTrainingsSessions();
-        $('#scroll-up-3').click(function() {
-            $('#scrollMyTrainings').animate({scrollTop: "-=100"}, 500);
-        });
-
-        $('#scroll-down-3').click(function() {
-            $('#scrollMyTrainings').animate({scrollTop: "+=100"}, 500);
-        });
     },
 
         methods: {
