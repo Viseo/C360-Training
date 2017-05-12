@@ -404,17 +404,13 @@ describe('assign collaborator test', function () {
             expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
         }, 0);
     });
-    it('should check if error message is displayed when there are  type error in search field ', function (done) {
-        setTimeout(function () {
-            vmAssignCollaborator.value = "@";
-            done();
-        }, 0);
 
-        setTimeout(function () {
-            expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
-            expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
-            done();
-        }, 0);
+    it('should check if error message is displayed when there are  type error in search field ', function () {
+        vmAssignCollaborator.value = "@";
+        vmAssignCollaborator.verifyLastName(vmAssignCollaborator.value, 'lastNameRegexErrorMessage');
+        expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
+        expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
+
 
 
     });
