@@ -18,7 +18,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                              style="position: absolute; left:50%; z-index:1;">
                     </div>
                 </div>
-                <div id="sessionsPanel" style=" height: 190px; overflow-y:hidden; overflow-x:hidden;"
+                <div id="sessionsPanel" style=" height: 200px; overflow-y:hidden; overflow-x:hidden;"
                      class="col-lg-12 col-md-12 col-sm-12">
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr>
@@ -48,7 +48,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                         </tr>
                     </table>
                 </div>
-                <div class="col-lg-12" style="margin-top:10px">
+                <div class="col-lg-12" style="margin:10px">
                     <img src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
                 </div>
                 <br>
@@ -56,7 +56,6 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                     <table style="width: 530px;">
                         <tr>
                             <td>
-                                <!--<br v-show="!showWish"/><br v-show="!showWish"/>-->
                                 <p>
                                     <span @click="changePage()"
                                           style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span
@@ -68,7 +67,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                     <input-text
                                             v-show="!showWish"
                                             :value="wish"
-                                            style="width:310px;position:absolute; left:40%; top:80%;"
+                                            style="width:300px;position:absolute; left:45%%; top:87%;"
                                             @input="updateV1"
                                             placeholder="Ex : javascript (50 caractères maximum)"
                                             maxlength="50"
@@ -76,9 +75,8 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                                             type='input'
                                             @click="sendWish">
                                     </input-text>
-                                    <span v-show="showWish" @click="showWish = !showWish"
-                                          style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span
-                                            class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
+                                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer">
+                                          <span class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
                                 </p>
                             </td>
                         </tr>
