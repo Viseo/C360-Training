@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
+import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -181,13 +182,23 @@ public class TrainingDAO {
     }
 
     @Transactional
-    public TrainingSession addCollaboratorToTrainingSession(TrainingSession trainingSession, List<Collaborator> collaborators){
+    public TrainingSession addCollaboratorToTrainingSession(TrainingSession trainingSession,
+                                                            List<Collaborator> collaborators){
         trainingSession = daoFacade.merge(trainingSession);
         for(int i=0;i<collaborators.size();i++){
             trainingSession.addCollaborator(collaborators.get(i));
+            setIsValidated(collaborators.get(i),trainingSession.getTraining());
         }
         daoFacade.flush();
         return trainingSession;
+    }
+
+    public void setIsValidated(Collaborator collaborator, Training training){
+        daoFacade.updateSingle("UPDATE RequestTraining ts SET ts.isValidated = 'true' WHERE ts.collaborator.id =:collaborator_id " +
+                        "AND ts.training.id =:training_id",
+                param("collaborator_id",collaborator.getId()),
+                param("training_id",training.getId()));
+        daoFacade.flush();
     }
 
     public boolean isThereOneSessionTrainingAlreadyPlanned(TrainingSession trainingSession) {
@@ -204,4 +215,27 @@ public class TrainingDAO {
                 param("ending", trainingSession.getEnding()));
         return !list.isEmpty();
     }
+
+    public List<Training> getTrainings(Long collaborator_id){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select ts.training from TrainingSession ts  ");
+    }
+
+    @Transactional
+    public CollaboratorRequestTraining getTrainingSession(Long collaborator_id, Long training_id){
+        CollaboratorRequestTraining collaboratorRequestTraining = new CollaboratorRequestTraining();
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        collaboratorRequestTraining.setTrainingSessions(daoFacade.getList("select ts from TrainingSession ts join ts.collaborators c" +
+                        " where c.id =:collaborator_id and ts.training.id =:training_id ",
+                param("collaborator_id", collaborator_id),
+                param("training_id", training_id)) );
+        collaboratorRequestTraining.setRequestTrainingList(daoFacade.getList("SELECT rt.sessions FROM RequestTraining rt WHERE" +
+                        " rt.collaborator.id =:collaborator_id" +
+                        " AND rt.training.id =:training_id" +
+                        " AND rt.isValidated = 'false'",
+                param("collaborator_id", collaborator_id),
+                param("training_id", training_id)));
+        return collaboratorRequestTraining;
+    }
+
 }
