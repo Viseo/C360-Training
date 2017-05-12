@@ -53,7 +53,7 @@ let Header = Vue.component('blue-header', {
             token: '',
             disconnect: false,
             app: {
-                training: true,
+                training: false,
                 skills: false,
                 mission: false,
                 leave: false
@@ -77,6 +77,9 @@ let Header = Vue.component('blue-header', {
         }, function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
         });
+        if(this.title == "Gestion des formations"){
+            this.app.training = true;
+        }
     },
     methods: {
         setDisconnectedToTrue(){
@@ -127,9 +130,9 @@ let Header = Vue.component('blue-header', {
             }
         },
         getCookieInfos() {
-            let isAdmin = ()=> jwt_decode(this.token).roles;
+            let isAdmin = () => jwt_decode(this.token).roles;
 
-            let retrieveTimeOfExit = ()=>{
+            let retrieveTimeOfExit = () => {
                 let timeOfExit = document.cookie.match('(^|;)\\s*' + "timeConnected" + '\\s*=\\s*([^;]+)');
                 if (timeOfExit) {
                     if (this.getPageName() != 'login') {
@@ -138,47 +141,47 @@ let Header = Vue.component('blue-header', {
                 }
             };
 
-            let preventCollaboratorToGoToAdminPage = ()=>{
+            let preventCollaboratorToGoToAdminPage = () => {
                 if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
 
-            let preventAdminToGoToCollaboratorPage = ()=>{
+            let preventAdminToGoToCollaboratorPage = () => {
                 if (isAdmin() && this.getPageName() != 'addTrainingTopic') {
                     this.goTo('addTrainingTopic');
                 }
             };
 
-            let retrieveUserInfoFromToken = ()=>{
+            let retrieveUserInfoFromToken = () => {
                 this.lastName = jwt_decode(this.token).lastName;
                 this.firstName = jwt_decode(this.token).sub;
             };
 
-            let isConnected = ()=> {
-                    let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-                    let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
+            let isConnected = () => {
+                let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
 
-                    if (!isTokenPresent) delete this.token;
-                    if (this.token == 'undefined') isTokenPresent = false;
-                    if (isTokenPresent && stayConnectedDefined) {
-                        this.token = String(isTokenPresent.pop());
-                        return true;
-                    }
-                    return false;
+                if (!isTokenPresent) delete this.token;
+                if (this.token == 'undefined') isTokenPresent = false;
+                if (isTokenPresent && stayConnectedDefined) {
+                    this.token = String(isTokenPresent.pop());
+                    return true;
+                }
+                return false;
             };
 
-            let redirectToLoginPage = ()=> {
-                if (this.getPageName()!= 'login') {
+            let redirectToLoginPage = () => {
+                if (this.getPageName() != 'login') {
                     if (this.getPageName() != 'resetPassword') {
                         this.goTo('login');
                     }
                 }
             };
 
-            let retrieveStayConnected = ()=> {
+            let retrieveStayConnected = () => {
                 let stayConnectedChecked = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
-                if (this.getPageName() != 'login'){
+                if (this.getPageName() != 'login') {
                     this.stayConnected = JSON.parse(stayConnectedChecked.pop());
                 }
             };
@@ -196,7 +199,7 @@ let Header = Vue.component('blue-header', {
         },
 
         disconnectUser(){
-            let disconnect = (response)=>{
+            let disconnect = (response) => {
                 if (response) {
                     let getCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                     let getCookieStayConnected = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
@@ -212,15 +215,17 @@ let Header = Vue.component('blue-header', {
                 }
             };
 
-            this.post("api/userdisconnect", this.token,disconnect);
+            this.post("api/userdisconnect", this.token, disconnect);
         }
     }
 });
-let router = new VueRouter({
+
+const router = new VueRouter({
     mode: 'hash',
     routes: [
         {
             path: "/addTrainingTopic",
+            name: 'addTrainingTopic',
             component: {
                 template: `
                 <div id="newVue" v-cloak>
@@ -237,7 +242,6 @@ let router = new VueRouter({
                     </div>
                 </div>`
             },
-            name: 'addTrainingTopic'
         },
         {
             path: "/registerTrainingCollaborator",
@@ -245,29 +249,31 @@ let router = new VueRouter({
             component: {
                 template: `<div id="newVue" v-cloak>
                                 <blue-header title="Gestion des formations"></blue-header>
- <div class="container-fluid">
-                                    <div class="col-sm-12 col-md-7 col-lg-7">
-                                        <collaborator-formation ref="myComponent" ></collaborator-formation>
+                                    <div class="container-fluid">
+                                        <div class="col-sm-12 col-md-7 col-lg-7">
+                                            <collaborator-formation ref="myComponent" ></collaborator-formation>
+                                        </div>
+                                        <div class="col-sm-12 col-md-5 col-lg-5">
+                                            <training-to-come></training-to-come>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-5 col-lg-5">
-                                        <training-to-come></training-to-come>
-                                    </div>
-                                </div>                           </div>`
+                           </div>`
             }
-        },        {
+        }, {
             path: "/WishToVote",
             name: 'WishToVote',
             component: {
                 template: `<div id="newVue" v-cloak>
                                 <blue-header title="Gestion des formations"></blue-header>
- <div class="container-fluid">
-                                    <div class="col-sm-12 col-md-7 col-lg-7">
-                                        <collaborator-formation ref="myComponent" ></collaborator-formation>
+                                    <div class="container-fluid">
+                                        <div class="col-sm-12 col-md-7 col-lg-7">
+                                            <collaborator-formation ref="myComponent" ></collaborator-formation>
+                                        </div>
+                                        <div class="col-sm-12 col-md-5 col-lg-5">
+                                            <wish-to-vote></wish-to-vote>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-5 col-lg-5">
-                                        <wish-to-vote></wish-to-vote>
-                                    </div>
-                                </div>                           </div>`
+                           </div>`
             }
         },
         {
@@ -309,10 +315,19 @@ let router = new VueRouter({
     ]
 });
 
+const PAGE_TITLE = {
+    "login": "Accueil C360",
+    "resetPassword": "Mise à jour mot de passe",
+    "registerTrainingCollaborator": "Gestion des formations",
+    "WishToVote": "Gestion des formations",
+    "addTrainingTopic": "Gestion des formations"
+};
+
+router.afterEach((toRoute, fromRoute) => {
+    window.document.title = PAGE_TITLE[toRoute.name];
+});
+
 new Vue({
     el: '#newVue',
     router
 });
-
-
-

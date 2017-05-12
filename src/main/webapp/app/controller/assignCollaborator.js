@@ -1,9 +1,6 @@
 /**
  * Created by NBE3663 on 18/04/2017.
  */
-Vue.use(VueResource);
-Vue.use(VueRouter);
-
 let assignCollaborator = Vue.component('assign-collaborator', {
     props: [],
     data: function () {
@@ -183,7 +180,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all requests from database");
-                    console.log(response.data);
                     this.collaboratorsRequesting = response.data;
                 },
                 function (response) {

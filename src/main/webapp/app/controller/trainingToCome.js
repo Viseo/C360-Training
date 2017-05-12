@@ -1,9 +1,6 @@
 /**
  * Created by SJO3662 on 02/05/2017.
  */
-Vue.use(VueResource);
-Vue.use(VueRouter);
-
 let trainingToComeComponent = Vue.component('training-to-come', {
     template: `<div class="row" >
                         <div class="row">

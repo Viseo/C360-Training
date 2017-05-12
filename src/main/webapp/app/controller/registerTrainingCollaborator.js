@@ -1,9 +1,6 @@
 /**
  * Created by CLH3623 on 10/04/2017.
  */
-Vue.use(VueResource);
-Vue.use(VueRouter);
-
 let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
