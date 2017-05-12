@@ -30,9 +30,11 @@ public class RequestTraining extends BaseEntity {
     @Valid
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany
-    List<TrainingSession> sessions;
+       List<TrainingSession> sessions;
 
     boolean doesNotMatter = false;
+
+    boolean isValidated = false;
 
     public RequestTraining() {
         super();
@@ -70,4 +72,12 @@ public class RequestTraining extends BaseEntity {
     public boolean isDoesNotMatter() {return doesNotMatter;}
 
     public void setDoesNotMatter(boolean doesNotMatter) {this.doesNotMatter = doesNotMatter;}
+
+    public boolean isValidated() {
+        return isValidated;
+    }
+
+    public void setValidated(boolean validated) {
+        isValidated = validated;
+    }
 }

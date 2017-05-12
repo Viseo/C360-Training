@@ -348,7 +348,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.isRegistrationAvailable = true;
             }
             else{
-                this.isRegistrationAvailable = false;
+                    this.isRegistrationAvailable = false;
             }
         },
         resetAssignCollaboratorsForm(){

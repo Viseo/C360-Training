@@ -46,7 +46,7 @@ let Header = Vue.component('blue-header', {
             </div>
         </div>
   `,
-    data: function () {
+    data: function() {
         return {
             lastName: '',
             firstName: '',
@@ -74,7 +74,7 @@ let Header = Vue.component('blue-header', {
         }
         $('ul.nav li.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-        }, function () {
+        }, function() {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
         });
         if(this.title == "Gestion des formations"){
@@ -103,16 +103,16 @@ let Header = Vue.component('blue-header', {
                     this.dialog = true;
                     this.disconnectUser();
                 }
-            document.onclick = function () {
+            document.onclick = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onmousemove = function () {
+            document.onmousemove = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onkeypress = function () {
+            document.onkeypress = function() {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            window.onbeforeunload = function () {
+            window.onbeforeunload = function() {
                 if (!this.disconnect && !this.dialog)
                     document.cookie = "timeConnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
@@ -254,6 +254,7 @@ const router = new VueRouter({
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
                                         </div>
                                         <div class="col-sm-12 col-md-5 col-lg-5">
+                                            <state-request></state-request>
                                             <training-to-come></training-to-come>
                                         </div>
                                     </div>

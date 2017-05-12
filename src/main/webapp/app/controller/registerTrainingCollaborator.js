@@ -169,7 +169,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
         renitialize(training){
-            this.trainingrequested = false;
+            this.trainingrequested = true;
             this.trainingalreadyrequested(training.id);
             this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
@@ -291,6 +291,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.$http.post("api/requests", this.RequestToRegister).then(
                 function (response) {
                     this.addingRequestSucceeded = true;
+                    this.$parent.$children[2].fetchTrainingsSessions();
                 },
                 function (response) {
                     console.log("Error: ", response);

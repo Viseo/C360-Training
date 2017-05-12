@@ -1,7 +1,6 @@
 package com.viseo.c360.formation.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
@@ -16,10 +15,10 @@ import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDesc
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
-import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
@@ -196,13 +195,15 @@ public class TrainingWS {
 
     @RequestMapping(value = "${endpoint.addcollaboratortotrainingsession}", method = RequestMethod.PUT)
     @ResponseBody
-    public TrainingSessionDescription addCollaboratorToTrainingSession(@PathVariable Long id_session,@PathVariable List<Long> id_collaborators) {
+    public TrainingSessionDescription addCollaboratorToTrainingSession(@PathVariable Long id_session,
+                                                                       @PathVariable List<Long> id_collaborators) {
         List<Collaborator> collaborators=new ArrayList<>();
         try {
             for(int i=0;i<id_collaborators.size();i++){
                 collaborators.add(collaboratorDAO.getCollaborator(id_collaborators.get(i)));
             }
             TrainingSession trainingSession = trainingDAO.getSessionTraining(id_session);
+//            trainingDAO.getRequestedSessionByTraining(trainingSession.getTraining().getId(),)
             return new TrainingSessionToDescription().convert(trainingDAO.addCollaboratorToTrainingSession(trainingSession, collaborators));
         } catch (PersistentObjectNotFoundException e) {
             throw new C360Exception(e);
@@ -241,6 +242,16 @@ public class TrainingWS {
         return new TrainingSessionToDescription().convert(trainingDAO.getRequestedSessionByTraining(Long.parseLong(trainingId),Long.parseLong(collabId)));
     }
 
+    @RequestMapping(value = "${endpoint.getRequestedSessions}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, CollaboratorRequestTraining> getRequestedTrainings(@PathVariable String collaborator_id) throws PersistentObjectNotFoundException {
+        List<Training> trainings = new ArrayList <> (trainingDAO.getTrainings(Long.parseLong(collaborator_id)));
+        Map<String, CollaboratorRequestTraining> requestTrainingsMap = new HashMap<>();
+        for (Training training: trainings){
+            requestTrainingsMap.put(training.getTrainingTitle(), trainingDAO.getTrainingSession(Long.parseLong(collaborator_id), training.getId()));
+        }
+        return requestTrainingsMap;
+    }
     @RequestMapping(value = "${endpoint.trainingsbysessions}", method = RequestMethod.GET)
     @ResponseBody
     public List<TrainingDescription> getTrainingBySession() {
