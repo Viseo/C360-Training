@@ -192,10 +192,12 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         },
 
         showTrainingAndSessionsSelected(training){
-            let formationRequestsComponent = this.$parent.$children[1];
-            formationRequestsComponent.displayTrainingsFn(training.id);
-            formationRequestsComponent.renitialize(training);
-            formationRequestsComponent.openPanel = true;
+            if(!this.showMouseOverMessage) {
+                let formationRequestsComponent = this.$parent.$children[1];
+                formationRequestsComponent.displayTrainingsFn(training.id);
+                formationRequestsComponent.renitialize(training);
+                formationRequestsComponent.openPanel = true;
+            }
         },
 
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
