@@ -324,8 +324,27 @@ const PAGE_TITLE = {
     "addTrainingTopic": "Gestion des formations"
 };
 
+const PAGE_FAVICON = {
+    "login": "img/icon_accueil.png",
+    "resetPassword": "img/icon_accueil.png",
+    "registerTrainingCollaborator": "img/icon_formation.png",
+    "WishToVote": "img/icon_formation.png",
+    "addTrainingTopic": "img/icon_formation.png"
+};
+
 router.afterEach((toRoute, fromRoute) => {
     window.document.title = PAGE_TITLE[toRoute.name];
+
+    let pageOldIconTab = window.document.getElementById('dynamic-favicon');
+    let pageNewIconTab = window.document.createElement('link');
+
+    pageNewIconTab.id = 'dynamic-favicon';
+    pageNewIconTab.rel = 'icon';
+    pageNewIconTab.href = PAGE_FAVICON[toRoute.name];
+    if (pageOldIconTab) {
+        window.document.head.removeChild(pageOldIconTab);
+    }
+    window.document.head.appendChild(pageNewIconTab);
 });
 
 new Vue({
