@@ -38,7 +38,7 @@ let stateRequest = Vue.component('state-request', {
                 </div>
             </div>
             <div class="row">
-                <div class="panel panel-default" style="margin-left:10px; ">
+                <div class="panel panel-default" style="margin-left:10px; margin-bottom:10px; ">
                      <div class="panel-body" style="padding:5px;">
                         <div class="row">
                             <div class="col-lg-12" style="margin-bottom:30px">
