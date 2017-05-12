@@ -348,7 +348,6 @@ public class CollaboratorWS {
     @ResponseBody
     public void sendCollaboratorEmail(@PathVariable String collaboratorId) {
         try {
-            System.out.println("testestestest");
             Collaborator collaborator= collaboratorDAO.getCollaborator(Long.parseLong(collaboratorId));
             sendMessage sendmessage = new sendMessage();
             try {
@@ -362,5 +361,6 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
 
 }

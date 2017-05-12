@@ -1,6 +1,3 @@
-Vue.use(VueResource);
-Vue.use(VueRouter);
-
 Vue.component('form-reset-password', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">

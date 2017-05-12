@@ -1,5 +1,3 @@
-Vue.use(VueResource);
-Vue.use(VueRouter);
 let NavigationMenu = Vue.component('connect-user', {
     data: function () {
         return {

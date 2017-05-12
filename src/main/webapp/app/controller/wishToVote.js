@@ -1,6 +1,3 @@
-Vue.use(VueResource);
-Vue.use(VueRouter);
-
 let wishToVoteComponent = Vue.component('wish-to-vote', {
     template: `<div class="row" >
                         <div class="row">
