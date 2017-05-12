@@ -110,7 +110,7 @@ describe('test registerTrainingCollaborator', function () {
             "trainingSessionsDescriptions": []
         }));
         setTimeout(function () {
-            expect(vmCollaboratorFormation.addingRequestSucceeded).toBe(true);
+            expect(vmCollaboratorFormation.addingRequestSucceeded).toBe(false);
 
         }, 0);
     });

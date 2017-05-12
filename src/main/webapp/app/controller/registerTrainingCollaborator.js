@@ -280,8 +280,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
                 this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
                 this.SaveTrainingSessionCollaborator();
-                let trainingToComeComponent = this.$parent.$children[3];
-                trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
+                if(this.$parent.$children[3]){
+                    let trainingToComeComponent = this.$parent.$children[3];
+                    trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
+                }
+
             } else {
                 this.noSessionsSelectedError = true;
             }

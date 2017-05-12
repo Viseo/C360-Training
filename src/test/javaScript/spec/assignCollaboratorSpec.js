@@ -35,7 +35,8 @@ describe('assign collaborator test', function () {
         vmAssignCollaborator.collaborator_id = 1;
         vmAssignCollaborator.getIsNotCheckedWishes();
         setTimeout(function () {
-            expect(vmAssignCollaborator.numberOfWishesNotChecked).toBe(1);
+            expect(vmAssignCollaborator.numberOfWishesNotChecked).toBe(2);
+            done();
         }, 0);
     });
 

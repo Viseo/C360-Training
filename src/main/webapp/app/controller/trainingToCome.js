@@ -1,7 +1,7 @@
 /**
  * Created by SJO3662 on 02/05/2017.
  */
-let trainingToComeComponent = Vue.component('training-to-come', {
+let TrainingToComeComponent = Vue.component('training-to-come', {
     template: `
 <div class="container-fluid">
     <div class="row">
