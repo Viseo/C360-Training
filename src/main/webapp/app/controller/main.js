@@ -271,6 +271,7 @@ const router = new VueRouter({
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
                                         </div>
                                         <div class="col-sm-12 col-md-5 col-lg-5">
+                                            <state-request></state-request>
                                             <wish-to-vote></wish-to-vote>
                                         </div>
                                     </div>

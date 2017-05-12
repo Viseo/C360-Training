@@ -10,7 +10,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         </div>
     </div>
     <div class="row">
-        <div class="panel panel-default" style="height:333px; margin-left:10px; ">
+        <div class="panel panel-default" style="height:355px; margin-left:10px; ">
             <div class="panel-body" style="padding:5px;">
                 <div class="row">
                     <div class="col-lg-12" style="margin-bottom:20px">
@@ -18,7 +18,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                              style="position: absolute; left:50%; z-index:1;">
                     </div>
                 </div>
-                <div id="sessionsPanel" style=" height: 200px; overflow-y:hidden; overflow-x:hidden;"
+                <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden;"
                      class="col-lg-12 col-md-12 col-sm-12">
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr>
@@ -50,7 +50,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                 </div>
 <div class="row">
     <div class="col-lg-12" style="margin-top:10px">
-        <img v-show="showChevrons" src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 10px; top:95%; z-index:1;">
+        <img v-show="showChevrons" src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
     </div>
 </div>
 <br>
@@ -67,7 +67,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                     <input-text
                             v-show="!showWish"
                             :value = "wish"
-                            style ="width:300px;position:absolute; left:300px; top:530px;"
+                            style ="width:300px;position:absolute; left:300px; top:550px;"
                             @input = "updateV1"
                             placeholder = "Ex: javascript (50 caractères maximum)"
                             maxlength = "50"
