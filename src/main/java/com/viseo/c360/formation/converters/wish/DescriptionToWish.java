@@ -12,6 +12,7 @@ public class DescriptionToWish {
     public Wish convert(WishDescription dto) {
         Wish domain = new Wish();
         domain.setId(dto.getId());
+        domain.setVersion(dto.getVersion());
         domain.setLabel(dto.getLabel());
         domain.setChecked(dto.getChecked());
         domain.setCollaborator(new DescriptionToCollaborator().convert(dto.getCollaborator()));

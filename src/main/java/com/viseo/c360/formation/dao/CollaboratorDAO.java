@@ -60,6 +60,7 @@ public class CollaboratorDAO {
     public Wish changeVoteOkToKo(Wish wish, Collaborator collaborator){
         wish = daoFacade.merge(wish);
         wish.removeVote_ok(collaborator);
+        daoFacade.flush();
         wish.addVote_ko(collaborator);
         daoFacade.flush();
         return wish;
@@ -69,17 +70,20 @@ public class CollaboratorDAO {
     public Wish changeVoteKoToOk(Wish wish, Collaborator collaborator){
         wish = daoFacade.merge(wish);
         wish.removeVote_ko(collaborator);
+        daoFacade.flush();
         wish.addVote_ok(collaborator);
         daoFacade.flush();
         return wish;
     }
 
+    @Transactional
     public List<Wish> getIsNotCheckedWishes(){
         List<Wish> listWish = daoFacade.getList(
                 "select w from Wish w where w.isChecked = false");
         return listWish;
     }
 
+    @Transactional
     public List<Wish> getAllWishes(){
         List<Wish> listWish = daoFacade.getList(
                 "select w from Wish w");
