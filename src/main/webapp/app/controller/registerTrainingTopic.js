@@ -168,7 +168,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.newTopic = v
         },
         verifyTrainingField(trainingTitle, errorMessage) {
-            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*)*$/.test(trainingTitle)) {
                 this[errorMessage] = '';
                 this.isTrainingTitleValid = true;
             } else {
@@ -211,7 +211,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             if(this.newTopic != ''){
                 this.verifyTopicFormBeforeSubmit();
             }else{
-                this.trainingTitle = this.trainingTitle.replace(/ +/g, "");
+                this.trainingTitle = this.trainingTitle.replace(/ +/g, " ").replace(/ +$/, "");
                 this.training.trainingTitle = this.trainingTitle;
                 this.training.numberHalfDays = this.numberHalfDays;
                 for (var tmp in this.state.selectOptionsOfTopic){
@@ -254,7 +254,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.topicToRegister = {};
         },
         saveTrainingIntoDatabase() {
-            this.trainingToRegister.trainingTitle = this.training.trainingTitle.replace(" ", "").toUpperCase();  //delete useless spaces between words
+            this.trainingToRegister.trainingTitle = this.training.trainingTitle.toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
             //post the form to the server
             this.$http.post("api/formations", this.trainingToRegister)
@@ -707,7 +707,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     },
     methods: {
         verifyTrainingTitleInAddSession(trainingTitle, errorMessage) {
-            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*$/.test(trainingTitle)) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+#%]*)*$/.test(trainingTitle)) {
                 this[errorMessage] = '';
                 this.isTrainingTitleInAddSessionValid = true;
             } else {
@@ -783,6 +783,11 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.state.idTraining = '';
             this.state.trainingChosen = {};
             this.state.trainingTitle = '';
+            this.confirmSession = false;
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+            this.isBeginningDateValid = true;
             this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },

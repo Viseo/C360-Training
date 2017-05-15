@@ -82,6 +82,11 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 }
             }
         },
+        hideMessage(){
+            this.wish_id = '';
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
+        },
         userAlreadyVotedOk(wish){
             this.wish_id = wish.id;
             this.collaboratorAlreadyVotedTheSameVote = false;
@@ -96,11 +101,6 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                     this.collaboratorAlreadyVotedTheOppositeVote = true;
                 }
             }
-        },
-        hideMessage(){
-            this.wish_id = '';
-            this.collaboratorAlreadyVotedTheSameVote = false;
-            this.collaboratorAlreadyVotedTheOppositeVote = false;
         },
         userAlreadyVotedKo(wish){
             this.wish_id = wish.id;
