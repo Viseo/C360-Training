@@ -84,7 +84,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <accordion id="accordionId" :one-at-atime="true" type="info">
                                                 <div v-for="training in trainingsFound">
                                                     <panel :is-open="openPanel" ref="selectingTraining" @openPanel="renitialize(training)"type="primary">
-                                                        <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
+                                                        <p  slot="header" style="color: rgba(66, 139, 202,0.8);"><u>{{training.trainingTitle}}</u></p>
                                                         <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                                         <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
                                                         <div :id="training.id">
