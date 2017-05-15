@@ -8,6 +8,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
             sessionAlreadybooked:[],
             trainingsFound: [],
+            disableSendButton:false,
             sessionAlreadyBookedMessage:false,
             noTrainingFound: false,
             sessionsByCollab:[],
@@ -99,7 +100,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                             <center>
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
                                                                 <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <button :disabled="disableSendButton" v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
                                                                 <p style="color:orange" v-show="!trainingrequested"> Vous avez déjà effectué une demande pour cette formation </p>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
                                                             </center>
@@ -169,6 +170,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
         renitialize(training){
+            this.disableSendButton = false;
             this.trainingrequested = true;
             this.trainingalreadyrequested(training.id);
             this.checkedSessions.splice(0, this.checkedSessions.length);
@@ -274,6 +276,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         verifyTrainingSessionCollaborator(){
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
+            this.disableSendButton = true;
             if (this.isNoSession == true || this.checkedSessions.length != 0) {
                 this.RequestToRegister.trainingDescription = this.trainingSelected;
                 this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
