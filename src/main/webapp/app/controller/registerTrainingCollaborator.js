@@ -66,11 +66,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <div class="col-lg-2 col-md-2 col-sm-12">
                                                 <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
-                                            <div class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(searchFormatted)" value=""></span>
-                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>  
+                                            <div @keyup.enter="storeTrainingsFound(searchFormatted)" class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(searchFormatted)"></span>
+                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>
                                                 <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
-                                                <div clas="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
+                                                <div class="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
                                             </div>
                                         </div>
                                         <div class="row">
@@ -119,7 +119,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                 <span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>
                                                 Toutes les formations démarrent à 9h00
                                             </p>
-                                        /center>
+                                        </center>
                                     </div>
                                 </div>
                         </div>
@@ -130,7 +130,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.gatherTrainingsFromDatabase();
         this.getCookies();
-        this.storeTrainingsFound(this.searchFormatted);
+        this.storeTrainingsFound('');
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
     },
@@ -143,8 +143,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     computed: {
         searchFormatted: function () {
-            if(this.value) return this.value.toUpperCase();
-            else return '';
+            if(this.value) {return this.value.toUpperCase();
+            }
+                else return null;
         },
 
         showChevrons(){
