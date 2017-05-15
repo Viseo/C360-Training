@@ -28,12 +28,15 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/main/webapp/app/controller/registerTrainingCollaborator.js',
             'src/main/webapp/app/controller/assignCollaborator.js',
+            'src/main/webapp/app/controller/stateRequestTraining.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
             'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
             'src/test/javaScript/spec/assignCollaboratorSpec.js',
-        ],
+            'src/test/javaScript/spec/stateRequestTrainingSpec.js',
+
+    ],
 
 
         // list of files to exclude

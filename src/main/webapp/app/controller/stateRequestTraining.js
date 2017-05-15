@@ -87,21 +87,18 @@ let stateRequest = Vue.component('state-request', {
 
         methods: {
             getDate(date){
-                dateToConvert = new Date(date);
-                formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
+                let dateToConvert = new Date(date);
+                let formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
                 return formattedDate;
             },
 
             getCookies(){
                 let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                 if(regexCookieToken){
-                    console.log(!regexCookieToken[0].includes('undefined'));
                     if(!regexCookieToken[0].includes('undefined')) {
-                        console.log("hello");
                         if (this.token != 'undefined'){
                             this.token = String(regexCookieToken.pop());
                             this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                            console.log(this.collaboratorIdentity.id);
                             this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
                             this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
                         }
@@ -123,14 +120,17 @@ let stateRequest = Vue.component('state-request', {
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
-                        console.log(Object.keys(this.requestedTraining)[0]);
+                        for (let index in this.requestedTraining) {
+                            console.log(index)
+                        }
+                        console.log(Object.keys(response.data));
                         for (let i =0;i<Object.keys(this.requestedTraining).length;i++) {
                             if(Object.values(this.requestedTraining)[i].requestTrainingList.length!=0 || Object.values(this.requestedTraining)[i].trainingSessions.length!=0){
                                 this.requestedTrainingByCollaborator.push({
                                 title: Object.keys(this.requestedTraining)[i],
                                 sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
                                 sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                            });}
+                        });}
                             this.orderSessions();
 
                          }
