@@ -788,6 +788,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.beginningDateErrorMessage = false;
             this.locationErrorMessage = false;
             this.isBeginningDateValid = true;
+            this.isSessionAlreadyPlanned = false;
             this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },
