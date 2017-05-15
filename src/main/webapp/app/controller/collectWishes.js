@@ -45,7 +45,33 @@ let collectWishes = Vue.component('collect-wishes', {
                     </div>
                     <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;">
                         <div class="row">
+                            <ol style="list-style-type:none" class="rectangle-list">
+                                <li><a title="Vue.js" href="">
+                                <img
+                             src="css/validate_icon.png" 
+                             width="25" 
+                             height="25"
+                             style="margin-left:20px; margin-right:20px;">
+                                <span class="glyphicon glyphicon-remove">
+                                </span></a></li>
+                                <li><a title="COBOL" href="">List item</a></li>
+                                <li><a title="Java" href="">List item</a></li>
+                                <li><a title="Javascript" href="">List item</a></li>
+                                <li><a title="HTML" href="">List item</a></li>
+                                <li><a title="Angular" href="">List item</a></li>
+                                <li><a title="Ruby" href="">List item</a></li>
+                                <li><a title="PHP" href="">List item</a></li>
+                                <li><a title="Vue.js" href="">List item</a></li>
+                                <li><a title="COBOL" href="">List item</a></li>
+                                <li><a title="Java" href="">List item</a></li>
+                                <li><a title="Javascript" href="">List item</a></li>
+                                <li><a title="HTML" href="">List item</a></li>
+                                <li><a title="Angular" href="">List item</a></li>
+                                <li><a title="Ruby" href="">List item</a></li>
+                                <li><a title="PHP" href="">List item</a></li>
+                            </ol>
                         </div>
+                    </div>
                     <div clas="row">
                     <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
                         <img v-show="showChevrons" 
