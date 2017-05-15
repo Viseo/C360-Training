@@ -118,9 +118,9 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             }
         },
         getAllWishes(){
-            this.$http.get("api/allwishes").then(
+            this.$http.get("api/allvalidatedwishes").then(
                 function (response) {
-                    console.log("success to get all wishes");
+                    console.log("success to get all validated wishes");
                     this.allWishes = response.data;
                     this.allWishes.sort(function (a, b) {
                         return (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0);
