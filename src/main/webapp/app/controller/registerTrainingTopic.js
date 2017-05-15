@@ -783,6 +783,11 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.state.idTraining = '';
             this.state.trainingChosen = {};
             this.state.trainingTitle = '';
+            this.confirmSession = false;
+            this.trainingTitleInAddSessionErrorMessage = false;
+            this.beginningDateErrorMessage = false;
+            this.locationErrorMessage = false;
+            this.isBeginningDateValid = true;
             this.ResetSessionForm();
             this.GatherTrainingsFromDatabase();
         },
