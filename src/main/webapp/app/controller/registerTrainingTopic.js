@@ -619,10 +619,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr v-for="trainings in topicTraining">
-                                                                            <td  v-for="training in trainings" width="25%">
-                                                                                <a @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
-                                                                                <button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="btn btn-toolbar btn-group" style="z-index:0; " @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                        <tr v-for="trainings in topicTraining" >
+                                                                            <td  v-for="training in trainings" width="25%" >
+                                                                               <button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                               <a  @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
