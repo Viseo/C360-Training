@@ -34,7 +34,7 @@ var vm = new Vue({
 describe('Header test', function () {
 
     beforeEach(function () {
-
+        headerComponent = vm.$children[0];
     });
 
     afterEach(function () {
@@ -42,36 +42,33 @@ describe('Header test', function () {
     });
 
     it('should check variable initialization from Header component', function () {
-        let headerComponent = vm.$children[0];
-        expect(headerComponent.lastName).toBe('');
-        expect(headerComponent.firstName).toBe('');
-        //expect(vm.$children[0].token).toBe('');
-        expect(headerComponent.disconnect).toBe(false);
-        expect(headerComponent.app).toEqual({training:true, skills:false, mission:false, leave:false});
-        expect(headerComponent.IDLE_TIMEOUT).toBe(60);
-        expect(headerComponent.idleSecondsCounter).toBe(0);
-        expect(headerComponent.myInterval).toBe('');
-        expect(headerComponent.stayConnected).toBe(true);
-        expect(headerComponent.dialog).toBe(false);
-        expect(headerComponent.timeConnected).toBe(0);
+        setTimeout( function () {
+            expect(headerComponent.lastName).toBe('');
+            expect(headerComponent.firstName).toBe('');
+            expect(vm.$children[0].token).toBe('');
+            expect(headerComponent.disconnect).toBe(false);
+            expect(headerComponent.app).toEqual({training:true, skills:false, mission:false, leave:false});
+            expect(headerComponent.IDLE_TIMEOUT).toBe(60);
+            expect(headerComponent.idleSecondsCounter).toBe(0);
+            expect(headerComponent.myInterval).toBe('');
+            expect(headerComponent.stayConnected).toBe(true);
+            expect(headerComponent.dialog).toBe(false);
+            expect(headerComponent.timeConnected).toBe(0);
+        },0);
     });
 
     it('should set an value to the variable idleSecondsCounter', function () {
-        let headerComponent = vm.$children[0];
         headerComponent.setIdleSecondsCounter(10);
         expect(headerComponent.idleSecondsCounter).toEqual(10);
 
     });
 
     it('should check whether the user disconnect', function () {
-        let headerComponent = vm.$children[0];
         headerComponent.token = collaboratorToken;
         headerComponent.disconnectUser();
     });
 
-    //to continue
     it('should get the Cookie information', function () {
-        let headerComponent = vm.$children[0];
         document = {
             value_: '',
 
@@ -84,21 +81,26 @@ describe('Header test', function () {
             }
         };
         document.cookie = "token="+ collaboratorToken;
-
-        headerComponent.getCookieInfos();
         expect(headerComponent.stayConnected).toBe(true);
     });
 
     it('should checkIfUserInactive', function () {
-        let headerComponent = vm.$children[0];
-        headerComponent.stayConnected = false;
-        headerComponent.checkIfUserInactive();
+       setTimeout( function () {
+           headerComponent.timeConnected = 2;
+           headerComponent.stayConnected = false;
+           headerComponent.checkIfUserInactive();
+           expect(headerComponent.timeConnected).not.toEqual(0);
+           expect(headerComponent.dialog).toBe(true);
+           //expect(headerComponent.idleSecondsCounter).toEqual(0);
+       },0);
     });
 
-
     it('should checkIdleTime', function () {
-        let headerComponent = vm.$children[0];
+        setTimeout( function () {
+        headerComponent.idleSecondsCounter = 60;
         headerComponent.checkIdleTime();
+        },0);
+
     });
 
 
