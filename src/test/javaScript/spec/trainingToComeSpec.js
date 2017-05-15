@@ -18,7 +18,7 @@ describe('training to come Panel test', function () {
             }
         };
         document.cookie = "token="+ collaboratorToken;
-        vmTrainingToCome = new trainingToComeComponent().$mount();
+        vmTrainingToCome = new TrainingToComeComponent().$mount();
         vmTrainingToCome.$parent = new Vue();
         vmTrainingToCome.$parent.$children[1] = vmCollaboratorFormation;
     });
@@ -26,19 +26,20 @@ describe('training to come Panel test', function () {
     afterEach(function () {
 
     });
-    it('should check if collaborator requests training session', function(done){
+
+    it('should check if collaborator requests training session', function(){
 
         let trainingSession = {
             "beginning":"11/05/2017",
             "beginningTime":"09:00",
-            "collaborators":[{
+            "collaborators":{
                 "email": 'eric.dupon@viseo.com',
                 "firstName": 'Eric',
                 "id": 5,
                 "lastName": 'Dupond',
                 "password": '123456',
                 "version": 0
-            }],
+            },
             "ending":"13/05/2017",
             "endingTime":"18:00",
             "id":6,
@@ -58,34 +59,36 @@ describe('training to come Panel test', function () {
             "version":1,
         };
         vmTrainingToCome.collaborator_id = 5;
+        console.log("id collab: " +vmTrainingToCome.collaborator_id);
         vmTrainingToCome.VerifyCollaboratorRequestsExistence(6,trainingSession);
         setTimeout(function () {
-
-            expect(vmTrainingToCome.existCollaboratorRequest).toBe(true);
-        done();
+            expect(trainingSession.isCollaboratorDidRequest).toBe(true);
+            //isCollaboratorDidRequest
         }, 0);
 
     });
 
-    it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function (done) {
-        let allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]]
+    it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function () {
+        let allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]];
 
         setTimeout(function () {
             expect(vmTrainingToCome.allTrainingsAndSessions).toEqual(allTrainingAndSessionsThatShouldBeDisplayedJSON);
-            done();
+
         }, 0);
     });
 
     it('should check if session selected is open on the acordeon (left panel) when the collaborator click on the session (right panel)', function () {
-        let trainingSelected = {
-            id: 3,
-            version: 0,
-            trainingTitle: "SWIFT",
-            numberHalfDays: 4,
-            topicDescription: {id: 1, version: 0, name: "MOBILE"}
+        var trainingSelected = {
+            "id": 3,
+            "version": 0,
+            "trainingTitle": "SWIFT",
+            "numberHalfDays": 4,
+            "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
         };
-        expect(vmCollaboratorFormation.openPanel).toBe(false);
+
+
         setTimeout(function () {
+            expect(vmCollaboratorFormation.openPanel).toBe(false);
             vmTrainingToCome.showTrainingAndSessionsSelected(trainingSelected);
             expect(vmCollaboratorFormation.openPanel).toBe(true);
         }, 0);

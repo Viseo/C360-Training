@@ -97,6 +97,7 @@ let Header = Vue.component('blue-header', {
         setIdleSecondsCounter(value){
             this.idleSecondsCounter = value;
         },
+
         checkIfUserInactive(){
             if (this.timeConnected != 0)
                 if ((parseInt(String(new Date().getHours()) + String(new Date().getMinutes())) - parseInt(this.timeConnected)) >= 1) {
@@ -118,6 +119,7 @@ let Header = Vue.component('blue-header', {
             }.bind(this);
             this.myInterval = window.setInterval(this.checkIdleTime, 1000);
         },
+
         checkIdleTime() {
             this.idleSecondsCounter++;
             var oPanel = document.getElementById("newVue");
@@ -129,6 +131,7 @@ let Header = Vue.component('blue-header', {
                 }
             }
         },
+
         getCookieInfos() {
             let isAdmin = () => jwt_decode(this.token).roles;
 
@@ -271,6 +274,7 @@ const router = new VueRouter({
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
                                         </div>
                                         <div class="col-sm-12 col-md-5 col-lg-5">
+                                            <state-request></state-request>
                                             <wish-to-vote></wish-to-vote>
                                         </div>
                                     </div>

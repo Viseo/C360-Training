@@ -38,7 +38,7 @@ let stateRequest = Vue.component('state-request', {
                 </div>
             </div>
             <div class="row">
-                <div class="panel panel-default" style="margin-left:10px; ">
+                <div class="panel panel-default" style="margin-left:10px; margin-bottom:10px; ">
                      <div class="panel-body" style="padding:5px;">
                         <div class="row">
                             <div class="col-lg-12" style="margin-bottom:30px">
@@ -46,8 +46,6 @@ let stateRequest = Vue.component('state-request', {
                             </div>
                         </div>
                         <div id="scrollMyTrainings">
-                            <div>
-                                <strong></strong>
                                 <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
                                     <div v-for="training in requestedTrainingByCollaborator" >
                                         <strong> {{training.title}}</strong>
@@ -61,7 +59,6 @@ let stateRequest = Vue.component('state-request', {
                                         </div>
                                         <hr style="margin:4.5px"/>
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12" style="margin-top:10px">
@@ -75,7 +72,7 @@ let stateRequest = Vue.component('state-request', {
 `,
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.activateScrollUp('#scroll-up-3','#scrollMyTraining');
+        this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
         this.getCookies();
         this.fetchTrainingsSessions();

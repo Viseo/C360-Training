@@ -1,7 +1,7 @@
 /**
  * Created by SJO3662 on 02/05/2017.
  */
-let trainingToComeComponent = Vue.component('training-to-come', {
+let TrainingToComeComponent = Vue.component('training-to-come', {
     template: `
 <div class="container-fluid">
     <div class="row">
@@ -10,15 +10,15 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         </div>
     </div>
     <div class="row">
-        <div class="panel panel-default" style="margin-left:10px; ">
+        <div class="panel panel-default" style="height:355px; margin-left:10px; ">
             <div class="panel-body" style="padding:5px;">
                 <div class="row">
-                    <div class="col-lg-12" style="margin-bottom:30px">
+                    <div class="col-lg-12" style="margin-bottom:20px">
                         <img v-show="showChevrons" src="css/up.png" id="scroll-up-training-to-come" width="60" height="20"
                              style="position: absolute; left:50%; z-index:1;">
                     </div>
                 </div>
-                <div id="sessionsPanel" style=" height: 190px; overflow-y:hidden; overflow-x:hidden;"
+                <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden;"
                      class="col-lg-12 col-md-12 col-sm-12">
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr>
@@ -48,51 +48,47 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                         </tr>
                     </table>
                 </div>
-                <div class="col-lg-12" style="margin-top:10px">
-                    <img src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
-                </div>
+<div class="row">
+    <div class="col-lg-12" style="margin-top:10px">
+        <img v-show="showChevrons" src="css/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+    </div>
+</div>
+<br>
+<div style="margin-top:20px; margin-left: 25px;">
+    <table style="width: 530px;">
+        <tr>
+            <td>
+                <p>
+                    <span @click="changePage()" style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
+                </p>
+            </td>
+            <td>
+                <p>
+                    <input-text
+                            v-show="!showWish"
+                            :value = "wish"
+                            style ="width:300px;position:absolute; left:300px; top:550px;"
+                            @input = "updateV1"
+                            placeholder = "Ex: javascript (50 caractères maximum)"
+                            maxlength = "50"
+                            icon = "glyphicon glyphicon-floppy-disk"
+                            type = 'input'
+                            @click="sendWish">
+                    </input-text>
+                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <br>
-                <div style="margin-top:20px;">
-                    <table style="width: 530px;">
-                        <tr>
-                            <td>
-                                <!--<br v-show="!showWish"/><br v-show="!showWish"/>-->
-                                <p>
-                                    <span @click="changePage()"
-                                          style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span
-                                            class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
-                                </p>
-                            </td>
-                            <td>
-                                <p>
-                                    <input-text
-                                            v-show="!showWish"
-                                            :value="wish"
-                                            style="width:310px;position:absolute; left:40%; top:80%;"
-                                            @input="updateV1"
-                                            placeholder="Ex : javascript (50 caractères maximum)"
-                                            maxlength="50"
-                                            icon="glyphicon glyphicon-floppy-disk"
-                                            type='input'
-                                            @click="sendWish">
-                                    </input-text>
-                                    <span v-show="showWish" @click="showWish = !showWish"
-                                          style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span
-                                            class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <br>
-                                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span>
-                                </center>
-                                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span>
-                                </center>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
+                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
+            </td>
+        </tr>
+    </table>
+
+</div>
             </div>
         </div>
             `,
@@ -149,7 +145,7 @@ let trainingToComeComponent = Vue.component('training-to-come', {
                     console.log("success to send a wish");
                     this.wishAlreadyExisted=false;
                     this.wishSuccess = true;
-                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
+                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 50000);
                 },
                 function (response) {
                     this.wishAlreadyExisted=true;
@@ -196,10 +192,12 @@ let trainingToComeComponent = Vue.component('training-to-come', {
         },
 
         showTrainingAndSessionsSelected(training){
-            let formationRequestsComponent = this.$parent.$children[1];
-            formationRequestsComponent.displayTrainingsFn(training.id);
-            formationRequestsComponent.renitialize(training);
-            formationRequestsComponent.openPanel = true;
+            if(!this.showMouseOverMessage) {
+                let formationRequestsComponent = this.$parent.$children[1];
+                formationRequestsComponent.displayTrainingsFn(training.id);
+                formationRequestsComponent.renitialize(training);
+                formationRequestsComponent.openPanel = true;
+            }
         },
 
         gatherTrainingsAlreadyHaveSessionsFromDatabase(){
