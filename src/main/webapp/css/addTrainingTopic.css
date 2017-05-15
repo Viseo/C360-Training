@@ -999,8 +999,8 @@ ul {
 
 a.boxclose{
     position: absolute;
-    top:1px;
-    left:167px;
+    top:2%;
+    left:85%;
     cursor:pointer;
     color: #fff;
     border-radius: 50%;
