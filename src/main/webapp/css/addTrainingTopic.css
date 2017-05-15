@@ -999,9 +999,9 @@ ul {
 }
 
 a.boxclose{
-    position:absolute;
-    margin-left:160px;
-    margin-top:-10px;
+    float: left;
+    margin-top:-50px;
+    margin-left: 160px;
     cursor:pointer;
     color: #fff;
     border-radius: 50%;
@@ -1012,12 +1012,14 @@ a.boxclose{
     display: inline-block;
     line-height: 0px;
     padding: 11px 3px;
-    z-index: 4;
+    z-index: 1;
     text-align: center;
     text-decoration: none;
 }
 
 .boxclose:before {
+
     content: "×";
 
 }
+
