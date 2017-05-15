@@ -124,7 +124,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <br>
                     <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
-                        <a id="box">{{numberOfWishesNotChecked}}</a>
+                        <a @click="loadCollectWishesPanel" id="box">{{numberOfWishesNotChecked}}</a>
                         <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
                     </div>
                     <div class="row ">
@@ -143,6 +143,9 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         this.GatherAllSessions();
     },
     methods: {
+        loadCollectWishesPanel(){
+            this.$router.push('/collectWishes')
+        },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken){
