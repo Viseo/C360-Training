@@ -82,6 +82,11 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 }
             }
         },
+        hideMessage(){
+            this.wish_id = '';
+            this.collaboratorAlreadyVotedTheSameVote = false;
+            this.collaboratorAlreadyVotedTheOppositeVote = false;
+        },
         userAlreadyVotedOk(wish){
             this.wish_id = wish.id;
             this.collaboratorAlreadyVotedTheSameVote = false;
@@ -96,11 +101,6 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                     this.collaboratorAlreadyVotedTheOppositeVote = true;
                 }
             }
-        },
-        hideMessage(){
-            this.wish_id = '';
-            this.collaboratorAlreadyVotedTheSameVote = false;
-            this.collaboratorAlreadyVotedTheOppositeVote = false;
         },
         userAlreadyVotedKo(wish){
             this.wish_id = wish.id;
@@ -118,9 +118,9 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             }
         },
         getAllWishes(){
-            this.$http.get("api/allwishes").then(
+            this.$http.get("api/allvalidatedwishes").then(
                 function (response) {
-                    console.log("success to get all wishes");
+                    console.log("success to get all validated wishes");
                     this.allWishes = response.data;
                     this.allWishes.sort(function (a, b) {
                         return (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0);

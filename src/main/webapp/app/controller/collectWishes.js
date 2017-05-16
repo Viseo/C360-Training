@@ -10,6 +10,12 @@ let collectWishes = Vue.component('collect-wishes', {
             validateIcon : 'img/validate_icon_init.png',
             refuseIcon : 'img/refuse_icon_init.png'
 
+            showChevrons : true,
+            allWishes:[],
+            listWishesToUpdate:[
+                {"id":3,"version":1,"label":"BBB","collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"ncjxkze","firstName":"cnjzk","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":false},
+                {"id":4,"version":1,"label":"FFF","collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"ncjxkze","firstName":"cnjzk","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":true}
+                ]
         }
     },
 
@@ -125,9 +131,45 @@ let collectWishes = Vue.component('collect-wishes', {
 </div>`,
 
     mounted: function () {
+        this.getAllWishes();
     },
-
     methods: {
+        getAllWishes(){
+            this.$http.get("api/allwishes").then(
+                function (response) {
+                    console.log("success to get all wishes");
+                    this.allWishes = response.data;
+                    this.allWishes.sort(function (a, b) {
+                        return (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0);
+                    });
+                },
+                function(response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
+        addWishToListWishes(wish,valueChecked){
+            this.wishAlreadyInList = false;
+            for(var tmp in this.listWishesToUpdate){
+                if(this.listWishesToUpdate[tmp].id == wish.id){
+                    this.listWishesToUpdate[tmp].checked = valueChecked;
+                    this.wishAlreadyInList = true;
+                }
+            }
+            if(!this.wishAlreadyInList){
+                this.listWishesToUpdate.push(wish);
+            }
+        },
+        updateWish(){
+            this.$http.post("api/ischeckedwishestoupdate",this.listWishesToUpdate).then(
+                function (response) {
+                    console.log("success to update wishes");
+                },
+                function(response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        }
         returnAssignCollabPanel(){
             this.$router.push('/addTrainingTopic')
         }
