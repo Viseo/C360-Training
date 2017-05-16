@@ -175,6 +175,7 @@ let collectWishes = Vue.component('collect-wishes', {
                 }
             }
             if(!this.wishAlreadyInList){
+                wish.checked = valueChecked;
                 this.listWishesToUpdate.push(wish);
             }
         },
