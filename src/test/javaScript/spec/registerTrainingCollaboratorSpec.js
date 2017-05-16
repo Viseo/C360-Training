@@ -36,9 +36,9 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should transform text to uppercase', function () {
         vmCollaboratorFormation.value = 'programmation';
-        expect(vmCollaboratorFormation.searchFormatted).toBe('PROGRAMMATION');
+        expect(vmCollaboratorFormation.capitalizeSearch).toBe('PROGRAMMATION');
         vmCollaboratorFormation.value = '';
-        expect(vmCollaboratorFormation.searchFormatted).toBe(null);
+        expect(vmCollaboratorFormation.capitalizeSearch).toBe(null);
     });
 
     it('should display the selected formation with sessions', function(done) {
@@ -76,7 +76,7 @@ describe('test registerTrainingCollaborator', function () {
     });
 
     it('should find sessions that are booked by collab', function () {
-        vmCollaboratorFormation.renitialize(trainingSelected);
+        vmCollaboratorFormation.reinitialize(trainingSelected);
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);
         setTimeout(function () {
             expect(vmCollaboratorFormation.listTrainingSession.length).toBe(0);
@@ -87,7 +87,7 @@ describe('test registerTrainingCollaborator', function () {
     });
 
     it('should not find any session booked', function () {
-        vmCollaboratorFormation.renitialize(trainingSelectedWithoutSessions);
+        vmCollaboratorFormation.reinitialize(trainingSelectedWithoutSessions);
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelectedWithoutSessions);
         expect(vmCollaboratorFormation.listTrainingSession.length).toBe(0);
         expect(vmCollaboratorFormation.isNoSession).toBe(true);

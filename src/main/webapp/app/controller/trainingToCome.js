@@ -196,7 +196,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             if(!this.showMouseOverMessage) {
                 let formationRequestsComponent = this.$parent.$children[1];
                 formationRequestsComponent.displayTrainingsFn(training.id);
-                formationRequestsComponent.renitialize(training);
+                formationRequestsComponent.reinitialize(training);
                 formationRequestsComponent.openPanel = true;
             }
         },
