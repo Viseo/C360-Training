@@ -12,6 +12,7 @@ let stateRequest = Vue.component('state-request', {
         props: [],
         data: function() {
             return {
+                noSessionForCollaborator: true,
                 collaboratorIdentity: {
                     id: '',
                     lastName: '',
@@ -39,14 +40,17 @@ let stateRequest = Vue.component('state-request', {
             </div>
             <div class="row">
                 <div class="panel panel-default" style="margin-left:10px; margin-bottom:10px; ">
-                     <div class="panel-body" style="padding:5px;">
+                     <div class="panel-body" style="padding:5px; height:202px">
                         <div class="row">
-                            <div class="col-lg-12" style="margin-bottom:30px">
+                            <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-bottom:30px">
                                 <img src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                             </div>
                         </div>
                         <div id="scrollMyTrainings">
                                 <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
+                                    <div v-show="noSessionForCollaborator">
+                                        <p style="text-align: center; margin:50px;">Vous n'êtes inscrit à aucune session.</p>
+                                    </div>
                                     <div v-for="training in requestedTrainingByCollaborator" >
                                         <strong> {{training.title}}</strong>
                                         <div v-for="session in training.sessionsPending">
@@ -61,8 +65,8 @@ let stateRequest = Vue.component('state-request', {
                                     </div>
                             </div>
                         </div>
-                        <div class="col-lg-12" style="margin-top:10px">
-                            <img src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+                        <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-top:10px">
+                            <img src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: relative; bottom:10px; left:50%; z-index:1;">
                         </div>
                      </div>
                 </div>
@@ -88,13 +92,10 @@ let stateRequest = Vue.component('state-request', {
             getCookies(){
                 let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                 if(regexCookieToken){
-                    console.log(!regexCookieToken[0].includes('undefined'));
                     if(!regexCookieToken[0].includes('undefined')) {
-                        console.log("hello");
                         if (this.token != 'undefined'){
                             this.token = String(regexCookieToken.pop());
                             this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                            console.log(this.collaboratorIdentity.id);
                             this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
                             this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
                         }
@@ -116,14 +117,15 @@ let stateRequest = Vue.component('state-request', {
                 this.$http.get("api/sessions/"+this.collaboratorIdentity.id+"/requestedSessions").then(
                     function (response) {
                         this.requestedTraining=response.data;
-                        console.log(Object.keys(this.requestedTraining)[0]);
                         for (let i =0;i<Object.keys(this.requestedTraining).length;i++) {
                             if(Object.values(this.requestedTraining)[i].requestTrainingList.length!=0 || Object.values(this.requestedTraining)[i].trainingSessions.length!=0){
                                 this.requestedTrainingByCollaborator.push({
                                 title: Object.keys(this.requestedTraining)[i],
                                 sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
                                 sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                            });}
+                            });
+                                this.noSessionForCollaborator = false;
+                            }
                             this.orderSessions();
 
                          }

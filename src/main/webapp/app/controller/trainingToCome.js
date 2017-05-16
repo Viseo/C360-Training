@@ -59,7 +59,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         <tr>
             <td>
                 <p>
-                    <span @click="changePage()" style="position:absolute; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
+                    <span @click="changePage()" style="position:absolute; top: 560px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
                 </p>
             </td>
             <td>
@@ -67,7 +67,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     <input-text
                             v-show="!showWish"
                             :value = "wish"
-                            style ="width:300px;position:absolute; left:300px; top:550px;"
+                            style ="width:300px;position:absolute; left:300px; top:535px;"
                             @input = "updateV1"
                             placeholder = "Ex: javascript (50 caractères maximum)"
                             maxlength = "50"
@@ -75,7 +75,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                             type = 'input'
                             @click="sendWish">
                     </input-text>
-                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span>Suggérer une formation</span>
+                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:565px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
                 </p>
             </td>
         </tr>
@@ -145,7 +145,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.log("success to send a wish");
                     this.wishAlreadyExisted=false;
                     this.wishSuccess = true;
-                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 50000);
+                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
                 },
                 function (response) {
                     this.wishAlreadyExisted=true;
@@ -260,7 +260,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     this.existCollaboratorRequest = false;
                     trainingAndSessions.isCollaboratorDidRequest = this.existCollaboratorRequest;
                     for (var tmp in this.collaboratorsRequesting) {
-                        console.log(this.collaborator_id + " " + this.collaboratorsRequesting[tmp].id);
                         if (this.collaborator_id == this.collaboratorsRequesting[tmp].id) {
                             this.existCollaboratorRequest = true;
                             trainingAndSessions.isCollaboratorDidRequest = this.existCollaboratorRequest;
