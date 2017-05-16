@@ -249,11 +249,35 @@ public class CollaboratorWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.updatecollaborator}", method = RequestMethod.PUT)
+    @ResponseBody
+    public CollaboratorDescription updateCollaborator(@RequestBody CollaboratorDescription collaborator) {
+        try {
+            Collaborator collaboratorToUpdate = collaboratorDAO.updateCollaborator(new DescriptionToCollaborator().convert(collaborator));
+            return new CollaboratorToDescription().convert(collaboratorToUpdate);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if(uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
+        }
+    }
+
     @RequestMapping(value = "${endpoint.collaborators}", method = RequestMethod.GET)
     @ResponseBody
     public List<CollaboratorIdentity> getAllCollaborators() {
         try {
             return new CollaboratorToIdentity().convert(collaboratorDAO.getAllCollaborators());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.collaboratorbyid}", method = RequestMethod.GET)
+    @ResponseBody
+    public CollaboratorDescription getCollaboratorById(@PathVariable Long collab_id) {
+        try {
+            return new CollaboratorToDescription().convert(collaboratorDAO.getCollaboratorById(collab_id));
         } catch (ConversionException e) {
             e.printStackTrace();
             throw new C360Exception(e);

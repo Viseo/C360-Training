@@ -145,7 +145,7 @@ let Header = Vue.component('blue-header', {
             };
 
             let preventCollaboratorToGoToAdminPage = () => {
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote' && this.getPageName() != 'profiltoupdate') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
@@ -316,7 +316,17 @@ const router = new VueRouter({
         {
             path: "/",
             redirect: "/login"
-        }
+        },
+        {
+            path: "/profiltoupdate",
+            name: 'profiltoupdate',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                               <blue-header></blue-header>
+                               <profil-to-update></profil-to-update>
+                           </div>`
+            }
+        },
     ]
 });
 

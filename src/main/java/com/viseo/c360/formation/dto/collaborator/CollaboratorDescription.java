@@ -17,6 +17,8 @@ public class CollaboratorDescription extends BaseDTO {
     String email;
     String password;
     Boolean isAdmin;
+    String function;
+    String businessUnit;
 
     public CollaboratorDescription() {
         this.isAdmin = false;
@@ -66,5 +68,29 @@ public class CollaboratorDescription extends BaseDTO {
 
     public void setIsAdmin(Boolean admin) {
         this.isAdmin = admin;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public String getBusinessUnit() {
+        return businessUnit;
+    }
+
+    public void setBusinessUnit(String businessUnit) {
+        this.businessUnit = businessUnit;
     }
 }

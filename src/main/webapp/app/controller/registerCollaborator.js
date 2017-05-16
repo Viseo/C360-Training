@@ -694,6 +694,7 @@ let CustomInput = Vue.component('customInput', {
                                :placeholder="placeholder" 
                                @focus="handleFocus" @blur="handleBlur"
                                @input="updateValue($event.target.value)"
+                               :value="value"
                                onblur="this.placeholder = placeholder " 
                                maxlength="maxlength" 
                                minlength="minlength">
@@ -702,6 +703,7 @@ let CustomInput = Vue.component('customInput', {
                                :id="label" 
                                :tabindex="tab" 
                                class="form-control"
+                               :value="value"
                                :placeholder="placeholder" 
                                @focus="handleFocus" @blur="handleBlur"
                                @input="updateValue($event.target.value)"

@@ -1,0 +1,9 @@
+.panel-header{
+    background-color: rgba(126,126,126,0.62);
+    width: 100%;
+    height: 25px;
+    padding-left: 20px;
+    padding-top: 4px;
+    color:white;
+    font-family: Arial;
+}
