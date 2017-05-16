@@ -27,8 +27,10 @@ let collectWishes = Vue.component('collect-wishes', {
                     <div class="row">
                     <div class="col-sm-12 col-md-2 col-lg-2">
                         <img src="css/left-arrow.png" 
-                             width="50" 
-                             height="50">
+                             width="40" 
+                             height="40"
+                             @click="returnAssignCollabPanel"
+                             style="cursor: pointer;">
                     </div>
                     <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                     <br/>
@@ -53,6 +55,8 @@ let collectWishes = Vue.component('collect-wishes', {
                                         height="25"
                                         style="margin-left:20px;">
                                     <img
+                                        @mouseover="refuseIcon='img/refuse_icon.png'"
+                                        @mouseleave="refuseIcon='img/refuse_icon_init.png'"
                                         :src="refuseIcon" 
                                         width="25" 
                                         height="25"
@@ -70,8 +74,31 @@ let collectWishes = Vue.component('collect-wishes', {
                                         style="margin-left:20px;">
                                        <span style="color:#8c8c8c">13 votes</span>
                                      </a>
-                                </li>                                                                
-                             </ol>
+                                </li> 
+<li>
+                                    <a title="Vue.js" href="">
+                                    <img
+                                        @mouseover="validateIcon='img/validate_icon.png'"
+                                        @mouseleave="validateIcon='img/validate_icon_init.png'"
+                                        :src="validateIcon" 
+                                        width="25" 
+                                        height="25"
+                                        style="margin-left:20px;">
+                                    <img
+                                        @mouseover="refuseIcon='img/refuse_icon.png'"
+                                        @mouseleave="refuseIcon='img/refuse_icon_init.png'"
+                                        :src="refuseIcon" 
+                                        width="25" 
+                                        height="25"
+                                        style="margin-left:50px;">  
+                                        <img
+                                        src="img/icon-novote.png" 
+                                        width="25" 
+                                        height="25"
+                                        style="margin-left:155px;">
+                                       <span style="color:#8c8c8c">0 votes</span>
+                                     </a>
+                                </li>                                   </ol>
                         </div>
                     </div>
                     <div clas="row">
@@ -101,6 +128,9 @@ let collectWishes = Vue.component('collect-wishes', {
     },
 
     methods: {
+        returnAssignCollabPanel(){
+            this.$router.push('/addTrainingTopic')
+        }
 
     }
 });
