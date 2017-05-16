@@ -1,11 +1,13 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-let Header = Vue.component('blue-header', {
-    props: ['title'],
+
+
+let Header = Vue.component('header-component', {
+    props: ['title','headerColor'],
     template: `<div id="wrap">
-            <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
-                <div class="container-fluid" id="blue-header">
+            <div class="navbar navbar-default navbar-fixed-top" :class="headerColor">
+                <div class="container-fluid" id="header-component">
                     <div class="row">
                         <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                             <p id="navbar-title" href="#">Collaborateur 360</p>
@@ -16,22 +18,22 @@ let Header = Vue.component('blue-header', {
                                  <span @mouseover="setDisconnectedToTrue()" v-show="showName()">{{firstName}} {{lastName}}</span>
                                  <button @click="disconnectUser" @mouseout="setDisconnectedToFalse()" v-show="showDisconnexion()" id="btn-disconnect"><i class="glyphicon glyphicon-remove"></i> Déconnexion</button>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
                                 <ul class="nav navbar-nav">
-                                    <li class="dropdown">	
+                                    <li class="dropdown">
                                         <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
                                         <ul id="dropdown-app" class="dropdown-menu">
                                             <li>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a href="http://localhost:8081/#/skillsStatementByCollaborators" @click="hrefSkills"> <img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span>
                                                 <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><img src="/img/icon_formation.png" href="#" class="text-center icon-app"><p>GF</p></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a href="http://localhost:8081/#/registerTrainingCollaborator" @click="hrefTrainings"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span>
                                                 <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
                                             </li>
                                         </ul>
-                                    </li> 
+                                    </li>
                                  </ul>
                             </div>
-                        </div>     
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,7 +44,7 @@ let Header = Vue.component('blue-header', {
                     <div class="dialog-buttons">
                         <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link>
                     </div>
-                </div>	
+                </div>
             </div>
         </div>
   `,
@@ -79,6 +81,9 @@ let Header = Vue.component('blue-header', {
         });
         if(this.title == "Gestion des formations"){
             this.app.training = true;
+        } else {
+            (this.skills == "Gestion des formations")
+            this.app.skills = true;
         }
     },
     methods: {
@@ -145,7 +150,7 @@ let Header = Vue.component('blue-header', {
             };
 
             let preventCollaboratorToGoToAdminPage = () => {
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote' && this.getPageName() !='skillsStatementByCollaborators') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
@@ -200,6 +205,12 @@ let Header = Vue.component('blue-header', {
                 redirectToLoginPage();
             }
         },
+        hrefSkills:function(){
+          console.log("helooooooo")
+        },
+        hrefTrainings:function(){
+
+        },
 
         disconnectUser(){
             let disconnect = (response) => {
@@ -232,7 +243,7 @@ const router = new VueRouter({
             component: {
                 template: `
                 <div id="newVue" v-cloak>
-                    <blue-header title="Gestion des formations"></blue-header>
+                    <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                     <div class="container-fluid">
                         <div class="col-sm-12 col-md-7 col-lg-7">
                             <add-formation-panel></add-formation-panel>
@@ -251,7 +262,7 @@ const router = new VueRouter({
             name: 'registerTrainingCollaborator',
             component: {
                 template: `<div id="newVue" v-cloak>
-                                <blue-header title="Gestion des formations"></blue-header>
+                                <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                     <div class="container-fluid">
                                         <div class="col-sm-12 col-md-7 col-lg-7">
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
@@ -268,7 +279,7 @@ const router = new VueRouter({
             name: 'WishToVote',
             component: {
                 template: `<div id="newVue" v-cloak>
-                                <blue-header title="Gestion des formations"></blue-header>
+                                <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                     <div class="container-fluid">
                                         <div class="col-sm-12 col-md-7 col-lg-7">
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
@@ -286,7 +297,7 @@ const router = new VueRouter({
             name: 'login',
             component: {
                 template: `<div id="newVue" v-cloak>
-                               <blue-header></blue-header>
+                               <header-component headerColor="blue-header"></header-component>
                                <connect-user></connect-user>
                            </div>`
             }
@@ -297,7 +308,7 @@ const router = new VueRouter({
                 template: `
                 <div class="container-fluid" id="newVue" v-cloak>
                    <div class="row">
-                        <blue-header></blue-header>
+                        <header-component headerColor="blue-header"></header-component>
                         <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -316,6 +327,16 @@ const router = new VueRouter({
         {
             path: "/",
             redirect: "/login"
+        },
+        {
+            path:"/skillsStatementByCollaborators",
+            name:'skillsStatementByCollaborators',
+            component:{
+                template: `<div id="newVue" v-cloak>
+                            <header-component title="Gestion des compétences" headerColor="red-header"></header-component>
+                            <statement-skills></statement-skills>
+                         </div>`
+            }
         }
     ]
 });
@@ -325,7 +346,9 @@ const PAGE_TITLE = {
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
     "WishToVote": "Gestion des formations",
-    "addTrainingTopic": "Gestion des formations"
+    "addTrainingTopic": "Gestion des formations",
+    "skillsStatementByCollaborators": "Gestion des compétences"
+
 };
 
 const PAGE_FAVICON = {
