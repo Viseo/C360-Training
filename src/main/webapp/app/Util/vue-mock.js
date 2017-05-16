@@ -347,7 +347,7 @@ let routes = [
                 "numberHalfDays":4,
                 "topicDescription":{"id":1,"version":0,"name":"MOBILE"}
             }
-            ]
+        ]
     },
     {
         method: 'GET',
@@ -359,10 +359,10 @@ let routes = [
                     {"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":
                         {"id":1,"version":0,"name":"MOBILE"}
                     },"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},
-                    {"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},
-                        "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
-                    }
-                    ]
+            {"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},
+                "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
+            }
+        ]
     },
     {
         method: 'GET',
@@ -382,6 +382,74 @@ let routes = [
             "label": "PHP",
             "collaborator_id": 1,
         },
+        ]
+    },
+    {
+        method: 'GET',
+        url: 'api/allwishes',
+        response: [
+            {   "id":2,
+                "version":5,
+                "label":"SSC",
+                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+                "vote_ko":[],
+                "checked":false},
+            {   "id":3,
+                "version":4,
+                "label":"SSCAAS",
+                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+                "vote_ko":[],
+                "checked":false}
+        ]
+    },
+    {
+        method: 'PUT',
+        url: 'api/okwishtoupdate/1',
+        response: [{   "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+            "vote_ko":[],
+            "checked":false}]
+    },
+    {
+        method: 'PUT',
+        url: 'api/kowishtochange/1',
+        response: {   "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+            "vote_ko":[],
+            "checked":false}
+    },
+    {
+        method: 'PUT',
+        url: 'api/kowishtoupdate/1',
+        response: [
+            {   "id":2,
+                "version":5,
+                "label":"SSC",
+                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+                "vote_ok":[],
+                "vote_ko":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+                "checked":false}
+        ]
+    },
+    {
+        method: 'PUT',
+        url: 'api/okwishtochange/1',
+        response: [
+            {   "id":2,
+                "version":5,
+                "label":"SSC",
+                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+                "vote_ok":[],
+                "vote_ko":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+                "checked":false}
         ]
     },
 
