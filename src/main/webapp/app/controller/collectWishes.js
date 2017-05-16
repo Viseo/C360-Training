@@ -179,17 +179,22 @@ let collectWishes = Vue.component('collect-wishes', {
             }
         },
         updateWish(){
-            this.$http.post("api/ischeckedwishestoupdate",this.listWishesToUpdate).then(
-                function (response) {
-                    console.log("success to update wishes");
-                    this.confirmUpdateWishes = true;
-                    setTimeout(function(){ this.confirmUpdateWishes = false; }.bind(this), 2000);
-                    this.getAllWishes();
-                },
-                function(response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
+            if(this.listWishesToUpdate.length>0) {
+
+                this.$http.post("api/ischeckedwishestoupdate", this.listWishesToUpdate).then(
+                    function (response) {
+                        console.log("success to update wishes");
+                        this.confirmUpdateWishes = true;
+                        setTimeout(function () {
+                            this.confirmUpdateWishes = false;
+                        }.bind(this), 2000);
+                        this.getAllWishes();
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    });
+            }
         },
         returnAssignCollabPanel(){
             this.$router.push('/addTrainingTopic')
