@@ -10,15 +10,15 @@
     width: 100%;
 }
 .searchCollab .searchField .glyphicon-search {
-    right: 35px;
+    right: 20px;
     position: absolute;
     top: 11px;
     cursor:pointer;
     z-index: 1000;
 }
-.searchCollab .searchField{
-    margin-left: -42px;
-    width: 138%;
+
+.panel-body {
+    padding: 10px 0px 15px 10px;
 }
 
 .green {
@@ -47,6 +47,14 @@ div.disabled
 {
 display:none;
 }
+#typeahead {
+    padding:0px 10px 0px 0px;
+}
+
+.simplebar-track.horizontal {
+    display:none;
+}
+
 #typeahead input {
     padding-right:25px;
     font-size:0.85em;
@@ -71,3 +79,9 @@ display:none;
     text-decoration: none;
 }
 
+.collaboratorsList {
+    overflow-y:auto;
+    overflow-x: hidden;
+    height:235px;
+    padding-left: 10px;
+}

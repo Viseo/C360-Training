@@ -63,15 +63,15 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                             <div class="panel-body">
                                 <div id="typeahead" v-show="!isDisabled"
-                                     class=" col-sm-12 col-md-12 col-lg-12 searchField">
+                                     class="col-sm-12 col-md-12 col-lg-12 searchField">
                                     <span class="glyphicon glyphicon-search" @click="storeCollaboratorsFound"
                                           value=""></span>
-                                    <typeahead class="col-sm-12 col-dm-12 col-lg-12" v-model="value"
+                                    <typeahead v-model="value"
                                                v-bind:data="allCollaboratorsName"
                                                placeholder="Nom ou prénom du collaborateur"></typeahead>
                                 </div>
                                 <br/><br/>
-                                <div align="center" style="overflow-y: auto; overflow-x: hidden; height:33vh;">
+                                <div id="collaboratorsList" data-simplebar style="overflow-y:auto; overflow-x: hidden; height:235px;">
                                     <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
                                     </div>
                                     <table class="tabCentring">
@@ -101,7 +101,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                             <div class="panel-body">
                                 <br/><br/>
-                                <div align="center" style="overflow: auto; position:fixed; height:33vh;">
+                                <div data-simplebar class="collaboratorsList">
                                     <table class="tabCentring">
                                         <tr v-for="collaborator in validatedCollab">
                                             <td @click="moveCollabLeft(collaborator)"><span
