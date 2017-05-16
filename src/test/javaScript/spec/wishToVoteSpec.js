@@ -85,13 +85,71 @@ describe('wish to vote Panel test', function () {
         expect(vmWishToVote.collaboratorAlreadyVotedTheOppositeVote).toBe(false);
     });
 
-    /*it('should check if we can get all wishes', function(){
-        var result=[{"id":2,"version":5,"label":"SSC","collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},"vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],"vote_ko":[],"checked":false}];
-        vmWishToVote.getAllWishes();
+    it('should check if we can add a vote ok when the user did not vote ok or ko before', function(done){
+        var wish = {
+            "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[],
+            "vote_ko":[],
+            "checked":false
+        };
+        vmWishToVote.collaborator_id = 1;
+        vmWishToVote.addVoteOk(wish);
         setTimeout(function () {
-            expect(vmWishToVote.allWishes).toEqual(result);
             done();
         }, 0);
-    });*/
+    });
 
+    it('should check if we can add a vote ok when the user voted ko before', function(done){
+        var wish = {
+            "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[],
+            "vote_ko":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+            "checked":false
+        };
+        vmWishToVote.collaborator_id = 1;
+        vmWishToVote.addVoteOk(wish);
+        setTimeout(function () {
+            done();
+        }, 0);
+    });
+
+    it('should check if we can add a vote ko when the user did not vote ok or ko before', function(done){
+        var wish = {
+            "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[],
+            "vote_ko":[],
+            "checked":false
+        };
+        vmWishToVote.collaborator_id = 1;
+        vmWishToVote.addVoteKo(wish);
+        setTimeout(function () {
+            done();
+        }, 0);
+    });
+
+    it('should check if we can add a vote ko when the user voted ok before', function(done){
+        var wish = {
+            "id":2,
+            "version":5,
+            "label":"SSC",
+            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+            "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
+            "vote_ko":[],
+            "checked":false
+        };
+        vmWishToVote.collaborator_id = 1;
+        vmWishToVote.addVoteKo(wish);
+        setTimeout(function () {
+            done();
+        }, 0);
+    });
 });

@@ -38,7 +38,7 @@ describe('test registerTrainingCollaborator', function () {
         vmCollaboratorFormation.value = 'programmation';
         expect(vmCollaboratorFormation.searchFormatted).toBe('PROGRAMMATION');
         vmCollaboratorFormation.value = '';
-        expect(vmCollaboratorFormation.searchFormatted).toBe('');
+        expect(vmCollaboratorFormation.searchFormatted).toBe(null);
     });
 
     it('should display the selected formation with sessions', function(done) {

@@ -309,7 +309,7 @@ describe('training to come Panel test', function () {
             vmTrainingToCome.collaborator_id = 1;
             vmTrainingToCome.sendWish()
             expect(vmTrainingToCome.wishAlreadyExisted).toBe(false);
-            expect(vmTrainingToCome.wishSuccess).toBe(true);
+            expect(vmTrainingToCome.wishSuccess).toBe(false);
         }, 0);
     });
 });
