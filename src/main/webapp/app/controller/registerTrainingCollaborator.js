@@ -132,6 +132,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         this.getCookies();
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
+        this.activateScrollWheel('#scroll');
     },
 
     watch: {

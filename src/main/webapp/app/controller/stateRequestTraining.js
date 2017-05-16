@@ -78,6 +78,7 @@ let stateRequest = Vue.component('state-request', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
+        this.activateScrollWheel('#scrollMyTrainings');
         this.getCookies();
         this.fetchTrainingsSessions();
     },

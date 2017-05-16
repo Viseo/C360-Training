@@ -128,6 +128,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         this.activateScrollUp('#scroll-up-training-to-come','#sessionsPanel');
         this.activeScrollDown('#scroll-down-training-to-come','#sessionsPanel');
+        this.activateScrollWheel('#sessionsPanel');
     },
     methods: {
         updateV1 (v) {
