@@ -206,10 +206,10 @@ let Header = Vue.component('header-component', {
             }
         },
         hrefSkills:function(){
-          console.log("helooooooo")
+          console.log();
         },
         hrefTrainings:function(){
-
+            console.log();
         },
 
         disconnectUser(){
