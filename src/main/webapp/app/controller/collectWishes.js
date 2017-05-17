@@ -9,7 +9,8 @@ let collectWishes = Vue.component('collect-wishes', {
             showChevrons : true,
             allWishes:[],
             listWishesToUpdate:[],
-            confirmUpdateWishes: false
+            confirmUpdateWishes: false,
+            disableSaveButton: true
         }
     },
 
@@ -115,7 +116,7 @@ let collectWishes = Vue.component('collect-wishes', {
                     <div class="row">
                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
                         <br/>
-                            <button class="btn btn-primary"  @click="updateWish()">Enregistrer</button>
+                            <button :disabled="disableSaveButton" class="btn btn-primary"  @click="updateWish()">Enregistrer</button>
                         </div>
                     </div>
                         <div style="width: 100%; height: 30px;">
@@ -127,6 +128,17 @@ let collectWishes = Vue.component('collect-wishes', {
         </div>
     </div>
 </div>`,
+
+    watch: {
+        listWishesToUpdate: function(){
+            if(this.listWishesToUpdate.length==0){
+                this.disableSaveButton = true;
+            }
+            else{
+                this.disableSaveButton = false;
+            }
+        }
+    },
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
@@ -186,6 +198,7 @@ let collectWishes = Vue.component('collect-wishes', {
                     function (response) {
                         console.log("success to update wishes");
                         this.confirmUpdateWishes = true;
+                        this.disableSaveButton = true;
                         setTimeout(function () {
                             this.confirmUpdateWishes = false;
                         }.bind(this), 2000);
