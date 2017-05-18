@@ -202,7 +202,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.trainingTitle = this.trainingTitle.replace(/ +/g, " ").replace(/ +$/, "");
                 this.training.trainingTitle = this.trainingTitle;
                 this.training.numberHalfDays = this.numberHalfDays;
-                for (var tmp in this.state.selectOptionsOfTopic){
+                for (let tmp in this.state.selectOptionsOfTopic){
                     if(this.topicDescription == this.state.selectOptionsOfTopic[tmp].name){
                         this.training.topicDescription = this.state.selectOptionsOfTopic[tmp];
                     }
@@ -244,45 +244,49 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         saveTrainingIntoDatabase() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
-            //post the form to the server
-            this.$http.post("api/formations", this.trainingToRegister)
-                .then(
-                    function (response) {
-                        this.isNewTrainingTitle = true;
-                        this.confirmFormation = true;
-                        this.gatherTrainingsFromDatabase();
-                        this.resetTrainingForm();
-                        setTimeout(function(){ this.confirmFormation = false; }.bind(this), 2000);
-                    },
-                    function (response) {
-                        console.log("Error: ", response);
-                        if (response.data.message == "trainingTitle") {
-                            this.isNewTrainingTitle = false;
-                        } else {
-                            console.error(response);
-                        }
-                    }
-                );
+            let saveTrainingSuccess = () => {
+                this.isNewTrainingTitle = true;
+                this.confirmFormation = true;
+                this.gatherTrainingsFromDatabase();
+                this.resetTrainingForm();
+                setTimeout(function(){ this.confirmFormation = false; }.bind(this), 2000);
+            };
+
+            let saveTrainingError = (response) => {
+                console.log("Error: ", response);
+                if (response.data.message == "trainingTitle") {
+                    this.isNewTrainingTitle = false;
+                } else {
+                    console.error(response);
+                }
+            };
+
+            this.post("api/formations", this.trainingToRegister, saveTrainingSuccess, saveTrainingError);
         },
+
         saveTopicIntoDatabase() {
             this.topicToRegister.name = this.newTopic.replace(" ", "").toUpperCase();
-            this.$http.post("api/themes", this.topicToRegister)
-                .then(
-                    function (response) {
-                        this.confirmTopic = true;
-                        this.gatherTopicsFromDatabase();
-                        setTimeout(function(){ this.confirmTopic = false; }.bind(this), 2000);
-                    },
-                    function (response) {
-                        console.log("Error: ", response);
-                        if (response.data.message == "name") {
-                            this.isNewTopic = false;
-                        } else {
-                            console.error(response);
-                        }
-                    }
-                );
+
+            let saveTopicSuccess = () => {
+                this.confirmTopic = true;
+                this.gatherTopicsFromDatabase();
+                setTimeout(function () {
+                    this.confirmTopic = false;
+                }.bind(this), 2000);
+            };
+
+            let saveTopicError = (response) => {
+                if (response.data.message == "name") {
+                    console.log("Error: ", response);
+                    this.isNewTopic = false;
+                } else {
+                    console.error("Error: ", response);
+                }
+            };
+
+            this.post("api/themes", this.topicToRegister, saveTopicSuccess, saveTopicError);
         },
+
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
@@ -298,6 +302,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 }
             );
         },
+
         gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
@@ -472,6 +477,9 @@ let ShowFormation = Vue.component('show-formation-panel', {
             allTrainings: []
         }
     },
+    mounted: function() {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+    },
     computed: {
         showChevrons(){
             if (this.state.allTopicTraining.length > 0) {
@@ -498,7 +506,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 }
             );
         },
-        GatherTrainingsFromDatabase(){
+
+        gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
                     this.allTrainings = response.data;
@@ -515,27 +524,26 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 }
             );
         },
-        RemoveTopic(topicToRemove){
-            this.$http.post("api/removetopic", topicToRemove).then(
-                function (response) {
-                    this.GatherTrainingsFromDatabase();
-                    this.GatherAllSessions();
-                    this.gatherTopicsFromDatabase();
-                },
-                function (response) {
-                    console.error(response);
-                });
+
+        removeTopic(topicToRemove){
+            let removeTopicSuccess = () => {
+                this.gatherTrainingsFromDatabase();
+                this.gatherAllSessions();
+                this.gatherTopicsFromDatabase();
+            };
+
+            this.$http.post("api/removetopic", topicToRemove, removeTopicSuccess)
         },
+
         removeTraining(trainingToRemove){
-            this.$http.post("api/removetraining", trainingToRemove).then(
-                function (response) {
-                    this.GatherTrainingsFromDatabase();
-                    this.GatherAllSessions();
-                },
-                function (response) {
-                    console.error(response);
-                });
+            let removeTopicSuccess = () => {
+                this.gatherTrainingsFromDatabase();
+                this.gatherAllSessions();
+            };
+
+            this.post("api/removetraining", trainingToRemove, removeTopicSuccess);
         },
+
         createSession(id){
             this.state.changePageToSession = true;
             this.state.changePageToTraining = false;
@@ -544,6 +552,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
             this.trainingStore.collectInformationOfTrainingChosen();
             this.gatherSessionsByTrainingFromDatabase();
         },
+
         gatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
                 function (response) {
@@ -570,7 +579,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
 
                 return false;
         },
-        GatherAllSessions(){
+        gatherAllSessions(){
             this.$http.get("api/sessions").then(
                 function (response) {
                     console.log("success to get all sessions from database");
@@ -603,7 +612,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                             <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                             <th width="25%"></th>
                                                                             <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a style="cursor: pointer;" @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="RemoveTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
+                                                                            <th class="deletetopic" width="25%"><a style="cursor: pointer;" @click="removeTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="removeTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -778,7 +787,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.isBeginningDateValid = true;
             this.isSessionAlreadyPlanned = false;
             this.ResetSessionForm();
-            this.GatherTrainingsFromDatabase();
+            this.gatherTrainingsFromDatabase();
         },
         ResetSessionForm(){
             this.beginningDate = '';
@@ -824,29 +833,29 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         SaveSessionIntoDatabase(){
-            this.$http.post("api/sessions", this.sessionToRegister)
-                .then(
-                    function (response) {
-                        this.isSessionAlreadyPlanned = false;
-                        this.confirmSession = true;
-                        setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
-                        this.state.changePageToSession = false;
-                        this.state.changePageToTraining = true;
-                        this.ResetSessionForm();
-                        this.gatherSessionsByTrainingFromDatabase();
-                        this.GatherAllSessions();
-                    },
-                    function (response) {
-                        console.log("Error: ",response);
-                        if (response.data.message === "TrainingSession already planned") {
-                            this.isSessionAlreadyPlanned = true;
-                        } else {
-                            console.error(response);
-                        }
-                    }
-                );
+            let saveSessionSuccess = () => {
+                this.isSessionAlreadyPlanned = false;
+                this.confirmSession = true;
+                setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
+                this.state.changePageToSession = false;
+                this.state.changePageToTraining = true;
+                this.ResetSessionForm();
+                this.gatherSessionsByTrainingFromDatabase();
+                this.gatherAllSessions();
+            };
+
+            let saveSessionError = (response) => {
+                if (response.data.message === "TrainingSession already planned") {
+                    this.isSessionAlreadyPlanned = true;
+                } else {
+                    console.error(response);
+                }
+            };
+
+            this.post("api/sessions", this.sessionToRegister, saveSessionSuccess, saveSessionError);
         },
-        GatherTrainingsFromDatabase(){
+
+        gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
                     this.allTrainings = response.data;
@@ -875,7 +884,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
-        GatherAllSessions(){
+        gatherAllSessions(){
             this.$http.get("api/sessions").then(
                 function (response) {
                     console.log("success to get all sessions from database");
@@ -907,7 +916,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.numberOfSessionSelected--;
                     this.ResetSessionForm();
                     this.gatherSessionsByTrainingFromDatabase();
-                    this.GatherAllSessions();
+                    this.gatherAllSessions();
                 },
                 function (response) {
                     this.confirmModification = false;
@@ -920,7 +929,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
         chooseSessionsToRemove(){
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
-                    this.RemoveSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
+                    this.removeSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
                     document.getElementById('circle' + this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id).className = 'circle';
                     this.numberOfSessionSelected--;
                 }
@@ -928,18 +937,16 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.confirmSupression = true;
             setTimeout(function(){ this.confirmSupression = false; }.bind(this), 1500);
         },
-        RemoveSession(sessionToRemove){
-            this.$http.post("api/sessionstoremove", sessionToRemove).then(
-                function (response) {
-                    console.log("success");
-                    this.canNotRegisterForm = false;
-                    this.ResetSessionForm();
-                    this.gatherSessionsByTrainingFromDatabase();
-                    this.GatherAllSessions();
-                },
-                function (response) {
-                    console.error(response);
-                });
+
+        removeSession(sessionToRemove){
+            let removeSessionSuccess = () => {
+                this.canNotRegisterForm = false;
+                this.ResetSessionForm();
+                this.gatherSessionsByTrainingFromDatabase();
+                this.gatherAllSessions();
+            };
+
+            this.post("api/sessionstoremove", sessionToRemove, removeSessionSuccess);
         },
         showSession(session){
             this.trainingTitleInAddSessionErrorMessage = false;

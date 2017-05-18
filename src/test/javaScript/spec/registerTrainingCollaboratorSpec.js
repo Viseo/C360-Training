@@ -1,7 +1,6 @@
 /**
  * Created by CLH3623 on 18/04/2017.
  */
-let runtime = "test";
 
 afterEach(function () {
 });
@@ -82,7 +81,7 @@ describe('test registerTrainingCollaborator', function () {
     it('should find sessions that are booked by collab', function () {
         vmCollaboratorFormation.reinitialize(trainingSelected);
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);
-        vmCollaboratorFormation.renitialize(trainingSelectedWithoutSessions);
+        vmCollaboratorFormation.reinitialize(trainingSelectedWithoutSessions);
         setTimeout(function () {
             expect(vmCollaboratorFormation.trainingrequested).toBe(false);
             expect(vmCollaboratorFormation.listTrainingSession.length).toBe(0);
@@ -119,10 +118,18 @@ describe('test registerTrainingCollaborator', function () {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
         vmCollaboratorFormation.isNoSession = false;
         vmCollaboratorFormation.verifyTrainingSessionCollaborator();
-
-            expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
-
+        expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
     });
+
+    // it('should disable all session when indiferent is checked', function (done) {
+    //     vmCollaboratorFormation.check = false;
+    //     vmCollaboratorFormation.disabling(trainingSelected.id);
+    //     setTimeout(function() {
+    //         expect(vmCollaboratorFormation.checkedSessions.length).not.toBe(0);
+    //         expect(vmCollaboratorFormation.isNoSession).toBe(false);
+    //         done();
+    //     },0);
+    // });
 
     it('should disable all session when indiferent is checked', function () {
         vmCollaboratorFormation.check = false;

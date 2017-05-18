@@ -56,7 +56,7 @@ let args;
             expect(vmFormulaire.errorMessageLogin).toBe('');
             vmFormulaire.verifyLogin('aZE1234');
             expect(vmFormulaire.isLoginValid).toBe(false);
-            expect(vmFormulaire.errorMessageLogin).toBe('Veuillez entrer code de login valide');
+            expect(vmFormulaire.errorMessageLogin).toBe('Veuillez entrer un code de login valide');
             vmFormulaire.personnalIdNumber = '';
             vmFormulaire.isLoginEmpty();
             expect(vmFormulaire.loginEmpty).toBe(true);
@@ -102,9 +102,9 @@ let args;
             vmFormulaire.email = '';
             vmFormulaire.isEmailEmpty();
             expect(vmFormulaire.emailEmpty).toBe(true);
-            vmFormulaire.setEmailAlreadyExistToTrue();
+            vmFormulaire.setEmailAlreadyExistToFalse();
             expect(vmFormulaire.emailEmpty).toBe(false);
-            expect(vmFormulaire.emailAlreadyExist).toBe(true);
+            expect(vmFormulaire.emailAlreadyExist).toBe(false);
         });
 
         it('Test password',function () {

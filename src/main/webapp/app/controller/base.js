@@ -12,9 +12,15 @@ function BaseComponent(prototype) {
             this.$router.push("/"+pageName);
         },
 
-        post: function(url,data,success){
+        post: function(url,data,success,error){
+            if (!error) {
+                error = (response) => {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            }
             this.$http.post(url, data)
-                .then(success);
+                .then(success, error);
         },
 
         activateScrollUp: function(idChevronUp, idComponentToScroll){

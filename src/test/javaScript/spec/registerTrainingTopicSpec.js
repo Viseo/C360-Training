@@ -663,7 +663,7 @@ describe('test registerTrainingTopic.js', function () {
     describe('vmShowFormationPanel', function () {
         it('should delete topic and its trainings',function (){
             var topicToRemove = {id: "2", version: "0", name: "PROGRAMMATION"};
-            vmShowFormation.RemoveTopic(topicToRemove);
+            vmShowFormation.removeTopic(topicToRemove);
         }),
             it('should delete training and its sessions',function (){
                 var trainingToRemove = {"id": 3, "version": 0, "name": "C"};

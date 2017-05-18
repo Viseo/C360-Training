@@ -58,6 +58,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         }
     },
     mounted:function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getCookies();
         this.getAllWishes();
         $('#scroll-up-4').click(function() {
@@ -69,7 +70,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
     },
     methods: {
         changePage(){
-            this.$router.push('/registerTrainingCollaborator');
+            this.goTo('registerTrainingCollaborator');
         },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');

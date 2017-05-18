@@ -18,8 +18,8 @@ Vue.http.interceptors.unshift((request, next) => {
             )
         );
     }
-
 });
+
 
 describe('assign collaborator test', function () {
 
@@ -95,9 +95,9 @@ describe('assign collaborator test', function () {
 
     });
 
-    it('should check if all available sessions are in the drop-down ok ', function () {
-        vmAssignCollaborator.GatherAllSessions();
-        var responses = [{
+    it('should check if all available sessions are in the drop-down ', function () {
+        vmAssignCollaborator.gatherAllSessions();
+        var response = [{
             "id": 6,
             "version": 0,
             "trainingDescription": {
@@ -113,20 +113,17 @@ describe('assign collaborator test', function () {
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }];
-        expect(vmAssignCollaborator.state.allSessions).toEqual(responses);
-
+        expect(vmAssignCollaborator.state.allSessions).toEqual(response);
     });
-    it('should check if all available sessions are in the drop-down ko', function () {
-        var reponseApi = vmAssignCollaborator.GatherAllSessions();
-        console.log("reponseApi " +reponseApi);
 
+    it('should check if all available sessions are in the drop-down ko', function () {
+        var reponseApi = vmAssignCollaborator.gatherAllSessions();
+        console.log("reponseApi " +reponseApi);
     });
 
     it('should check if fields are greys when there are no sessions selected ', function () {
-
         expect(vmAssignCollaborator.isDisabled).toBe(true);
         expect(vmAssignCollaborator.sessionIdChosen).toBe(0);
-
     });
 
     it('should check if fields are not greys when sessions are selected ', function () {

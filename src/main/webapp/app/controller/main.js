@@ -214,7 +214,7 @@ let Header = Vue.component('blue-header', {
                             document.cookie = "timeConnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                     }
                     if (!this.dialog)
-                        this.$router.push('/login')
+                        this.goTo('login')
                 }
             };
 
