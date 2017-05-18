@@ -55,7 +55,6 @@ let collectWishes = Vue.component('collect-wishes', {
                                                 <li v-for="wish in allWishes">
                                                     <a :title="wish.label">
                                                         <img v-if="wish.checked==true"
-                                                             :id="'validate'+wish.id"
                                                              @click="addWishToListWishes(wish, false)"
                                                              src="img/validate_icon.png"
                                                              width="25"
@@ -63,7 +62,6 @@ let collectWishes = Vue.component('collect-wishes', {
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
                                                         <img v-else-if="wish.checked==null"
-                                                             :id="'validate'+wish.id"
                                                              @click="addWishToListWishes(wish, true)"
                                                              src="img/validate_icon_init.png"
                                                              width="25"
@@ -71,7 +69,6 @@ let collectWishes = Vue.component('collect-wishes', {
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
                                                         <img v-else-if="wish.checked ==false"
-                                                             :id="'validate'+wish.id"
                                                              @click="addWishToListWishes(wish, true)"
                                                              src="img/refuse_icon.png"
                                                              width="25"
@@ -157,17 +154,8 @@ let collectWishes = Vue.component('collect-wishes', {
     },
     methods: {
 
-        changeIconFromGreyToColor(idImage, colorIcon){
-            document.getElementById(idImage).src = colorIcon;
-        },
-
-        changeIconFromColorToGrey(idImage, greyIcon){
-            document.getElementById(idImage).src = greyIcon;
-        },
-
         addWishToListWishes(wish, isWishValidate){
             this.wishAlreadyInList = false;
-
             for (var index in this.listWishesToUpdate) {
                 if (this.listWishesToUpdate[index].id == wish.id) {
                     this.listWishesToUpdate[index].checked = isWishValidate;

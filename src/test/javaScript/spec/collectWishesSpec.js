@@ -101,22 +101,13 @@ describe('collect wishes panel test', function () {
             ];
         vmCollectWishes.updateWish();
         setTimeout(function () {
-            expect(vmCollectionWishes.disableSaveButton).toBe(false);
-            expect(vmCollection.showConfirmUpdateWishesMessage).toBe(true);
+            expect(vmCollectWishes.disableSaveButton).toBe(true);
+            expect(vmCollectWishes.showConfirmUpdateWishesMessage).toBe(true);
             done();
         }, 0);
     });
 
     it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function (done) {
-        let createImage = function (elementId, elementSrc) {
-            var dummyElement = document.createElement('img');
-            dummyElement.setAttribute("id", elementId);
-            dummyElement.setAttribute("src", elementSrc);
-            document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
-        };
-
-        createImage('validate98', 'img/validate_icon_init.png');
-
         wish =
             [
                 {
@@ -148,15 +139,6 @@ describe('collect wishes panel test', function () {
     });
 
     it('should check if wish is ready to be update and icon is changed from color to grey when administrator dont validate the wish', function (done) {
-        let createImage = function (elementId, elementSrc) {
-            var dummyElement = document.createElement('img');
-            dummyElement.setAttribute("id", elementId);
-            dummyElement.setAttribute("src", elementSrc);
-            document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
-        };
-
-        createImage('validate98', 'img/validate_icon.png');
-
         wish =
             [
                 {
