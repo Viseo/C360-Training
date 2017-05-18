@@ -62,10 +62,18 @@ let collectWishes = Vue.component('collect-wishes', {
                                                              height="25"
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
-                                                        <img v-else-if="wish.checked==null || wish.checked ==false"
+                                                        <img v-else-if="wish.checked==null"
                                                              :id="'validate'+wish.id"
                                                              @click="addWishToListWishes(wish, true)"
                                                              src="img/validate_icon_init.png"
+                                                             width="25"
+                                                             height="25"
+                                                             style="margin-left:50px; 
+                                                                    cursor:pointer;">
+                                                        <img v-else-if="wish.checked ==false"
+                                                             :id="'validate'+wish.id"
+                                                             @click="addWishToListWishes(wish, true)"
+                                                             src="img/refuse_icon.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:50px; 
@@ -159,12 +167,7 @@ let collectWishes = Vue.component('collect-wishes', {
 
         addWishToListWishes(wish, isWishValidate){
             this.wishAlreadyInList = false;
-            if (isWishValidate) {
-                this.changeIconFromGreyToColor('validate' + wish.id, 'img/validate_icon.png');
-            }
-            else if (isWishValidate == false) {
-                this.changeIconFromColorToGrey('validate' + wish.id, 'img/validate_icon_init.png');
-            }
+
             for (var index in this.listWishesToUpdate) {
                 if (this.listWishesToUpdate[index].id == wish.id) {
                     this.listWishesToUpdate[index].checked = isWishValidate;
