@@ -8,22 +8,44 @@
     font-family: Arial;
 }
 
-#box{
+.boxon{
+
+}
+
+.image{
     position:absolute;
-    margin-left:580px;
+    margin-left:420px;
     margin-top:-30px;
     cursor:pointer;
-    color: #fff;
     border-radius: 50%;
     height:80px;
     width: 80px;
-    font-weight: bold;
-    display: inline-block;
-    line-height: 0px;
-    padding: 11px 3px;
-    z-index: 1;
+    z-index:1;
+
+}
+
+
+.text{
+    position: absolute;
+    margin-left:420px;
+    margin-top:-30px;
     text-align: center;
-    text-decoration: none;
-    background-size: contain;
-    background-repeat: no-repeat;
+    border-radius: 50%;
+    height:80px;
+    width: 80px;
+    font-size: smaller;
+    visibility: hidden;
+    color: white;
+    opacity: 0.6;
+    z-index:2;
+    background: black;
+
+}
+
+.boxon:hover .text{
+    visibility: visible;
+    opacity: 0.6;
+
+
+
 }
