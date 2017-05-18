@@ -7,7 +7,7 @@ afterEach(function () {
 
 describe('test registerTrainingCollaborator', function () {
 
-    beforeEach(function (done) {
+    beforeEach(function () {
         vmCollaboratorFormation = new CollaboratorFormation().$mount();
         vmCollaboratorFormation.collaboratorIdentity = {
             id: 2,
@@ -16,11 +16,8 @@ describe('test registerTrainingCollaborator', function () {
         };
         vmCollaboratorFormation.idTraining = 5;
         vmCollaboratorFormation.$parent = new Vue();
-        setTimeout(function() {
-            done();
-        }, 1);
-
     });
+
     var trainingSelected = {
         "id": 5,
         "version": 0,
@@ -67,18 +64,18 @@ describe('test registerTrainingCollaborator', function () {
         }, 0);
     });
 
-    it('should find trainings having inserted value', function () {
+    it('should find trainings having inserted value', function (done) {
         vmCollaboratorFormation.value = 'FOR';
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
             expect(vmCollaboratorFormation.trainingsFound.length).toBe(3);
             expect(vmCollaboratorFormation.trainingsFound[0].trainingTitle).toBe("FORMATION1");
-
+            done();
         }, 0);
 
     });
 
-    it('should find sessions that are booked by collab', function () {
+    it('should find sessions that are booked by collab', function (done) {
         vmCollaboratorFormation.reinitialize(trainingSelected);
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);
         vmCollaboratorFormation.reinitialize(trainingSelectedWithoutSessions);
@@ -87,6 +84,7 @@ describe('test registerTrainingCollaborator', function () {
             expect(vmCollaboratorFormation.listTrainingSession.length).toBe(0);
             expect(vmCollaboratorFormation.displayTrainings).toBe(true);
             expect(vmCollaboratorFormation.isNoSession).toBe(true);
+            done();
         }, 0);
     });
 
@@ -96,9 +94,9 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should verify and save training request', function () {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
-        //vmCollaboratorFormation.isNoSession = true;
+        vmCollaboratorFormation.isNoSession = true;
         vmCollaboratorFormation.verifyTrainingSessionCollaborator();
-        expect(JSON.stringify(vmCollaboratorFormation.RequestToRegister)).toEqual(JSON.stringify({
+        expect(JSON.stringify(vmCollaboratorFormation.requestToRegister)).toEqual(JSON.stringify({
             "trainingDescription": {
                 "id": 5,
                 "version": 0,
@@ -133,7 +131,7 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should disable all session when indiferent is checked', function () {
         vmCollaboratorFormation.check = false;
-        vmCollaboratorFormation.disabling(trainingSelected.id, runtime);
+        vmCollaboratorFormation.disabling(trainingSelected.id);
         setTimeout(function() {
             expect(vmCollaboratorFormation.checkedSessions.length).not.toBe(0);
             expect(vmCollaboratorFormation.isNoSession).toBe(false);
