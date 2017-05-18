@@ -6,8 +6,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 <div class="panel-header">
                     <span class="glyphicon glyphicon-user"> 1. Mes coordonnées</span>
                     <div class="boxon">
-                        <img src="css/vote_ok.png" class="image" />
-                        <p class="text"><br><br><br>MODIFIER</p>
+                        <img src="img/IMGTEST.jpg" class="image" />
+                        <p class="text"><br><br><br><b>MODIFIER</b></p>
                     </div>
                 </div>
                 <div class="panel-body">
