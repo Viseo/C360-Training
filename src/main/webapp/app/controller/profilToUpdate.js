@@ -5,6 +5,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             <div class="panel panel-default">
                 <div class="panel-header">
                     <span class="glyphicon glyphicon-user"> 1. Mes coordonnées</span>
+                    <a id="box" style="background-image:url('css/arrow_back.png');"></a>
                 </div>
                 <div class="panel-body">
                         <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">

@@ -7,3 +7,24 @@
     color:white;
     font-family: Arial;
 }
+
+#box{
+    position:absolute;
+    margin-left:580px;
+    margin-top:-30px;
+    cursor:pointer;
+    color: #fff;
+    border-radius: 50%;
+    height:80px;
+    width: 80px;
+    background: #4b9bdf ;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;
+    z-index: 1;
+    text-align: center;
+    text-decoration: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
