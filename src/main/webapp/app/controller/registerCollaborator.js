@@ -739,15 +739,15 @@ let CustomInput = Vue.component('customInput', {
 });
 
 let customPasswordInput = Vue.component('customPasswordInput', {
-    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show'],
+    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show','isValid','isNotValid'],
     template: `<table style="border-spacing: 0px">
                 <div class="form-group"   :class="{'has-error': emptyField || errorField }">
                     <label for="label">{{labelText}}</label>
                     <div class="password" :class="{ 'control': true }">
                     <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-lock "></i>
-                        <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open "> </span>
-                        <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close "> </span> 
+                        <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open " style="margin-right: 5%;"> </span>
+                        <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close " style="margin-right: 5%;"> </span> 
                         <input type="password"  
                                 v-show="!show" 
                                 :value="textValue" 
@@ -767,7 +767,12 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                                 class="form-control"
                                 @focus="handleFocus" @blur="handleBlur"
                                 @input="updateValue($event.target.value)">
-                    </td></tr>
+                        </td>
+                        <td>
+                             <span v-show="isValid" class="glyphicon glyphicon-ok-circle color-green"></span>
+                             <span v-show="isNotValid" class="glyphicon glyphicon-remove-circle color-red"></span>
+                        </td>
+                    </tr>
                     <tr><td style="height: 20px;">
                         <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
                         <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>

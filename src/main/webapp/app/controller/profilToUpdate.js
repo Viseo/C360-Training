@@ -18,7 +18,12 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         type="text"
                                         tab="2"
                                         v-model="firstName"
-                                        maxlength="125" minlength="2">
+                                        maxlength="125" minlength="2"
+                                        @focus="setFirstNameEmptyToFalse()" 
+                                        @blur="isFirstNameEmpty()" 
+                                        :emptyField="firstNameEmpty"
+                                        :errorField="isErrorFirstName()"
+                                        :errorMessage="errorMessageFirstName">
                                     </customInput>
                                 </div>
                                 <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
@@ -45,7 +50,12 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         type="text"
                                         tab="2"
                                         v-model="lastName"
-                                        maxlength="125" minlength="2">
+                                        maxlength="125" minlength="2"
+                                        @focus="setLastNameEmptyToFalse()" 
+                                        @blur="isLastNameEmpty()" 
+                                        :emptyField="lastNameEmpty"
+                                        :errorField="isErrorLastName()"
+                                        :errorMessage="errorMessageLastName">
                                     </customInput>
                                 </div>
                                 <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
@@ -57,7 +67,6 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                                 <tr><td style="width: 500px;">
                                                     <i class="glyphicon"></i>
                                                     <select class="form-control" v-model="businessUnit">
-                                                        <option ></option>
                                                         <option >VISEO DATA & PROCESS</option>
                                                         <option >VISEO TECHNOLOGIES</option>
                                                         <option >VISEO DIGITAL</option>
@@ -86,7 +95,16 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     <customPasswordInput
                                         label="ancienmdp"
                                         labelText="Ancien mot de passe"
-                                        v-model="password">
+                                        v-model="password"
+                                        @focus="setOldPasswordEmptyToFalse()" 
+                                        @blur="isOldPasswordEmpty()"
+                                        :emptyField="oldPasswordEmpty"
+                                        :errorField="isErrorOldPassword()"
+                                        :errorMessage="errorMessageOldPassword"
+                                        :show="showPass"
+                                        @click="toggleShowPassword()"
+                                        :isValid="isValidOldPassword"
+                                        :isNotValid="isNotValidOldPassword">
                                     </customPasswordInput>
                                 </div>
                                 <div class="col-lg-6 col-lg-offset-1 col-md-offset-0">
@@ -97,7 +115,12 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         icon="glyphicon-envelope"
                                         type="text"
                                         tab="2"
-                                        v-model="email">
+                                        v-model="email"
+                                        @focus="setEmailAlreadyExistToTrue()" 
+                                        @blur="isEmailEmpty()"
+                                        :emptyField="emailEmpty"
+                                        :errorField="isErrorEmail()"
+                                        :errorMessage="errorMessageEmail">
                                     </customInput>
                                 </div>
                             </div>
@@ -108,8 +131,18 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     <customPasswordInput
                                         label="nouveaumdp"
                                         labelText="Nouveau mot de passe"
-                                        v-model="newPassword">
+                                        v-model="newPassword"
+                                        @focus="setPasswordEmptyToFalse()" 
+                                        @blur="isPasswordEmpty()"
+                                        :emptyField="passwordEmpty"
+                                        :errorField="isErrorPassword()"
+                                        :errorMessage="errorMessagePassword"
+                                        :show="showPass"
+                                        @click="toggleShowPassword()"
+                                        :isValid="isValidPassword"
+                                        :isNotValid="isNotValidPassword">
                                     </customPasswordInput>
+                                    
                                 </div>
                                 <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
                                     <span><b>Remarque:</b></span><br>
@@ -123,7 +156,16 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     <customPasswordInput
                                         label="mdpc"
                                         labelText="Confirmation mot de passe"
-                                        v-model="confirmPassword">
+                                        v-model="confirmPassword"
+                                        @focus="setConfirmPasswordEmptyToFalse()" 
+                                        @blur="isConfirmPasswordEmpty()"
+                                        :emptyField="confirmPasswordEmpty"
+                                        :errorField="isErrorConfirmPassword()"
+                                        :errorMessage="errorMessageConfirmPassword"
+                                        :show="showPass"
+                                        @click="toggleShowPassword()"
+                                        :isValid="isValidConfirmPassword"
+                                        :isNotValid="isNotValidConfirmPassword">
                                     </customPasswordInput>
                                 </div>
                             </div>
@@ -165,9 +207,63 @@ let profilToUpdate = Vue.component('profil-to-update', {
             password:'',
             newPassword:'',
             confirmPassword:'',
-            infoCollab:[],
-            CollabToUpdate:{"id":1,"version":1,"personnalIdNumber":"ABC1234","lastName":"meng","firstName":"xiangzhe","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false,"function":"Chef de JAVA","businessUnit":"VISEO Digital","admin":false}
 
+            lastNameEmpty: false,
+            isLastNameValid:true,
+            errorMessageLastName:'',
+
+            firstNameEmpty: false,
+            isFirstNameValid:true,
+            errorMessageFirstName:'',
+
+            emailEmpty: false,
+            isEmailValid:true,
+            errorMessageEmail:'',
+
+            passwordEmpty: false,
+            isPasswordValid:true,
+            errorMessagePassword:'',
+            isValidPassword:false,
+            isNotValidPassword:false,
+
+            oldPasswordEmpty: false,
+            isOldPasswordValid:true,
+            errorMessageOldPassword:'',
+            isValidOldPassword:false,
+            isNotValidOldPassword:false,
+
+            confirmPasswordEmpty: false,
+            isConfirmPasswordValid:true,
+            errorMessageConfirmPassword:'',
+            isValidConfirmPassword:false,
+            isNotValidConfirmPassword:false,
+
+            showPass: false,
+            infoCollab:[],
+            CollabToUpdate:{}
+
+        }
+    },
+    watch: {
+        lastName: function (value) {
+            this.verifyLastName(value);
+        },
+        firstName: function (value) {
+            this.verifyFirstName(value);
+        },
+        email: function (value) {
+            this.verifyEmail(value);
+        },
+        password: function (value) {
+            this.verifyOldPassword(value);
+        },
+        newPassword: function (value) {
+            this.verifyPassword(value);
+            if (this.confirmPassword != '')
+                this.verifyConfirmPassword(value);
+        },
+        confirmPassword: function (value) {
+            this.verifyConfirmPassword(value);
         }
     },
     mounted:function () {
@@ -175,7 +271,159 @@ let profilToUpdate = Vue.component('profil-to-update', {
         this.getInfoCollaborator();
     },
     methods: {
-        changPage(){
+        setLastNameEmptyToFalse() {
+            this.lastNameEmpty = false;
+        },
+
+        setFirstNameEmptyToFalse() {
+            this.firstNameEmpty = false;
+        },
+
+        setEmailAlreadyExistToTrue() {
+            this.emailEmpty = false
+        },
+
+        verifyLastName(lastName) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
+                this.errorMessageLastName = '';
+                this.isLastNameValid = true;
+            } else {
+                this.errorMessageLastName = 'Veuillez entrer un nom valide';
+                this.isLastNameValid = false;
+            }
+        },
+
+        isLastNameEmpty(){
+            if (this.lastName == '') {
+                this.lastNameEmpty = true;
+            }
+        },
+
+        isErrorLastName() {
+            return !this.isLastNameValid && !this.lastNameEmpty;
+        },
+
+        verifyFirstName(firstName) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(firstName)) {
+                this.errorMessageFirstName = '';
+                this.isFirstNameValid = true;
+            } else {
+                this.errorMessageFirstName = 'Veuillez entrer un prénom valide';
+                this.isFirstNameValid = false;
+            }
+        },
+
+        isFirstNameEmpty(){
+            if (this.firstName == '') {
+                this.firstNameEmpty = true;
+            }
+        },
+
+        isErrorFirstName() {
+            return !this.isFirstNameValid && !this.firstNameEmpty;
+        },
+
+        verifyEmail(email){
+            if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
+                    .test(email)) {
+
+                this.errorMessageEmail = '';
+                this.isEmailValid = true;
+            } else {
+                this.errorMessageEmail = 'Veuillez entrer un email valide';
+                this.isEmailValid = false;
+            }
+        },
+
+        isEmailEmpty(){
+            if (this.email == '') {
+                this.emailEmpty = true;
+            }
+        },
+
+        isErrorEmail() {
+            return !this.isEmailValid && !this.emailEmpty;
+        },
+
+        setConfirmPasswordEmptyToFalse(){
+            this.confirmPasswordEmpty = false;
+        },
+        isConfirmPasswordEmpty(){
+            if (this.confirmPassword == '') {
+                this.confirmPasswordEmpty = true;
+                this.isValidConfirmPassword = false;
+                this.isNotValidConfirmPassword = true;
+
+            }
+        },
+        isErrorConfirmPassword(){
+            return !this.isConfirmPasswordValid && !this.confirmPasswordEmpty;
+        },
+        setOldPasswordEmptyToFalse(){
+            this.oldPasswordEmpty = false;
+        },
+        isOldPasswordEmpty(){
+            if (this.password == '') {
+                this.oldPasswordEmpty = true;
+            }
+        },
+        isErrorOldPassword(){
+            return !this.isOldPasswordValid && !this.oldPasswordEmpty;
+        },
+        setPasswordEmptyToFalse(){
+            this.passwordEmpty = false;
+        },
+        isPasswordEmpty(){
+            if (this.newPassword == '') {
+                this.passwordEmpty = true;
+            }
+        },
+        isErrorPassword(){
+            return !this.isPasswordValid && !this.passwordEmpty;
+        },
+        toggleShowPassword(){
+            this.showPass = !this.showPass;
+        },
+        verifyOldPassword(password) {
+            if (/^(.){6,125}$/.test(password)) {
+                this.errorMessageOldPassword = '';
+                this.isOldPasswordValid = true;
+                this.isValidOldPassword = true;
+                this.isNotValidOldPassword = false;
+            } else {
+                this.errorMessageOldPassword = 'Le mot de passe doit avoir au minimum 6 caractères';
+                this.isOldPasswordValid = false;
+                this.isValidOldPassword = false;
+                this.isNotValidOldPassword = true;
+            }
+        },
+        verifyPassword(password) {
+            if (/^(.){6,125}$/.test(password)) {
+                this.errorMessagePassword = '';
+                this.isPasswordValid = true;
+                this.isValidPassword = true;
+                this.isNotValidPassword = false;
+            } else {
+                this.errorMessagePassword = 'Le mot de passe doit avoir au minimum 6 caractères';
+                this.isPasswordValid = false;
+                this.isValidPassword = false;
+                this.isNotValidPassword = true;
+            }
+        },
+        verifyConfirmPassword(confirmPassword) {
+            if (this.confirmPassword === this.newPassword) {
+                this.errorMessageConfirmPassword = '';
+                this.isConfirmPasswordValid = true;
+                this.isValidConfirmPassword = true;
+                this.isNotValidConfirmPassword = false;
+            } else {
+                this.errorMessageConfirmPassword = 'La confirmation du mot de passe n\'est pas valide';
+                this.isConfirmPasswordValid = false;
+                this.isValidConfirmPassword = false;
+                this.isNotValidConfirmPassword = true;
+            }
+        },
+        changePage(){
             this.$router.push('/registerTrainingCollaborator');
         },
         getCookies(){
