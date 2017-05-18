@@ -41,6 +41,10 @@ public class Collaborator extends BaseEntity {
 	@NotNull
 	Boolean isAdmin;
 
+	String function;
+
+	String businessUnit;
+
 	public Collaborator() {
 		super();
 	}
@@ -73,4 +77,28 @@ public class Collaborator extends BaseEntity {
 	}
 	public Boolean getIsAdmin() {return isAdmin;}
 	public void setIsAdmin(Boolean admin) {this.isAdmin = admin;}
+
+	public Boolean getAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		isAdmin = admin;
+	}
+
+	public String getFunction() {
+		return function;
+	}
+
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
+	public String getBusinessUnit() {
+		return businessUnit;
+	}
+
+	public void setBusinessUnit(String businessUnit) {
+		this.businessUnit = businessUnit;
+	}
 }

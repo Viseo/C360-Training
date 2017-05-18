@@ -44,6 +44,12 @@
     top: 12px;
     cursor:pointer;
 }
+.password .glyphicon-ok-circle,.glyphicon-remove-circle{
+    left: 120px;
+    position: absolute;
+    top: 12px;
+    margin-left: 50%;
+}
 .password .glyphicon-lock,#password2 .glyphicon-lock {
 
     left: 10px;

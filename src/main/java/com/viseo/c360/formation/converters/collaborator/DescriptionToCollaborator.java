@@ -21,6 +21,8 @@ public class DescriptionToCollaborator {
         domain.setEmail(dto.getEmail());
         domain.setPassword(dto.getPassword());
         domain.setIsAdmin(dto.getIsAdmin());
+        domain.setFunction(dto.getFunction());
+        domain.setBusinessUnit(dto.getBusinessUnit());
         return domain;
     }
 
