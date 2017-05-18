@@ -235,7 +235,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.numberHalfDays = '';
             this.topicDescription = '';
             this.trainingToRegister = {};
-
         },
         resetTopicForm() {
             this.newTopic = '';
@@ -321,24 +320,28 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 }
             );
         },
+
         resetVarialbesByInputTrainingTitle(){
             this.trainingTitleErrorMessage = false;
             this.confirmFormation = false;
             this.isNewTrainingTitle = true;
             this.newTopicErrorMessage = false;
         },
+
         resetVariablesByInputNumberHalfDays(){
             this.numberHalfDaysErrorMessage = false;
             this.confirmFormation = false;
             this.isNewTrainingTitle = true;
             this.newTopicErrorMessage = false;
         },
+
         resetVariablesByInputTopic(){
             this.topicErrorMessage = false;
             this.confirmFormation = false;
             this.isNewTrainingTitle = true;
             this.newTopicErrorMessage=false;
         },
+
         resetVariablesByInputNameTopic(){
             this.newTopicErrorMessage = false;
             this.confirmTopic = false;
@@ -347,27 +350,35 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.numberHalfDaysErrorMessage = false;
             this.topicErrorMessage = false;
         },
+
         showSuccessMessageForTrainingForm(){
             return this.confirmFormation && this.isNewTrainingTitle && !(this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
         },
+
         showSuccessMessageForTopicForm(){
             return this.confirmTopic && this.isNewTopic && !this.newTopicErrorMessage;
         },
+
         showEmptyInputMessageForTrainingForm(){
             return (this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
         },
+
         showEmptyInputMessageForTopicForm(){
             return this.newTopicErrorMessage;
         },
+
         showInvalidateInputMessageForTrainingForm(){
             return !this.isTrainingTitleValid && !(this.trainingTitleErrorMessage || this.numberHalfDaysErrorMessage || this.topicErrorMessage);
         },
+
         showInvalidateInputMessageForTopicForm(){
             return !this.isNewTopicValid;
         },
+
         showExistInputMessageForTrainingForm(){
             return !this.isNewTrainingTitle;
         },
+
         showExistInputMessageForTopicForm(){
             return !this.isNewTopic;
         }
@@ -565,20 +576,24 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     }
                 });
         },
+
         showCloseButton(trainingId){
             this.upHere = true;
             this.trainingIdSelected = trainingId;
         },
+
         hideCloseButton(){
             this.upHere = false;
             this.trainingIdSelected = null;
         },
+
         verifyShowButtonOrNot(trainingId){
             if(this.upHere == true && this.trainingIdSelected == trainingId)
                 return true;
 
                 return false;
         },
+
         gatherAllSessions(){
             this.$http.get("api/sessions").then(
                 function (response) {
@@ -691,6 +706,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         }
     },
     mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getDate();
     },
     watch:{
@@ -712,17 +728,19 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isTrainingTitleInAddSessionValid = false;
             }
         },
+
         isTrainingTitleInAddSessionEmpty(){
             if (this.state.trainingTitle == '' || this.state.trainingTitle == undefined) {
                 this.trainingTitleInAddSessionErrorMessage = true;
             }
         },
+
         verifyBeginningDate(beginningDate, errorMessage) {
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(beginningDate)) {
                 if(this.testDate(beginningDate)){
                     this[errorMessage] = '';
                     this.isBeginningDateValid = true;
-                    this.CalculateEndingDate();
+                    this.calculateEndingDate();
                 }else{
                     this[errorMessage] = "La date est déjà passée!";
                     this.isBeginningDateValid = false;
@@ -732,11 +750,13 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isBeginningDateValid = false;
             }
         },
+
         isBeginningDateEmpty(){
             if (this.beginningDate == '' || this.beginningDate == undefined) {
                 this.beginningDateErrorMessage = true;
             }
         },
+
         isLocationEmpty(){
             if (this.location == '' || this.location == undefined) {
                 this.locationErrorMessage = true;
@@ -773,7 +793,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         updateV4 (v) {
             this.endingDate = v;
         },
-        ReturnToPageTraining(){
+
+        returnToPageTraining(){
             this.isDisabledTrainingTitle = true;
             this.state.changePageToTraining = true;
             this.state.changePageToSession = false;
@@ -786,10 +807,11 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.locationErrorMessage = false;
             this.isBeginningDateValid = true;
             this.isSessionAlreadyPlanned = false;
-            this.ResetSessionForm();
+            this.resetSessionForm();
             this.gatherTrainingsFromDatabase();
         },
-        ResetSessionForm(){
+
+        resetSessionForm(){
             this.beginningDate = '';
             this.endingDate = '';
             this.location = '';
@@ -798,9 +820,10 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             this.valueButtonSaveModify = 'Ajouter';
             this.state.idSession='';
         },
-        VerifyFormBeforeSaveSession(){
+
+        verifyFormBeforeSaveSession(){
             if(this.modifySessionButton){
-                this.ModifyTrainingSession();
+                this.modifyTrainingSession();
             }
             else {
                 this.session.trainingDescription = this.state.trainingChosen;
@@ -815,12 +838,12 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isLocationEmpty();
                 if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
-                    this.SaveSessionIntoDatabase();
+                    this.saveSessionIntoDatabase();
                 }
             }
         },
 
-        ModifyTrainingTopic(){
+        modifyTrainingTopic(){
             if (this.isDisabledTrainingTitle == false) {
                 this.trainingTitleInAddSession = this.trainingTitleInAddSession.replace(" ", "").toUpperCase();
                 this.state.trainingTitle = this.trainingTitleInAddSession;
@@ -832,14 +855,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             }
         },
 
-        SaveSessionIntoDatabase(){
+        saveSessionIntoDatabase(){
             let saveSessionSuccess = () => {
                 this.isSessionAlreadyPlanned = false;
                 this.confirmSession = true;
                 setTimeout(function(){ this.confirmSession = false; }.bind(this), 1500);
                 this.state.changePageToSession = false;
                 this.state.changePageToTraining = true;
-                this.ResetSessionForm();
+                this.resetSessionForm();
                 this.gatherSessionsByTrainingFromDatabase();
                 this.gatherAllSessions();
             };
@@ -872,6 +895,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 }
             );
         },
+
         gatherSessionsByTrainingFromDatabase(){
             this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
                 function (response) {
@@ -884,6 +908,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
+
         gatherAllSessions(){
             this.$http.get("api/sessions").then(
                 function (response) {
@@ -896,7 +921,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 });
         },
 
-        ModifyTrainingSession(){
+        modifyTrainingSession(){
             this.sessionToModify.id = this.state.idSession;
             this.sessionToModify.trainingDescription = this.state.trainingChosen;
             this.sessionToModify.trainingDescription.trainingTitle = this.state.trainingTitle;
@@ -914,7 +939,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     document.getElementById('circle' + this.sessionToModify.id).className = 'circle';
                     this.listTrainingSessionSelected.splice(0,this.listTrainingSessionSelected.length);
                     this.numberOfSessionSelected--;
-                    this.ResetSessionForm();
+                    this.resetSessionForm();
                     this.gatherSessionsByTrainingFromDatabase();
                     this.gatherAllSessions();
                 },
@@ -927,6 +952,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     }
                 });
         },
+
         chooseSessionsToRemove(){
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     this.removeSession(this.listTrainingSessionSelected[indexOfListTrainingSessionSelected]);
@@ -941,60 +967,77 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         removeSession(sessionToRemove){
             let removeSessionSuccess = () => {
                 this.canNotRegisterForm = false;
-                this.ResetSessionForm();
+                this.resetSessionForm();
                 this.gatherSessionsByTrainingFromDatabase();
                 this.gatherAllSessions();
             };
 
             this.post("api/sessionstoremove", sessionToRemove, removeSessionSuccess);
         },
+
         showSession(session){
-            this.trainingTitleInAddSessionErrorMessage = false;
-            this.beginningDateErrorMessage = false;
-            this.locationErrorMessage = false;
-            this.isTrainingTitleInAddSessionValid = true;
-            this.isBeginningDateValid = true;
-            this.isSessionAlreadyPlanned = false;
-            if( document.getElementById('circle'+session.id).className === 'circle') {
+            let sessionUnselected = document.getElementById('circle' + session.id).className === 'circle';
+
+            let initializeParameters = () => {
+                this.trainingTitleInAddSessionErrorMessage = false;
+                this.beginningDateErrorMessage = false;
+                this.locationErrorMessage = false;
+                this.isTrainingTitleInAddSessionValid = true;
+                this.isBeginningDateValid = true;
+                this.isSessionAlreadyPlanned = false;
+            };
+
+            let addToSelectedSessions = () => {
                 document.getElementById('circle' + session.id).className = 'full-circle';
                 this.numberOfSessionSelected++;
                 this.listTrainingSessionSelected.push(session);
-            }
-            else {
+            };
+
+            let removeFromSelectedSessions = () => {
                 document.getElementById('circle' + session.id).className = 'circle';
                 this.numberOfSessionSelected--;
                 for (var indexOfListTrainingSessionSelected in this.listTrainingSessionSelected) {
                     if (this.listTrainingSessionSelected[indexOfListTrainingSessionSelected].id === session.id) {
-                        this.listTrainingSessionSelected.splice(indexOfListTrainingSessionSelected,1);
+                        this.listTrainingSessionSelected.splice(indexOfListTrainingSessionSelected, 1);
                     }
                 }
-            }
-            if(this.numberOfSessionSelected>=2){
-                this.canNotRegisterForm = true;
-            }
-            else{
-                this.canNotRegisterForm = false;
-            }
-            if(this.numberOfSessionSelected === 1){
+            };
+
+            let setModifiedSession = () => {
+                let sessionModified = this.listTrainingSessionSelected[0];
                 this.valueButtonSaveModify = "Modifier";
                 this.modifySessionButton = true;
-                this.beginningDate = this.listTrainingSessionSelected[0].beginning;
-                this.endingDate = this.listTrainingSessionSelected[0].ending;
-                this.location = this.listTrainingSessionSelected[0].location;
-                this.state.idSession = this.listTrainingSessionSelected[0].id;
+                this.beginningDate = sessionModified.beginning;
+                this.endingDate = sessionModified.ending;
+                this.location = sessionModified.location;
+                this.state.idSession = sessionModified.id;
+            };
+
+            initializeParameters();
+            if (sessionUnselected) {
+                addToSelectedSessions();
             }
-            else{
-                this.ResetSessionForm();
+            else {
+                removeFromSelectedSessions();
+            }
+            this.canNotRegisterForm = this.numberOfSessionSelected >= 2;
+            if (this.numberOfSessionSelected === 1) {
+                setModifiedSession();
+            }
+            else {
+                this.resetSessionForm();
             }
         },
-        CanNotUseButtonSupprimer(){
+
+        canNotUseButtonSupprimer(){
             if(this.numberOfSessionSelected>=1){
                 return false;
             }else{
                 return true;
             }
         },
-        JoursFeries (an){
+
+        setHolidays (an){
             var JourAn = new Date(an, "00", "01")
             var FeteTravail = new Date(an, "04", "01")
             var Victoire1945 = new Date(an, "04", "08")
@@ -1022,7 +1065,8 @@ let AddSessionPanel = Vue.component('add-session-panel', {
 
             return new Array(JourAn, LundiPaques, FeteTravail, Victoire1945, Ascension, LundiPentecote, FeteNationale, Assomption, Toussaint, Armistice, Noel, SaintEtienne)
         },
-        CalculateEndingDate(){
+
+        calculateEndingDate(){
             if (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/.test(this.beginningDate)) {
                 if(this.state.trainingChosen.numberHalfDays !=1)
                 var nbDays = Math.ceil(this.state.trainingChosen.numberHalfDays / 2)-1;
@@ -1036,7 +1080,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 var fin = dateObject;
                 fin.setDate(dayOfMonth+nbDays)
                 for (var d = debut; d <= fin; d.setDate(d.getDate() + 1)) {
-                    if(d.getDay() == 6 || d.getDay() == 0 || this.JoursFeries(d.getFullYear()).filter(function(e) { return e.getTime() === d.getTime(); }).length > 0){
+                    if(d.getDay() == 6 || d.getDay() == 0 || this.setHolidays(d.getFullYear()).filter(function(e) { return e.getTime() === d.getTime(); }).length > 0){
                         nbDays++;
                         fin.setDate(fin.getDate() + 1);
                     }
@@ -1049,6 +1093,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.endingDate = '';
             }
         },
+
         testDate(beginningDate){
             var d = new Date();
             function pad(s) { return (s < 10) ? '0' + s : s; }
@@ -1065,6 +1110,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 return true;
             }
         },
+
         getDate(){
             var now = new Date();
             var day = now.getDate();
@@ -1072,18 +1118,21 @@ let AddSessionPanel = Vue.component('add-session-panel', {
             var year = now.getFullYear();
             this.toDay = (year + "-" + month + "-" + day);
         },
+
         resetVarialbesByDate(){
             this.confirmSession = false;
             this.trainingTitleInAddSessionErrorMessage = false;
             this.beginningDateErrorMessage = false;
             this.locationErrorMessage = false;
         },
+
         resetVariablesBySalle(){
             this.confirmSession = false;
             this.trainingTitleInAddSessionErrorMessage = false;
             this.beginningDateErrorMessage = false;
             this.locationErrorMessage = false;
         },
+
         showSuccessToCreateMessage(){
             return this.confirmSession && !(this.trainingTitleInAddSessionErrorMessage || this.beginningDateErrorMessage || this.locationErrorMessage);
         },
@@ -1115,10 +1164,10 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         </div>
                     </div>
                     <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
-                        <img @click="ReturnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:5%; top:45%; z-index:1;">
+                        <img @click="returnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:5%; top:45%; z-index:1;">
                         <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div id="glyphiconpencil" class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
-                                  <form id = "registr-form" @submit.prevent="ModifyTrainingTopic()">
+                                  <form id = "registr-form" @submit.prevent="modifyTrainingTopic()">
                                         <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
                                         <input-text 
                                             :value = "state.trainingTitle" 
@@ -1129,7 +1178,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                             icon = "glyphicon glyphicon-floppy-disk"
                                             type = 'input'
                                             :disabled = "isDisabledTrainingTitle" 
-                                            @click="ModifyTrainingTopic()">
+                                            @click="modifyTrainingTopic()">
                                         </input-text>
                                   </form>                                      
                             </div>
@@ -1151,14 +1200,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                     </ul>
                                 </nav>
                             </div>     
-                            <form id="registr-form" @submit.prevent="VerifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
+                            <form id="registr-form" @submit.prevent="verifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
                                 <div class = "row" style="margin-bottom: 20px;">
                                     <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
                                         <datepicker  
                                             v-model = "beginningDate"
                                             :isValid = "isBeginningDateValid" 
                                             :disabled = "canNotRegisterForm"
-                                            @blur = "CalculateEndingDate()"
+                                            @blur = "calculateEndingDate()"
                                             @focus="resetVarialbesByDate()"
                                             @input = "updateV2"
                                             :min = "toDay">                                                                                       
@@ -1230,7 +1279,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                    class = "btn btn-danger" 
                                                    value = "Supprimer" 
                                                    @click = "chooseSessionsToRemove()" 
-                                                   :disabled = "CanNotUseButtonSupprimer()" 
+                                                   :disabled = "canNotUseButtonSupprimer()" 
                                                    style = "width:100%"/>                                                                        
                                     </div>
                                 </div>                                                     
@@ -1310,7 +1359,7 @@ let DatePicker = Vue.component('datepicker', {
          </div>`,
 
     data () {
-        let now = new Date()
+        let now = new Date();
         return {
             showCancel: false,
             panelState: false,
@@ -1401,7 +1450,7 @@ let DatePicker = Vue.component('datepicker', {
             }
         },
 
-        JoursFeries (an){
+        setHolidays (an){
             var JourAn = new Date(an, "00", "01")
             var FeteTravail = new Date(an, "04", "01")
             var Victoire1945 = new Date(an, "04", "08")
@@ -1613,7 +1662,7 @@ let DatePicker = Vue.component('datepicker', {
             for (let i = dateList.length, item = 1; i < 2; i++, item++) {
                 dateList[dateList.length] = {nextMonth: true, value: item}
             }
-            this.arrayJoursFeries = this.JoursFeries (this.tmpYear);
+            this.arrayJoursFeries = this.setHolidays (this.tmpYear);
             for (let i = 0; i < this.arrayJoursFeries.length; i++){
                 if((this.arrayJoursFeries[i].getMonth())==this.tmpMonth)
                     this.arrayJoursFeriersMonth.push(this.arrayJoursFeries[i])
@@ -1670,6 +1719,7 @@ let DatePicker = Vue.component('datepicker', {
     },
 
     mounted () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.$nextTick(() => {
             if(this.$el.parentNode != null) {
                 if (this.$el.parentNode.offsetWidth + this.$el.parentNode.offsetLeft - this.$el.offsetLeft <= 300) {
@@ -1726,7 +1776,7 @@ let DatePicker = Vue.component('datepicker', {
     beforeDestroy () {
         window.removeEventListener('click', this.close)
     }
-})
+});
 
 class trainingStore {
     constructor () {

@@ -150,7 +150,7 @@ describe('assign collaborator test', function () {
         //         "version": 0
         //     }
         // ];
-        //vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+        //vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
     });
     it('should check if collaborators are displayed when checkbox is checked false', function () {
         //vmAssignCollaborator.verifyCheckedNames();
@@ -168,7 +168,7 @@ describe('assign collaborator test', function () {
                 "version": 0
             }
         ];
-        vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+        vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
 
     });
 

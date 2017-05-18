@@ -154,7 +154,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.error(response);
                 }
             );
-
         },
 
         getIdCollaboratorWithTokenCookies() {

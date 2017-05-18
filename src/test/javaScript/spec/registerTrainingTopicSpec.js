@@ -50,7 +50,7 @@ describe('test registerTrainingTopic.js', function () {
     describe('vmAddSessionPanel', function () {
 
         it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
-            vmAddSessionPanel.ReturnToPageTraining();
+            vmAddSessionPanel.returnToPageTraining();
             setTimeout(function () {
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
                 expect(vmAddSessionPanel.state.changePageToTraining).toBe(true);
@@ -73,11 +73,11 @@ describe('test registerTrainingTopic.js', function () {
         it('should check if ending date is calculated when user choose beginning date', function () {
             vmAddSessionPanel.state.trainingChosen.numberHalfDays = '1';
             vmAddSessionPanel.beginningDate = '12/04/2017';
-            vmAddSessionPanel.CalculateEndingDate();
+            vmAddSessionPanel.calculateEndingDate();
             expect(vmAddSessionPanel.endingDate).toEqual('12/04/2017');
             vmAddSessionPanel.state.trainingChosen.numberHalfDays = '4';
             vmAddSessionPanel.beginningDate = '12/04/2017';
-            vmAddSessionPanel.CalculateEndingDate();
+            vmAddSessionPanel.calculateEndingDate();
             expect(vmAddSessionPanel.endingDate).toEqual('13/04/2017');
         });
 
@@ -146,7 +146,7 @@ describe('test registerTrainingTopic.js', function () {
                 vmAddSessionPanel.beginningTime = "09:00";
                 vmAddSessionPanel.endingTime = "18:00";
                 vmAddSessionPanel.location = "Salle Bora Bora";
-                vmAddSessionPanel.VerifyFormBeforeSaveSession();
+                vmAddSessionPanel.verifyFormBeforeSaveSession();
                 setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
@@ -170,7 +170,7 @@ describe('test registerTrainingTopic.js', function () {
                 vmAddSessionPanel.beginningTime = "09:00";
                 vmAddSessionPanel.endingTime = "18:00";
                 vmAddSessionPanel.location = "Salle Bora Bora";
-                vmAddSessionPanel.VerifyFormBeforeSaveSession();
+                vmAddSessionPanel.verifyFormBeforeSaveSession();
                 setTimeout(function () {
                     expect(vmAddSessionPanel.isSessionAlreadyPlanned).toBe(false);
                     done();
@@ -266,9 +266,9 @@ describe('test registerTrainingTopic.js', function () {
 
         it('should check whether we can use the button Supprimer ', function () {
                 vmAddSessionPanel.numberOfSessionSelected = 1;
-                expect(vmAddSessionPanel.CanNotUseButtonSupprimer()).toBe(false);
+                expect(vmAddSessionPanel.canNotUseButtonSupprimer()).toBe(false);
                 vmAddSessionPanel.numberOfSessionSelected = 0;
-                expect(vmAddSessionPanel.CanNotUseButtonSupprimer()).toBe(true);
+                expect(vmAddSessionPanel.canNotUseButtonSupprimer()).toBe(true);
             }
         );
 
@@ -281,7 +281,7 @@ describe('test registerTrainingTopic.js', function () {
         it('should check whether we can modify training topic', function () {
             vmAddSessionPanel.state.trainingTitle = "HELLO";
             vmAddSessionPanel.isDisabledTrainingTitle = false;
-            vmAddSessionPanel.ModifyTrainingTopic();
+            vmAddSessionPanel.modifyTrainingTopic();
             expect(vmAddSessionPanel.confirmModification).toBe(true);
         });
 
