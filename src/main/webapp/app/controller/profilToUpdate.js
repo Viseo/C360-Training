@@ -4,7 +4,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-header">
-                    <span class="glyphicon glyphicon-user"> 1. Mes coordonnées</span>
+                    <span><span class="glyphicon glyphicon-user"></span> 1. Mes coordonnées</span>
                     <div class="boxon">
                         <img src="img/IMGTEST.jpg" class="image" />
                         <p class="text"><br><br><br><b>MODIFIER</b></p>
@@ -89,7 +89,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-header">
-                    <span class="glyphicon glyphicon-user"> 2. Mes identifiants</span>
+                    <span><span class="glyphicon glyphicon-user"></span> 2. Mes identifiants</span>
                 </div>
                 <div class="panel-body">
                         <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
@@ -172,6 +172,13 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         :isNotValid="isNotValidConfirmPassword">
                                     </customPasswordInput>
                                 </div>
+                                <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
+                                    <br>
+                                    <span v-show="!isRightOldPassword" class="color-red">
+                                        <b>Ancien mot de passe incorrect.</b>
+                                    </span>
+                                    
+                                </div>
                             </div>
                         </div>
                 </div>
@@ -195,6 +202,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             </button>
                         </div>
                     </div>
+                    <br><br>
                 </div>
             </div>
         </div>
@@ -241,6 +249,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
             errorMessageConfirmPassword:'',
             isValidConfirmPassword:false,
             isNotValidConfirmPassword:false,
+
+            isRightOldPassword:true,
 
             showPass: false,
             infoCollab:[],
@@ -369,6 +379,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
         isOldPasswordEmpty(){
             if (this.password == '') {
                 this.oldPasswordEmpty = true;
+                this.isValidOldPassword = false;
+                this.isNotValidOldPassword = true;
             }
         },
         isErrorOldPassword(){
@@ -380,6 +392,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
         isPasswordEmpty(){
             if (this.newPassword == '') {
                 this.passwordEmpty = true;
+                this.isValidPassword = false;
+                this.isNotValidPassword = true;
             }
         },
         isErrorPassword(){
@@ -458,23 +472,34 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 });
         },
         updateCollaboratorInfo(){
-            if (this.infoCollab.password ==  this.password){
-                if(this.newPassword == this.confirmPassword){
-                    this.CollabToUpdate = this.infoCollab;
-                    this.CollabToUpdate.firstName = this.firstName;
-                    this.CollabToUpdate.lastName = this.lastName;
-                    this.CollabToUpdate.email = this.email;
-                    this.CollabToUpdate.function = this.fonction;
-                    this.CollabToUpdate.businessUnit = this.businessUnit;
-                    this.CollabToUpdate.password = this.newPassword;
-                    this.$http.put("api/updatecollaborator",this.CollabToUpdate).then(
-                        function (response) {
-                            console.log("success to update user information");
-                        },
-                        function(response) {
-                            console.log("Error: ", response);
-                            console.error(response);
-                        });
+            this.isFirstNameEmpty();
+            this.isLastNameEmpty();
+            this.isEmailEmpty();
+            this.isOldPasswordEmpty();
+            this.isPasswordEmpty();
+            this.isConfirmPasswordEmpty();
+            if(!this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.oldPasswordEmpty &&!this.passwordEmpty && !this.confirmPasswordEmpty){
+                if (this.infoCollab.password ==  this.password){
+                    this.isRightOldPassword = true;
+                    if(this.newPassword == this.confirmPassword){
+                        this.CollabToUpdate = this.infoCollab;
+                        this.CollabToUpdate.firstName = this.firstName;
+                        this.CollabToUpdate.lastName = this.lastName;
+                        this.CollabToUpdate.email = this.email;
+                        this.CollabToUpdate.function = this.fonction;
+                        this.CollabToUpdate.businessUnit = this.businessUnit;
+                        this.CollabToUpdate.password = this.newPassword;
+                        this.$http.put("api/updatecollaborator",this.CollabToUpdate).then(
+                            function (response) {
+                                console.log("success to update user information");
+                            },
+                            function(response) {
+                                console.log("Error: ", response);
+                                console.error(response);
+                            });
+                    }
+                }else{
+                    this.isRightOldPassword = false;
                 }
             }
         }

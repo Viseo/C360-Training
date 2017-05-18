@@ -322,8 +322,12 @@ const router = new VueRouter({
             name: 'profiltoupdate',
             component: {
                 template: `<div id="newVue" v-cloak>
-                               <blue-header></blue-header>
-                               <profil-to-update></profil-to-update>
+                                <blue-header title="Gestion des formations"></blue-header>
+                                <div class="container-fluid">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <profil-to-update></profil-to-update>
+                                    </div>
+                                </div>
                            </div>`
             }
         },
