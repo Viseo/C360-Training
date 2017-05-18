@@ -137,22 +137,10 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     mounted: function(){
         this.gatherTopicsFromDatabase();
         this.gatherTrainingsFromDatabase();
-        $('#scroll-up').click(function() {
-            $('#test').animate({scrollTop: "-=100"}, 500);
-        });
-
-        $('#scroll-down').click(function() {
-            $('#test').animate({scrollTop: "+=100"}, 500);
-        });
-
-        $('#test').bind('mousewheel DOMMouseScroll', function(event){
-            if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-                $('#test').animate({scrollTop: "-=100"}, 80);
-            }
-            else{
-                $('#test').animate({scrollTop: "+=100"}, 80);
-            }
-        });
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+        this.activateScrollUp('#scroll-up','#adminTrainingContainer');
+        this.activeScrollDown('#scroll-down','#adminTrainingContainer');
+        this.activateScrollWheel('#adminTrainingContainer');
     },
     methods: {
         updateV1 (v) {
@@ -601,7 +589,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
-                            <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="test" class="roundedCorner">
+                            <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
                                   <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                         <table class="fix tabnonborder" >
                                             <tbody>

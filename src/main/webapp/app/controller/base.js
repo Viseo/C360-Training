@@ -27,7 +27,19 @@ function BaseComponent(prototype) {
             $(idChevronDown).click(function() {
                 $(idComponentToScroll).animate({scrollTop: "+=100"}, 500);
             })
+        },
+
+        activateScrollWheel: function(idComponentToScroll){
+            $(idComponentToScroll).bind('mousewheel DOMMouseScroll', function(event){
+                if(event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+                    $(idComponentToScroll).animate({scrollTop: "-=100"}, 80);
+                }
+                else{
+                    $(idComponentToScroll).animate({scrollTop: "+=100"}, 80);
+                }
+            });
         }
+
     };
     result.__proto__ = prototype;
     return result;

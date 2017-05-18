@@ -30,19 +30,20 @@ let NavigationMenu = Vue.component('connect-user', {
             </div>
         `,
     beforeCreate: function () {
-        let regexCookie = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-        if (regexCookie) {
-            let token = String(regexCookie.pop());
+        let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+        if (isTokenPresent) {
+            let token = String(isTokenPresent.pop());
             this.$http.post('api/sendtoken', token)
                 .then(
                     function (response) {
                         if (response) {
-                            this.$router.push('/registerTrainingCollaborator')
-                        }
-                        else {
+                            this.goTo('registerTrainingCollaborator')
                         }
                     });
         }
+    },
+    mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
     methods: {
         showInscriptionForm() {
@@ -73,7 +74,7 @@ let Formulaire = Vue.component('inscription-form', {
                     @blur="isLoginEmpty" 
                     maxlength="20" minlength="2" 
                     :emptyField="loginEmpty"
-                    :existField="!personalIdNumberAlreadyExist"
+                    :existField="personalIdNumberAlreadyExist"
                     existMessage="Ce code de login a déjà été enregistré" 
                     :errorField="isErrorLogin()"
                     :errorMessage="errorMessageLogin">
@@ -121,10 +122,10 @@ let Formulaire = Vue.component('inscription-form', {
                     tab="2" 
                     placeholder="eric.dupont@viseo.com" 
                     v-model="email" 
-                    @focus="setEmailAlreadyExistToTrue()" 
+                    @focus="setEmailAlreadyExistToFalse()" 
                     @blur="isEmailEmpty"
                     :emptyField="emailEmpty"
-                    :existField="!emailAlreadyExist"
+                    :existField="emailAlreadyExist"
                     existMessage="Cet email a déjà été enregistré."
                     :errorField="isErrorEmail()"
                     :errorMessage="errorMessageEmail">
@@ -195,8 +196,8 @@ let Formulaire = Vue.component('inscription-form', {
             errorMessageConfirmPassword: '',
             collaboratorToRegister: {},
             verif: true,
-            personalIdNumberAlreadyExist: true,
-            emailAlreadyExist: true,
+            personalIdNumberAlreadyExist: false,
+            emailAlreadyExist: false,
             loginEmpty: false,
             lastNameEmpty: false,
             firstNameEmpty: false,
@@ -213,6 +214,9 @@ let Formulaire = Vue.component('inscription-form', {
             isPasswordValid: true,
             isConfirmPasswordValid: true
         }
+    },
+    mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
     watch: {
         personnalIdNumber: function (value) {
@@ -270,8 +274,8 @@ let Formulaire = Vue.component('inscription-form', {
         setFirstNameEmptyToFalse() {
             this.firstNameEmpty = false;
         },
-        setEmailAlreadyExistToTrue() {
-            this.emailAlreadyExist = true;
+        setEmailAlreadyExistToFalse() {
+            this.emailAlreadyExist = false;
             this.emailEmpty = false
         },
         setPasswordEmptyToFalse() {
@@ -281,13 +285,13 @@ let Formulaire = Vue.component('inscription-form', {
             this.confirmPasswordEmpty = false
         },
         verifyLogin(personnalIdNumber) {
-            this.personalIdNumberAlreadyExist = true;
+            this.personalIdNumberAlreadyExist = false;
             this.loginEmpty = false;
             if (/^[A-Z]{3}[0-9]{4}$/.test(personnalIdNumber)) {
                 this.errorMessageLogin = '';
                 this.isLoginValid = true;
             } else {
-                this.errorMessageLogin = 'Veuillez entrer code de login valide';
+                this.errorMessageLogin = 'Veuillez entrer un code de login valide';
                 this.isLoginValid = false;
             }
         },
@@ -363,6 +367,7 @@ let Formulaire = Vue.component('inscription-form', {
                 this.passwordEmpty = true;
             }
         },
+
         verifyConfirmPassword(confirmPassword) {
             if (this.confirmPassword === this.password) {
                 this.errorMessageConfirmPassword = '';
@@ -389,8 +394,8 @@ let Formulaire = Vue.component('inscription-form', {
             this.$http.post("api/collaborateurs", this.collaboratorToRegister)
                 .then(
                     function (response) {
-                        this.emailAlreadyExist = true;
-                        this.personalIdNumberAlreadyExist = true;
+                        this.emailAlreadyExist = false;
+                        this.personalIdNumberAlreadyExist = false;
                         this.user.email = this.collaborator.email;
                         this.user.password = this.collaborator.password;
                         this.userToConnect = JSON.parse(JSON.stringify(this.user));
@@ -400,34 +405,39 @@ let Formulaire = Vue.component('inscription-form', {
                         console.log("Error: ", response);
                         if (response.data.message == "personnalIdNumber") {
                             console.log("PID already exist");
-                            this.personalIdNumberAlreadyExist = false;
-                            this.emailAlreadyExist = true;
+                            this.personalIdNumberAlreadyExist = true;
+                            this.emailAlreadyExist = false;
                         }
                         else if (response.data.message == "email") {
                             console.log("email already exist");
-                            this.emailAlreadyExist = false;
-                            this.personalIdNumberAlreadyExist = true;
+                            this.emailAlreadyExist = true;
+                            this.personalIdNumberAlreadyExist = false;
                         } else {
                             console.error(response);
-                            this.personalIdNumberAlreadyExist = false;
-                            this.emailAlreadyExist = false;
+                            this.personalIdNumberAlreadyExist = true;
+                            this.emailAlreadyExist = true;
                         }
                     }
                 );
         },
+
         verifyUserToConnectByDatabase(){
+            let redirectDependingOnRole = (token) => {
+                if (typeof token.data['userConnected'] != 'undefined') {
+                    if (jwt_decode(token.data['userConnected']).roles) {
+                        this.goTo('addTrainingTopic');
+                    }
+                    else {
+                        this.goTo('registerTrainingCollaborator');
+                    }
+                }
+            };
+
             this.$http.post("api/user", this.userToConnect)
                 .then(
                     function (userPersistedToken) {
-                        this.handleCookie(userPersistedToken.data['userConnected']);
-                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
-                            if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
-                                this.$router.push('/addTrainingTopic');
-                            }
-                            else {
-                                this.$router.push('/registerTrainingCollaborator');
-                            }
-                        }
+                        this.handleCookie(token.data['userConnected']);
+                        redirectDependingOnRole(userPersistedToken);
                     }
                 )},
 
@@ -441,8 +451,8 @@ let Formulaire = Vue.component('inscription-form', {
             this.isPasswordEmpty();
             this.isConfirmPasswordEmpty();
             if (!this.loginEmpty && !this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.passwordEmpty && !this.confirmPasswordEmpty && this.isPasswordValid && this.isConfirmPasswordValid) {
-                this.personalIdNumberAlreadyExist = true;
-                this.emailAlreadyExist = true;
+                this.personalIdNumberAlreadyExist = false;
+                this.emailAlreadyExist = false;
                 this.collaborator.personnalIdNumber = this.personnalIdNumber;
                 this.collaborator.lastName = this.lastName;
                 this.collaborator.firstName = this.firstName;
@@ -531,7 +541,6 @@ let ConnexionForm = Vue.component('connexionForm', {
             password: '',
             userToRegister: {},
             isErrorAuthentification: false,
-            verif: true,
             emailEmpty: false,
             passwordEmpty: false,
             showPass: false,
@@ -547,6 +556,9 @@ let ConnexionForm = Vue.component('connexionForm', {
             firstNameToSend: ''
         }
     },
+    mounted: function() {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+    },
     methods: {
 
         handleCookie(token) {
@@ -559,6 +571,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 document.cookie = "stayconnected=" + this.stayConnected;
             }
         },
+
         showPopupFn() {
             if (this.email == '') {
                 this.emailEmpty = true;
@@ -566,16 +579,19 @@ let ConnexionForm = Vue.component('connexionForm', {
                 this.gatherUsersFromDatabaseToVerify();
             }
         },
+
         isEmailEmpty(){
             if (this.email == '') {
                 this.emailEmpty = true;
             }
         },
+
         isPasswordEmpty(){
             if (this.password == '') {
                 this.passwordEmpty = true;
             }
         },
+
         VerifyForm(){
             this.isEmailEmpty();
             this.isPasswordEmpty();
@@ -594,10 +610,10 @@ let ConnexionForm = Vue.component('connexionForm', {
                             this.handleCookie(userPersistedToken.data['userConnected']);
                         if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
                             if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
-                                this.$router.push('/addTrainingTopic');
+                                this.goTo('addTrainingTopic');
                             }
                             else
-                                this.$router.push('/registerTrainingCollaborator');
+                                this.goTo('registerTrainingCollaborator');
                             }
                         }
 
@@ -607,6 +623,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 this.isErrorAuthentification = true;
             });
         },
+
         gatherUsersFromDatabaseToVerify(){
             this.$http.get("api/collaborateurs").then(
                 function (response) {
@@ -631,6 +648,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 }
             )
         },
+
         sendInformationToCookie(){
             this.$http.get("api/collaborateurs").then(
                 function (response) {
@@ -656,6 +674,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 }
             )
         },
+
         VerifyEmailFromDatabase(){
             this.isNotNewEmail = false;
             for (var tmp in this.allUsers) {

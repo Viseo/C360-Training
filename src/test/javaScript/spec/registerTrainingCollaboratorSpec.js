@@ -40,9 +40,9 @@ describe('test registerTrainingCollaborator', function () {
 
     it('should transform text to uppercase', function () {
         vmCollaboratorFormation.value = 'programmation';
-        expect(vmCollaboratorFormation.searchFormatted).toBe('PROGRAMMATION');
+        expect(vmCollaboratorFormation.capitalizeSearch).toBe('PROGRAMMATION');
         vmCollaboratorFormation.value = '';
-        expect(vmCollaboratorFormation.searchFormatted).toBe(null);
+        expect(vmCollaboratorFormation.capitalizeSearch).toBe(null);
     });
 
     it('should display the selected formation with sessions', function(done) {
@@ -80,6 +80,8 @@ describe('test registerTrainingCollaborator', function () {
     });
 
     it('should find sessions that are booked by collab', function () {
+        vmCollaboratorFormation.reinitialize(trainingSelected);
+        expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);
         vmCollaboratorFormation.renitialize(trainingSelectedWithoutSessions);
         setTimeout(function () {
             expect(vmCollaboratorFormation.trainingrequested).toBe(false);
@@ -117,7 +119,9 @@ describe('test registerTrainingCollaborator', function () {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
         vmCollaboratorFormation.isNoSession = false;
         vmCollaboratorFormation.verifyTrainingSessionCollaborator();
-        expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
+
+            expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
+
     });
 
     it('should disable all session when indiferent is checked', function () {

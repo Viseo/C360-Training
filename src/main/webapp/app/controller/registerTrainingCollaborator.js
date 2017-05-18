@@ -67,8 +67,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             <div class="col-lg-2 col-md-2 col-sm-12">
                                                 <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit" class="btn btn-primary" value="Valider"/>
                                             </div>
-                                            <div @keyup.enter="storeTrainingsFound(searchFormatted)" class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(searchFormatted)"></span>
+                                            <div @keyup.enter="storeTrainingsFound(capitalizeSearch)" class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(capitalizeSearch)"></span>
                                                 <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>
                                                 <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
                                                 <div class="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
@@ -83,10 +83,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             </div>
                                         </div>
                                         <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
-                                            <accordion id="accordionId" :one-at-atime="true" type="info">
+                                            <accordion id="accordionId" :one-at-atime="true" type="info" >
                                                 <div v-for="training in trainingsFound">
-                                                    <panel :is-open="openPanel" ref="selectingTraining" @openPanel="renitialize(training)" type="primary">
-                                                        <strong  slot="header"><u>{{training.trainingTitle}}</u></strong>
+                                                    <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training)"type="default" >
+                                                         <p  slot="header" style="color: rgba(66, 139, 202,0.8); text-align: none !important;"><u>{{training.trainingTitle}}</u></p> 
                                                         <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                                         <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
                                                         <div :id="training.id">
@@ -133,6 +133,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         this.getCookies();
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
+        this.activateScrollWheel('#scroll');
     },
 
     watch: {
@@ -142,19 +143,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
 
     computed: {
-        searchFormatted: function () {
+        capitalizeSearch: function () {
             if(this.value) {return this.value.toUpperCase();
             }
                 else return null;
         },
 
         showChevrons(){
-            if(this.trainingsFound.length >0){
-                return true;
-            }
-            else{
-                return false;
-            }
+            let numberOfTrainings = this.trainingsFound.length;
+            return numberOfTrainings;
         }
     },
 
@@ -171,7 +168,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
 
-        renitialize(training){
+        reinitialize(training){
             this.disableSendButton = false;
             this.trainingrequested = true;
             this.trainingalreadyrequested(training.id);
@@ -185,16 +182,18 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
         },
 
-        disabling(id, runtime){
+        disabling(id){
             this.check = !this.check;
-            var test = document.getElementById(id);
-            if (test != null){
-                var nodes= document.getElementById(id).getElementsByTagName("*");
-            }
-            else if (runtime == "test") {
-                var nodes = ["input","input"];
-            }
-            if (this.check == true) {
+            let isindifferentChecked = this.check;
+            let nodes;
+            let getHTMLSessionInsideTraining = () => {
+                let idTrainingWithSession = document.getElementById(id);
+                if (idTrainingWithSession != null){
+                    nodes= document.getElementById(id).getElementsByTagName("*");
+                }
+            };
+
+            let getSessionAlreadyBooked = () => {
                 this.$http.get("api/formations/" + id + "/sessions").then(
                     function (response) {
                         this.checkedSessions.splice(0, this.checkedSessions.length);
@@ -206,16 +205,28 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                             this.isNoSession = false;
                         }
                     });
+            };
+
+            let disableSessions = () => {
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = true;
                 }
-                this.disablingSessions();
-            }
-            else {
+            };
+
+            let enableSessions = () => {
                 this.checkedSessions.splice(0, this.checkedSessions.length)
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = false;
                 }
+            };
+            getHTMLSessionInsideTraining();
+            if (isindifferentChecked == true) {
+                getSessionAlreadyBooked();
+                disableSessions();
+                this.disablingSessions();
+            }
+            else {
+                enableSessions();
                 this.disablingSessions();
             }
         },
@@ -248,6 +259,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 });
             }
         },
+
         gatherTrainingsFromDatabase(){
             this.$http.get("api/formations").then(
                 function (response) {
@@ -264,6 +276,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 }
             );
         },
+
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken){
@@ -298,6 +311,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
             this.storeSessionsByCollab(this.trainingSelected.id);
         },
+
         SaveTrainingSessionCollaborator(){
             this.$http.post("api/requests", this.RequestToRegister).then(
                 function (response) {
@@ -320,9 +334,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         storeTrainingsFound(trainingTitle){
             this.trainingsFound.splice(0, this.trainingsFound.length);
             this.displayTrainings = true;
-            setTimeout(function() {
-
-            },0);
             this.$http.get("api/formations").then(function(response) {
                 for (index in this.allTrainings) {
                     if (this.allTrainings[index].trainingTitle.indexOf(trainingTitle) != -1) {
@@ -344,6 +355,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 }
             )
         },
+
         storeTrainingSessions(id){
             this.$http.get("api/formations/" + id + "/sessions").then(
                 function (response) {
@@ -382,6 +394,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         }
     }
 });
+
 Vue.component('typeahead', VueStrap.typeahead);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('panel', VueStrap.panel);

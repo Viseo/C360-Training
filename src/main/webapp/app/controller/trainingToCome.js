@@ -128,6 +128,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         this.activateScrollUp('#scroll-up-training-to-come','#sessionsPanel');
         this.activeScrollDown('#scroll-down-training-to-come','#sessionsPanel');
+        this.activateScrollWheel('#sessionsPanel');
     },
     methods: {
         updateV1 (v) {
@@ -195,7 +196,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             if(!this.showMouseOverMessage) {
                 let formationRequestsComponent = this.$parent.$children[1];
                 formationRequestsComponent.displayTrainingsFn(training.id);
-                formationRequestsComponent.renitialize(training);
+                formationRequestsComponent.reinitialize(training);
                 formationRequestsComponent.openPanel = true;
             }
         },
