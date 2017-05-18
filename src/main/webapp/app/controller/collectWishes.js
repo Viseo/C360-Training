@@ -56,11 +56,11 @@ let collectWishes = Vue.component('collect-wishes', {
                                                     <a :title="wish.label">
                                                         <img v-if="wish.checked==true"
                                                              :id="'validate'+wish.id"
-                                                             @click="addWishToListWishes(wish, true)"
+                                                             @click="addWishToListWishes(wish, false)"
                                                              src="img/validate_icon.png"
                                                              width="25"
                                                              height="25"
-                                                             style="margin-left:20px; 
+                                                             style="margin-left:50px; 
                                                                     cursor:pointer;">
                                                         <img v-else-if="wish.checked==null || wish.checked ==false"
                                                              :id="'validate'+wish.id"
@@ -68,28 +68,12 @@ let collectWishes = Vue.component('collect-wishes', {
                                                              src="img/validate_icon_init.png"
                                                              width="25"
                                                              height="25"
-                                                             style="margin-left:20px; 
+                                                             style="margin-left:50px; 
                                                                     cursor:pointer;">
-                                                        <img v-if="wish.checked==false"
-                                                             :id="'refuse'+wish.id"
-                                                             @click="addWishToListWishes(wish, false)"
-                                                             src="img/refuse_icon.png"
-                                                             width="25"
-                                                             height="25"
-                                                             style="margin-left:50px; 
-                                                                    cursor:pointer">
-                                                        <img v-else-if="wish.checked == null || wish.checked ==true"
-                                                             :id="'refuse'+wish.id"
-                                                             @click="addWishToListWishes(wish, false)"
-                                                             src="img/refuse_icon_init.png"
-                                                             width="25"
-                                                             height="25"
-                                                             style="margin-left:50px; 
-                                                                    cursor:pointer">
                                                         <img src="img/thumbs_up.png"
                                                              width="25"
                                                              height="25"
-                                                             style="margin-left:50px;">
+                                                             style="margin-left:90px;">
                                                         <span style="color:#8c8c8c">
                                                               {{ wish.vote_ok.length}} votes
                                                         </span>
@@ -99,15 +83,6 @@ let collectWishes = Vue.component('collect-wishes', {
                                                              style="margin-left:20px;">
                                                         <span style="color:#8c8c8c">
                                                               {{ wish.vote_ko.length }} votes
-                                                        </span>
-                                                        <img v-show="true"
-                                                             src="img/icon-novote.png"
-                                                             width="25"
-                                                             height="25"
-                                                             style="margin-left:155px;">
-                                                        <span v-show="false"
-                                                              style="color:#8c8c8c">
-                                                              0 votes
                                                         </span>
                                                     </a>
                                                 </li>
@@ -186,10 +161,8 @@ let collectWishes = Vue.component('collect-wishes', {
             this.wishAlreadyInList = false;
             if (isWishValidate) {
                 this.changeIconFromGreyToColor('validate' + wish.id, 'img/validate_icon.png');
-                this.changeIconFromColorToGrey('refuse' + wish.id, 'img/refuse_icon_init.png')
             }
             else if (isWishValidate == false) {
-                this.changeIconFromGreyToColor('refuse' + wish.id, 'img/refuse_icon.png');
                 this.changeIconFromColorToGrey('validate' + wish.id, 'img/validate_icon_init.png');
             }
             for (var index in this.listWishesToUpdate) {
@@ -226,17 +199,21 @@ let collectWishes = Vue.component('collect-wishes', {
             this.get("api/allwishes", gatherAllWishesSuccess, gatherAllWishesError);
         },
 
+        showConfirmUpdateWishMessageDuring2Seconds(){
+            this.showConfirmUpdateWishesMessage = true;
+            setTimeout(function () {
+                this.showConfirmUpdateWishesMessage = false;
+            }.bind(this), 2000);
+        },
+
         updateWish(){
             let isAdminChooseAtLeastOneWishToUpdate = this.listWishesToUpdate.length > 0;
             if (isAdminChooseAtLeastOneWishToUpdate) {
                 let updateSuccess = (response) => {
                     if (response) {
                         console.log("success to update wishes");
-                        this.showConfirmUpdateWishesMessage = true;
                         this.disableSaveButton = true;
-                        setTimeout(function () {
-                            this.showConfirmUpdateWishesMessage = false;
-                        }.bind(this), 2000);
+                        this.showConfirmUpdateWishMessageDuring2Seconds();
                         this.getAllWishes();
                     }
                 };
