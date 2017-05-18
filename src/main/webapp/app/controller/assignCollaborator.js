@@ -167,22 +167,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         },
         GatherAllSessions(){
             this.$http.get("api/sessions").then(
-        function (response) {
-            console.log("success to get all sessions from database");
-            this.state.allSessions = response.data;
-        },
-        function(response) {
-            console.log("Error: ", response);
-            console.error(response);
-        });
-},
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
                 function (response) {
-                    console.log("success to get all requests from database");
-                    this.collaboratorsRequesting = response.data;
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
                 },
-                function (response) {
+                function(response) {
                     console.log("Error: ", response);
                     console.error(response);
                 });
@@ -304,6 +293,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             }
         },
         gatherCollaboratorsFromDatabase(){
+
          this.$http.get("api/collaborateurs").then(
          function (response) {
          this.allCollaborators = response.data;
@@ -314,8 +304,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 
          },
          function (response) {
-         console.log("Error: ", response);
-         console.error(response);
+             console.log("Error: ", response);
+             console.error(response);
          }
          );
          },

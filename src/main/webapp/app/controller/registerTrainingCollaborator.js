@@ -4,6 +4,7 @@
 let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
+
             isSearchValid: true,
             searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
             sessionAlreadybooked:[],
@@ -160,7 +161,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     methods: {
         disablingSessions(){
             for(i in this.sessionsByCollab){
-                temp=document.getElementById(this.sessionsByCollab[i].id);
+                temp = document.getElementById(this.sessionsByCollab[i].id);
                 if(temp!=null) {
                     temp.disabled =true;
                     this.sessionAlreadyBookedMessage = true;
@@ -352,7 +353,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.isNoSession = true;
                     }
                     else {
-                        this.displayTrainings= true;
+                        this.displayTrainings = true;
                         this.isNoSession = false;
                     }
                 });

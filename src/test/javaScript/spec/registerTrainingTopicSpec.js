@@ -279,10 +279,11 @@ describe('test registerTrainingTopic.js', function () {
         );
 
         it('should check whether we can modify training topic', function () {
-                vmAddSessionPanel.state.trainingTitle = "HELLO";
-                vmAddSessionPanel.ModifyTrainingTopic();
-            }
-        );
+            vmAddSessionPanel.state.trainingTitle = "HELLO";
+            vmAddSessionPanel.isDisabledTrainingTitle = false;
+            vmAddSessionPanel.ModifyTrainingTopic();
+            expect(vmAddSessionPanel.confirmModification).toBe(true);
+        });
 
         it('should check if variables are reset by Input Date', function () {
             vmAddSessionPanel.resetVarialbesByDate();

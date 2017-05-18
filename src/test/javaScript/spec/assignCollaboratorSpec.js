@@ -5,12 +5,12 @@ Vue.use(VueResource);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
-        return (request.method === item.method && request.url === item.url);
+        return (request.method === item.method && request.url === item.url );
     });
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
         next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    } else {
+    }else {
         next(
             request.respondWith(
                 route.response,
@@ -18,8 +18,8 @@ Vue.http.interceptors.unshift((request, next) => {
             )
         );
     }
-});
 
+});
 
 describe('assign collaborator test', function () {
 
@@ -95,9 +95,9 @@ describe('assign collaborator test', function () {
 
     });
 
-    it('should check if all available sessions are in the drop-down ', function () {
+    it('should check if all available sessions are in the drop-down ok ', function () {
         vmAssignCollaborator.GatherAllSessions();
-        var response = [{
+        var responses = [{
             "id": 6,
             "version": 0,
             "trainingDescription": {
@@ -113,7 +113,12 @@ describe('assign collaborator test', function () {
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }];
-        expect(vmAssignCollaborator.state.allSessions).toEqual(response);
+        expect(vmAssignCollaborator.state.allSessions).toEqual(responses);
+
+    });
+    it('should check if all available sessions are in the drop-down ko', function () {
+        var reponseApi = vmAssignCollaborator.GatherAllSessions();
+        console.log("reponseApi " +reponseApi);
 
     });
 

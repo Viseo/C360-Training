@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
-        return (request.method === item.method && request.url === item.url);
+        return (request.method === item.method && request.url === item.url );
     });
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
@@ -20,6 +20,7 @@ Vue.http.interceptors.unshift((request, next) => {
         );
     }
 });
+
 const collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
 
 //let vmHeader = new Header().$mount();

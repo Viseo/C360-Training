@@ -20,7 +20,7 @@ let routes = [
                 "numberHalfDays": 1,
                 "topicDescription": {"id": 3, "version": 0, "name": "C"}
             }
-        ]
+        ],
     },
     {
         method: 'GET',
@@ -237,6 +237,7 @@ let routes = [
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }
+
     },
     {
         method: 'PUT',
@@ -292,7 +293,7 @@ let routes = [
     {
         method: 'GET',
         url: 'api/sessions',
-        response: [{
+        response : [{
             "id": 6,
             "version": 0,
             "trainingDescription": {
@@ -307,7 +308,7 @@ let routes = [
             "beginningTime": "09:00",
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
-        }]
+        }],
     },
     {
         method: 'GET',
@@ -452,6 +453,54 @@ let routes = [
                 "checked":false}
         ]
     },
+    {
+        method: 'GET',
+        url: 'api/listrequests/6/2',
+        response:[{
+            "collaboratorIdentity" : {
+                "email":"eric.dupont@viseo.com",
+                "firstName":"Eric",
+                "id":2,
+                "lastName":"Dupont",
+                "password":"123456",
+                "version":0
+            },
+            "doesNotMatter":false,
+            "id":7,
+            "trainingDescription":{
+                "id":3,
+                "numberHalfDays":2,
+                "topicDescription":{
+                    "id":2,
+                    "name":"WEB",
+                    "version":0
+                },
+                "trainingTitle":"PHP1",
+                "version":0
+            },
+            "trainingSessionsDescriptions": [{
+                "beginning":"26/05/2017",
+                "beginningTime":"09:00",
+                "collaborators":[],
+                "ending":"26/05/2017",
+                "endingTime":"18:00",
+                "id":4,
+                "location":"Salle Bora Bora",
+                "trainingDescription": {
+                    "id":3,
+                    "numberHalfDays":2,
+                    "topicDescription":{
+                        "id":2,
+                        "name":"WEB",
+                        "version":0
+                    },
+                    "trainingTitle":"PHP1",
+                    "version":0
+                }
+            }],
+            "version":0
+        }]
+    }
 
 ];
 

@@ -77,7 +77,7 @@ describe('training to come Panel test', function () {
         }, 0);
     });
 
-    it('should check if session selected is open on the acordeon (left panel) when the collaborator click on the session (right panel)', function () {
+    it('should check if session selected is open on the accordeon (left panel) when the collaborator click on the session (right panel)', function () {
         var trainingSelected = {
             "id": 3,
             "version": 0,
@@ -85,13 +85,9 @@ describe('training to come Panel test', function () {
             "numberHalfDays": 4,
             "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
         };
-
-
-        setTimeout(function () {
             expect(vmCollaboratorFormation.openPanel).toBe(false);
             vmTrainingToCome.showTrainingAndSessionsSelected(trainingSelected);
             expect(vmCollaboratorFormation.openPanel).toBe(true);
-        }, 0);
     });
 
     it('should check if seats available text is red when there is only or less than 3 seats available', function(){
