@@ -4,27 +4,32 @@
 function BaseComponent(prototype) {
 
     var result = {
-        getPageName: function(){
+        getPageName: function () {
             return this.$route.name;
         },
 
-        goTo: function(pageName){
-            this.$router.push("/"+pageName);
+        goTo: function (pageName) {
+            this.$router.push("/" + pageName);
         },
 
-        post: function(url,data,success){
+        post: function (url, data, success, error) {
             this.$http.post(url, data)
-                .then(success);
+                .then(success, error);
         },
 
-        activateScrollUp: function(idChevronUp, idComponentToScroll){
-            $(idChevronUp).click(function() {
+        get: function (url, success, error) {
+            this.$http.get(url)
+                .then(success, error);
+        },
+
+        activateScrollUp: function (idChevronUp, idComponentToScroll) {
+            $(idChevronUp).click(function () {
                 $(idComponentToScroll).animate({scrollTop: "-=100"}, 500);
             });
         },
 
-        activeScrollDown: function(idChevronDown, idComponentToScroll){
-            $(idChevronDown).click(function() {
+        activeScrollDown: function (idChevronDown, idComponentToScroll) {
+            $(idChevronDown).click(function () {
                 $(idComponentToScroll).animate({scrollTop: "+=100"}, 500);
             })
         }
