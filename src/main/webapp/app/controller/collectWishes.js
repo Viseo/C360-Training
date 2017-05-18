@@ -156,8 +156,8 @@ let collectWishes = Vue.component('collect-wishes', {
 
     watch: {
         listWishesToUpdate: function disableOrEnableSaveButton() {
-            let isUserChooseAtLeastOneWishToUpdate = (this.listWishesToUpdate.length === 0);
-            if (isUserChooseAtLeastOneWishToUpdate) {
+            let isAdminChooseAtLeastOneWishToUpdate = (this.listWishesToUpdate.length === 0);
+            if (isAdminChooseAtLeastOneWishToUpdate) {
                 this.disableSaveButton = true;
             }
             else {
@@ -227,7 +227,8 @@ let collectWishes = Vue.component('collect-wishes', {
         },
 
         updateWish(){
-            if (this.listWishesToUpdate.length > 0) {
+            let isAdminChooseAtLeastOneWishToUpdate = this.listWishesToUpdate.length > 0;
+            if (isAdminChooseAtLeastOneWishToUpdate) {
                 let updateSuccess = (response) => {
                     if (response) {
                         console.log("success to update wishes");

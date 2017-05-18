@@ -384,7 +384,14 @@ let routes = [
         },
         ]
     },
-
+    {
+        method: 'GET',
+        url: 'api/allwishes',
+        response: [
+            {"id":98,"version":0,"label":"JAVASCRIPT","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":null},
+            {"id":93,"version":4,"label":"PHP","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":null}
+            ]
+    }
 ];
 
 
