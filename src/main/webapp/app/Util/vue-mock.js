@@ -386,26 +386,6 @@ let routes = [
         ]
     },
     {
-        method: 'GET',
-        url: 'api/allwishes',
-        response: [
-            {   "id":2,
-                "version":5,
-                "label":"SSC",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "vote_ko":[],
-                "checked":false},
-            {   "id":3,
-                "version":4,
-                "label":"SSCAAS",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "vote_ko":[],
-                "checked":false}
-        ]
-    },
-    {
         method: 'PUT',
         url: 'api/okwishtoupdate/1',
         response: [{   "id":2,
@@ -500,7 +480,7 @@ let routes = [
             }],
             "version":0
         }]
-    }
+    },
 
     {
         method: 'GET',
