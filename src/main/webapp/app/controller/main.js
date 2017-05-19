@@ -151,7 +151,7 @@ let Header = Vue.component('blue-header', {
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
-                if (isAdmin() && this.getPageName() != 'addTrainingTopic') {
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes') {
                     this.goTo('addTrainingTopic');
                 }
             };
@@ -247,6 +247,26 @@ const router = new VueRouter({
             },
         },
         {
+            path: "/collectWishes",
+            name: 'collectWishes',
+            component: {
+                template: `
+                <div id="newVue" v-cloak>
+                    <blue-header title="Gestion des formations"></blue-header>
+                    <div class="container-fluid">
+                        <div class="col-sm-12 col-md-7 col-lg-7">
+                            <add-formation-panel></add-formation-panel>
+                            <show-formation-panel></show-formation-panel>
+                            <add-session-panel></add-session-panel>
+                        </div>
+                        <div class="col-sm-12 col-md-5 col-lg-5">
+                            <collect-wishes></collect-wishes>
+                        </div>
+                    </div>
+                </div>`
+            },
+        },
+        {
             path: "/registerTrainingCollaborator",
             name: 'registerTrainingCollaborator',
             component: {
@@ -325,7 +345,8 @@ const PAGE_TITLE = {
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
     "WishToVote": "Gestion des formations",
-    "addTrainingTopic": "Gestion des formations"
+    "addTrainingTopic": "Gestion des formations",
+    "collectWishes": "Gestion des formations"
 };
 
 const PAGE_FAVICON = {
@@ -333,7 +354,8 @@ const PAGE_FAVICON = {
     "resetPassword": "img/icon_accueil.png",
     "registerTrainingCollaborator": "img/icon_formation.png",
     "WishToVote": "img/icon_formation.png",
-    "addTrainingTopic": "img/icon_formation.png"
+    "addTrainingTopic": "img/icon_formation.png",
+    "collectWishes": "img/icon_formation.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {

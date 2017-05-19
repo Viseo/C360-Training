@@ -138,7 +138,6 @@ public class CollaboratorWS {
         try {
             Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
             wishDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
-            wishDescription.setChecked(false);
             wishDescription.setVote_ok(new ArrayList<>());
             wishDescription.setVote_ko(new ArrayList<>());
             Wish wish = collaboratorDAO.addWish(new DescriptionToWish().convert(wishDescription));
@@ -171,6 +170,18 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
+    @RequestMapping(value = "${endpoint.allvalidatedwishes}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WishDescription> getIsValidatedWishes() {
+        try {
+            return new WishToDescription().convert(collaboratorDAO.getIsValidatedWishes());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
 
     @RequestMapping(value = "${endpoint.kowishtoadd}", method = RequestMethod.PUT)
     @ResponseBody
@@ -234,6 +245,24 @@ public class CollaboratorWS {
             e.printStackTrace();
             throw new C360Exception(e);
         }
+    }
+
+    @RequestMapping(value = "${endpoint.ischeckedwishestoupdate}", method = RequestMethod.POST)
+    @ResponseBody
+    public List<WishDescription> updateIsChecked(@RequestBody List<WishDescription> Wishes) {
+        List<WishDescription> updatedWishes=new ArrayList<>();
+        try {
+            for (int i=0;i < Wishes.size();i++){
+                Wish wishToUpdate = new DescriptionToWish().convert(Wishes.get(i));
+                if(wishToUpdate == null) throw new PersistentObjectNotFoundException(15,Wish.class);
+                wishToUpdate = collaboratorDAO.updateIsChecked(wishToUpdate);
+                updatedWishes.add(new WishToDescription().convert(wishToUpdate));
+            }
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+        return updatedWishes;
     }
 
     @RequestMapping(value = "${endpoint.collaborators}", method = RequestMethod.POST)
