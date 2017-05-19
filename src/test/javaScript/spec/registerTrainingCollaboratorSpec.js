@@ -92,7 +92,7 @@ describe('test registerTrainingCollaborator', function () {
 
     });
 
-    it('should verify and save training request', function () {
+    it('should verify and save training request', function (done) {
         vmCollaboratorFormation.trainingSelected = trainingSelected;
         vmCollaboratorFormation.isNoSession = true;
         vmCollaboratorFormation.verifyTrainingSessionCollaborator();
@@ -108,7 +108,8 @@ describe('test registerTrainingCollaborator', function () {
             "trainingSessionsDescriptions": []
         }));
         setTimeout(function () {
-            expect(vmCollaboratorFormation.addingRequestSucceeded).toBe(false);
+            expect(vmCollaboratorFormation.addingRequestSucceeded).toBe(true);
+            done();
         }, 0);
     });
 
@@ -119,23 +120,13 @@ describe('test registerTrainingCollaborator', function () {
         expect(vmCollaboratorFormation.noSessionsSelectedError).toBe(true);
     });
 
-    // it('should disable all session when indiferent is checked', function (done) {
-    //     vmCollaboratorFormation.check = false;
-    //     vmCollaboratorFormation.disabling(trainingSelected.id);
-    //     setTimeout(function() {
-    //         expect(vmCollaboratorFormation.checkedSessions.length).not.toBe(0);
-    //         expect(vmCollaboratorFormation.isNoSession).toBe(false);
-    //         done();
-    //     },0);
-    // });
-
-    it('should disable all session when indiferent is checked', function () {
+    it('should disable all session when indiferent is checked', function (done) {
         vmCollaboratorFormation.check = false;
         vmCollaboratorFormation.disabling(trainingSelected.id);
         setTimeout(function() {
             expect(vmCollaboratorFormation.checkedSessions.length).not.toBe(0);
             expect(vmCollaboratorFormation.isNoSession).toBe(false);
-
+            done();
         },0);
     });
 });

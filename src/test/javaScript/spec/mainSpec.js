@@ -42,11 +42,11 @@ describe('Header test', function () {
 
     });
 
-    it('should check variable initialization from Header component', function () {
+    it('should check variable initialization from Header component', function (done) {
         setTimeout( function () {
             expect(headerComponent.lastName).toBe('');
             expect(headerComponent.firstName).toBe('');
-            expect(vm.$children[0].token).toBe('');
+            expect(headerComponent.token).toBe('');
             expect(headerComponent.disconnect).toBe(false);
             expect(headerComponent.app).toEqual({training:true, skills:false, mission:false, leave:false});
             expect(headerComponent.IDLE_TIMEOUT).toBe(60);
@@ -55,6 +55,7 @@ describe('Header test', function () {
             expect(headerComponent.stayConnected).toBe(true);
             expect(headerComponent.dialog).toBe(false);
             expect(headerComponent.timeConnected).toBe(0);
+            done();
         },0);
     });
 
@@ -85,21 +86,22 @@ describe('Header test', function () {
         expect(headerComponent.stayConnected).toBe(true);
     });
 
-    it('should checkIfUserInactive', function () {
+    it('should checkIfUserInactive', function (done) {
        setTimeout( function () {
            headerComponent.timeConnected = 2;
            headerComponent.stayConnected = false;
            headerComponent.checkIfUserInactive();
            expect(headerComponent.timeConnected).not.toEqual(0);
            expect(headerComponent.dialog).toBe(true);
-           //expect(headerComponent.idleSecondsCounter).toEqual(0);
+           done();
        },0);
     });
 
-    it('should checkIdleTime', function () {
+    it('should checkIdleTime', function (done) {
         setTimeout( function () {
-        headerComponent.idleSecondsCounter = 60;
-        headerComponent.checkIdleTime();
+            headerComponent.idleSecondsCounter = 60;
+            headerComponent.checkIdleTime();
+            done();
         },0);
 
     });
