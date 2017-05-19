@@ -1,13 +1,16 @@
 let profilToUpdate = Vue.component('profil-to-update', {
     template: `
-<form id="registr-form" @submit.prevent="updateCollaboratorInfo()">
+<form id="registr-form" @submit.prevent="updateCollaboratorInfo()" enctype="multipart/form-data">
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-header">
                     <span><span class="glyphicon glyphicon-user"></span> 1. Mes coordonnées</span>
                     <div class="boxon">
-                        <img src="img/IMGTEST.jpg" class="image" />
-                        <p class="text"><br><br><br><b>MODIFIER</b></p>
+                        <img id="profilImage" src="img/IMGTEST.jpg" class="image" />
+                        <p class="text">
+                        <input ref="loadProfilImage" id="loadProfilImage" type="file" accept="image/*" style="opacity: 0.0; position: absolute; top:0; left: 0; bottom: 0; right:0; width: 100%; height:100%; cursor:pointer;" />
+                        <br><br><br><b>MODIFIER</b>
+                        </p>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -254,7 +257,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
             showPass: false,
             infoCollab:[],
-            CollabToUpdate:{}
+            CollabToUpdate:{},
+            imagePathName : '',
+            imageHasBeenChanged : false
 
         }
     },
@@ -283,6 +288,26 @@ let profilToUpdate = Vue.component('profil-to-update', {
     mounted:function () {
         this.getCookies();
         this.getInfoCollaborator();
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#profilImage').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+                console.log(input.files[0].name)
+
+                this.imagePathName = input.files[0].name;
+                this.imageHasBeenChanged = true;
+            }
+        }
+        $("#loadProfilImage").change(function(){
+            readURL(this);
+
+        });
+
+
     },
     methods: {
         setLastNameEmptyToFalse() {
@@ -489,9 +514,23 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         this.CollabToUpdate.function = this.fonction;
                         this.CollabToUpdate.businessUnit = this.businessUnit;
                         this.CollabToUpdate.password = this.newPassword;
+                        if(imageHasBeenChanged === true){
+                            console.log(this.$refs.loadProfilImage.files[0]);
+
+                            var formData = new FormData();
+
+                            formData.append('image', this.$refs.loadProfilImage.files[0]);
+
+                            this.$http.post('api/uploadFile',formData).then( function(response){
+
+                            }, function (response) {
+
+                            });
+                            }
                         this.$http.put("api/updatecollaborator",this.CollabToUpdate).then(
                             function (response) {
                                 console.log("success to update user information");
+                                this.imageHasBeenChanged = false;
                             },
                             function(response) {
                                 console.log("Error: ", response);
