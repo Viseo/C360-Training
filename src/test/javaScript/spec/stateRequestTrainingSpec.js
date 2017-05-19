@@ -32,29 +32,27 @@ fdescribe('state Request training test', function () {
 
     });
 
-    it('it should check if the date is in the right forme ', function() {
-        vmStateRequestTraining.getDate();
-
-
-
-    })
     it('it should check cookies!!! ', function() {
+        expect (vmStateRequestTraining.token).not.toBe('undefined');
+        expect (vmStateRequestTraining.collaboratorIdentity.id).not.toBe('');
+        expect (vmStateRequestTraining.collaboratorIdentity.lastName).not.toBe('');
+        expect (vmStateRequestTraining.collaboratorIdentity.firstName).not.toBe('');
 
-    })
+    });
+
     it('it should check if sessions are in the right order ', function() {
-        vmStateRequestTraining.orderSessions();
-        var vmsessionsValidated = vmStateRequestTraining.sessionsValidated;
-        var vmsessionsPending = vmStateRequestTraining.sessionsPending;
-        vmsessionsValidated =[{
+        var vmsessionsValidated = [{
             "begining": '29 Mai 2017'
-         }];
-        vmsessionsPending =[{
-            "begining": '15 Mai 2017'
         }];
 
+        var vmsessionsPending = [{
+            "begining": '15 Mai 2017'
+        }];
+        vmStateRequestTraining.sessionsValidated = vmsessionsValidated;
+        vmStateRequestTraining.sessionsPending = vmsessionsPending;
+        vmStateRequestTraining.orderSessions();
+    });
 
-
-    })
     it('it should check if trainings titles and session are fetched and if the validated sessions are checked ', function(done) {
         vmStateRequestTraining.fetchTrainingsSessions();
         let vmRequestedTraining =vmStateRequestTraining.requestedTraining;
@@ -67,11 +65,7 @@ fdescribe('state Request training test', function () {
             done();
         }, 0);
 
-
-    })
-
-
-
+    });
 });
 
 
