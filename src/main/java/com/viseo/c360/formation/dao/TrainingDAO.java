@@ -11,10 +11,8 @@ import javax.persistence.*;
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
-import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
-import com.viseo.c360.formation.domain.training.Topic;
-import com.viseo.c360.formation.domain.training.Training;
-import com.viseo.c360.formation.domain.training.TrainingSession;
+import com.viseo.c360.formation.domain.training.*;
+import com.viseo.c360.formation.dto.training.TrainingScore;
 import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException;
 import com.viseo.c360.formation.exceptions.dao.TrainingSessionException;
 import com.viseo.c360.formation.exceptions.dao.util.TrainingSessionErrors;
@@ -56,6 +54,29 @@ public class TrainingDAO {
         daoFacade.flush();
         return training;
     }
+
+    //Feedback
+    @Transactional
+    public Feedback addFeedback(Feedback feedback) throws PersistenceException {
+        daoFacade.persist(feedback);
+        daoFacade.flush();
+        return feedback;
+    }
+
+    @Transactional
+    public List<Feedback> getAllFeedbacks(){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select f from Feedback f");
+    }
+
+    @Transactional
+    public List<TrainingScore> getTrainingsScore(){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("select t,avg(f.score) from Feedback f join f.training t group by t");
+    }
+
+
+
 
     /***
      * Topic

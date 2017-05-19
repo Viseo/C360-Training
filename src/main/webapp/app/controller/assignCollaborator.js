@@ -31,11 +31,24 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             lastNameRegexErrorMessage: '',
             token: '',
             collaborator_id: '',
-            numberOfWishesNotChecked: ''
+            numberOfWishesNotChecked: '',
+
+            //feedback
+            //training dans feedback est sous la forme training au lieu de trianingdescription
+            feedback:{
+                "score":5,
+                "comment":"HELLO WORLD",
+                "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
+            },
+            allFeedbacks:[],
+            allTrainingScore:[]
         }
     },
     template: `
 <div class="container-fluid">
+    <button @click="addFeedback()">Add feedback</button>
+    <button @click="getAllFeedbacks()"> Get All Feedbacks</button>
+    <button @click="getTrainingsScore()"> Get All Training Score</button>
     <div class="row">
         <div class="col-sm-12 col-md-10 col-lg-12">
             <div class="row">
@@ -375,6 +388,41 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this[errorMessage] = "Veuillez entrer un nom ou prénom valide";
                 this.isSearchNameValid = false;
             }
+        },
+        addFeedback(){
+            this.$http.post("api/feedback/"+this.collaborator_id,this.feedback).then(
+                function (response) {
+                    console.log("success to add a feedback");
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        getAllFeedbacks(){
+            this.$http.get("api/feedbacks").then(
+                function (response) {
+                    console.log("success to get all feedbacks");
+                    this.allFeedbacks = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        getTrainingsScore(){
+            this.$http.get("api/trainingscore").then(
+                function (response) {
+                    console.log("success to get all training score");
+                    this.allTrainingScore = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
         }
     },
     watch: {

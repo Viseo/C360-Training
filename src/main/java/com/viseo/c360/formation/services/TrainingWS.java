@@ -1,10 +1,15 @@
 package com.viseo.c360.formation.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
+import com.viseo.c360.formation.converters.Feedback.DescriptionToFeedback;
+import com.viseo.c360.formation.converters.Feedback.FeedbackToDescription;
+import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.topic.DescriptionToTopic;
 import com.viseo.c360.formation.converters.topic.TopicToDescription;
@@ -12,24 +17,24 @@ import com.viseo.c360.formation.converters.training.DescriptionToTraining;
 import com.viseo.c360.formation.converters.training.TrainingToDescription;
 import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDescription;
 
+import com.viseo.c360.formation.converters.wish.DescriptionToWish;
+import com.viseo.c360.formation.converters.wish.WishToDescription;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
-import com.viseo.c360.formation.domain.training.CollaboratorRequestTraining;
-import com.viseo.c360.formation.domain.training.Topic;
-import com.viseo.c360.formation.domain.training.Training;
-import com.viseo.c360.formation.domain.training.TrainingSession;
+import com.viseo.c360.formation.domain.collaborator.Wish;
+import com.viseo.c360.formation.domain.training.*;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
-import com.viseo.c360.formation.dto.training.TrainingDescription;
-import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
+import com.viseo.c360.formation.dto.training.*;
 import com.viseo.c360.formation.converters.trainingsession.DescriptionToTrainingSession;
 
-import com.viseo.c360.formation.dto.training.TopicDescription;
 import com.viseo.c360.formation.exceptions.C360Exception;
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
 import org.springframework.core.convert.ConversionException;
+import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +54,35 @@ public class TrainingWS {
 
     @Inject
     ExceptionUtil exceptionUtil;
+
+    //Feedback
+    @RequestMapping(value = "${endpoint.feedback}", method = RequestMethod.POST)
+    @ResponseBody
+    public FeedbackDescription addFeedback(@RequestBody FeedbackDescription myFeedbackDescription,@PathVariable Long collab_id) {
+        try{
+            Collaborator collaborator = collaboratorDAO.getCollaborator(collab_id);
+            myFeedbackDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
+            myFeedbackDescription.setDate(new Date());
+            Feedback feedback = trainingDAO.addFeedback(new DescriptionToFeedback().convert(myFeedbackDescription));
+            return new FeedbackToDescription().convert(feedback);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if(uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.feedbacks}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<FeedbackDescription> getAllFeedbacks() {
+        return new FeedbackToDescription().convert(trainingDAO.getAllFeedbacks());
+    }
+
+    @RequestMapping(value = "${endpoint.trainingscore}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<TrainingScore> getTrainingsScore() {
+        return trainingDAO.getTrainingsScore();
+    }
 
     /***
      * Training
