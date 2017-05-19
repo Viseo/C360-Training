@@ -509,7 +509,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     this.state.selectOptionsOfTopic.sort(function (a, b) {
                         return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
                     });
-                    this.resetTopicForm();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -543,7 +542,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 this.gatherTopicsFromDatabase();
             };
 
-            this.$http.post("api/removetopic", topicToRemove, removeTopicSuccess)
+            this.post("api/removetopic", topicToRemove, removeTopicSuccess)
         },
 
         removeTraining(trainingToRemove){
