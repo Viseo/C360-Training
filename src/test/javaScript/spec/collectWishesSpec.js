@@ -1,0 +1,173 @@
+/**
+ * Created by BBA3616 on 18/05/2017.
+ */
+describe('collect wishes panel test', function () {
+
+    beforeEach(function () {
+        vmCollectWishes = new collectWishes().$mount();
+    });
+
+    afterEach(function () {
+
+    });
+
+    it('should check if all wishes are gathered when administrator is in the wishes collected panel', function (done) {
+        vmCollectWishes.getAllWishes();
+        setTimeout(function () {
+            let AllWishesInDatabase =
+                [
+                    {
+                        "id": 98,
+                        "version": 0,
+                        "label": "JAVASCRIPT",
+                        "collaborator": {
+                            "id": 8,
+                            "version": 0,
+                            "personnalIdNumber": "POP1234",
+                            "lastName": "Batista",
+                            "firstName": "Benjamin",
+                            "email": "benjamin.batista@viseo.com",
+                            "password": "bibimbaps",
+                            "isAdmin": false
+                        },
+                        "vote_ok": [],
+                        "vote_ko": [],
+                        "checked": null
+                    },
+                    {
+                        "id": 93,
+                        "version": 4,
+                        "label": "PHP",
+                        "collaborator": {
+                            "id": 8,
+                            "version": 0,
+                            "personnalIdNumber": "POP1234",
+                            "lastName": "Batista",
+                            "firstName": "Benjamin",
+                            "email": "benjamin.batista@viseo.com",
+                            "password": "bibimbaps",
+                            "isAdmin": false
+                        },
+                        "vote_ok": [],
+                        "vote_ko": [],
+                        "checked": null
+                    }
+                ];
+            expect(vmCollectWishes.allWishes).toEqual(AllWishesInDatabase);
+            expect(vmCollectWishes.disableSaveButton).toBe(true);
+            done();
+        }, 0);
+    });
+
+    it('should check if wishes are updated when administrator click on the save button', function (done) {
+        vmCollectWishes.listWishesToUpdate =
+            [
+                {
+                    "id": 98,
+                    "version": 0,
+                    "label": "JAVASCRIPT",
+                    "collaborator": {
+                        "id": 8,
+                        "version": 0,
+                        "personnalIdNumber": "POP1234",
+                        "lastName": "Batista",
+                        "firstName": "Benjamin",
+                        "email": "benjamin.batista@viseo.com",
+                        "password": "bibimbaps",
+                        "isAdmin": false
+                    },
+                    "vote_ok": [],
+                    "vote_ko": [],
+                    "checked": true
+                },
+                {
+                    "id": 93,
+                    "version": 4,
+                    "label": "PHP",
+                    "collaborator": {
+                        "id": 8,
+                        "version": 0,
+                        "personnalIdNumber": "POP1234",
+                        "lastName": "Batista",
+                        "firstName": "Benjamin",
+                        "email": "benjamin.batista@viseo.com",
+                        "password": "bibimbaps",
+                        "isAdmin": false
+                    },
+                    "vote_ok": [],
+                    "vote_ko": [],
+                    "checked": false
+                }
+            ];
+        vmCollectWishes.updateWish();
+        setTimeout(function () {
+            expect(vmCollectWishes.disableSaveButton).toBe(true);
+            expect(vmCollectWishes.showConfirmUpdateWishesMessage).toBe(true);
+            done();
+        }, 0);
+    });
+
+    it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function (done) {
+        wish =
+            [
+                {
+                    "id": 98,
+                    "version": 0,
+                    "label": "JAVASCRIPT",
+                    "collaborator": {
+                        "id": 8,
+                        "version": 0,
+                        "personnalIdNumber": "POP1234",
+                        "lastName": "Batista",
+                        "firstName": "Benjamin",
+                        "email": "benjamin.batista@viseo.com",
+                        "password": "bibimbaps",
+                        "isAdmin": false
+                    },
+
+                    "vote_ok": [],
+                    "vote_ko": [],
+                    "checked": false
+                }
+            ];
+        vmCollectWishes.addWishToListWishes(wish,true);
+
+        setTimeout(function () {
+            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(true);
+            done();
+        }, 0);
+    });
+
+    it('should check if wish is ready to be update and icon is changed from color to grey when administrator dont validate the wish', function (done) {
+        wish =
+            [
+                {
+                    "id": 98,
+                    "version": 0,
+                    "label": "JAVASCRIPT",
+                    "collaborator": {
+                        "id": 8,
+                        "version": 0,
+                        "personnalIdNumber": "POP1234",
+                        "lastName": "Batista",
+                        "firstName": "Benjamin",
+                        "email": "benjamin.batista@viseo.com",
+                        "password": "bibimbaps",
+                        "isAdmin": false
+                    },
+
+                    "vote_ok": [],
+                    "vote_ko": [],
+                    "checked": true
+                }
+            ];
+        vmCollectWishes.addWishToListWishes(wish,false);
+
+        setTimeout(function () {
+            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
+            done();
+        }, 0);
+    });
+
+});
+

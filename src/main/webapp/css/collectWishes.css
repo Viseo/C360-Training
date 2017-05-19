@@ -1,0 +1,55 @@
+#collectWishes {
+    border:1px solid #dcdcdc;
+    border-radius: 10px;
+    height:100%;
+    width: 100%;
+    padding:20px;
+}
+
+.rectangle-list a{
+    width:900px;
+    left: 100px;
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em .8em;
+    *padding: .10em;
+    margin: .5em 0 .5em 2.5em;
+    background: #eee;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all .3s ease-out;
+}
+
+.rectangle-list a:hover{
+    background: #eee;
+}
+
+.rectangle-list a:before{
+    content: attr(title);
+    position: absolute;
+    left: -11em;
+    top: 50%;
+    margin-top: -1em;
+    background: #4d7cb9;
+    height: 2em;
+    width: 10em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.rectangle-list a:after{
+    position: absolute;
+    content: '';
+    border: .5em solid transparent;
+    left: -1em;
+    top: 50%;
+    margin-top: -.5em;
+    transition: all .3s ease-out;
+}
+
+.rectangle-list a:hover:after{
+    left: -.5em;
+    border-left-color: #4d7cb9;
+}
+

@@ -29,15 +29,17 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/main/webapp/app/controller/registerTrainingCollaborator.js',
             'src/main/webapp/app/controller/assignCollaborator.js',
-            'src/main/webapp/app/controller/wishToVote.js',
             'src/main/webapp/app/controller/trainingToCome.js',
+            'src/main/webapp/app/controller/wishToVote.js',
+            'src/main/webapp/app/controller/collectWishes.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
             'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
             'src/test/javaScript/spec/assignCollaboratorSpec.js',
             'src/test/javaScript/spec/trainingToComeSpec.js',
-            'src/test/javaScript/spec/wishToVoteSpec.js',
+            'src/test/javaScript/spec/collectWishesSpec.js',
+            'src/test/javaScript/spec/wishToVoteSpec.js'
 
         ],
 
