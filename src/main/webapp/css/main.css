@@ -69,6 +69,13 @@ i.glyphicon {
     color: black;
 }
 
+.red-header{
+    background-color: rgb(224,53,89) !important;
+}
+.blue-header{
+    background-color :#428bca;
+}
+
 
 .dialog {
     width: 100%;
@@ -161,6 +168,6 @@ i.glyphicon {
     padding-left: 35px;
 }
 
-#blue-header{
+#header-component{
     height:65px;
 }

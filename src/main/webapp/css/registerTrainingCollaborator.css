@@ -59,17 +59,13 @@ button + p {
 }
 
 .panel-primary{
-    background-color: rgba(66, 139, 202,0.8);
+    border-color: rgba(66, 139, 202,0.8);
+
 
 }
 .panel-heading{
+    background-color:#f5f5f5 !important;
 
-    bbackground-color:#FFFFFF !important;
-
-}
-
-#accordionId u{
-    text-decoration: none;
 }
 
 #scroll{
