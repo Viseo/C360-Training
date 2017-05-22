@@ -13,9 +13,9 @@ let Header = Vue.component('blue-header', {
                         </div>
                         <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()" >
-                                 <span class="text-left" v-show="showName()" style="font-size: 15px;">
+                                 <span class="text-left" v-show="showPicture()" style="font-size: 15px;">
                                  
-                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" /><span @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
+                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" /><span v-show="showName()" @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
                                  <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
@@ -26,7 +26,7 @@ let Header = Vue.component('blue-header', {
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">     
                                 <ul class="nav navbar-nav">
                                     <li class="dropdown">	
-                                        <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" style="top:5px" data-toggle="dropdown" aria-hidden="true" href="#"></span>
+                                        <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle"  data-toggle="dropdown" aria-hidden="true" href="#"></span>
                                         <ul id="dropdown-app" class="dropdown-menu">
                                             <li>
                                                 <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/icon_cv.png" href="#"class="text-center  icon-app"><p>GCv</p></span>
@@ -106,6 +106,9 @@ let Header = Vue.component('blue-header', {
         },
         showDisconnexion(){
             return this.disconnect && !this.dialog;
+        },
+        showPicture(){
+            return this.$route.name != 'login';
         },
         setIdleSecondsCounter(value){
             this.idleSecondsCounter = value;
