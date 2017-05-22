@@ -6,6 +6,7 @@ package com.viseo.c360.formation.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -27,22 +28,25 @@ public class FileUploadController extends HttpServlet {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
         Part part = request.getPart("blob");
-        System.out.println("test"+request.getPart("idCollaborator"));
-        Part collaboratorId = request.getPart("idCollaborator");
+        String idCollaborator = request.getParameter("idCollaborator");
         String fileName = null;
+        URL resource = getClass().getResource("/");
+        System.out.println("test"+ resource );
+        String path = resource.getPath();
+        System.out.println("test"+ resource.getPath() );
         if (part != null) {
             //writing blob
-            part.write("C:/Users/BBA3616/Documents/GitHub/C360/src/main/webapp/img" + File.separator + "IMGTEST.jpg");
+            part.write( resource.getPath().replace("WEB-INF/classes/","") + "img/" + File.separator + idCollaborator + ".jpg");
 
         } else {
             //Writing image or file
             part = request.getPart("file");
-            part.write("C:/Users/BBA3616/Documents/GitHub/C360/src/main/webapp/img" +File.separator + "IMGTEST.jpg");
+            part.write(resource.getPath().replace("WEB-INF/classes/","") + "img/" + File.separator + idCollaborator + ".jpg");
         }
 
         // Extra logic to support multiple domain - you may want to remove this
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.getWriter().print(" uploaded successfully" + collaboratorId);
+        response.getWriter().print(" uploaded successfully");
     }
 
 }
