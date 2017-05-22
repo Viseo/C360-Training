@@ -15,7 +15,7 @@ let Header = Vue.component('blue-header', {
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseout="setDisconnectedToFalse()" @mouseover="setDisconnectedToTrue()">
                                  <span class="text-left" v-show="showName()" style="font-size: 15px;">
                                  
-                                    <img id="profilImage" :src="imagePathName" class="image-min" />{{firstName}} {{lastName}}</span>
+                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" />{{firstName}} {{lastName}}</span>
                                  <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
@@ -71,7 +71,8 @@ let Header = Vue.component('blue-header', {
             stayConnected: true,
             dialog: false,
             timeConnected: 0,
-            imagePathName : 'img/profile.jpg',
+            imagePath: 'img/profile.jpg',
+            collaboratorId : ''
         }
     },
     mounted: function () {
@@ -89,6 +90,8 @@ let Header = Vue.component('blue-header', {
             this.app.training = true;
         }
 
+
+        this.imagePath = "img/" + this.collaboratorId + ".jpg";
 
     },
     methods: {
@@ -169,6 +172,7 @@ let Header = Vue.component('blue-header', {
             let retrieveUserInfoFromToken = () => {
                 this.lastName = jwt_decode(this.token).lastName;
                 this.firstName = jwt_decode(this.token).sub;
+                this.collaboratorId = jwt_decode(this.token).id;
             };
 
             let isConnected = () => {
@@ -229,6 +233,10 @@ let Header = Vue.component('blue-header', {
             };
 
             this.post("api/userdisconnect", this.token, disconnect);
+        },
+
+        imageLoadOnError () {
+            this.imagePath = "img/profile.jpg"
         }
     }
 });

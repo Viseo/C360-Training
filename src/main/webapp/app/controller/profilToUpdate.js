@@ -310,11 +310,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
         });
 
-        this.imagePath = "img/" + this.collaborator_id + ".jpg"
-        var im = document.getElementById('profilImageToChange');
-        im.onerror = function(){
-          this.imagePath = "img/profile.jpg";
-        };
+        this.imagePath = "img/" + this.collaborator_id + ".jpg";
 
     },
     methods: {
