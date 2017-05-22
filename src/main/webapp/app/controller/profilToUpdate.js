@@ -339,8 +339,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
         verifyEmail(email){
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
-                    .test(email)) {
-
+                    .test(email))
+            {
                 this.errorMessageEmail = '';
                 this.isEmailValid = true;
             } else {
@@ -402,6 +402,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
         toggleShowPassword(){
             this.showPass = !this.showPass;
         },
+
         verifyOldPassword(password) {
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessageOldPassword = '';
@@ -455,6 +456,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 }
             }
         },
+
         getInfoCollaborator(){
             this.$http.get("api/getcollaborator/"+this.collaborator_id).then(
                 function (response) {
