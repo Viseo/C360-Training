@@ -357,7 +357,8 @@ const PAGE_TITLE = {
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
     "WishToVote": "Gestion des formations",
-    "addTrainingTopic": "Gestion des formations"
+    "addTrainingTopic": "Gestion des formations",
+    "profiltoupdate" : "Modifier mon profil"
 };
 
 const PAGE_FAVICON = {
@@ -365,7 +366,8 @@ const PAGE_FAVICON = {
     "resetPassword": "img/icon_accueil.png",
     "registerTrainingCollaborator": "img/icon_formation.png",
     "WishToVote": "img/icon_formation.png",
-    "addTrainingTopic": "img/icon_formation.png"
+    "addTrainingTopic": "img/icon_formation.png",
+    "profiltoupdate" : "img/icon_accueil.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {
