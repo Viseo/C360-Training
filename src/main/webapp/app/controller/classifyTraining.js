@@ -22,17 +22,6 @@ let classifyTraining = Vue.component('classify-training', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
     methods: {
-        addFeedback(feedback){
-            this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
-                function (response) {
-                    console.log("success to add a feedback");
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
         getAllFeedbacks(){
             this.$http.get("api/feedbacks").then(
                 function (response) {
@@ -57,6 +46,6 @@ let classifyTraining = Vue.component('classify-training', {
                 }
             );
         }
-    },
+    }
 });
 Vue.component('typeahead', VueStrap.typeahead);

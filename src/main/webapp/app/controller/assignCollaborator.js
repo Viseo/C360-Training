@@ -404,6 +404,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.$http.get("api/feedbacks").then(
                 function (response) {
                     console.log("success to get all feedbacks");
+
                     this.allFeedbacks = response.data;
                 },
                 function (response) {

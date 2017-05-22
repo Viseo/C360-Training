@@ -338,6 +338,7 @@ const router = new VueRouter({
                          </div>`
             }
         },
+
     ]
 });
 

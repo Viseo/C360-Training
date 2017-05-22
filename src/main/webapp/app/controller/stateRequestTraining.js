@@ -139,6 +139,18 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
+
+            addFeedback(feedback){
+                this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
+                    function (response) {
+                        console.log("success to add a feedback");
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
         }
     }
 )
