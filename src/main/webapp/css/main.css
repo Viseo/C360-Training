@@ -165,12 +165,27 @@ i.glyphicon {
 #blue-header{
     height:76px;
 }
+#menu{
+
+}
 
 
 #menu ul.dropdown-menu{
     top:95%;
     left:0%;
-    width:100%;
+    width:110%;
+}
+#menu ul{
+    color: #6a6a6a;
+    text-align: left;
+}
+#menu button.btn.btn-default{
+    padding:1% 5%;
+    font-size:100%;
+    box-shadow: none;
+    background-color: #dcdcdc;
+    border: solid 1px #dcdcdc;
+    border-radius:15px;
 }
 
 .image-min {

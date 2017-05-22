@@ -5,17 +5,16 @@ let Header = Vue.component('blue-header', {
     props: ['title'],
     template: `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
-                <div class="container-fluid" id="blue-header">
+                <div class="container-fluid" id="blue-header" >
                     <div class="row">
                         <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                             <p id="navbar-title" href="#">Collaborateur 360</p>
                             <p id="navbar-subtitle">{{title}}</p>
                         </div>
                         <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseout="setDisconnectedToFalse()" @mouseover="setDisconnectedToTrue()">
-                                 <span class="text-left" v-show="showName()" style="font-size: 15px;">
-                                 
-                                    <img id="profilImage" src="img/IMGTEST.jpg" class="image-min" />{{firstName}} {{lastName}}</span>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()">
+                                 <span  class="text-left" v-show="showName()" style="font-size: 15px;" >
+                                    <img v-show="showName()" id="profilImage" src="img/IMGTEST.jpg" class="image-min" /><span  @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
                                  <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
