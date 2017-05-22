@@ -173,21 +173,6 @@ let stateRequest = Vue.component('state-request', {
                     );
                 }
             },
-            /*collectAllTrainingsToGiveFeedbacks(){
-                var dateToday = new Date();
-                for(var tmp1 in this.requestedTrainingByCollaborator){ //pour chaque formation
-                    for(var tmp2 in this.requestedTrainingByCollaborator[tmp1].sessionsValidated){ //pour chaque session d'une formation
-                        //à modifier pour faire l'inverse
-                        if(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].ending > dateToday){
-                            this.allTrainingsToGiveFeedbacks.push(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].training);
-                            break;
-                        }
-                    }
-                }
-                this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
-                    return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
-                });
-            },*/
             collectAllTrainingsToGiveFeedbacks(){
                 this.$http.get("api//trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
                     function (response) {
