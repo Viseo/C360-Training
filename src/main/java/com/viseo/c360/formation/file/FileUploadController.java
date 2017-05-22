@@ -4,7 +4,6 @@ package com.viseo.c360.formation.file;
  * Created by BBA3616 on 22/05/2017.
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -25,28 +24,46 @@ public class FileUploadController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
-        Part part = request.getPart("blob");
-        String idCollaborator = request.getParameter("idCollaborator");
-        String fileName = null;
-        URL resource = getClass().getResource("/");
-        System.out.println("test"+ resource );
-        String path = resource.getPath();
-        System.out.println("test"+ resource.getPath() );
-        if (part != null) {
-            //writing blob
-            part.write( resource.getPath().replace("WEB-INF/classes/","") + "img/" + File.separator + idCollaborator + ".jpg");
-
-        } else {
-            //Writing image or file
-            part = request.getPart("file");
-            part.write(resource.getPath().replace("WEB-INF/classes/","") + "img/" + File.separator + idCollaborator + ".jpg");
+    protected void setServerResponse(HttpServletResponse response,String successMessage) throws IOException {
+        try {
+        response.getWriter().print(successMessage);
+        System.out.println(successMessage);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-        // Extra logic to support multiple domain - you may want to remove this
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.getWriter().print(" uploaded successfully");
+    protected void createImage(Part image, String Path) throws IOException {
+        try {
+            image.write(Path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected String getCurrentPath(){
+        URL resource = getClass().getResource("/");
+        return resource.getPath();
+    }
+
+    protected boolean isMimeTypeImage(Part image){
+        String mimeType = image.getContentType().split("/")[0];
+        return mimeType.equals("image");
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Part imageCollaborator = request.getPart("file");
+        String idCollaborator = request.getParameter("idCollaborator");
+        String imgPath = getCurrentPath().replace("WEB-INF/classes/", "") + "img/";
+        String imageName = idCollaborator + ".jpg";
+
+        if(isMimeTypeImage(imageCollaborator)) {
+            createImage(imageCollaborator, imgPath + imageName);
+            setServerResponse(response, "Upload/Update profil image successfully, id collaborator:"+idCollaborator+"\n");
+        }
+        else{
+            response.sendError(404,"File MimeType is not an image");
+        }
     }
 
 }
