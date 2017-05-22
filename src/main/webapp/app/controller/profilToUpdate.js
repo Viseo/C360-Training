@@ -519,12 +519,11 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         if(imageHasBeenChanged === true){
                             console.log(this.$refs.loadProfilImage.files[0]);
 
-                            var formData = new FormData();
-
-                            formData.append('image', this.$refs.loadProfilImage.files[0]);
-
-                            this.$http.post('api/uploadFile',formData).then( function(response){
-
+                            var data = new FormData();
+                            data.append("file", this.$refs.loadProfilImage.files[0]);
+                            data.append("idCollaborator", this.collaborator_id);
+                            this.$http.post('/fileUpload',data, this.collaborator_id).then( function(response){
+                                console.log(response);
                             }, function (response) {
 
                             });

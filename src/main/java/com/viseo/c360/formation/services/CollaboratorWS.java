@@ -1,5 +1,8 @@
 package com.viseo.c360.formation.services;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -385,6 +389,28 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
+//    //Save collaborator image
+//    @RequestMapping(value = "${endpoint.updatecollaboratorpicture}", method = RequestMethod.POST)
+//    @ResponseBody
+//    public void FileUploadService(@PathVariable FilecollaboratorImage) {
+//        String name ="blabla";
+//        if(!collaboratorImage){
+//            try{
+//                byte[] bytes = collaboratorImage.getBytes();
+//                BufferedOutputStream stream =
+//                        new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+//                stream.write(bytes);
+//                stream.close();
+//
+//            } catch (Exception e) {
+//            }
+//        } else {
+//
+//        }
+//
+//        }
+
 
 
 }
