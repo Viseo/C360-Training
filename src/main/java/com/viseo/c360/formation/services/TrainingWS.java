@@ -11,6 +11,7 @@ import com.viseo.c360.formation.converters.Feedback.DescriptionToFeedback;
 import com.viseo.c360.formation.converters.Feedback.FeedbackToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
+import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
 import com.viseo.c360.formation.converters.topic.DescriptionToTopic;
 import com.viseo.c360.formation.converters.topic.TopicToDescription;
 import com.viseo.c360.formation.converters.training.DescriptionToTraining;
@@ -82,6 +83,14 @@ public class TrainingWS {
     @ResponseBody
     public List<TrainingScore> getTrainingsScore() {
         return trainingDAO.getTrainingsScore();
+    }
+
+    @RequestMapping(value = "${endpoint.trainingstogivefeedbacks}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Training> getTrainingsToGiveFeedbacks(@PathVariable Long collab_id) {
+        Collaborator collaborator = collaboratorDAO.getCollaborator(collab_id);
+        List<Training> training = trainingDAO.getTrainingsToGiveFeedbacks(collaborator);
+        return training;
     }
 
     /***

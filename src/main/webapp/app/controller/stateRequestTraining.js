@@ -43,7 +43,8 @@ let stateRequest = Vue.component('state-request', {
                     "comment":"HELLO WORLD",
                     "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
                 },*/
-                allTrainingsToGiveFeedbacks:[]
+                allTrainingsToGiveFeedbacks:[],
+                testest:[]
             }
         },
         template: `
@@ -96,6 +97,7 @@ let stateRequest = Vue.component('state-request', {
         this.activateScrollWheel('#scrollMyTrainings');
         this.getCookies();
         this.fetchTrainingsSessions();
+        this.collectAllTrainingsToGiveFeedbacks();
     },
 
         methods: {
@@ -147,8 +149,6 @@ let stateRequest = Vue.component('state-request', {
                          }
                         console.log(this.requestedTrainingByCollaborator);
                        this.orderSessions();
-                       //fonction collectAllTrainingsToGiveFeedbacks pour récupérer toutes les formations à noter
-                       this.collectAllTrainingsToGiveFeedbacks();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -162,7 +162,7 @@ let stateRequest = Vue.component('state-request', {
                     this.feedback.training = training;
                     this.feedback.score = this.score;
                     this.feedback.comment = this.comment;
-                    this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
+                    this.$http.post("api/feedback/"+this.collaboratorIdentity.id,this.feedback).then(
                         function (response) {
                             console.log("success to add a feedback");
                         },
@@ -173,10 +173,11 @@ let stateRequest = Vue.component('state-request', {
                     );
                 }
             },
-            collectAllTrainingsToGiveFeedbacks(){
+            /*collectAllTrainingsToGiveFeedbacks(){
                 var dateToday = new Date();
                 for(var tmp1 in this.requestedTrainingByCollaborator){ //pour chaque formation
                     for(var tmp2 in this.requestedTrainingByCollaborator[tmp1].sessionsValidated){ //pour chaque session d'une formation
+                        //à modifier pour faire l'inverse
                         if(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].ending > dateToday){
                             this.allTrainingsToGiveFeedbacks.push(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].training);
                             break;
@@ -186,7 +187,19 @@ let stateRequest = Vue.component('state-request', {
                 this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
                     return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                 });
-            }
+            },*/
+            collectAllTrainingsToGiveFeedbacks(){
+                this.$http.get("api//trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
+                    function (response) {
+                        console.log("success to get all trainings to give feedbacks");
+                        this.allTrainingsToGiveFeedbacks = response.data;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
         }
     }
 )
