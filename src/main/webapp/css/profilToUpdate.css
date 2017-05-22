@@ -17,6 +17,7 @@
     margin-top:-30px;
     cursor:pointer;
     border-radius: 50%;
+    object-fit: cover;
     height:80px;
     width: 80px;
     z-index:1;

@@ -51,8 +51,7 @@
     border-radius:15px;
 }
 #navbar-app {
-    font-size:1.7em;
-    line-height:75%;
+    font-size:200%;
 }
 i.glyphicon {
     top:2.5px;
@@ -164,5 +163,26 @@ i.glyphicon {
 }
 
 #blue-header{
-    height:65px;
+    height:76px;
+}
+
+
+#menu ul.dropdown-menu{
+    top:95%;
+    left:0%;
+    width:100%;
+}
+
+.image-min {
+    top:2px;
+    position: relative;
+    margin-top: -14px;
+    /* margin-left: 10%; */
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    height: 50px;
+    width: 50px;
+    z-index: 1000;
 }
