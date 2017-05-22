@@ -193,6 +193,9 @@ let stateRequest = Vue.component('state-request', {
                     function (response) {
                         console.log("success to get all trainings to give feedbacks");
                         this.allTrainingsToGiveFeedbacks = response.data;
+                        this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
+                            return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                        });
                     },
                     function (response) {
                         console.log("Error: ", response);
