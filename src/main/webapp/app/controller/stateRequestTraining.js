@@ -28,7 +28,22 @@ let stateRequest = Vue.component('state-request', {
                 allTrainingsAndSessions:[{
                     collaborators: []
                 }],
-                trainingAndSessions:[]
+                trainingAndSessions:[],
+
+                //feedback
+                score:'',
+                comment:'',
+                feedback:{
+                    score:'',
+                    comment:'',
+                    training:''
+                },
+                /*feedback:{
+                    "score":5,
+                    "comment":"HELLO WORLD",
+                    "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
+                },*/
+                allTrainingsToGiveFeedbacks:[]
             }
         },
         template: `
@@ -132,6 +147,8 @@ let stateRequest = Vue.component('state-request', {
                          }
                         console.log(this.requestedTrainingByCollaborator);
                        this.orderSessions();
+                       //fonction collectAllTrainingsToGiveFeedbacks pour récupérer toutes les formations à noter
+                       this.collectAllTrainingsToGiveFeedbacks();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -139,6 +156,37 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
+
+            addFeedback(training){
+                if(this.score != '' && this.comment != ''){
+                    this.feedback.training = training;
+                    this.feedback.score = this.score;
+                    this.feedback.comment = this.comment;
+                    this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
+                        function (response) {
+                            console.log("success to add a feedback");
+                        },
+                        function (response) {
+                            console.log("Error: ", response);
+                            console.error(response);
+                        }
+                    );
+                }
+            },
+            collectAllTrainingsToGiveFeedbacks(){
+                var dateToday = new Date();
+                for(var tmp1 in this.requestedTrainingByCollaborator){ //pour chaque formation
+                    for(var tmp2 in this.requestedTrainingByCollaborator[tmp1].sessionsValidated){ //pour chaque session d'une formation
+                        if(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].ending > dateToday){
+                            this.allTrainingsToGiveFeedbacks.push(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].training);
+                            break;
+                        }
+                    }
+                }
+                this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
+                    return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                });
+            }
         }
     }
 )
