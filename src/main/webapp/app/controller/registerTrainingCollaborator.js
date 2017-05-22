@@ -306,6 +306,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
 
     methods: {
+
         disablingSessions(){
             for(i in this.sessionsByCollab){
                 temp=document.getElementById(this.sessionsByCollab[i].id);
