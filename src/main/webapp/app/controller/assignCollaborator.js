@@ -46,7 +46,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     },
     template: `
 <div class="container-fluid">
-    <button @click="addFeedback()">Add feedback</button>
+    <button @click="addFeedback(feedback)">Add feedback</button>
     <button @click="getAllFeedbacks()"> Get All Feedbacks</button>
     <button @click="getTrainingsScore()"> Get All Training Score</button>
     <div class="row">
@@ -389,8 +389,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.isSearchNameValid = false;
             }
         },
-        addFeedback(){
-            this.$http.post("api/feedback/"+this.collaborator_id,this.feedback).then(
+        addFeedback(feedback){
+            this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
                 function (response) {
                     console.log("success to add a feedback");
                 },
