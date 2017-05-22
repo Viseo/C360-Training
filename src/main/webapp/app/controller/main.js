@@ -388,9 +388,9 @@ router.afterEach((toRoute, fromRoute) => {
     window.document.head.appendChild(pageNewIconTab);
 });
 
+Vue.component('dropdown', VueStrap.dropdown);
+
 new Vue({
     el: '#newVue',
     router
 });
-
-Vue.component('dropdown', VueStrap.dropdown);

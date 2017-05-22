@@ -14,9 +14,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     </div>
                 </div>
                 <div class="panel-body">
-                        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
+                        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-10 col-lg-offset-1 col-md-offset-1">
                             <div class="row">
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-lg-offset-0 col-md-offset-0">
                                     <!-- PRENOM -->
                                     <customInput
                                         label="prenom"
@@ -33,7 +33,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         :errorMessage="errorMessageFirstName">
                                     </customInput>
                                 </div>
-                                <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-6 col-md-6 col-lg-offset-0 col-md-offset-0">
                                     <!-- FONCTION -->
                                     <customInput
                                         label="fonction"
@@ -48,7 +48,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-lg-offset-0 col-md-offset-0">
                                     <!-- NOM -->
                                     <customInput
                                         label="nom"
@@ -65,7 +65,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         :errorMessage="errorMessageLastName">
                                     </customInput>
                                 </div>
-                                <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0">
                                     <!-- BUSINESS UNIT -->
                                     <table style="border-spacing: 0px">
                                         <div class="form-group has-feedback">
@@ -97,7 +97,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 <div class="panel-body">
                         <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
                             <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12 col-lg-offset-0">
                                     <!-- MOT DE PASSE -->
                                     <customPasswordInput
                                         label="ancienmdp"
@@ -114,7 +114,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                         :isNotValid="isNotValidOldPassword">
                                     </customPasswordInput>
                                 </div>
-                                <div class="col-lg-6 col-lg-offset-1 col-md-offset-0">
+                                <div class="col-lg-6 col-lg-offset-1 col-md-12">
                                     <!-- EMAIL-->
                                     <customInput
                                         label="email"
@@ -133,7 +133,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12 col-lg-offset-0 col-md-offset-0">
                                     <!-- NOUVEAU MOT DE PASSE -->
                                     <customPasswordInput
                                         label="nouveaumdp"
@@ -158,7 +158,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12 col-lg-offset-0 col-md-offset-0">
                                     <!-- CONFIRMATION MOT DE PASSE -->
                                     <customPasswordInput
                                         label="mdpc"
