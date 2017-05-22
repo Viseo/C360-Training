@@ -31,6 +31,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/assignCollaborator.js',
             'src/main/webapp/app/controller/wishToVote.js',
             'src/main/webapp/app/controller/trainingToCome.js',
+            'src/main/webapp/app/controller/profilToUpdate.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
@@ -38,6 +39,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/assignCollaboratorSpec.js',
             'src/test/javaScript/spec/trainingToComeSpec.js',
             'src/test/javaScript/spec/wishToVoteSpec.js',
+            'src/test/javaScript/spec/profilToUpdateSpec.js',
 
         ],
 

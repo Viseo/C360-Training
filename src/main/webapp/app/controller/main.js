@@ -5,16 +5,17 @@ let Header = Vue.component('blue-header', {
     props: ['title'],
     template: `<div id="wrap">
             <div class="navbar navbar-default navbar-fixed-top" style="background-color:#428bca;">
-                <div class="container-fluid" id="blue-header" >
+                <div class="container-fluid" id="blue-header">
                     <div class="row">
                         <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
                             <p id="navbar-title" href="#">Collaborateur 360</p>
                             <p id="navbar-subtitle">{{title}}</p>
                         </div>
                         <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()">
-                                 <span  class="text-left" v-show="showName()" style="font-size: 15px;" >
-                                    <img v-show="showName()" id="profilImage" src="img/IMGTEST.jpg" class="image-min" /><span  @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseout="setDisconnectedToFalse()" @mouseover="setDisconnectedToTrue()">
+                                 <span class="text-left" v-show="showName()" style="font-size: 15px;">
+                                 
+                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" />{{firstName}} {{lastName}}</span>
                                  <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
@@ -70,6 +71,8 @@ let Header = Vue.component('blue-header', {
             stayConnected: true,
             dialog: false,
             timeConnected: 0,
+            imagePath: 'img/profile.jpg',
+            collaboratorId : ''
         }
     },
     mounted: function () {
@@ -86,6 +89,10 @@ let Header = Vue.component('blue-header', {
         if(this.title == "Gestion des formations"){
             this.app.training = true;
         }
+
+
+        this.imagePath = "img/" + this.collaboratorId + ".jpg";
+
     },
     methods: {
         setDisconnectedToTrue(){
@@ -165,6 +172,7 @@ let Header = Vue.component('blue-header', {
             let retrieveUserInfoFromToken = () => {
                 this.lastName = jwt_decode(this.token).lastName;
                 this.firstName = jwt_decode(this.token).sub;
+                this.collaboratorId = jwt_decode(this.token).id;
             };
 
             let isConnected = () => {
@@ -225,6 +233,10 @@ let Header = Vue.component('blue-header', {
             };
 
             this.post("api/userdisconnect", this.token, disconnect);
+        },
+
+        imageLoadOnError () {
+            this.imagePath = "img/profile.jpg"
         }
     }
 });
@@ -345,7 +357,8 @@ const PAGE_TITLE = {
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
     "WishToVote": "Gestion des formations",
-    "addTrainingTopic": "Gestion des formations"
+    "addTrainingTopic": "Gestion des formations",
+    "profiltoupdate" : "Modifier mon profil"
 };
 
 const PAGE_FAVICON = {
@@ -353,7 +366,8 @@ const PAGE_FAVICON = {
     "resetPassword": "img/icon_accueil.png",
     "registerTrainingCollaborator": "img/icon_formation.png",
     "WishToVote": "img/icon_formation.png",
-    "addTrainingTopic": "img/icon_formation.png"
+    "addTrainingTopic": "img/icon_formation.png",
+    "profiltoupdate" : "img/icon_accueil.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {

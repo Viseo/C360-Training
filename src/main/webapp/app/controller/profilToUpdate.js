@@ -6,7 +6,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 <div class="panel-header">
                     <span><span class="glyphicon glyphicon-user"></span> 1. Mes coordonnées</span>
                     <div class="boxon">
-                        <img id="profilImage" src="img/IMGTEST.jpg" class="image" />
+                        <img id="profilImageToChange" @error="imageLoadOnError" :src="imagePath" class="image" />
                         <p class="text">
                         <input ref="loadProfilImage" id="loadProfilImage" type="file" accept="image/*" style="opacity: 0.0; position: absolute; top:0; left: 0; bottom: 0; right:0; width: 100%; height:100%; cursor:pointer;" />
                         <br><br><br><b>MODIFIER</b>
@@ -258,8 +258,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
             showPass: false,
             infoCollab:[],
             CollabToUpdate:{},
-            imagePathName : '',
-            imageHasBeenChanged : false
+            imagePathName : 'img/profile.jpg',
+            imageHasBeenChanged : false,
+            imagePath : ''
 
         }
     },
@@ -286,6 +287,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
         }
     },
     mounted:function () {
+
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getCookies();
         this.getInfoCollaborator();
         function readURL(input) {
@@ -293,10 +296,10 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#profilImage').attr('src', e.target.result);
+                    $('#profilImageToChange').attr('src', e.target.result);
                 }
                 reader.readAsDataURL(input.files[0]);
-                console.log(input.files[0].name)
+                console.log(input.files[0].name);
 
                 this.imagePathName = input.files[0].name;
                 this.imageHasBeenChanged = true;
@@ -307,6 +310,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
         });
 
+        this.imagePath = "img/" + this.collaborator_id + ".jpg";
 
     },
     methods: {
@@ -364,8 +368,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
         verifyEmail(email){
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
-                    .test(email)) {
-
+                    .test(email))
+            {
                 this.errorMessageEmail = '';
                 this.isEmailValid = true;
             } else {
@@ -427,6 +431,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
         toggleShowPassword(){
             this.showPass = !this.showPass;
         },
+
         verifyOldPassword(password) {
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessageOldPassword = '';
@@ -480,6 +485,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 }
             }
         },
+
         getInfoCollaborator(){
             this.$http.get("api/getcollaborator/"+this.collaborator_id).then(
                 function (response) {
@@ -517,12 +523,11 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         if(imageHasBeenChanged === true){
                             console.log(this.$refs.loadProfilImage.files[0]);
 
-                            var formData = new FormData();
-
-                            formData.append('image', this.$refs.loadProfilImage.files[0]);
-
-                            this.$http.post('api/uploadFile',formData).then( function(response){
-
+                            var data = new FormData();
+                            data.append("file", this.$refs.loadProfilImage.files[0]);
+                            data.append("idCollaborator", this.collaborator_id);
+                            this.$http.post('/fileUpload',data, this.collaborator_id).then( function(response){
+                                console.log(response);
                             }, function (response) {
 
                             });
@@ -531,6 +536,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             function (response) {
                                 console.log("success to update user information");
                                 this.imageHasBeenChanged = false;
+                                this.$router.go(this.$router.currentRoute)
                             },
                             function(response) {
                                 console.log("Error: ", response);
@@ -541,6 +547,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     this.isRightOldPassword = false;
                 }
             }
+        },
+        imageLoadOnError () {
+            this.imagePath = "img/profile.jpg"
         }
     }
 });

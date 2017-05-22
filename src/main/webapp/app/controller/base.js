@@ -27,7 +27,17 @@ function BaseComponent(prototype) {
             $(idChevronDown).click(function() {
                 $(idComponentToScroll).animate({scrollTop: "+=100"}, 500);
             })
-        }
+        },
+
+        verifyLastName(lastName) {
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
+                this.errorMessageLastName = '';
+                this.isLastNameValid = true;
+            } else {
+                this.errorMessageLastName = 'Veuillez entrer un nom valide';
+                this.isLastNameValid = false;
+            }
+        },
     };
     result.__proto__ = prototype;
     return result;

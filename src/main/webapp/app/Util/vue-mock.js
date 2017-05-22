@@ -452,6 +452,30 @@ let routes = [
                 "checked":false}
         ]
     },
+    {
+        method: 'GET',
+        url: 'api/getcollaborator/1',
+        response: [
+            {
+                "email":"eric.dupont@viseo.com",
+                "admin":false,
+                "businessUnit":null,
+                "firstName":"Eric",
+                "function":null,
+                "id":1,
+                "isAdmin":false,
+                "lastName":"DUPONT",
+                "password":"123456",
+                "personnalIdNumber":"AAB1234",
+                "version":0
+            }
+        ]
+    },
+    {
+        method: 'PUT',
+        url: 'api/updatecollaborator',
+        response: []
+    },
 
 ];
 
