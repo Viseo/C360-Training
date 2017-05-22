@@ -4,13 +4,16 @@
 let statementSkills = Vue.component('statement-skills', {
     props:[],
     data: function (){
-       return {}
+       return {
+           vote:false,
+       }
     },
     template: ``,
     mounted: function(){
-
-
     },
-    methods:{}
+    methods:{
+
+
+    }
 
 });

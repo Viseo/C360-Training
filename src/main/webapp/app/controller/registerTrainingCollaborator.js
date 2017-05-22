@@ -132,6 +132,155 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         this.storeTrainingsFound(this.searchFormatted);
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
+
+        swal.setDefaults({
+            input: 'text',
+            text: 'Laissez un commentaire',
+            confirmButtonText: 'Suivant &rarr;',
+            showCancelButton: true,
+            type:'info',
+            progressSteps: ['HTML', 'VueJs', 'JavaScript'],
+            inputValidator: function (value) {
+                return new Promise(function (resolve, reject) {
+                    if (value) {
+                        resolve()
+                    } else {
+                        reject('Merci de voter la formation et de laisser un commenataire!')
+                    }
+                })
+            },
+
+
+        })
+
+        var steps = [
+            {    input: 'text',
+                text: 'Laissez un commentaire',
+                confirmButtonText: 'Suivant &rarr;',
+                showCancelButton: true,
+                type:'info',
+                progressSteps: ['HTML', 'VueJs', 'JavaScript'],
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value) {
+                            resolve()
+                        } else {
+                            reject('Merci de voter la formation et de laisser un commenataire!')
+                        }
+                    })
+                },
+                input: 'text',
+                text: 'Laissez un commentaire',
+                confirmButtonText: 'Suivant &rarr;',
+                showCancelButton: true,
+                type:'info',
+                progressSteps: ['HTML', 'VueJs', 'JavaScript'],
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value) {
+                            resolve()
+                        } else {
+                            reject('Merci de voter la formation et de laisser un commenataire!')
+                        }
+                    })
+                },
+                text: 'HTML',
+                type:'info',
+                html:
+                    `
+            <div class="stars" @click="vote=true">
+            <input class="star star-5" id="star-5" type="radio" name="star"/>
+            <label class="star star-5" for="star-5"></label>
+            <input class="star star-4" id="star-4" type="radio" name="star"/>
+            <label class="star star-4" for="star-4"></label>
+            <input class="star star-3" id="star-3" type="radio" name="star"/>
+            <label class="star star-3" for="star-3"></label>
+            <input class="star star-2" id="star-2" type="radio" name="star"/>
+            <label class="star star-2" for="star-2"></label>
+            <input class="star star-1" id="star-1" type="radio" name="star"/>
+            <label class="star star-1" for="star-1"></label>
+            <!--<button type="button" class="btn btn-link" style="transform:rotate(180deg);">Laissez un commentaire</button>-->
+            </div>`},
+            {
+                input: 'text',
+                text: 'Laissez un commentaire',
+                confirmButtonText: 'Suivant &rarr;',
+                showCancelButton: true,
+                type:'info',
+                progressSteps: ['HTML', 'VueJs', 'JavaScript'],
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value) {
+                            resolve()
+                        } else {
+                            reject('Merci de voter la formation et de laisser un commenataire!')
+                        }
+                    })
+                },
+                text: 'HTML',
+                type:'info',
+                html:
+                    `
+            <div class="stars" >
+            <input class="star star-5" id="star-5" type="radio" name="star"/>
+            <label class="star star-5" for="star-5"></label>
+            <input class="star star-4" id="star-4" type="radio" name="star"/>
+            <label class="star star-4" for="star-4"></label>
+            <input class="star star-3" id="star-3" type="radio" name="star"/>
+            <label class="star star-3" for="star-3"></label>
+            <input class="star star-2" id="star-2" type="radio" name="star"/>
+            <label class="star star-2" for="star-2"></label>
+            <input class="star star-1" id="star-1" type="radio" name="star"/>
+            <label class="star star-1" for="star-1"></label>
+            <!--<button type="button" class="btn btn-link" style="transform:rotate(180deg);">Laissez un commentaire</button>-->
+            </div>`},
+            {
+                input: 'text',
+                text: 'Laissez un commentaire',
+                confirmButtonText: 'Suivant &rarr;',
+                showCancelButton: true,
+                type:'info',
+                progressSteps: ['HTML', 'VueJs', 'JavaScript'],
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value) {
+                            resolve()
+                        } else {
+                            reject('Merci de voter la formation et de laisser un commenataire!')
+                        }
+                    })
+                },
+                text: 'javaScript',
+                type:'info',
+                html:
+                    `
+            <div class="stars" >
+            <input class="star star-5" id="star-5" type="radio" name="star"/>
+            <label class="star star-5" for="star-5"></label>
+            <input class="star star-4" id="star-4" type="radio" name="star"/>
+            <label class="star star-4" for="star-4"></label>
+            <input class="star star-3" id="star-3" type="radio" name="star"/>
+            <label class="star star-3" for="star-3"></label>
+            <input class="star star-2" id="star-2" type="radio" name="star"/>
+            <label class="star star-2" for="star-2"></label>
+            <input class="star star-1" id="star-1" type="radio" name="star"/>
+            <label class="star star-1" for="star-1"></label>
+            <!--<button type="button" class="btn btn-link" style="transform:rotate(180deg);">Laissez un commentaire</button>-->
+            </div>`}
+
+        ]
+
+        swal.queue(steps).then(function (result) {
+            swal.resetDefaults()
+            swal({
+                title: 'Merci pour les votes!',
+                type:'success',
+                confirmButtonText: 'Lovely!',
+                showCancelButton: false
+            })
+        }, function () {
+
+        })
     },
 
     watch: {
@@ -157,6 +306,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
 
     methods: {
+
         disablingSessions(){
             for(i in this.sessionsByCollab){
                 temp=document.getElementById(this.sessionsByCollab[i].id);

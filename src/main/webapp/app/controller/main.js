@@ -337,7 +337,7 @@ const router = new VueRouter({
                             <statement-skills></statement-skills>
                          </div>`
             }
-        }
+        },
     ]
 });
 
