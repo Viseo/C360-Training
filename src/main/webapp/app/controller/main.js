@@ -12,10 +12,10 @@ let Header = Vue.component('blue-header', {
                             <p id="navbar-subtitle">{{title}}</p>
                         </div>
                         <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseout="setDisconnectedToFalse()" @mouseover="setDisconnectedToTrue()">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()" >
                                  <span class="text-left" v-show="showName()" style="font-size: 15px;">
                                  
-                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" />{{firstName}} {{lastName}}</span>
+                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" /><span @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
                                  <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
