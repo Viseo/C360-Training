@@ -72,7 +72,8 @@ let Header = Vue.component('blue-header', {
             dialog: false,
             timeConnected: 0,
             imagePath: 'img/profile.jpg',
-            collaboratorId : ''
+            collaboratorId : '',
+            validateToken : ''
         }
     },
     mounted: function () {
@@ -90,11 +91,22 @@ let Header = Vue.component('blue-header', {
             this.app.training = true;
         }
 
-
+        this.checkIfTokenExist();
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
 
     },
     methods: {
+
+        checkIfTokenExist(){
+            let isTokenValid = (response) => {
+                this.validateToken = response.body;
+                if(!this.validateToken){
+                    this.disconnectUser();
+                }
+            };
+            this.post('api/sendtoken', this.token, isTokenValid);
+        },
+
         setDisconnectedToTrue(){
             this.disconnect = true;
         },
