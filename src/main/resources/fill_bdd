@@ -1,0 +1,108 @@
+INSERT INTO collaborator VALUES (10, 0, 'admin@viseo.com', 'admin', true, 'admin', 'admin', 'ADM1234');
+INSERT INTO collaborator VALUES (1, 0, 'caroline.lhote@viseo.com', 'Caroline', false, 'LHOTE', '123456', 'ABC1234');
+INSERT INTO collaborator VALUES (8, 0, 'benjamin.batista@viseo.com', 'Benjamin', false, 'Batista', 'bibimbaps', 'POP1234');
+INSERT INTO collaborator VALUES (11, 0, 'mario.batista@free.fr', 'Mario', false, 'Batista', 'bibimbaps', 'KLM4577');
+INSERT INTO collaborator VALUES (12, 0, 'ouahib.adli@viseo.com', 'Ouahib', false, 'Adli', 'bibimbaps', 'BKL7894');
+INSERT INTO collaborator VALUES (14, 0, 'soline.john@viseo.com', 'Soline', false, 'JOHN', 'bibimbaps', 'JOH7878');
+INSERT INTO collaborator VALUES (15, 0, 'hamza.idrissi@viseo.com', 'Hamza', false, 'Idrissi', 'bibimbaps', 'HAM7979');
+INSERT INTO collaborator VALUES (17, 0, 'meng.xiangzhe@viseo.com', 'Xiangzhe', false, 'Meng', 'bibimbaps', 'AHZ7879');
+INSERT INTO collaborator VALUES (18, 0, 'henri.darmet@viseo.com', 'Henri', false, 'DARMET', 'bibimbaps', 'HEN7879');
+INSERT INTO collaborator VALUES (19, 0, 'kamalakaran.risana@viseo.com', 'Risana', false, 'Kamalakaran', 'bibimbaps', 'BNN4578');
+INSERT INTO collaborator VALUES (21, 0, 'david.ma@viseo.com', 'David', false, 'MA', 'bibimbaps', 'OOO7879');
+INSERT INTO collaborator VALUES (22, 0, 'farah.taouti@viseo.com', 'Farah', false, 'TOUATI', 'bibimbaps', 'BNF7879');
+INSERT INTO collaborator VALUES (23, 0, 'nihel.ben@viseo.com', 'Nihel', false, 'Ben Gamra', 'bibimbaps', 'NIH7878');
+INSERT INTO collaborator VALUES (24, 0, 'aziz.benmiled@viseo.com', 'Aziz', false, 'Ben Miled', 'bibimbaps', 'BNB7879');
+INSERT INTO collaborator VALUES (25, 0, 'adrien.bourcier@viseo.com', 'Adrien', false, 'Bourcier', 'bibimbaps', 'AFE7879');
+INSERT INTO collaborator VALUES (26, 0, 'harmonie.rouby@viseo.com', 'Harmonie', false, 'ROUBY', 'bibimbaps', 'POP7894');
+INSERT INTO collaborator VALUES (27, 0, 'paul.polo@viseo.com', 'Paul', false, 'Polo', 'bibimbaps', 'BDZ7789');
+INSERT INTO collaborator VALUES (28, 0, 'stefani.pester@viseo.com', 'Stefani', false, 'Pester', 'bibimbaps', 'FEZ7897');
+INSERT INTO collaborator VALUES (29, 0, 'alice.darocha@viseo.com', 'Alice', false, 'Da Rocha', 'bibimbaps', 'ALD4454');
+INSERT INTO collaborator VALUES (30, 0, 'tahiana.randria@viseo.com', 'Tahiana', false, 'RANDRIAMAMONJISOA', 'bibimbaps', 'TAH7787');
+INSERT INTO collaborator VALUES (31, 0, 'gabriel.zeidi@viseo.com', 'Gabriel', false, 'Zeidi', 'bibimbaps', 'POP4878');
+INSERT INTO collaborator VALUES (33, 0, 'vincent.guerin@viseo.com', 'Vincent', false, 'GUERIN', 'bibimbaps', 'GFF7879');
+INSERT INTO collaborator VALUES (34, 0, 'bibim@viseo.com', 'Jean', false, 'Marc', 'bibimb', 'ABC8797');
+--
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+SELECT pg_catalog.setval('hibernate_sequence', 66, true);
+--
+-- Data for Name: topic; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO topic VALUES (2, 0, 'PROGRAMMATION');
+INSERT INTO topic VALUES (48, 0, 'WEB');
+INSERT INTO topic VALUES (54, 0, 'METHODOLOGIE');
+--
+-- Data for Name: training; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO training VALUES (3, 0, 3, 'JAVA', 2);
+INSERT INTO training VALUES (4, 0, 2, 'JAVASCRIPT', 2);
+INSERT INTO training VALUES (5, 0, 2, 'HIBERNATE', 2);
+INSERT INTO training VALUES (6, 0, 4, 'SPRING', 2);
+INSERT INTO training VALUES (49, 0, 2, 'CSS', 48);
+INSERT INTO training VALUES (50, 0, 3, 'HTML', 48);
+INSERT INTO training VALUES (51, 0, 2, 'PHP', 48);
+INSERT INTO training VALUES (53, 0, 2, 'RUBY', 48);
+INSERT INTO training VALUES (55, 0, 2, 'SCRUM', 54);
+INSERT INTO training VALUES (56, 0, 2, 'KANBAN', 54);
+INSERT INTO training VALUES (57, 0, 2, 'SAFE', 54);
+INSERT INTO training VALUES (58, 0, 2, 'LEAN', 54);
+--
+-- Data for Name: requesttraining; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO requesttraining VALUES (16, 0, false, false, 1, 3);
+INSERT INTO requesttraining VALUES (35, 0, false, false, 1, 5);
+INSERT INTO requesttraining VALUES (36, 0, false, false, 8, 5);
+INSERT INTO requesttraining VALUES (37, 0, false, false, 12, 5);
+INSERT INTO requesttraining VALUES (39, 0, false, false, 14, 5);
+INSERT INTO requesttraining VALUES (40, 0, false, false, 15, 5);
+INSERT INTO requesttraining VALUES (41, 0, false, false, 17, 5);
+INSERT INTO requesttraining VALUES (42, 0, false, false, 18, 5);
+INSERT INTO requesttraining VALUES (43, 0, false, false, 23, 5);
+INSERT INTO requesttraining VALUES (44, 0, false, false, 1, 5);
+INSERT INTO requesttraining VALUES (62, 0, false, false, 1, 5);
+INSERT INTO requesttraining VALUES (64, 0, false, false, 1, 5);
+INSERT INTO requesttraining VALUES (66, 0, false, false, 1, 4);
+--
+-- Data for Name: trainingsession; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO trainingsession VALUES (9, 1, '2017-07-10 09:00:00', '2017-07-11 18:00:00', 'Salle Saint-Germain', 4);
+INSERT INTO trainingsession VALUES (7, 1, '2017-05-02 09:00:00', '2017-05-03 18:00:00', 'Salle de la Fontaine', 3);
+INSERT INTO trainingsession VALUES (20, 0, '2017-07-18 09:00:00', '2017-07-19 18:00:00', 'Salle Bora Bora', 5);
+INSERT INTO trainingsession VALUES (32, 0, '2017-05-09 09:00:00', '2017-05-10 18:00:00', 'Salle Bora Bora', 5);
+INSERT INTO trainingsession VALUES (38, 0, '2017-05-22 09:00:00', '2017-05-23 18:00:00', 'Salle de la Fontaine', 5);
+INSERT INTO trainingsession VALUES (52, 1, '2017-05-02 09:00:00', '2017-05-03 18:00:00', 'Salle Bali', 5);
+INSERT INTO trainingsession VALUES (63, 1, '2017-05-29 09:00:00', '2017-05-30 18:00:00', 'Salle Bora Bora', 5);
+--
+-- Data for Name: requesttraining_trainingsession; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO requesttraining_trainingsession VALUES (16, 7);
+INSERT INTO requesttraining_trainingsession VALUES (35, 20);
+INSERT INTO requesttraining_trainingsession VALUES (36, 20);
+INSERT INTO requesttraining_trainingsession VALUES (37, 20);
+INSERT INTO requesttraining_trainingsession VALUES (39, 20);
+INSERT INTO requesttraining_trainingsession VALUES (40, 20);
+INSERT INTO requesttraining_trainingsession VALUES (41, 20);
+INSERT INTO requesttraining_trainingsession VALUES (42, 20);
+INSERT INTO requesttraining_trainingsession VALUES (43, 20);
+INSERT INTO requesttraining_trainingsession VALUES (44, 38);
+INSERT INTO requesttraining_trainingsession VALUES (62, 52);
+INSERT INTO requesttraining_trainingsession VALUES (64, 63);
+INSERT INTO requesttraining_trainingsession VALUES (66, 9);
+--
+-- Data for Name: trainingsession_collaborator; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+INSERT INTO trainingsession_collaborator VALUES (9, 1);
+INSERT INTO trainingsession_collaborator VALUES (9, 11);
+INSERT INTO trainingsession_collaborator VALUES (7, 1);
+INSERT INTO trainingsession_collaborator VALUES (52, 1);
+INSERT INTO trainingsession_collaborator VALUES (63, 25);
+INSERT INTO trainingsession_collaborator VALUES (63, 18);
+INSERT INTO trainingsession_collaborator VALUES (63, 29);
+INSERT INTO trainingsession_collaborator VALUES (63, 33);
+INSERT INTO trainingsession_collaborator VALUES (63, 15);
+INSERT INTO trainingsession_collaborator VALUES (63, 14);
+INSERT INTO trainingsession_collaborator VALUES (63, 19);
+INSERT INTO trainingsession_collaborator VALUES (63, 1);
+INSERT INTO trainingsession_collaborator VALUES (63, 21);
+INSERT INTO trainingsession_collaborator VALUES (63, 34);
+INSERT INTO trainingsession_collaborator VALUES (63, 17);
