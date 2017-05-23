@@ -209,37 +209,39 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
-
             addFeedback(training){
-                if(this.score != '' && this.comment != ''){
+                if (this.score != '' && this.comment != '') {
                     this.feedback.training = training;
                     this.feedback.score = this.score;
                     this.feedback.comment = this.comment;
-                    this.$http.post("api/feedback/"+this.collaboratorIdentity.id,this.feedback).then(
-                        function (response) {
+                    this.$http.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback).then(
+                        function(response) {
                             console.log("success to add a feedback");
+                            this.collectAllTrainingsToGiveFeedbacks();
                         },
-                        function (response) {
+                        function(response) {
                             console.log("Error: ", response);
                             console.error(response);
                         }
                     );
                 }
             },
+            //nouvelle version
             collectAllTrainingsToGiveFeedbacks(){
-                var dateToday = new Date();
-                for(var tmp1 in this.requestedTrainingByCollaborator){ //pour chaque formation
-                    for(var tmp2 in this.requestedTrainingByCollaborator[tmp1].sessionsValidated){ //pour chaque session d'une formation
-                        if(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].ending < dateToday){
-                            this.allTrainingsToGiveFeedbacks.push(this.requestedTrainingByCollaborator[tmp1].sessionsValidated[tmp2].training);
-                            break;
-                        }
+                this.$http.get("api//trainingstogivefeedbacks/" + this.collaboratorIdentity.id).then(
+                    function(response) {
+                        console.log("success to get all trainings to give feedbacks");
+                        this.allTrainingsToGiveFeedbacks = response.data;
+                        this.allTrainingsToGiveFeedbacks.sort(function(a, b) {
+                            return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                        });
+                    },
+                    function(response) {
+                        console.log("Error: ", response);
+                        console.error(response);
                     }
-                }
-                this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
-                    return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
-                });
-            }
+                );
+            },
         }
     }
 );
