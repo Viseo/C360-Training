@@ -137,8 +137,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <br>
                     <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
+                    
                         <a id="box">{{numberOfWishesNotChecked}}</a>
                         <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Classements formations</span>
                     </div>
                     <div class="row ">
                         <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
