@@ -228,7 +228,7 @@ let stateRequest = Vue.component('state-request', {
             },
             //nouvelle version
             collectAllTrainingsToGiveFeedbacks(){
-                this.$http.get("api//trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
+                this.$http.get("api/trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
                     function (response) {
                         console.log("success to get all trainings to give feedbacks");
                         this.allTrainingsToGiveFeedbacks = response.data;

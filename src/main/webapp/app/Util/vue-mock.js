@@ -500,6 +500,26 @@ let routes = [
             }],
             "version":0
         }]
+    },
+    {
+        method: 'GET',
+        url: 'api/trainingscore',
+        response: [
+            [{"id":3,"version":0,"trainingTitle":"SXQSQCDS","numberHalfDays":2,"topic":{"id":2,"version":0,"name":"C"}},5.0],
+                [{"id":6,"version":0,"trainingTitle":"QCD","numberHalfDays":5,"topic":{"id":5,"version":0,"name":"CSD"}},3.0]
+            ]
+    },
+    {
+        method: 'GET',
+        url: 'api/trainingstogivefeedbacks/1',
+        response: [
+            {   "id":11,
+                "version":0,
+                "trainingTitle":"FORMATION",
+                "numberHalfDays":3,
+                "topic":{"id":10,"version":0,"name":"JAVA"}
+            }
+        ]
     }
 
 ];

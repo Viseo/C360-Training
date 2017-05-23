@@ -8,6 +8,9 @@ public class TrainingScore extends BaseDTO {
 
     Training training;
 
+    public TrainingScore() {
+    }
+
     public double getScore() {
         return score;
     }

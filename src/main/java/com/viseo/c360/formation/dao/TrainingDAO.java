@@ -72,6 +72,7 @@ public class TrainingDAO {
     @Transactional
     public List<TrainingScore> getTrainingsScore(){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
+        List<TrainingScore> trainingscores = new ArrayList<>();
         return daoFacade.getList("select t,avg(f.score) from Feedback f join f.training t group by t");
     }
 
