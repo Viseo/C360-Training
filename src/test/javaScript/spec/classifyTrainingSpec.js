@@ -44,19 +44,7 @@ fdescribe('classify training test', function () {
     });
 
     it('it should collect all training with', function (done) {
-        var response = [
-            {
-                "id":3,
-                "numberHalfDays":2,
-                "topic":{
-                    "id":2,
-                    "name":"WEB",
-                    "version":0,
-                },
-                "trainingTitle":"PHP",
-                "version":0,
-            }
-        ];
+        var response = [{"id":3,"version":0,"trainingTitle":"SXQSQCDS","numberHalfDays":2,"topic":{"id":2,"version":0,"name":"C"}},5.0];
         vmClassifyTraining.getTrainingsScore();
         setTimeout(function () {
             expect(vmClassifyTraining.allTrainingScore).toEqual(response);

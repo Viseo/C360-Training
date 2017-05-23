@@ -529,19 +529,8 @@ let routes = [
     {
         method: 'GET',
         url: 'api/trainingscore',
-        response: [
-            {
-                "id":3,
-                "numberHalfDays":2,
-                "topic":{
-                    "id":2,
-                    "name":"WEB",
-                    "version":0,
-                },
-                "trainingTitle":"PHP",
-                "version":0,
-            }
-        ]
+        response:
+            [{"id":3,"version":0,"trainingTitle":"SXQSQCDS","numberHalfDays":2,"topic":{"id":2,"version":0,"name":"C"}},5.0]
     }
 
 ];
