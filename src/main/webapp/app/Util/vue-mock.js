@@ -456,56 +456,58 @@ let routes = [
     {
         method: 'GET',
         url: 'api/listrequests/6/2',
-        response:[{
-            "collaboratorIdentity" : {
-                "email":"eric.dupont@viseo.com",
-                "firstName":"Eric",
-                "id":2,
-                "lastName":"Dupont",
-                "password":"123456",
-                "version":0
+        response: [{
+            "collaboratorIdentity": {
+                "email": "eric.dupont@viseo.com",
+                "firstName": "Eric",
+                "id": 2,
+                "lastName": "Dupont",
+                "password": "123456",
+                "version": 0
             },
-            "doesNotMatter":false,
-            "id":7,
-            "trainingDescription":{
-                "id":3,
-                "numberHalfDays":2,
-                "topicDescription":{
-                    "id":2,
-                    "name":"WEB",
-                    "version":0
+            "doesNotMatter": false,
+            "id": 7,
+            "trainingDescription": {
+                "id": 3,
+                "numberHalfDays": 2,
+                "topicDescription": {
+                    "id": 2,
+                    "name": "WEB",
+                    "version": 0
                 },
-                "trainingTitle":"PHP1",
-                "version":0
+                "trainingTitle": "PHP1",
+                "version": 0
             },
             "trainingSessionsDescriptions": [{
-                "beginning":"26/05/2017",
-                "beginningTime":"09:00",
-                "collaborators":[],
-                "ending":"26/05/2017",
-                "endingTime":"18:00",
-                "id":4,
-                "location":"Salle Bora Bora",
+                "beginning": "26/05/2017",
+                "beginningTime": "09:00",
+                "collaborators": [],
+                "ending": "26/05/2017",
+                "endingTime": "18:00",
+                "id": 4,
+                "location": "Salle Bora Bora",
                 "trainingDescription": {
-                    "id":3,
-                    "numberHalfDays":2,
-                    "topicDescription":{
-                        "id":2,
-                        "name":"WEB",
-                        "version":0
+                    "id": 3,
+                    "numberHalfDays": 2,
+                    "topicDescription": {
+                        "id": 2,
+                        "name": "WEB",
+                        "version": 0
                     },
-                    "trainingTitle":"PHP1",
-                    "version":0
+                    "trainingTitle": "PHP1",
+                    "version": 0
                 }
             }],
-            "version":0
+            "version": 0
         }]
+    },
     {
         method: 'GET',
         url: 'api/trainingscore',
         response:
             [{"id":3,"version":0,"trainingTitle":"SXQSQCDS","numberHalfDays":2,"topic":{"id":2,"version":0,"name":"C"}},5.0]
     },
+    {
         method: 'GET',
         url: 'api/trainingstogivefeedbacks/1',
         response: [
@@ -525,6 +527,31 @@ let routes = [
             "comment":"HELLO WORLD",
             "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
         }
+    },
+    {
+        method: 'GET',
+        url: 'api/feedbacks',
+        response: [
+            {
+                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
+                "comment":"HELLO WORLD",
+                "date":1495460297678,
+                "id":6,
+                "score":5,
+                "training":{
+                    "id":3,
+                    "numberHalfDays":2,
+                    "topic":{
+                        "id":2,
+                        "name":"WEB",
+                        "version":0,
+                    },
+                    "trainingTitle":"PHP",
+                    "version":0,
+                },
+                "version":0
+            }
+        ]
     }
 
 
