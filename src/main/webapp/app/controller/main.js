@@ -167,7 +167,7 @@ let Header = Vue.component('blue-header', {
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
-                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes') {
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && 'addSession' != this.getPageName()) {
                     this.goTo('addTrainingTopic');
                 }
             };
@@ -258,7 +258,6 @@ const router = new VueRouter({
                         <div class="col-sm-12 col-md-7 col-lg-7">
                             <add-formation-panel></add-formation-panel>
                             <show-formation-panel></show-formation-panel>
-                            <add-session-panel></add-session-panel>
                         </div>
                         <div class="col-sm-12 col-md-5 col-lg-5">
                             <assign-collaborator></assign-collaborator>
@@ -359,6 +358,24 @@ const router = new VueRouter({
             redirect: "/login"
         },
         {
+            path: "/addSession",
+            name: 'addSession',
+            component: {
+                template: `<div id="newVue" v-cloak>
+                            <blue-header title="Gestion des sessions"></blue-header>
+                            <div class="container-fluid">
+                                <div class="col-sm-12 col-md-7 col-lg-7">
+                                    <add-formation-panel></add-formation-panel>
+                                    <add-session-panel></add-session-panel>
+                                </div>
+                                <div class="col-sm-12 col-md-5 col-lg-5">
+                                    <assign-collaborator></assign-collaborator>
+                                </div>
+                            </div>
+                        </div>`
+            },
+        },
+        {
             path: "/profiltoupdate",
             name: 'profiltoupdate',
             component: {
@@ -372,6 +389,7 @@ const router = new VueRouter({
                            </div>`
             }
         },
+
     ]
 });
 
@@ -383,7 +401,9 @@ const PAGE_TITLE = {
     "addTrainingTopic": "Gestion des formations",
     "profiltoupdate" : "Modifier mon profil",
     "addTrainingTopic": "Gestion des formations",
-    "collectWishes": "Gestion des formations"
+    "collectWishes": "Gestion des formations",
+    "addSession":"Gestion des sessions"
+
 };
 
 const PAGE_FAVICON = {
@@ -393,7 +413,8 @@ const PAGE_FAVICON = {
     "WishToVote": "img/icon_formation.png",
     "addTrainingTopic": "img/icon_formation.png",
     "profiltoupdate" : "img/icon_accueil.png",
-    "collectWishes": "img/icon_formation.png"
+    "collectWishes": "img/icon_formation.png",
+    "addSession": "img/icon_formation.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {
