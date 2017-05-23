@@ -20,7 +20,7 @@ Vue.http.interceptors.unshift((request, next) => {
 });
 
 
-fdescribe('state Request training test', function () {
+describe('state Request training test', function () {
 
     beforeEach(function() {
         vmStateRequestTraining = new stateRequest().$mount();

@@ -43,11 +43,11 @@ module.exports = function (config) {
             'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/profilToUpdateSpec.js',
-
-        ],
             'src/test/javaScript/spec/stateRequestTrainingSpec.js',
 
-    ],
+        ],
+
+
 
 
         // list of files to exclude
