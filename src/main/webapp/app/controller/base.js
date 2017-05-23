@@ -4,27 +4,27 @@
 function BaseComponent(prototype) {
 
     var result = {
-        getPageName: function(){
+        getPageName: function () {
             return this.$route.name;
         },
 
-        goTo: function(pageName){
-            this.$router.push("/"+pageName);
+        goTo: function (pageName) {
+            this.$router.push("/" + pageName);
         },
 
-        post: function(url,data,success){
+        post: function (url, data, success) {
             this.$http.post(url, data)
                 .then(success);
         },
 
-        activateScrollUp: function(idChevronUp, idComponentToScroll){
-            $(idChevronUp).click(function() {
+        activateScrollUp: function (idChevronUp, idComponentToScroll) {
+            $(idChevronUp).click(function () {
                 $(idComponentToScroll).animate({scrollTop: "-=100"}, 500);
             });
         },
 
-        activeScrollDown: function(idChevronDown, idComponentToScroll){
-            $(idChevronDown).click(function() {
+        activeScrollDown: function (idChevronDown, idComponentToScroll) {
+            $(idChevronDown).click(function () {
                 $(idComponentToScroll).animate({scrollTop: "+=100"}, 500);
             })
         },
@@ -37,8 +37,9 @@ function BaseComponent(prototype) {
                 this.errorMessageLastName = 'Veuillez entrer un nom valide';
                 this.isLastNameValid = false;
             }
-        },
-    };
+        }
+    }
+
     result.__proto__ = prototype;
     return result;
 
