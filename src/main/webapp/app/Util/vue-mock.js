@@ -520,7 +520,16 @@ let routes = [
                 "topic":{"id":10,"version":0,"name":"JAVA"}
             }
         ]
-    }
+    },
+    {
+        method: 'POST',
+        url: 'api/feedback/1',
+        response: {
+            "score":5,
+            "comment":"HELLO WORLD",
+            "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
+        }
+    },
 
 ];
 

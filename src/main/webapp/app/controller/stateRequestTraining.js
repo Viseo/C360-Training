@@ -146,8 +146,8 @@ let stateRequest = Vue.component('state-request', {
         this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
         this.activateScrollWheel('#scrollMyTrainings');
         this.getCookies();
-        this.fetchTrainingsSessions();
-        this.collectAllTrainingsToGiveFeedbacks();
+        //this.fetchTrainingsSessions();
+        //this.collectAllTrainingsToGiveFeedbacks();
     },
 
         methods: {
