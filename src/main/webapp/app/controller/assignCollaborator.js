@@ -130,11 +130,18 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
                         </button>
                     </div>
-                    <br>
-                    <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
-                        <a id="box">{{numberOfWishesNotChecked}}</a>
-                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
-                    </div>
+                    </br>
+                    <div class="row">
+                    
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <a id="box">{{numberOfWishesNotChecked}}</a>
+                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        </center>
+                        
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <span class="glyphicon glyphicon-star" style="font-size:150%;"></span><span>Classement des formations</span>
+                        </center>
+                       </div>
                     <div class="row ">
                         <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
                         <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
