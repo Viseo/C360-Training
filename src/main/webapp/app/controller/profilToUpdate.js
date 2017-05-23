@@ -566,7 +566,19 @@ let profilToUpdate = Vue.component('profil-to-update', {
             });
         },
 
+        saveUpdateCollaborator(){
+            let saveModification = (response) => {
+                if (response) {
+                    console.log("success to update user information");
+                    this.imageHasBeenChanged = false;
+                    this.$router.go(this.$router.currentRoute);
+                }
+            };
+            this.put("api/updatecollaborator", this.CollabToUpdate, saveModification);
+        },
+
         updateCollaboratorInfo(){
+
             this.isFirstNameEmpty();
             this.isLastNameEmpty();
             this.isEmailEmpty();
@@ -586,17 +598,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         this.CollabToUpdate.password = this.newPassword;
                         if (this.imageHasBeenChanged === true) {
                             this.updateCollaboratorImage();
-                        }
-                        this.$http.put("api/updatecollaborator", this.CollabToUpdate).then(
-                            function (response) {
-                                console.log("success to update user information");
-                                this.imageHasBeenChanged = false;
-                                this.$router.go(this.$router.currentRoute);
-                            },
-                            function (response) {
-                                console.log("Error: ", response);
-                                console.error(response);
-                            });
+                        };
+                        this.saveUpdateCollaborator();
                     }
                 } else {
                     this.isRightOldPassword = false;
