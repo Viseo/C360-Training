@@ -20,7 +20,7 @@ let routes = [
                 "numberHalfDays": 1,
                 "topicDescription": {"id": 3, "version": 0, "name": "C"}
             }
-        ],
+        ]
     },
     {
         method: 'GET',
@@ -237,7 +237,6 @@ let routes = [
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }
-
     },
     {
         method: 'PUT',
@@ -308,7 +307,7 @@ let routes = [
             "beginningTime": "09:00",
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
-        }],
+        }]
     },
     {
         method: 'GET',
@@ -480,6 +479,30 @@ let routes = [
             }],
             "version":0
         }]
+    },
+    {
+        method: 'GET',
+        url: 'api/getcollaborator/1',
+        response: [
+            {
+                "email":"eric.dupont@viseo.com",
+                "admin":false,
+                "businessUnit":null,
+                "firstName":"Eric",
+                "function":null,
+                "id":1,
+                "isAdmin":false,
+                "lastName":"DUPONT",
+                "password":"123456",
+                "personnalIdNumber":"AAB1234",
+                "version":0
+            }
+        ]
+    },
+    {
+        method: 'PUT',
+        url: 'api/updatecollaborator',
+        response: []
     },
 
     {

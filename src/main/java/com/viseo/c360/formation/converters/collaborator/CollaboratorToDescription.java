@@ -23,6 +23,8 @@ public class CollaboratorToDescription {
         dto.setEmail(source.getEmail());
         dto.setPassword(source.getPassword());
         dto.setIsAdmin(source.getIsAdmin());
+        dto.setFunction(source.getFunction());
+        dto.setBusinessUnit(source.getBusinessUnit());
         return dto;
     }
 

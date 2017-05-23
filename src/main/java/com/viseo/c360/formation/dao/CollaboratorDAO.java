@@ -112,6 +112,13 @@ public class CollaboratorDAO {
         return collaborator;
     }
 
+    @Transactional
+    public Collaborator updateCollaborator(Collaborator collaborator) throws PersistenceException {
+        collaborator = daoFacade.merge(collaborator);
+        daoFacade.flush();
+        return collaborator;
+    }
+
     public Collaborator getCollaboratorByLoginPassword(String personnalEmail,String personnalPassword){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         Collaborator registredUser =
@@ -127,6 +134,15 @@ public class CollaboratorDAO {
                 (Collaborator) daoFacade.getSingle(
                         "select c from Collaborator c where c.email = :personnalEmail",
                         param("personnalEmail",personnalEmail));
+        return registredUser;
+    }
+
+    public Collaborator getCollaboratorById(Long collab_id){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        Collaborator registredUser =
+                (Collaborator) daoFacade.getSingle(
+                        "select c from Collaborator c where c.id = :id",
+                        param("id",collab_id));
         return registredUser;
     }
 

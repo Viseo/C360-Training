@@ -47,8 +47,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             collaboratorAlreadyVotedTheSameVote:false,
             collaboratorAlreadyVotedTheOppositeVote:false,
             wish_id:'',
-            changePageToTraining:false
-
+            changePageToTraining:false,
         }
     },
 

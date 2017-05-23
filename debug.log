@@ -1,0 +1,3 @@
+[0420/163848.493:ERROR:process_reader_win.cc(142)] SuspendThread: Accès refusé. (0x5)
+[0420/163848.493:ERROR:exception_snapshot_win.cc(87)] thread ID 6580 not found in process
+[0420/163848.493:WARNING:crash_report_exception_handler.cc(60)] ProcessSnapshotWin::Initialize failed

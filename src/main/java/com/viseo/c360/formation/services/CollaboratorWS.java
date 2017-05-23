@@ -1,5 +1,8 @@
 package com.viseo.c360.formation.services;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +48,7 @@ import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -278,11 +282,35 @@ public class CollaboratorWS {
         }
     }
 
+    @RequestMapping(value = "${endpoint.updatecollaborator}", method = RequestMethod.PUT)
+    @ResponseBody
+    public CollaboratorDescription updateCollaborator(@RequestBody CollaboratorDescription collaborator) {
+        try {
+            Collaborator collaboratorToUpdate = collaboratorDAO.updateCollaborator(new DescriptionToCollaborator().convert(collaborator));
+            return new CollaboratorToDescription().convert(collaboratorToUpdate);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if(uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
+        }
+    }
+
     @RequestMapping(value = "${endpoint.collaborators}", method = RequestMethod.GET)
     @ResponseBody
     public List<CollaboratorIdentity> getAllCollaborators() {
         try {
             return new CollaboratorToIdentity().convert(collaboratorDAO.getAllCollaborators());
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.collaboratorbyid}", method = RequestMethod.GET)
+    @ResponseBody
+    public CollaboratorDescription getCollaboratorById(@PathVariable Long collab_id) {
+        try {
+            return new CollaboratorToDescription().convert(collaboratorDAO.getCollaboratorById(collab_id));
         } catch (ConversionException e) {
             e.printStackTrace();
             throw new C360Exception(e);
@@ -390,6 +418,28 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
+
+//    //Save collaborator image
+//    @RequestMapping(value = "${endpoint.updatecollaboratorpicture}", method = RequestMethod.POST)
+//    @ResponseBody
+//    public void FileUploadService(@PathVariable FilecollaboratorImage) {
+//        String name ="blabla";
+//        if(!collaboratorImage){
+//            try{
+//                byte[] bytes = collaboratorImage.getBytes();
+//                BufferedOutputStream stream =
+//                        new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+//                stream.write(bytes);
+//                stream.close();
+//
+//            } catch (Exception e) {
+//            }
+//        } else {
+//
+//        }
+//
+//        }
+
 
 
 }
