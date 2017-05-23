@@ -72,7 +72,15 @@ public class TrainingDAO {
     @Transactional
     public List<TrainingScore> getTrainingsScore(){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
+        List<TrainingScore> trainingscores = new ArrayList<>();
         return daoFacade.getList("select t,avg(f.score) from Feedback f join f.training t group by t");
+    }
+
+    @Transactional
+    public List<Training> getTrainingsToGiveFeedbacks(Collaborator collaborator){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("SELECT DISTINCT ts.training FROM TrainingSession ts JOIN ts.collaborators tsc WHERE :collaborator IN tsc AND ts.training NOT IN (SELECT f.training FROM Feedback f WHERE f.collaborator = :collaborator)",
+                param("collaborator", collaborator));
     }
 
 

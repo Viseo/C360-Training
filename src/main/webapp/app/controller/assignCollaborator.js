@@ -35,11 +35,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 
             //feedback
             //training dans feedback est sous la forme training au lieu de trianingdescription
-            feedback:{
-                "score":5,
-                "comment":"HELLO WORLD",
-                "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
-            },
             allFeedbacks:[],
             allTrainingScore:[]
         }
@@ -135,13 +130,18 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
                         </button>
                     </div>
-                    <br>
-                    <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
+                    </br>
+                    <div class="row">
                     
-                        <a id="box">{{numberOfWishesNotChecked}}</a>
-                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
-                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Classements formations</span>
-                    </div>
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <a id="box">{{numberOfWishesNotChecked}}</a>
+                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        </center>
+                        
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <span class="glyphicon glyphicon-star" style="font-size:150%;"></span><span>Classement des formations</span>
+                        </center>
+                       </div>
                     <div class="row ">
                         <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
                         <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
@@ -402,6 +402,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 }
             );
         },
+
         getAllFeedbacks(){
             this.$http.get("api/feedbacks").then(
                 function (response) {
@@ -415,11 +416,26 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 }
             );
         },
+
+        //fonction pour classer les formations
         getTrainingsScore(){
             this.$http.get("api/trainingscore").then(
                 function (response) {
                     console.log("success to get all training score");
                     this.allTrainingScore = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        getAllTrainingsToGiveFeedbacks(){
+            this.$http.get("api/givefeedbacks").then(
+                function (response) {
+                    console.log("success to get all trainings to give feedbacks");
+                    this.allTrainingsToGiveFeedbacks = response.data;
                 },
                 function (response) {
                     console.log("Error: ", response);
