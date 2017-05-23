@@ -34,9 +34,10 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 </div>
             </div>
             <div class="panel-body">
-                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
+                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-10 col-lg-offset-1 col-md-offset-1"> 
                     <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6"> 
+
                             <!-- PRENOM -->
                             <customInput
                                     label="prenom"
@@ -53,7 +54,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :errorMessage="errorMessageFirstName">
                             </customInput>
                         </div>
-                        <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-6 col-md-6"> 
+
                             <!-- FONCTION -->
                             <customInput
                                     label="fonction"
@@ -68,7 +70,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6"> 
                             <!-- NOM -->
                             <customInput
                                     label="nom"
@@ -85,7 +87,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :errorMessage="errorMessageLastName">
                             </customInput>
                         </div>
-                        <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-6 col-md-6 "> 
                             <!-- BUSINESS UNIT -->
                             <table style="border-spacing: 0px">
                                 <div class="form-group has-feedback">
@@ -120,9 +122,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 </span>
             </div>
             <div class="panel-body">
-                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
+                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-3">
                     <div class="row">
-                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
                             <!-- MOT DE PASSE -->
                             <customPasswordInput
                                     label="ancienmdp"
@@ -139,7 +141,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :isNotValid="isNotValidOldPassword">
                             </customPasswordInput>
                         </div>
-                        <div class="col-lg-6 col-lg-offset-1 col-md-offset-0">
+                        <div class="col-lg-6 col-lg-offset-1 col-md-12"> 
                             <!-- EMAIL-->
                             <customInput
                                     label="email"
@@ -158,7 +160,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
                             <!-- NOUVEAU MOT DE PASSE -->
                             <customPasswordInput
                                     label="nouveaumdp"
@@ -183,7 +185,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
                             <!-- CONFIRMATION MOT DE PASSE -->
                             <customPasswordInput
                                     label="mdpc"
@@ -213,11 +215,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
         </div>
     </div>
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                        <div class="col-xs-6 col-xm-6 col-md-6 cold-lg-6 col-lg-offset-6 col-md-offset-6">
+                    <div class="col-lg-5 col-lg-offset-1 col-md-3 col-md-offset-3 col-sm-6 col-xs-6">
                             <button type="submit"
                                     name="register-submit"
                                     id="register-submit"
@@ -225,23 +225,19 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     class="form-control btn btn-primary">
                                 Enregistrer
                             </button>
-                        </div>
                     </div>
-                    <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
-                        <div class="col-xs-6 col-xm-6 col-md-6 cold-lg-6 ">
+                    <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3">
                             <button @click="goTo('registerTrainingCollaborator')"
                                     name="cancel-submit"
                                     id="cancel-submit"
                                     tabindex="4"
                                     class="form-control btn btn-primary">Annuler
                             </button>
-                        </div>
                     </div>
                     <br><br>
                 </div>
             </div>
         </div>
-    </div>
 </form>
 `,
 
