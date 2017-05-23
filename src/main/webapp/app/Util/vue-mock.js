@@ -504,6 +504,71 @@ let routes = [
         url: 'api/updatecollaborator',
         response:[]
     },
+    {
+        method: 'GET',
+        url: 'api/sessions/6/requestedSessions',
+        response:[
+            {
+                    "requestTrainingList":[
+                        {
+                            "id":13,
+                            "version":0,
+                            "training":{
+                                "id":4,
+                                "version":0,
+                                "trainingTitle":"SPRING",
+                                "numberHalfDays":3,
+                                "topic":{
+                                    "id":3,
+                                    "version":0,
+                                    "name":"JAVA"
+                                }
+                            },
+                            "beginning":1496041200000,
+                            "ending":1496160000000,
+                            "location":"Salle Bora Bora",
+                            "collaborators":[
+
+                            ]
+                        }
+                    ],
+                    "trainingSessions":[
+                        {
+                            "id":11,
+                            "version":1,
+                            "training":{
+                                "id":4,
+                                "version":0,
+                                "trainingTitle":"SPRING",
+                                "numberHalfDays":3,
+                                "topic":{
+                                    "id":3,
+                                    "version":0,
+                                    "name":"JAVA"
+                                }
+                            },
+                            "beginning":1494831600000,
+                            "ending":1494950400000,
+                            "location":"Salle Bali",
+                            "collaborators":[
+                                {
+                                    "id":6,
+                                    "version":0,
+                                    "personnalIdNumber":"AAA1234",
+                                    "lastName":"AAA",
+                                    "firstName":"AAA",
+                                    "email":"aa@aa.com",
+                                    "password":"123456",
+                                    "isAdmin":false
+                                }
+                            ]
+                        }
+                    ]
+
+            }
+        ]
+    },
+
 
     {
         method: 'POST',

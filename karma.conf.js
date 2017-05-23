@@ -15,7 +15,6 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-
             'src/main/webapp/lib/jquery.min.js',
             'src/main/webapp/lib/vue.js',
             'src/main/webapp/lib/vue-strap.js',
@@ -33,6 +32,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/wishToVote.js',
             'src/main/webapp/app/controller/collectWishes.js',
             'src/main/webapp/app/controller/profilToUpdate.js',
+            'src/main/webapp/app/controller/stateRequestTraining.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
@@ -45,6 +45,9 @@ module.exports = function (config) {
             'src/test/javaScript/spec/profilToUpdateSpec.js',
 
         ],
+            'src/test/javaScript/spec/stateRequestTrainingSpec.js',
+
+    ],
 
 
         // list of files to exclude
