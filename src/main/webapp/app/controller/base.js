@@ -60,10 +60,8 @@ function BaseComponent(prototype) {
                 this.isLastNameValid = false;
             }
         }
-    }
-
-
     };
+
     result.__proto__ = prototype;
     return result;
 

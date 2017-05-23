@@ -381,7 +381,7 @@ const PAGE_TITLE = {
     "registerTrainingCollaborator": "Gestion des formations",
     "WishToVote": "Gestion des formations",
     "addTrainingTopic": "Gestion des formations",
-    "profiltoupdate" : "Modifier mon profil"
+    "profiltoupdate" : "Modifier mon profil",
     "addTrainingTopic": "Gestion des formations",
     "collectWishes": "Gestion des formations"
 };
@@ -392,8 +392,7 @@ const PAGE_FAVICON = {
     "registerTrainingCollaborator": "img/icon_formation.png",
     "WishToVote": "img/icon_formation.png",
     "addTrainingTopic": "img/icon_formation.png",
-    "profiltoupdate" : "img/icon_accueil.png"
-    "addTrainingTopic": "img/icon_formation.png",
+    "profiltoupdate" : "img/icon_accueil.png",
     "collectWishes": "img/icon_formation.png"
 };
 

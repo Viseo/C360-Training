@@ -40,7 +40,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/assignCollaboratorSpec.js',
             'src/test/javaScript/spec/trainingToComeSpec.js',
             'src/test/javaScript/spec/collectWishesSpec.js',
-            'src/test/javaScript/spec/wishToVoteSpec.js'
+            'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/profilToUpdateSpec.js',
 
