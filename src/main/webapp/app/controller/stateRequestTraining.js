@@ -226,7 +226,6 @@ let stateRequest = Vue.component('state-request', {
                     );
                 }
             },
-            //nouvelle version
             collectAllTrainingsToGiveFeedbacks(){
                 this.$http.get("api/trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
                     function (response) {
