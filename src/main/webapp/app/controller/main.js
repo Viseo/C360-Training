@@ -184,7 +184,7 @@ let Header = Vue.component('header-component', {
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
-                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() !='trainingRanking' && 'addSession' != this.getPageName()) {
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() !='trainingRanking' && this.getPageName() != 'addSession' ) {
                     this.goTo('addTrainingTopic');
                 }
             };
