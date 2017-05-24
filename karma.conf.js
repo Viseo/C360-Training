@@ -34,7 +34,6 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/profilToUpdate.js',
             'src/main/webapp/app/controller/stateRequestTraining.js',
             'src/main/webapp/app/controller/classifyTraining.js',
-            'src/main/webapp/app/controller/stateRequestTraining.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',
@@ -45,9 +44,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/classifyTrainingSpec.js',
             'src/test/javaScript/spec/stateRequestTrainingSpec.js',
-            'src/test/javaScript/spec/wishToVoteSpec.js',
             'src/test/javaScript/spec/profilToUpdateSpec.js',
-            'src/test/javaScript/spec/stateRequestTrainingSpec.js',
 
         ],
 

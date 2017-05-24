@@ -31,10 +31,10 @@ let Header = Vue.component('header-component', {
                                         <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
                                         <ul id="dropdown-app" class="dropdown-menu">
                                             <li>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a href="http://localhost:8081/#/skillsStatementByCollaborators" @click="hrefSkills"> <img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" href="#"  class="text-center icon-app"><p>GCon</p></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a href="http://localhost:8081/#/registerTrainingCollaborator" @click="hrefTrainings"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" href="#"  class="text-center icon-app"><p>GM</p></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a @click="goTo('skillsStatementByCollaborators')"> <img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" class="text-center icon-app"><p>GCon</p></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" class="text-center icon-app"><p>GM</p></span>
                                             </li>
                                         </ul>
                                     </li> 
@@ -234,12 +234,6 @@ let Header = Vue.component('header-component', {
                 redirectToLoginPage();
             }
         },
-        hrefSkills:function(){
-          console.log();
-        },
-        hrefTrainings:function(){
-            console.log();
-        },
 
         disconnectUser(){
             let disconnect = (response) => {
@@ -436,8 +430,8 @@ const PAGE_TITLE = {
     "addTrainingTopic": "Gestion des formations",
     "profiltoupdate" : "Modifier mon profil",
     "collectWishes": "Gestion des formations",
-    "skillsStatementByCollaborators": "Gestion des compétences"
-
+    "skillsStatementByCollaborators": "Gestion des compétences",
+    "trainingRanking" : "Gestion des formations"
 };
 
 const PAGE_FAVICON = {
@@ -447,7 +441,8 @@ const PAGE_FAVICON = {
     "WishToVote": "img/icon_formation.png",
     "addTrainingTopic": "img/icon_formation.png",
     "profiltoupdate" : "img/icon_accueil.png",
-    "collectWishes": "img/icon_formation.png"
+    "collectWishes": "img/icon_formation.png",
+    "trainingRanking": "img/icon_formation.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {

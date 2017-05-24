@@ -135,7 +135,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         </center>
                         
                         <center class="row col-sm-6 col-md-6 col-lg-6 ">
-                            <span class="glyphicon glyphicon-star" style="font-size:150%;"></span><span>Classement des formations</span>
+                            <span @click="goTo('trainingRanking')" class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;" @click="goTo('trainingRanking')">Classement des formations</span>
                         </center>
                        </div>
                     <div class="row ">

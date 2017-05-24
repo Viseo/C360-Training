@@ -105,12 +105,5 @@ describe('Header test', function () {
         },0);
 
     });
-    it('should check hrefSkills', function () {
-        headerComponent.hrefSkills();
-    });
-    it('should check hrefTrainings', function () {
-        headerComponent.hrefTrainings();
-    })
-
 
 });

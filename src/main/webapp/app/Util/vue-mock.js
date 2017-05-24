@@ -92,7 +92,7 @@ let routes = [
                 "location": "Salle Bali"
             }
         ]
-    },{
+    }, {
         method: 'GET',
         url: 'api/formations/6/sessions',
         response: []
@@ -173,7 +173,7 @@ let routes = [
     {
         method: 'POST',
         url: 'api/requests',
-        response: {status:"ok"}
+        response: {status: "ok"}
     },
     {
         method: 'GET',
@@ -293,7 +293,7 @@ let routes = [
     {
         method: 'GET',
         url: 'api/sessions',
-        response : [{
+        response: [{
             "id": 6,
             "version": 0,
             "trainingDescription": {
@@ -342,11 +342,12 @@ let routes = [
         method: 'GET',
         url: 'api/formations/sessions',
         response: [
-            {   "id":3,
-                "version":0,
-                "trainingTitle":"SWIFT",
-                "numberHalfDays":4,
-                "topicDescription":{"id":1,"version":0,"name":"MOBILE"}
+            {
+                "id": 3,
+                "version": 0,
+                "trainingTitle": "SWIFT",
+                "numberHalfDays": 4,
+                "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
             }
         ]
     },
@@ -354,14 +355,39 @@ let routes = [
         method: 'GET',
         url: 'api/formations/sessions/collaborators',
         response: [
-            {   "id":4,
-                "version":0,
-                "trainingDescription":
-                    {"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":
-                        {"id":1,"version":0,"name":"MOBILE"}
-                    },"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},
-            {"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},
-                "beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]
+            {
+                "id": 4,
+                "version": 0,
+                "trainingDescription": {
+                    "id": 3,
+                    "version": 0,
+                    "trainingTitle": "SWIFT",
+                    "numberHalfDays": 4,
+                    "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
+                },
+                "beginning": "19/05/2017",
+                "ending": "21/05/2017",
+                "beginningTime": "09:00",
+                "endingTime": "18:00",
+                "location": "Salle Bora Bora",
+                "collaborators": []
+            },
+            {
+                "id": 5,
+                "version": 0,
+                "trainingDescription": {
+                    "id": 3,
+                    "version": 0,
+                    "trainingTitle": "SWIFT",
+                    "numberHalfDays": 4,
+                    "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
+                },
+                "beginning": "26/05/2017",
+                "ending": "28/05/2017",
+                "beginningTime": "09:00",
+                "endingTime": "18:00",
+                "location": "Salle Bastille",
+                "collaborators": []
             }
         ]
     },
@@ -369,8 +395,42 @@ let routes = [
         method: 'GET',
         url: 'api/wish/1',
         response: [
-            {"id":10, "version":0,"label":"SSS","collaborator":{"id":5,"version":0,"personnalIdNumber":"BBB1234","lastName":"nrjek","firstName":"rnrejk","email":"mxzsdef@163.com","password":"123456","isAdmin":false},"vote_ok":null,"vote_ko":null,"checked":false},
-            {"id":11,"version":0,"label":"SSSFFF","collaborator":{"id":5,"version":0,"personnalIdNumber":"BBB1234","lastName":"nrjek","firstName":"rnrejk","email":"mxzsdef@163.com","password":"123456","isAdmin":false},"vote_ok":null,"vote_ko":null,"checked":true}
+            {
+                "id": 10,
+                "version": 0,
+                "label": "SSS",
+                "collaborator": {
+                    "id": 5,
+                    "version": 0,
+                    "personnalIdNumber": "BBB1234",
+                    "lastName": "nrjek",
+                    "firstName": "rnrejk",
+                    "email": "mxzsdef@163.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": null,
+                "vote_ko": null,
+                "checked": false
+            },
+            {
+                "id": 11,
+                "version": 0,
+                "label": "SSSFFF",
+                "collaborator": {
+                    "id": 5,
+                    "version": 0,
+                    "personnalIdNumber": "BBB1234",
+                    "lastName": "nrjek",
+                    "firstName": "rnrejk",
+                    "email": "mxzsdef@163.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": null,
+                "vote_ko": null,
+                "checked": true
+            }
         ]
     },
     {
@@ -389,68 +449,188 @@ let routes = [
         method: 'GET',
         url: 'api/allwishes',
         response: [
-            {   "id":2,
-                "version":5,
-                "label":"SSC",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "vote_ko":[],
-                "checked":false},
-            {   "id":3,
-                "version":4,
-                "label":"SSCAAS",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "vote_ko":[],
-                "checked":false}
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "vote_ko": [],
+                "checked": false
+            },
+            {
+                "id": 3,
+                "version": 4,
+                "label": "SSCAAS",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "vote_ko": [],
+                "checked": false
+            }
         ]
     },
     {
         method: 'PUT',
         url: 'api/okwishtoupdate/1',
-        response: [{   "id":2,
-            "version":5,
-            "label":"SSC",
-            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-            "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-            "vote_ko":[],
-            "checked":false}]
+        response: [{
+            "id": 2,
+            "version": 5,
+            "label": "SSC",
+            "collaborator": {
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            },
+            "vote_ok": [{
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            }],
+            "vote_ko": [],
+            "checked": false
+        }]
     },
     {
         method: 'PUT',
         url: 'api/kowishtochange/1',
-        response: {   "id":2,
-            "version":5,
-            "label":"SSC",
-            "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-            "vote_ok":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-            "vote_ko":[],
-            "checked":false}
+        response: {
+            "id": 2,
+            "version": 5,
+            "label": "SSC",
+            "collaborator": {
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            },
+            "vote_ok": [{
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            }],
+            "vote_ko": [],
+            "checked": false
+        }
     },
     {
         method: 'PUT',
         url: 'api/kowishtoupdate/1',
         response: [
-            {   "id":2,
-                "version":5,
-                "label":"SSC",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[],
-                "vote_ko":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "checked":false}
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "checked": false
+            }
         ]
     },
     {
         method: 'PUT',
         url: 'api/okwishtochange/1',
         response: [
-            {   "id":2,
-                "version":5,
-                "label":"SSC",
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "vote_ok":[],
-                "vote_ko":[{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false}],
-                "checked":false}
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "checked": false
+            }
         ]
     },
     {
@@ -506,65 +686,108 @@ let routes = [
         url: 'api/getcollaborator/1',
         response: [
             {
-                "email":"eric.dupont@viseo.com",
-                "admin":false,
-                "businessUnit":null,
-                "firstName":"Eric",
-                "function":null,
-                "id":1,
-                "isAdmin":false,
-                "lastName":"DUPONT",
-                "password":"123456",
-                "personnalIdNumber":"AAB1234",
-                "version":0
+                "email": "eric.dupont@viseo.com",
+                "admin": false,
+                "businessUnit": null,
+                "firstName": "Eric",
+                "function": null,
+                "id": 1,
+                "isAdmin": false,
+                "lastName": "DUPONT",
+                "password": "123456",
+                "personnalIdNumber": "AAB1234",
+                "version": 0
             }
         ]
     },
     {
         method: 'PUT',
         url: 'api/updatecollaborator',
-        response:[]
+        response: []
     },
     {
         method: 'GET',
         url: 'api/sessions/6/requestedSessions',
-        response:[
+        response: [
             {
-                    "requestTrainingList":[
-                        {
-                            "id":13,
-                            "version":0,
-                            "training":{
-                                "id":4,
-                                "version":0,
-                                "trainingTitle":"SPRING",
-                                "numberHalfDays":3,
-                                "topic":{
-                                    "id":3,
-                                    "version":0,
-                                    "name":"JAVA"
-                                }
-                            },
-                            "beginning":1496041200000,
-                            "ending":1496160000000,
-                            "location":"Salle Bora Bora",
-                            "collaborators":[
+                "requestTrainingList": [
+                    {
+                        "id": 13,
+                        "version": 0,
+                        "training": {
+                            "id": 4,
+                            "version": 0,
+                            "trainingTitle": "SPRING",
+                            "numberHalfDays": 3,
+                            "topic": {
+                                "id": 3,
+                                "version": 0,
+                                "name": "JAVA"
+                            }
+                        },
+                        "beginning": 1496041200000,
+                        "ending": 1496160000000,
+                        "location": "Salle Bora Bora",
+                        "collaborators": []
+                    }
+                ],
+                "trainingSessions": [
+                    {
+                        "id": 11,
+                        "version": 1,
+                        "training": {
+                            "id": 4,
+                            "version": 0,
+                            "trainingTitle": "SPRING",
+                            "numberHalfDays": 3,
+                            "topic": {
+                                "id": 3,
+                                "version": 0,
+                                "name": "JAVA"
+                            }
+                        },
+                        "beginning": 1494831600000,
+                        "ending": 1494950400000,
+                        "location": "Salle Bali",
+                        "collaborators": [
+                            {
+                                "id": 6,
+                                "version": 0,
+                                "personnalIdNumber": "AAA1234",
+                                "lastName": "AAA",
+                                "firstName": "AAA",
+                                "email": "aa@aa.com",
+                                "password": "123456",
+                                "isAdmin": false
+                            }
+                        ]
+                    }
+                ]
+
+            }
+        ]
     },
     {
         method: 'GET',
         url: 'api/trainingscore',
-        response:
-            [{"id":3,"version":0,"trainingTitle":"SXQSQCDS","numberHalfDays":2,"topic":{"id":2,"version":0,"name":"C"}},5.0]
+        response: [{
+            "id": 3,
+            "version": 0,
+            "trainingTitle": "SXQSQCDS",
+            "numberHalfDays": 2,
+            "topic": {"id": 2, "version": 0, "name": "C"}
+        }, 5.0]
     },
     {
         method: 'GET',
         url: 'api/trainingstogivefeedbacks/1',
         response: [
-            {   "id":11,
-                "version":0,
-                "trainingTitle":"FORMATION",
-                "numberHalfDays":3,
-                "topic":{"id":10,"version":0,"name":"JAVA"}
+            {
+                "id": 11,
+                "version": 0,
+                "trainingTitle": "FORMATION",
+                "numberHalfDays": 3,
+                "topic": {"id": 10, "version": 0, "name": "JAVA"}
             }
         ]
     },
@@ -572,9 +795,15 @@ let routes = [
         method: 'POST',
         url: 'api/feedback/1',
         response: {
-            "score":5,
-            "comment":"HELLO WORLD",
-            "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
+            "score": 5,
+            "comment": "HELLO WORLD",
+            "training": {
+                "id": 3,
+                "version": 0,
+                "trainingTitle": "FORMATION",
+                "numberHalfDays": 3,
+                "topic": {"id": 2, "version": 0, "name": "C"}
+            }
         }
     },
     {
@@ -582,64 +811,32 @@ let routes = [
         url: 'api/feedbacks',
         response: [
             {
-                "collaborator":{"id":1,"version":0,"personnalIdNumber":"AAA1234","lastName":"nckjzn","firstName":"ncdxkzn","email":"xiangzhe.meng@outlook.com","password":"123456","isAdmin":false},
-                "comment":"HELLO WORLD",
-                "date":1495460297678,
-                "id":6,
-                "score":5,
-                "training":{
-                    "id":3,
-                    "numberHalfDays":2,
-                    "topic":{
-                        "id":2,
-                        "name":"WEB",
-                        "version":0,
-                    },
-                    "trainingTitle":"PHP",
-                    "version":0,
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
                 },
-                "version":0
-            }
-        ]
-    }
-
-
-                            ]
-                        }
-                    ],
-                    "trainingSessions":[
-                        {
-                            "id":11,
-                            "version":1,
-                            "training":{
-                                "id":4,
-                                "version":0,
-                                "trainingTitle":"SPRING",
-                                "numberHalfDays":3,
-                                "topic":{
-                                    "id":3,
-                                    "version":0,
-                                    "name":"JAVA"
-                                }
-                            },
-                            "beginning":1494831600000,
-                            "ending":1494950400000,
-                            "location":"Salle Bali",
-                            "collaborators":[
-                                {
-                                    "id":6,
-                                    "version":0,
-                                    "personnalIdNumber":"AAA1234",
-                                    "lastName":"AAA",
-                                    "firstName":"AAA",
-                                    "email":"aa@aa.com",
-                                    "password":"123456",
-                                    "isAdmin":false
-                                }
-                            ]
-                        }
-                    ]
-
+                "comment": "HELLO WORLD",
+                "date": 1495460297678,
+                "id": 6,
+                "score": 5,
+                "training": {
+                    "id": 3,
+                    "numberHalfDays": 2,
+                    "topic": {
+                        "id": 2,
+                        "name": "WEB",
+                        "version": 0,
+                    },
+                    "trainingTitle": "PHP",
+                    "version": 0,
+                },
+                "version": 0
             }
         ]
     },
@@ -654,16 +851,84 @@ let routes = [
         method: 'GET',
         url: 'api/allwishes',
         response: [
-            {"id":98,"version":0,"label":"JAVASCRIPT","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":null},
-            {"id":93,"version":4,"label":"PHP","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":null}
+            {
+                "id": 98,
+                "version": 0,
+                "label": "JAVASCRIPT",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": null
+            },
+            {
+                "id": 93,
+                "version": 4,
+                "label": "PHP",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": null
+            }
         ]
     },
     {
         method: 'POST',
         url: 'api/ischeckedwishestoupdate',
-        response:[
-            {"id":98,"version":0,"label":"JAVASCRIPT","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":true},
-            {"id":93,"version":4,"label":"PHP","collaborator":{"id":8,"version":0,"personnalIdNumber":"POP1234","lastName":"Batista","firstName":"Benjamin","email":"benjamin.batista@viseo.com","password":"bibimbaps","isAdmin":false},"vote_ok":[],"vote_ko":[],"checked":false}
+        response: [
+            {
+                "id": 98,
+                "version": 0,
+                "label": "JAVASCRIPT",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": true
+            },
+            {
+                "id": 93,
+                "version": 4,
+                "label": "PHP",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": false
+            }
         ]
     }
 ];

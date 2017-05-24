@@ -2,7 +2,7 @@
  * Created by SJO3662 on 22/05/2017.
  */
 
-fdescribe('classify training test', function () {
+describe('classify training test', function () {
     beforeEach(function () {
 
         vmClassifyTraining = new classifyTraining().$mount();

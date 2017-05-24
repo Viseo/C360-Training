@@ -73,6 +73,7 @@ let trainingRanking = Vue.component('training-ranking', {
         
 `,
         mounted: function () {
+            Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
             this.getTrainingsScore();
         },
 
