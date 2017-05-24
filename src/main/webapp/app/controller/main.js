@@ -294,7 +294,6 @@ const router = new VueRouter({
                         <div class="col-sm-12 col-md-7 col-lg-7">
                             <add-formation-panel></add-formation-panel>
                             <show-formation-panel></show-formation-panel>
-                            <add-session-panel></add-session-panel>
                         </div>
                         <div class="col-sm-12 col-md-5 col-lg-5">
                             <collect-wishes></collect-wishes>
@@ -413,7 +412,6 @@ const router = new VueRouter({
                        <div class="col-sm-12 col-md-7 col-lg-7">
                            <add-formation-panel></add-formation-panel>
                            <show-formation-panel></show-formation-panel>
-                           <add-session-panel></add-session-panel>
                        </div>
                        <div class="col-sm-12 col-md-5 col-lg-5">
                            <training-ranking></training-ranking>
