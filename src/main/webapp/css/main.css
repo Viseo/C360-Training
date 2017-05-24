@@ -68,6 +68,13 @@ i.glyphicon {
     color: black;
 }
 
+.red-header{
+    background-color: rgb(224,53,89) !important;
+}
+.blue-header{
+    background-color :#428bca;
+}
+
 
 .dialog {
     width: 100%;
@@ -160,9 +167,6 @@ i.glyphicon {
     padding-left: 35px;
 }
 
-#blue-header{
-    height:73px;
-}
 #menu{
     right:10px;
 }
@@ -173,6 +177,7 @@ i.glyphicon {
     top:10px;
     width:170px;
 }
+
 #menu ul{
     color: #6a6a6a;
     text-align: left;
@@ -188,8 +193,9 @@ i.glyphicon {
     border: solid 1px #dcdcdc;
     border-radius:15px;
 }
+
 .image-min {
-    left:8%;
+    left: 8%;
     position: absolute;
     margin-top: -14px;
     /* margin-left: 10%; */
@@ -200,4 +206,8 @@ i.glyphicon {
     height: 50px;
     width: 50px;
     z-index: 1000;
+}
+
+#header-component{
+    height:65px;
 }

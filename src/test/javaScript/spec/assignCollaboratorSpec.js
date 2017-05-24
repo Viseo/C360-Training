@@ -413,8 +413,5 @@ describe('assign collaborator test', function () {
         vmAssignCollaborator.verifyLastName(vmAssignCollaborator.value, 'lastNameRegexErrorMessage');
         expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
         expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
-
-
-
     });
 });

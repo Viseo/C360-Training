@@ -4,7 +4,6 @@
 let CollaboratorFormation = Vue.component('collaborator-formation', {
     data: function () {
         return {
-
             isSearchValid: true,
             searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
             sessionAlreadybooked:[],

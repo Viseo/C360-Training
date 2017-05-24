@@ -66,7 +66,34 @@ describe('state Request training test', function () {
         }, 0);
 
     });
+
+    it('it should check if we can add a feedback ', function(done) {
+        vmStateRequestTraining.collaboratorIdentity.id = 1;
+        var result = [
+            {   "id":11,
+                "version":0,
+                "trainingTitle":"FORMATION",
+                "numberHalfDays":3,
+                "topic":{"id":10,"version":0,"name":"JAVA"}
+            }
+        ];
+
+        vmStateRequestTraining.collectAllTrainingsToGiveFeedbacks();
+        setTimeout(function () {
+            expect (vmStateRequestTraining.allTrainingsToGiveFeedbacks).toEqual(result);
+            done();
+        }, 0);
+    });
+
+    it('it should check if we can get all trainings to give feedbacks ', function(done) {
+        vmStateRequestTraining.collaboratorIdentity.id = 1;
+        vmStateRequestTraining.score = 5;
+        vmStateRequestTraining.comment = "HELLO WORLD";
+        var training = {"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}};
+
+        vmStateRequestTraining.addFeedback(training);
+        setTimeout(function () {
+            done();
+        }, 0);
+    });
 });
-
-
-
