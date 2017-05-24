@@ -1,6 +1,6 @@
 let profilToUpdate = Vue.component('profil-to-update', {
     template: `
-<form id="registr-form"
+<form id="register-form"
       @submit.prevent="updateCollaboratorInfo()"
       enctype="multipart/form-data">
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
