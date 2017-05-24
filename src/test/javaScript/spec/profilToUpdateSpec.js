@@ -194,8 +194,8 @@ describe('profil to update test', function () {
         expect(vmProfilToUpdate.isNotValidConfirmPassword).toBe(true);
     });
 
-    it('it should update collaborator information', function (){
-
+    it('it should update collaborator information', function (done){
+        vmProfilToUpdate.imageHasBeenChanged = true;
         vmProfilToUpdate.function = '';
         vmProfilToUpdate.lastName = 'DUPONT';
         vmProfilToUpdate.firstName = 'Eric';
@@ -206,14 +206,12 @@ describe('profil to update test', function () {
         vmProfilToUpdate.password = '123456';
         vmProfilToUpdate.infoCollab.password = '123456';
         vmProfilToUpdate.updateCollaboratorInfo();
-        expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
-        expect(vmProfilToUpdate.CollabToUpdate).toEqual(vmProfilToUpdate.infoCollab);
-        expect(vmProfilToUpdate.CollabToUpdate.firstName).toEqual(vmProfilToUpdate.firstName);
-        expect(vmProfilToUpdate.CollabToUpdate.lastName).toEqual(vmProfilToUpdate.lastName);
-        expect(vmProfilToUpdate.CollabToUpdate.email).toEqual(vmProfilToUpdate.email);
-        expect(vmProfilToUpdate.CollabToUpdate.function).toEqual(vmProfilToUpdate.function);
-        expect(vmProfilToUpdate.CollabToUpdate.businessUnit).toEqual(vmProfilToUpdate.businessUnit);
-        expect(vmProfilToUpdate.CollabToUpdate.password).toEqual(vmProfilToUpdate.newPassword);
+        setTimeout(function () {
+            expect(vmProfilToUpdate.imageHasBeenChanged).toBe(false);
+            expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
+            done();
+        },0);
+
 
     });
 
@@ -224,6 +222,7 @@ describe('profil to update test', function () {
         vmProfilToUpdate.setOldPasswordEmptyToFalse();
         vmProfilToUpdate.setPasswordEmptyToFalse();
         vmProfilToUpdate.setConfirmPasswordEmptyToFalse();
+        vmProfilToUpdate.toggleShowPassword();
 
         expect(vmProfilToUpdate.lastNameEmpty).toBe(false);
         expect(vmProfilToUpdate.firstNameEmpty).toBe(false);
@@ -231,6 +230,7 @@ describe('profil to update test', function () {
         expect(vmProfilToUpdate.oldPasswordEmpty).toBe(false);
         expect(vmProfilToUpdate.passwordEmpty).toBe(false);
         expect(vmProfilToUpdate.confirmPasswordEmpty).toBe(false);
+        expect(vmProfilToUpdate.showPass).toBe(true);
     });
 
 });

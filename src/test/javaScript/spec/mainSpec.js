@@ -25,7 +25,7 @@ const collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3RO
 
 //let vmHeader = new Header().$mount();
 var vm = new Vue({
-    template: '<div><blue-header></blue-header></div>',
+    template: '<div><header-component></header-component></div>',
     router: router,
     components: {
         'blueHeader': Header
@@ -105,6 +105,5 @@ describe('Header test', function () {
         },0);
 
     });
-
 
 });

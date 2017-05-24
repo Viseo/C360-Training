@@ -28,49 +28,108 @@ let stateRequest = Vue.component('state-request', {
                 allTrainingsAndSessions:[{
                     collaborators: []
                 }],
-                trainingAndSessions:[]
+                trainingAndSessions:[],
+
+                //feedback
+                score:'',
+                comment:'',
+                feedback:{
+                    score:'',
+                    comment:'',
+                    training:''
+                },
+                /*feedback:{
+                    "score":5,
+                    "comment":"HELLO WORLD",
+                    "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
+                },*/
+                allTrainingsToGiveFeedbacks:[],
+                testest:[],
+                showModal:false
             }
         },
         template: `
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-7 col-md-7 col-sm-7 text-center" style="width:200px">
-                    <legend> Mes formations </legend>
-                </div>
-            </div>
-            <div class="row">
-                <div class="panel panel-default" style="margin-left:10px; margin-bottom:10px; ">
-                     <div class="panel-body" style="padding:5px; height:202px">
-                        <div class="row">
-                            <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-bottom:30px">
-                                <img src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+             <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7 text-center" style="width:200px">
+                            <legend> Mes formations </legend>
+                    </div>
+             </div>
+             <div class="row">
+                   <div class="panel panel-default" style="margin-left:10px; margin-bottom:10px; ">
+                         <div class="panel-body" style="padding:5px; height:202px">
+                                <div class="row">
+                                       <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-bottom:30px">
+                                             <img src="css/up.png" id="scroll-up-3" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                       </div>
+                                </div>
+                                <div id="scrollMyTrainings">
+                                       <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
+                                              <div v-show="noSessionForCollaborator">
+                                                   <p style="text-align: center; margin:50px;">Vous n'êtes inscrit à aucune session.</p>
+                                              </div>
+                                              <div v-for="training in requestedTrainingByCollaborator" >
+                                                    <strong> {{training.title}}</strong>
+                                                         <div v-for="session in training.sessionsPending">
+                                                              {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
+                                                              <span class="glyphicon glyphicon-time alignIcon"></span>
+                                                         </div>
+                                                         <div v-for="session in training.sessionsValidated">
+                                                              {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
+                                                                <span class="glyphicon glyphicon-ok-circle alignIcon" style="color: green"></span>
+                                                         </div>
+                                                         <hr style="margin:4.5px"/>
+                                              </div>
+                                       </div>
+                                </div>
+                                <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-top:10px">
+                                       <img src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: relative; bottom:10px; left:50%; z-index:1;">
+                                </div>
+                         </div>
+                   </div>
+             </div>
+             <div v-show = "showModal" style="position: fixed;z-index: 9998;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, .5);display: table;transition: opacity .3s ease;">
+                 <alert type = "info" placement = "top" width="40%" style="top:25%;background-color:white;">
+                     <center><h2 style="color:rgba(66, 139, 202,0.8);">Notez vos formations!</h2></center> 
+                     <span style="top:-60px;left:98%" class="glyphicon glyphicon-remove-sign color-red" @click="showModal = false;"></span>
+                     <br><br>
+                     <accordion id="accordionId" :one-at-atime="true" type="info" style="height:100%">
+                            <div v-for="training in allTrainingsToGiveFeedbacks">
+                                  <panel :is-open="openPanel" type="default" >
+                                        <p  slot="header" style="color: black;">{{training.trainingTitle}}</p>
+                                             <div class="container">
+                                                    <div class="row">
+                                                         <div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                               <div class="stars " >
+                                                                    <input class="star star-5" id="star-5" type="radio" name="star" @click="setScore(5)"/>
+                                                                    <label class="star star-5" for="star-5" @click="setScore(5)"></label>
+                                                                    <input class="star star-4" id="star-4" type="radio" name="star" @click="setScore(4)"/>
+                                                                    <label class="star star-4" for="star-4" @click="setScore(4)"></label>
+                                                                    <input class="star star-3" id="star-3" type="radio" name="star" @click="setScore(3)"/>
+                                                                    <label class="star star-3" for="star-3" @click="setScore(3)"></label>
+                                                                    <input class="star star-2" id="star-2" type="radio" name="star" @click="setScore(2)"/>
+                                                                    <label class="star star-2" for="star-2" @click="setScore(2)"></label>
+                                                                    <input class="star star-1" id="star-1" type="radio" name="star" @click="setScore(1)"/>
+                                                                    <label class="star star-1" for="star-1" @click="setScore(1)"></label>
+                                                               </div>
+                                                         </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <center>
+                                                         <div class="col-sm-2 col-md-2 col-lg-2 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                                    <input type="text" class="form-control" placeholder="Commentaire" v-model="comment">
+                                                         </div>
+                                                         <div class="col-sm-1 col-md-1 col-lg-1">
+                                                                     <button type="button" class="btn btn-default" @click="addFeedback(training)">Enregistrer</button>
+                                                         </div>
+                                                         </center>
+                                                    </div>                        
+                                             </div>
+                                  </panel>
                             </div>
-                        </div>
-                        <div id="scrollMyTrainings">
-                                <div class="col-sm-12 col-md-11 col-lg-11" style="line-height:2em; font-size:1em">
-                                    <div v-show="noSessionForCollaborator">
-                                        <p style="text-align: center; margin:50px;">Vous n'êtes inscrit à aucune session.</p>
-                                    </div>
-                                    <div v-for="training in requestedTrainingByCollaborator" >
-                                        <strong> {{training.title}}</strong>
-                                        <div v-for="session in training.sessionsPending">
-                                            {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                            <span class="glyphicon glyphicon-time alignIcon"></span>
-                                        </div>
-                                        <div v-for="session in training.sessionsValidated">
-                                            {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                            <span class="glyphicon glyphicon-ok-circle alignIcon" style="color: green"></span>
-                                        </div>
-                                        <hr style="margin:4.5px"/>
-                                    </div>
-                            </div>
-                        </div>
-                        <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-top:10px">
-                            <img src="css/down.png" id="scroll-down-3" width="60" height="20" style="position: relative; bottom:10px; left:50%; z-index:1;">
-                        </div>
-                     </div>
-                </div>
-            </div>
+                     </accordion>
+                 </alert>
+             </div>
         </div>
 
 `,
@@ -81,9 +140,13 @@ let stateRequest = Vue.component('state-request', {
         this.activateScrollWheel('#scrollMyTrainings');
         this.getCookies();
         this.fetchTrainingsSessions();
+        this.collectAllTrainingsToGiveFeedbacks();
     },
 
         methods: {
+            setScore(value){
+                this.score = value;
+            },
             getDate(date){
                 dateToConvert = new Date(date);
                 formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
@@ -139,6 +202,99 @@ let stateRequest = Vue.component('state-request', {
                     }
                 );
             },
+            addFeedback(training){
+                if (this.score != '' && this.comment != '') {
+                    this.feedback.training = training;
+                    this.feedback.score = this.score;
+                    this.feedback.comment = this.comment;
+                    this.$http.post("api/feedback/"+this.collaboratorIdentity.id,this.feedback).then(
+                        function (response) {
+                            console.log("success to add a feedback");
+                            this.collectAllTrainingsToGiveFeedbacks();
+                        },
+                        function(response) {
+                            console.log("Error: ", response);
+                            console.error(response);
+                        }
+                    );
+                }
+            },
+            collectAllTrainingsToGiveFeedbacks(){
+                this.$http.get("api/trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
+                    function (response) {
+                        console.log("success to get all trainings to give feedbacks");
+                        this.allTrainingsToGiveFeedbacks = response.data;
+                        this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
+                            return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                        });
+                        if(this.allTrainingsToGiveFeedbacks.length == 0){
+                            this.showModal = false;
+                        }else{
+                            this.showModal = true;
+                        }
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
         }
     }
-)
+);
+
+Vue.component('modal',{
+        template:`
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                               <div class="modal-header">
+                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                     <h4 class="modal-title">Notez votre formation</h4>
+                               </div>
+                               <div class="modal-body">
+                                     <accordion id="accordionId" :one-at-atime="true" type="info">
+                                            <div v-for="training in allTrainingsToGiveFeedbacks">
+                                                  <panel :is-open="openPanel" type="default">
+                                                        <p  slot="header" style="color: black;">{{training.trainingTitle}}</p>
+                                                             <div class="container">
+                                                                    <div class="row">
+                                                                         <div class="col-sm-4 col-md-4 col-lg-4">
+                                                                               <div class="stars " >
+                                                                                    <input class="star star-5" id="star-5" type="radio" name="star" @click="setScore(5)"/>
+                                                                                    <label class="star star-5" for="star-5" @click="setScore(5)"></label>
+                                                                                    <input class="star star-4" id="star-4" type="radio" name="star" @click="setScore(4)"/>
+                                                                                    <label class="star star-4" for="star-4" @click="setScore(4)"></label>
+                                                                                    <input class="star star-3" id="star-3" type="radio" name="star" @click="setScore(3)"/>
+                                                                                    <label class="star star-3" for="star-3" @click="setScore(3)"></label>
+                                                                                    <input class="star star-2" id="star-2" type="radio" name="star" @click="setScore(2)"/>
+                                                                                    <label class="star star-2" for="star-2" @click="setScore(2)"></label>
+                                                                                    <input class="star star-1" id="star-1" type="radio" name="star" @click="setScore(1)"/>
+                                                                                    <label class="star star-1" for="star-1" @click="setScore(1)"></label>
+                                                                               </div>
+                                                                         </div>
+                                                                         <div class="col-sm-3 col-md-3 col-lg-3"> <br/>
+                                                                                    <input type="text" class="form-control" placeholder="Laissez un commentaire" aria-describedby="basic-addon1" v-model="comment">
+                                                                         </div>
+                                                                         <div class="col-sm-4 col-md-4 col-lg-4"> <br/>
+                                                                                     <button type="button" class="btn btn-default" @click="addFeedback(training)">Enregistrer</button>
+                                                                         </div>
+                                                                    </div>                        
+                                                             </div>
+                                                  </panel>
+                                            </div>
+                                            <div class="footer">
+                                                  <button type="button" class="btn btn-default" data-dismiss="modal">Abandonner</button>
+                                            </div>
+                                     </accordion>
+                               </div>
+                          </div>
+                    </div>
+             </div>
+`
+});
+Vue.component('accordion', VueStrap.accordion);
+Vue.component('panel', VueStrap.panel);
+Vue.component('alert', VueStrap.alert);
+
+

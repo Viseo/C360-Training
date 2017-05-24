@@ -28,6 +28,11 @@ function BaseComponent(prototype) {
                 .then(success, error);
         },
 
+        put: function (url, data, success, error) {
+            this.$http.put(url,data)
+                .then(success, error);
+        },
+
         activateScrollUp: function (idChevronUp, idComponentToScroll) {
             $(idChevronUp).click(function () {
                 $(idComponentToScroll).animate({scrollTop: "-=100"}, 500);
