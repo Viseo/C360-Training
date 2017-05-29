@@ -23,7 +23,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     </div>
                     <div class="row">
                         <div id="rankingTraining">
-                        <button @click="delateFeedbackComment()">delate Feedback Comment</button>
+                        <button @click="delateFeedbackComment(feedbackComments[0])">delate Feedback Comment</button>
                             <div class="row">
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <img src="css/left-arrow.png"
@@ -90,8 +90,6 @@ let trainingRanking = Vue.component('training-ranking', {
                         this.allTrainingScore = response.data;
                         for (let index in this.allTrainingScore){
                             this.allTrainingScore[index][1]= Math.floor(this.allTrainingScore[index][1])
-
-                            console.log(this.allTrainingScore[index][1]);
                         }
 
                     },
@@ -102,7 +100,7 @@ let trainingRanking = Vue.component('training-ranking', {
                 );
             },
             getFeedbackCommentByTraining(training_id){
-                this.$http.get("api/feedbackcomment/"+training_id).then(
+                this.$http.get("api/feedbackcomment/"+ training_id).then(
                     function (response) {
                         console.log("success to get all feedback comments of the same training");
                         this.feedbackComments = response.data;
@@ -113,10 +111,8 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
-            delateFeedbackComment(){
-                //variable feedbackComments à modifier
-                //faut remplacer par this.feedbackCommentToDelete
-                this.$http.put("api/deletefeedbackcomment",this.feedbackComments[0]).then(
+            delateFeedbackComment(feedbackCommentToDelete){
+                this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
                     function (response) {
                         console.log("success to delete feedback comment");
                         this.feedback = response.data;

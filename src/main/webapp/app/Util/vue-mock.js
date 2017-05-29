@@ -770,13 +770,38 @@ let routes = [
     {
         method: 'GET',
         url: 'api/trainingscore',
-        response: [{
-            "id": 3,
-            "version": 0,
-            "trainingTitle": "SXQSQCDS",
-            "numberHalfDays": 2,
-            "topic": {"id": 2, "version": 0, "name": "C"}
-        }, 5.0]
+        response: [
+            [
+                {
+                    "id":4,
+                    "version":0,
+                    "trainingTitle":"FORMATION1",
+                    "numberHalfDays":3,
+                    "topic":{"id":2,"version":0,"name":"C"}
+                },
+                3.0
+            ],
+            [
+                {
+                    "id":14,
+                    "version":0,
+                    "trainingTitle":"FORMATION3",
+                    "numberHalfDays":5,
+                    "topic":{"id":13,"version":0,"name":"C++"}
+                },
+                4.0
+            ],
+            [
+                {
+                    "id":9,
+                    "version":0,
+                    "trainingTitle":"FORMATION2",
+                    "numberHalfDays":5,
+                    "topic":{"id":3,"version":0,"name":"JAVA"}
+                },
+                3.0
+            ]
+        ]
     },
     {
         method: 'GET',
@@ -805,6 +830,36 @@ let routes = [
                 "topic": {"id": 2, "version": 0, "name": "C"}
             }
         }
+    },
+    {
+        method: 'GET',
+        url: 'api/feedbackcomment/9',
+        response: [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }]
+    },
+    {
+        method: 'PUT',
+        url: 'api/deletefeedbackcomment',
+        response: [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"",
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }]
     },
     {
         method: 'GET',

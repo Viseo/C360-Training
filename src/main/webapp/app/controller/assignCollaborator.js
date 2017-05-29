@@ -416,20 +416,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             );
         },
 
-        //fonction pour classer les formations
-        getTrainingsScore(){
-            this.$http.get("api/trainingscore").then(
-                function (response) {
-                    console.log("success to get all training score");
-                    this.allTrainingScore = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
-
         getAllTrainingsToGiveFeedbacks(){
             this.$http.get("api/givefeedbacks").then(
                 function (response) {
