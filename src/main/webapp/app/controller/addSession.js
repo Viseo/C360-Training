@@ -61,9 +61,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getDate();
-        if (this.state.idTraining == null || this.state.idTraining == '') {
-            this.goTo('addTrainingTopic');
-        }
+
     },
 
     watch:{

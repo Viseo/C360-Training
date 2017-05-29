@@ -5,7 +5,11 @@ let trainingRanking = Vue.component('training-ranking', {
         props: [],
         data: function() {
             return {
-                allTrainingScore: []
+                allTrainingScore: [],
+                //US13
+                training_id:'14',
+                feedbackComments:[],
+                feedbackCommentToDelete:{}
             }
         },
         template: `
@@ -19,6 +23,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     </div>
                     <div class="row">
                         <div id="rankingTraining">
+                        <button @click="delateFeedbackComment()">delate Feedback Comment</button>
                             <div class="row">
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <img src="css/left-arrow.png"
@@ -44,7 +49,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                         overflow-y:hidden; 
                                         overflow-x:hidden;">
                                          <div v-for=" training in allTrainingScore">
-                                         <span class="col-lg-8">{{training[0].trainingTitle}}</span>
+                                         <span class="col-lg-8" @click="getFeedbackCommentByTraining(training[0].id)" style="cursor: pointer;">{{training[0].trainingTitle}}</span>
                                          <span class="col-lg-4"><span v-for="i in training[1]"><span class="glyphicon glyphicon-star fullStar"></span></span>
                                          <span v-for="i in (5-training[1])"><span class="glyphicon glyphicon-star-empty emptyStar"></span></span>
                                          </span>
@@ -96,6 +101,32 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
+            getFeedbackCommentByTraining(training_id){
+                this.$http.get("api/feedbackcomment/"+training_id).then(
+                    function (response) {
+                        console.log("success to get all feedback comments of the same training");
+                        this.feedbackComments = response.data;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            delateFeedbackComment(){
+                //variable feedbackComments à modifier
+                //faut remplacer par this.feedbackCommentToDelete
+                this.$http.put("api/deletefeedbackcomment",this.feedbackComments[0]).then(
+                    function (response) {
+                        console.log("success to delete feedback comment");
+                        this.feedback = response.data;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            }
 
         }
     }

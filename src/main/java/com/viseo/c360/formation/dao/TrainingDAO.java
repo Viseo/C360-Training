@@ -58,6 +58,7 @@ public class TrainingDAO {
     //Feedback
     @Transactional
     public Feedback addFeedback(Feedback feedback) throws PersistenceException {
+        if(feedback.getComment() == ""){ feedback.setComment(null); }
         daoFacade.persist(feedback);
         daoFacade.flush();
         return feedback;
@@ -81,6 +82,21 @@ public class TrainingDAO {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         return daoFacade.getList("SELECT DISTINCT ts.training FROM TrainingSession ts JOIN ts.collaborators tsc WHERE :collaborator IN tsc AND ts.training NOT IN (SELECT f.training FROM Feedback f WHERE f.collaborator = :collaborator)",
                 param("collaborator", collaborator));
+    }
+
+    @Transactional
+    public List<Feedback> getFeedbackByTraining(Training training){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("SELECT f FROM Feedback f WHERE f.training = :training AND f.comment IS NOT NULL",
+                param("training", training));
+    }
+
+    @Transactional
+    public Feedback delateFeedbackComment(Feedback feedback){
+        feedback = daoFacade.merge(feedback);
+        feedback.setComment(null);
+        daoFacade.flush();
+        return feedback;
     }
 
 

@@ -34,6 +34,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/profilToUpdate.js',
             'src/main/webapp/app/controller/stateRequestTraining.js',
             'src/main/webapp/app/controller/classifyTraining.js',
+            'src/main/webapp/app/controller/addSession.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/registerTrainingTopicSpec.js',

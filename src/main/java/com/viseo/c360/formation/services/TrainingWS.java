@@ -93,6 +93,21 @@ public class TrainingWS {
         return training;
     }
 
+    @RequestMapping(value = "${endpoint.feedbackcomment}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Feedback> getFeedbackByTraining(@PathVariable Long training_id) {
+        Training training = trainingDAO.getTraining(training_id);
+        List<Feedback> comment = trainingDAO.getFeedbackByTraining(training);
+        return comment;
+    }
+
+    @RequestMapping(value = "${endpoint.deletefeedbackcomment}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Feedback delateFeedbackComment(@RequestBody Feedback myFeedback) {
+        Feedback feedback = trainingDAO.delateFeedbackComment(myFeedback);
+        return feedback;
+    }
+
     /***
      * Training
      ***/

@@ -15,7 +15,12 @@ let classifyTraining = Vue.component('classify-training', {
                 "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
             },
             allFeedbacks:[],
-            allTrainingScore:[]
+            allTrainingScore:[],
+
+            //US13
+            training_id:'',
+            feedbackComments:[]
+
         }
     },
     mounted: function () {
@@ -39,6 +44,18 @@ let classifyTraining = Vue.component('classify-training', {
                 function (response) {
                     console.log("success to get all training score");
                     this.allTrainingScore = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+        getFeedbackCommentByTraining(){
+            this.$http.get("api//feedbackcomment/"+this.training_id).then(
+                function (response) {
+                    console.log("success to get all feedback comments of the same training");
+                    this.feedbackComments = response.data;
                 },
                 function (response) {
                     console.log("Error: ", response);

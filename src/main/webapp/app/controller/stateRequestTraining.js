@@ -38,11 +38,6 @@ let stateRequest = Vue.component('state-request', {
                     comment:'',
                     training:''
                 },
-                /*feedback:{
-                    "score":5,
-                    "comment":"HELLO WORLD",
-                    "training":{"id":3,"version":0,"trainingTitle":"FORMATION","numberHalfDays":3,"topic":{"id":2,"version":0,"name":"C"}}
-                },*/
                 allTrainingsToGiveFeedbacks:[],
                 testest:[],
                 showModal:false
@@ -133,15 +128,15 @@ let stateRequest = Vue.component('state-request', {
         </div>
 
 `,
-    mounted: function () {
-        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
-        this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
-        this.activateScrollWheel('#scrollMyTrainings');
-        this.getCookies();
-        this.fetchTrainingsSessions();
-        this.collectAllTrainingsToGiveFeedbacks();
-    },
+        mounted: function () {
+            Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+            this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
+            this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
+            this.activateScrollWheel('#scrollMyTrainings');
+            this.getCookies();
+            this.fetchTrainingsSessions();
+            this.collectAllTrainingsToGiveFeedbacks();
+        },
 
         methods: {
             setScore(value){
@@ -184,17 +179,17 @@ let stateRequest = Vue.component('state-request', {
                         for (let i =0;i<Object.keys(this.requestedTraining).length;i++) {
                             if(Object.values(this.requestedTraining)[i].requestTrainingList.length!=0 || Object.values(this.requestedTraining)[i].trainingSessions.length!=0){
                                 this.requestedTrainingByCollaborator.push({
-                                title: Object.keys(this.requestedTraining)[i],
-                                sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
-                                sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                            });
+                                    title: Object.keys(this.requestedTraining)[i],
+                                    sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
+                                    sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
+                                });
                                 this.noSessionForCollaborator = false;
                             }
                             this.orderSessions();
 
-                         }
+                        }
                         console.log(this.requestedTrainingByCollaborator);
-                       this.orderSessions();
+                        this.orderSessions();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -203,7 +198,7 @@ let stateRequest = Vue.component('state-request', {
                 );
             },
             addFeedback(training){
-                if (this.score != '' && this.comment != '') {
+                if (this.score != '') {
                     this.feedback.training = training;
                     this.feedback.score = this.score;
                     this.feedback.comment = this.comment;
@@ -244,7 +239,7 @@ let stateRequest = Vue.component('state-request', {
 );
 
 Vue.component('modal',{
-        template:`
+    template:`
                 <div class="modal fade" id="myModal" role="dialog">
                     <div class="modal-dialog modal-lg">
                           <div class="modal-content">
@@ -296,5 +291,3 @@ Vue.component('modal',{
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('panel', VueStrap.panel);
 Vue.component('alert', VueStrap.alert);
-
-
