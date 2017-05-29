@@ -27,7 +27,7 @@ describe('training to come Panel test', function () {
 
     });
 
-    it('should check if collaborator requests training session', function(){
+    it('should check if collaborator requests training session', function(done){
 
         let trainingSession = {
             "beginning":"11/05/2017",
@@ -63,21 +63,21 @@ describe('training to come Panel test', function () {
         vmTrainingToCome.VerifyCollaboratorRequestsExistence(6,trainingSession);
         setTimeout(function () {
             expect(trainingSession.isCollaboratorDidRequest).toBe(true);
-            //isCollaboratorDidRequest
+            done();
         }, 0);
 
     });
 
-    it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function () {
+    it('should check if all the next formations are displayed on the panel "Formation à venir" when page is loaded', function (done) {
         let allTrainingAndSessionsThatShouldBeDisplayedJSON = [[{"id":4,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"19/05/2017","ending":"21/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bora Bora","collaborators":[]},{"id":5,"version":0,"trainingDescription":{"id":3,"version":0,"trainingTitle":"SWIFT","numberHalfDays":4,"topicDescription":{"id":1,"version":0,"name":"MOBILE"}},"beginning":"26/05/2017","ending":"28/05/2017","beginningTime":"09:00","endingTime":"18:00","location":"Salle Bastille","collaborators":[]}]];
 
         setTimeout(function () {
             expect(vmTrainingToCome.allTrainingsAndSessions).toEqual(allTrainingAndSessionsThatShouldBeDisplayedJSON);
-
+            done();
         }, 0);
     });
 
-    it('should check if session selected is open on the acordeon (left panel) when the collaborator click on the session (right panel)', function () {
+    it('should check if session selected is open on the accordeon (left panel) when the collaborator click on the session (right panel)', function () {
         var trainingSelected = {
             "id": 3,
             "version": 0,
@@ -85,13 +85,9 @@ describe('training to come Panel test', function () {
             "numberHalfDays": 4,
             "topicDescription": {"id": 1, "version": 0, "name": "MOBILE"}
         };
-
-
-        setTimeout(function () {
             expect(vmCollaboratorFormation.openPanel).toBe(false);
             vmTrainingToCome.showTrainingAndSessionsSelected(trainingSelected);
             expect(vmCollaboratorFormation.openPanel).toBe(true);
-        }, 0);
     });
 
     it('should check if seats available text is red when there is only or less than 3 seats available', function(){
@@ -303,13 +299,14 @@ describe('training to come Panel test', function () {
             expect(vmTrainingToCome.verifyShowMessageOrNot(trainingSelected)).toBe(true);
     });
 
-    it('Should check sending wishes in the database', function () {
+    it('Should check sending wishes in the database', function (done) {
         setTimeout(function () {
             vmTrainingToCome.wish = "PHP";
             vmTrainingToCome.collaborator_id = 1;
-            vmTrainingToCome.sendWish()
+            vmTrainingToCome.sendWish();
             expect(vmTrainingToCome.wishAlreadyExisted).toBe(false);
             expect(vmTrainingToCome.wishSuccess).toBe(false);
+            done();
         }, 0);
     });
 });

@@ -30,21 +30,25 @@ let NavigationMenu = Vue.component('connect-user', {
             </div>
         `,
     beforeCreate: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+
         let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+
+        let redirectToTrainingCollaborator = (response) => {
+            if (response) {
+                this.goTo('registerTrainingCollaborator')
+            }
+        };
+
         if (isTokenPresent) {
             let token = String(isTokenPresent.pop());
-            this.$http.post('api/sendtoken', token)
-                .then(
-                    function (response) {
-                        if (response) {
-                            this.goTo('registerTrainingCollaborator')
-                        }
-                    });
+            this.post('api/sendtoken', token, redirectToTrainingCollaborator);
         }
     },
+
     mounted: function () {
-        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
+
     methods: {
         showInscriptionForm() {
             this.tabinscription = 'tab active';
@@ -391,34 +395,34 @@ let Formulaire = Vue.component('inscription-form', {
         saveAction() {
             delete this.collaboratorToRegister['confirmPassword'];  //delete password confirmation
             //post the form to the server
-            this.$http.post("api/collaborateurs", this.collaboratorToRegister)
-                .then(
-                    function (response) {
-                        this.emailAlreadyExist = false;
-                        this.personalIdNumberAlreadyExist = false;
-                        this.user.email = this.collaborator.email;
-                        this.user.password = this.collaborator.password;
-                        this.userToConnect = JSON.parse(JSON.stringify(this.user));
-                        this.verifyUserToConnectByDatabase();
-                    },
-                    function (response) {
-                        console.log("Error: ", response);
-                        if (response.data.message == "personnalIdNumber") {
-                            console.log("PID already exist");
-                            this.personalIdNumberAlreadyExist = true;
-                            this.emailAlreadyExist = false;
-                        }
-                        else if (response.data.message == "email") {
-                            console.log("email already exist");
-                            this.emailAlreadyExist = true;
-                            this.personalIdNumberAlreadyExist = false;
-                        } else {
-                            console.error(response);
-                            this.personalIdNumberAlreadyExist = true;
-                            this.emailAlreadyExist = true;
-                        }
-                    }
-                );
+            let sendUserToRegisterSuccess = (response) => {
+                this.emailAlreadyExist = false;
+                this.personalIdNumberAlreadyExist = false;
+                this.user.email = this.collaborator.email;
+                this.user.password = this.collaborator.password;
+                this.userToConnect = JSON.parse(JSON.stringify(this.user));
+                this.verifyUserToConnectByDatabase();
+            };
+
+            let sendUserToRegisterError = (response) => {
+                console.log("Error: ", response);
+                if (response.data.message == "personnalIdNumber") {
+                    console.log("PID already exist");
+                    this.personalIdNumberAlreadyExist = true;
+                    this.emailAlreadyExist = false;
+                }
+                else if (response.data.message == "email") {
+                    console.log("email already exist");
+                    this.emailAlreadyExist = true;
+                    this.personalIdNumberAlreadyExist = false;
+                } else {
+                    console.error(response);
+                    this.personalIdNumberAlreadyExist = true;
+                    this.emailAlreadyExist = true;
+                }
+            };
+
+            this.post("api/collaborateurs", this.collaboratorToRegister, sendUserToRegisterSuccess, sendUserToRegisterError)
         },
 
         verifyUserToConnectByDatabase(){
@@ -433,13 +437,13 @@ let Formulaire = Vue.component('inscription-form', {
                 }
             };
 
-            this.$http.post("api/user", this.userToConnect)
-                .then(
-                    function (userPersistedToken) {
-                        this.handleCookie(token.data['userConnected']);
-                        redirectDependingOnRole(userPersistedToken);
-                    }
-                )},
+            let connectUser = (userPersistedToken) => {
+                this.handleCookie(userPersistedToken.data['userConnected']);
+                redirectDependingOnRole(userPersistedToken);
+            };
+
+            this.post("api/user", this.userToConnect, connectUser);
+        },
 
         verifyForm (){
             this.lastName = this.lastName.replace(/ +/g, " ").replace(/ +$/, "");
@@ -604,24 +608,24 @@ let ConnexionForm = Vue.component('connexionForm', {
         },
 
         verifyUserByDatabase(){
-            this.$http.post("api/user", this.userToRegister)
-                .then(
-                    function (userPersistedToken) {
-                            this.handleCookie(userPersistedToken.data['userConnected']);
-                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
-                            if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
-                                this.goTo('addTrainingTopic');
-                            }
-                            else
-                                this.goTo('registerTrainingCollaborator');
-                            }
-                        }
+            let connectUserSuccess = (userPersistedToken) => {
+                this.handleCookie(userPersistedToken.data['userConnected']);
+                if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                    if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
+                        this.goTo('addTrainingTopic');
+                    }
+                    else
+                        this.goTo('registerTrainingCollaborator');
+                }
+            };
 
-                ).catch(function () {
+            let connectUserError = () => {
                 this.password = "";
                 this.user.password = "";
                 this.isErrorAuthentification = true;
-            });
+            };
+
+            this.post("api/user", this.userToRegister, connectUserSuccess, connectUserError);
         },
 
         gatherUsersFromDatabaseToVerify(){
@@ -638,8 +642,8 @@ let ConnexionForm = Vue.component('connexionForm', {
                     this.VerifyEmailFromDatabase();
                     this.isErrorAuthentification = false;
                     if (this.isNotNewEmail == true) {
-                        var self = this
-                        this.$http.post("api/sendemail/" + this.idToSend);
+                        var self = this;
+                        this.post("api/sendemail/" + this.idToSend);
                         this.showPopup = true;
                         setTimeout(function () {
                             self.showPopup = false;
@@ -660,7 +664,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 }
             ).then(
                 function () {
-                    for (var tmp in this.allUsers) {
+                    for (let tmp in this.allUsers) {
                         if (this.email == this.allUsers[tmp].email) {
                             this.emailToSend = this.allUsers[tmp].email;
                             this.passwordToSend = this.allUsers[tmp].password;
@@ -713,6 +717,7 @@ let CustomInput = Vue.component('customInput', {
                                :placeholder="placeholder" 
                                @focus="handleFocus" @blur="handleBlur"
                                @input="updateValue($event.target.value)"
+                               :value="value"
                                onblur="this.placeholder = placeholder " 
                                maxlength="maxlength" 
                                minlength="minlength">
@@ -721,6 +726,7 @@ let CustomInput = Vue.component('customInput', {
                                :id="label" 
                                :tabindex="tab" 
                                class="form-control"
+                               :value="value"
                                :placeholder="placeholder" 
                                @focus="handleFocus" @blur="handleBlur"
                                @input="updateValue($event.target.value)"
@@ -756,15 +762,15 @@ let CustomInput = Vue.component('customInput', {
 });
 
 let customPasswordInput = Vue.component('customPasswordInput', {
-    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show'],
+    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show','isValid','isNotValid'],
     template: `<table style="border-spacing: 0px">
                 <div class="form-group"   :class="{'has-error': emptyField || errorField }">
                     <label for="label">{{labelText}}</label>
                     <div class="password" :class="{ 'control': true }">
                     <tr><td style="width: 500px;">
                         <i class="glyphicon glyphicon-lock "></i>
-                        <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open "> </span>
-                        <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close "> </span> 
+                        <span @click="handleClick" v-show="!show && !emptyField" class="glyphicon glyphicon-eye-open " style="margin-right: 5%;"> </span>
+                        <span @click="handleClick" v-show="show && !emptyField" class="glyphicon glyphicon-eye-close " style="margin-right: 5%;"> </span> 
                         <input type="password"  
                                 v-show="!show" 
                                 :value="textValue" 
@@ -784,7 +790,12 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                                 class="form-control"
                                 @focus="handleFocus" @blur="handleBlur"
                                 @input="updateValue($event.target.value)">
-                    </td></tr>
+                        </td>
+                        <td>
+                             <span v-show="isValid" class="glyphicon glyphicon-ok-circle color-green"></span>
+                             <span v-show="isNotValid" class="glyphicon glyphicon-remove-circle color-red"></span>
+                        </td>
+                    </tr>
                     <tr><td style="height: 20px;">
                         <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
                         <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>

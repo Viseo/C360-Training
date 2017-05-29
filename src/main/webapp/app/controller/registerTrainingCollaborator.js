@@ -25,7 +25,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 lastName: '',
                 firstName: ''
             },
-            RequestToRegister: {
+            requestToRegister: {
                 trainingDescription: {},
                 collaboratorIdentity: {},
                 trainingSessionsDescriptions: []
@@ -41,7 +41,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             isNoSession: true,
             displayTrainings: false,
             openPanel: false,
-            state: training_store.state
+            state: training_store.state,
+            test:false
         }
     },
 
@@ -101,8 +102,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
                                                                 <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
                                                                 <button :disabled="disableSendButton" v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
-                                                                <p style="color:orange" v-show="!trainingrequested"> Vous avez déjà effectué une demande pour cette formation </p>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
+                                                                <p style="color:orange" v-show="test"> Vous avez déjà effectué une demande pour cette formation </p>
                                                             </center>
                                                         </div>
                                                     </panel>
@@ -128,7 +129,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.gatherTrainingsFromDatabase();
+        this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
         this.getCookies();
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
@@ -156,8 +157,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     methods: {
         disablingSessions(){
+            if(this.listTrainingSessionSelected != null && this.sessionsByCollab != null && this.listTrainingSession.length == this.sessionsByCollab.length){
+                this.test = true;
+            }
             for(i in this.sessionsByCollab){
-                temp=document.getElementById(this.sessionsByCollab[i].id);
+                temp = document.getElementById(this.sessionsByCollab[i].id);
                 if(temp!=null) {
                     temp.disabled =true;
                     this.sessionAlreadyBookedMessage = true;
@@ -259,7 +263,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
         },
 
-        gatherTrainingsFromDatabase(){
+        gatherTrainingsFromDatabase(storeTrainings){
             this.$http.get("api/formations").then(
                 function (response) {
                     this.allTrainings = response.data;
@@ -267,13 +271,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
                     });
                     this.selectTrainingTitles();
-                    this.storeTrainingsFound("");
+                    this.test = false;
                 },
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 }
             );
+            storeTrainings("");
         },
 
         getCookies(){
@@ -295,10 +300,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             this.noSessionsSelectedError = false;
             this.disableSendButton = true;
             if (this.isNoSession == true || this.checkedSessions.length != 0) {
-                this.RequestToRegister.trainingDescription = this.trainingSelected;
-                this.RequestToRegister.collaboratorIdentity = this.collaboratorIdentity;
-                this.RequestToRegister.trainingSessionsDescriptions = this.checkedSessions;
-                this.RequestToRegister = JSON.parse(JSON.stringify(this.RequestToRegister));
+                this.requestToRegister.trainingDescription = this.trainingSelected;
+                this.requestToRegister.collaboratorIdentity = this.collaboratorIdentity;
+                this.requestToRegister.trainingSessionsDescriptions = this.checkedSessions;
+                this.requestToRegister = JSON.parse(JSON.stringify(this.requestToRegister));
                 this.SaveTrainingSessionCollaborator();
                 if(this.$parent.$children[3]){
                     let trainingToComeComponent = this.$parent.$children[3];
@@ -312,16 +317,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         SaveTrainingSessionCollaborator(){
-            this.$http.post("api/requests", this.RequestToRegister).then(
-                function (response) {
-                    this.addingRequestSucceeded = true;
-                    this.$parent.$children[2].fetchTrainingsSessions();
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
+            let stateRequestTrainingComponent = this.$parent.$children[2];
+
+            let addRequestSuccess = (response) => {
+                this.addingRequestSucceeded = true;
+                stateRequestTrainingComponent.fetchTrainingsSessions();
+                this.storeSessionsByCollab(this.trainingSelected.id);
+            };
+
+            this.post("api/requests", this.requestToRegister, addRequestSuccess);
         },
 
         selectTrainingTitles(){
@@ -364,7 +368,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.isNoSession = true;
                     }
                     else {
-                        this.displayTrainings= true;
+                        this.displayTrainings = true;
                         this.isNoSession = false;
                     }
                 });

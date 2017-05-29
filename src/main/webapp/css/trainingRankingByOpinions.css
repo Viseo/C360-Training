@@ -1,0 +1,27 @@
+#rankingTraining {
+    border:1px solid #dcdcdc ;
+    border-radius: 10px;
+    height:558px;
+    width: 100%;
+    padding:20px;
+}
+
+#scrollRanking {
+    margin-top:30px;
+    height: 420px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.fullStar {
+    vertical-align: middle;
+    color: #ffe22d;
+    font-size:25px;
+}
+
+.emptyStar {
+    vertical-align: middle;
+
+    color: #848484;
+    font-size:25px;
+}

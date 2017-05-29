@@ -44,7 +44,7 @@ public class Wish extends BaseEntity{
     @JoinTable(name="wish_vote_ko")
     List<Collaborator> vote_ko;
 
-    @NotNull
+
     Boolean isChecked;
 
     public Wish() {

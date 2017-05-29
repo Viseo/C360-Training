@@ -51,8 +51,7 @@
     border-radius:15px;
 }
 #navbar-app {
-    font-size:1.7em;
-    line-height:75%;
+    font-size:200%;
 }
 i.glyphicon {
     top:2.5px;
@@ -67,6 +66,13 @@ i.glyphicon {
 }
 #dropdown-app p {
     color: black;
+}
+
+.red-header{
+    background-color: rgb(224,53,89) !important;
+}
+.blue-header{
+    background-color :#428bca;
 }
 
 
@@ -159,10 +165,49 @@ i.glyphicon {
     color: #fff;
     border: 1px solid #2a3b8c;
     padding-left: 35px;
-    background-image: url(http://css-creations.com/uploads/media/items/8/8y15B9d.png);
-    background-repeat: repeat-x;
 }
 
-#blue-header{
+#menu{
+    right:10px;
+}
+
+
+#menu ul.dropdown-menu{
+    left:-120px;
+    top:10px;
+    width:170px;
+}
+
+#menu ul{
+    color: #6a6a6a;
+    text-align: left;
+}
+#menu button.btn.btn-default{
+    position: absolute;
+    top:-10px;
+    left:-120px;
+    padding:1% 5%;
+    font-size:100%;
+    box-shadow: none;
+    background-color: #dcdcdc;
+    border: solid 1px #dcdcdc;
+    border-radius:15px;
+}
+
+.image-min {
+    left: 8%;
+    position: absolute;
+    margin-top: -14px;
+    /* margin-left: 10%; */
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    height: 50px;
+    width: 50px;
+    z-index: 1000;
+}
+
+#header-component{
     height:65px;
 }

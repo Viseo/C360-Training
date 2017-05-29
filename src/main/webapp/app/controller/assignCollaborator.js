@@ -5,20 +5,19 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     props: [],
     data: function () {
         return {
-            sessionIdChosen:0,
-            numberPlacesAvailable:15,
-            collaboratorsRequesting:[],
-            requestedCollaborators:[],
-            requestedCollaboratorsMemo:[],
-            allCollaboratorsIdChosen:[],
-            allCollaboratorsAlreadyInSessions:[],
-            collaboratorAlreadyInSession:false,
-            allCollaboratorsIdChosen:[],
+            sessionIdChosen: 0,
+            numberPlacesAvailable: 15,
+            collaboratorsRequesting: [],
+            requestedCollaborators: [],
+            requestedCollaboratorsMemo: [],
+            allCollaboratorsIdChosen: [],
+            allCollaboratorsAlreadyInSessions: [],
+            collaboratorAlreadyInSession: false,
             checkedNames: true,
             isRegistrationAvailable: true,
             validatedCollab: [],
             allCollaborators: [],
-            allCollaboratorsName:[],
+            allCollaboratorsName: [],
             value: '',
             collaboratorsFound: [],
             displayCollaborators: false,
@@ -29,9 +28,14 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             confirmCollaboratorAddedSession: false,
             isSearchNameValid: true,
             lastNameRegexErrorMessage: '',
-            token:'',
-            collaborator_id:'',
-            numberOfWishesNotChecked:''
+            token: '',
+            collaborator_id: '',
+            numberOfWishesNotChecked: '',
+
+            //feedback
+            //training dans feedback est sous la forme training au lieu de trianingdescription
+            allFeedbacks:[],
+            allTrainingScore:[]
         }
     },
     template: `
@@ -71,7 +75,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                placeholder="Nom ou prénom du collaborateur"></typeahead>
                                 </div>
                                 <br/><br/>
-                                <div id="collaboratorsList" data-simplebar style="overflow-y:auto; overflow-x: hidden; height:235px;">
+                                <div class="collaboratorsList" data-simplebar>
                                     <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
                                     </div>
                                     <table class="tabCentring">
@@ -122,11 +126,18 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
                         </button>
                     </div>
-                    <br>
-                    <div class="row col-sm-offset-1 col-dm-offset-1 col-lg-offset-1 ">
-                        <a id="box">{{numberOfWishesNotChecked}}</a>
-                        <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
-                    </div>
+                    </br>
+                    <div class="row">
+                    
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                        <a @click="loadCollectWishesPanel" id="box">{{numberOfWishesNotChecked}}</a>
+                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        </center>
+                        
+                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <span @click="goTo('trainingRanking')" class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;" @click="goTo('trainingRanking')">Classement des formations</span>
+                        </center>
+                       </div>
                     <div class="row ">
                         <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
                         <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
@@ -138,56 +149,52 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     </div>
 </div>`,
     mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getCookies();
         this.getIsNotCheckedWishes();
-        this.GatherAllSessions();
+        this.gatherAllSessions();
     },
     methods: {
+        loadCollectWishesPanel(){
+            this.$router.push('/collectWishes')
+        },
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
+            if (regexCookieToken) {
+                if (!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined') {
                         this.token = String(regexCookieToken.pop());
                         this.collaborator_id = jwt_decode(this.token).id;
                     }
                 }
             }
         },
+
         getIsNotCheckedWishes(){
-            this.$http.get("api/wish/"+this.collaborator_id).then(
+            this.$http.get("api/wish/" + this.collaborator_id).then(
                 function (response) {
                     console.log("success to get all wishes which are not checked");
                     this.numberOfWishesNotChecked = response.data.length;
                 },
-                function(response) {
+                function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 });
         },
-        GatherAllSessions(){
+
+        gatherAllSessions(){
             this.$http.get("api/sessions").then(
-        function (response) {
-            console.log("success to get all sessions from database");
-            this.state.allSessions = response.data;
-        },
-        function(response) {
-            console.log("Error: ", response);
-            console.error(response);
-        });
-},
-        GatherAllRequestsBySession(){
-            this.$http.get("api/requests/session/"+ this.sessionIdChosen + "/collaborators").then(
                 function (response) {
-                    console.log("success to get all requests from database");
-                    this.collaboratorsRequesting = response.data;
+                    console.log("success to get all sessions from database");
+                    this.state.allSessions = response.data;
                 },
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 });
         },
-        AddCollaboratorsToTrainingSession(){
+
+        addCollaboratorsToTrainingSession(){
             this.$http.put("api/sessions/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to modify the table trainingsession_collaborator");
@@ -197,33 +204,35 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     console.error(response);
                 });
         },
+
         gatherCollaboratorsRequestingBySession(){
             this.$http.get("api/requests/session/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table requesttraining_trainingsession");
                     this.collaboratorsRequesting = response.data;
-                    this.VerifyCollaboratorsRequestingNotYetAccepted();
+                    this.verifyCollaboratorsRequestingNotYetAccepted();
                 },
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 });
         },
-        VerifyCollaboratorsRequestingNotYetAccepted(){
+
+        verifyCollaboratorsRequestingNotYetAccepted(){
             this.$http.get("api/sessions/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator");
                     this.allCollaboratorsAlreadyInSessions = response.data;
                     var collaborators = this.collaboratorsRequesting;
-                    this.collaboratorsRequesting=[];
+                    this.collaboratorsRequesting = [];
                     for (var tmp1 in collaborators) {
                         this.collaboratorAlreadyInSession = false;
-                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions){
-                            if (collaborators[tmp1].id == this.allCollaboratorsAlreadyInSessions[tmp2].id){
+                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions) {
+                            if (collaborators[tmp1].id == this.allCollaboratorsAlreadyInSessions[tmp2].id) {
                                 this.collaboratorAlreadyInSession = true;
                             }
                         }
-                        if(!this.collaboratorAlreadyInSession){
+                        if (!this.collaboratorAlreadyInSession) {
                             this.requestedCollaborators.push(collaborators[tmp1]);
                         }
                     }
@@ -236,21 +245,21 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 });
         },
 
-        VerifyAllCollaboratorsNotYetAccepted(){
+        verifyAllCollaboratorsNotYetAccepted(){
             this.$http.get("api/sessions/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
                     console.log("success to get all collaborators from the table trainingsession_collaborator");
                     this.allCollaboratorsAlreadyInSessions = response.data;
                     var collaborators = this.allCollaborators;
-                    this.allCollaborators=[];
+                    this.allCollaborators = [];
                     for (var tmp1 in collaborators) {
                         this.collaboratorAlreadyInSession = false;
-                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions){
-                            if (collaborators[tmp1].id == this.allCollaboratorsAlreadyInSessions[tmp2].id){
+                        for (var tmp2 in this.allCollaboratorsAlreadyInSessions) {
+                            if (collaborators[tmp1].id == this.allCollaboratorsAlreadyInSessions[tmp2].id) {
                                 this.collaboratorAlreadyInSession = true;
                             }
                         }
-                        if(!this.collaboratorAlreadyInSession){
+                        if (!this.collaboratorAlreadyInSession) {
                             this.allCollaborators.push(collaborators[tmp1]);
                         }
                     }
@@ -266,68 +275,72 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         },
 
         verifyCheckedNames() {
-            this.collaboratorsRequesting.splice(0,this.collaboratorsRequesting.length);
-            this.requestedCollaborators.splice(0,this.requestedCollaborators.length);
-            this.validatedCollab.splice(0,this.validatedCollab.length);
+            this.collaboratorsRequesting.splice(0, this.collaboratorsRequesting.length);
+            this.requestedCollaborators.splice(0, this.requestedCollaborators.length);
+            this.validatedCollab.splice(0, this.validatedCollab.length);
             this.allCollaboratorsName = [];
 
             if (this.checkedNames === true) {
                 this.gatherCollaboratorsRequestingBySession();
             }
-            else{
+            else {
                 this.gatherCollaboratorsFromDatabase();
 
             }
 
         },
+
         moveCollabRight(nameCollab){
             this.validatedCollab.push(nameCollab);
             this.requestedCollaborators.indexOf(nameCollab);
-            this.requestedCollaborators.splice(this.requestedCollaborators.indexOf(nameCollab),1);
+            this.requestedCollaborators.splice(this.requestedCollaborators.indexOf(nameCollab), 1);
         },
+
         moveCollabLeft(nameCollab){
             this.requestedCollaborators.push(nameCollab);
             this.validatedCollab.indexOf(nameCollab);
-            this.validatedCollab.splice(this.validatedCollab.indexOf(nameCollab),1);
+            this.validatedCollab.splice(this.validatedCollab.indexOf(nameCollab), 1);
         },
+
         saveCollabInSessions(){
             this.numberAddedCollabCounter();
-            if(this.isRegistrationAvailable && this.validatedCollab.length>0) {
+            if (this.isRegistrationAvailable && this.validatedCollab.length > 0) {
                 var i;
                 for (i = 0; i < this.validatedCollab.length; i++) {
                     this.allCollaboratorsIdChosen.push(this.validatedCollab[i].id);
                 }
-                this.AddCollaboratorsToTrainingSession();
+                this.addCollaboratorsToTrainingSession();
                 this.resetAssignCollaboratorsForm();
                 this.confirmCollaboratorAddedSession = true;
-                setTimeout(function(){ this.confirmCollaboratorAddedSession = false; }.bind(this), 2000);
+                setTimeout(function () {
+                    this.confirmCollaboratorAddedSession = false;
+                }.bind(this), 2000);
             }
         },
-        gatherCollaboratorsFromDatabase(){
-         this.$http.get("api/collaborateurs").then(
-         function (response) {
-         this.allCollaborators = response.data;
-         this.allCollaborators.sort(function (a, b) {
-         return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0);
-         });
-         this.VerifyAllCollaboratorsNotYetAccepted();
 
-         },
-         function (response) {
-         console.log("Error: ", response);
-         console.error(response);
-         }
-         );
-         },
+        gatherCollaboratorsFromDatabase(){
+            this.$http.get("api/collaborateurs").then(
+                function (response) {
+                    this.allCollaborators = response.data;
+                    this.allCollaborators.sort(function (a, b) {
+                        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0);
+                    });
+                    this.verifyAllCollaboratorsNotYetAccepted();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
 
         storeCollaboratorsFound(){
-            this.requestedCollaborators=[];
-            for (index in this.requestedCollaboratorsMemo)
-            {
-                if ( (this.requestedCollaboratorsMemo[index].lastName.toUpperCase()).indexOf(this.value.toUpperCase()) != -1
+            this.requestedCollaborators = [];
+            for (index in this.requestedCollaboratorsMemo) {
+                if ((this.requestedCollaboratorsMemo[index].lastName.toUpperCase()).indexOf(this.value.toUpperCase()) != -1
                     || (this.requestedCollaboratorsMemo[index].firstName.toUpperCase()).indexOf(this.value.toUpperCase()) != -1
-                    || ((this.requestedCollaboratorsMemo[index].lastName.toUpperCase())+" "+(this.requestedCollaboratorsMemo[index].firstName.toUpperCase())).indexOf(this.value.toUpperCase()) != -1
-                    || ((this.requestedCollaboratorsMemo[index].firstName.toUpperCase())+" "+(this.requestedCollaboratorsMemo[index].lastName.toUpperCase())).indexOf(this.value.toUpperCase()) != -1 ) {
+                    || ((this.requestedCollaboratorsMemo[index].lastName.toUpperCase()) + " " + (this.requestedCollaboratorsMemo[index].firstName.toUpperCase())).indexOf(this.value.toUpperCase()) != -1
+                    || ((this.requestedCollaboratorsMemo[index].firstName.toUpperCase()) + " " + (this.requestedCollaboratorsMemo[index].lastName.toUpperCase())).indexOf(this.value.toUpperCase()) != -1) {
                     this.requestedCollaborators.push(this.requestedCollaboratorsMemo[index]);
                 }
             }
@@ -336,7 +349,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         },
         selectCollaborators(){
             for (index in this.requestedCollaborators) {
-                this.allCollaboratorsName.push(this.requestedCollaborators[index].lastName +" " +this.requestedCollaborators[index].firstName);
+                this.allCollaboratorsName.push(this.requestedCollaborators[index].lastName + " " + this.requestedCollaborators[index].firstName);
             }
         },
         numberAddedCollabCounter (){
@@ -344,25 +357,26 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.numberAddedCollab = this.validatedCollab.length;
             this.numberPlacesAvailable = 15 - this.allCollaboratorsAlreadyInSessions.length;
 
-            if(this.numberAddedCollab <= this.numberPlacesAvailable){
+            if (this.numberAddedCollab <= this.numberPlacesAvailable) {
                 this.isRegistrationAvailable = true;
             }
-            else{
-                    this.isRegistrationAvailable = false;
+            else {
+                this.isRegistrationAvailable = false;
             }
         },
         resetAssignCollaboratorsForm(){
-            this.validatedCollab.splice(0,this.validatedCollab.length);
-            this.allCollaboratorsIdChosen.splice(0,this.allCollaboratorsIdChosen.length);
-            this.allCollaboratorsAlreadyInSessions.splice(0,this.allCollaboratorsAlreadyInSessions.length);
+            this.validatedCollab.splice(0, this.validatedCollab.length);
+            this.allCollaboratorsIdChosen.splice(0, this.allCollaboratorsIdChosen.length);
+            this.allCollaboratorsAlreadyInSessions.splice(0, this.allCollaboratorsAlreadyInSessions.length);
             this.sessionIdChosen = 0;
             this.isDisabled = true;
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
-            this.allCollaborators.splice(0,this.allCollaborators.length);
-            this.requestedCollaborators.splice(0,this.requestedCollaborators.length);
+            this.allCollaborators.splice(0, this.allCollaborators.length);
+            this.requestedCollaborators.splice(0, this.requestedCollaborators.length);
             this.isRegistrationAvailable = true;
             this.value = '';
         },
+
         clearGreyPanel(){
             this.isDisabled = false;
         },
@@ -375,37 +389,90 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this[errorMessage] = "Veuillez entrer un nom ou prénom valide";
                 this.isSearchNameValid = false;
             }
+        },
+        addFeedback(feedback){
+            this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
+                function (response) {
+                    console.log("success to add a feedback");
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        getAllFeedbacks(){
+            this.$http.get("api/feedbacks").then(
+                function (response) {
+                    console.log("success to get all feedbacks");
+
+                    this.allFeedbacks = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        //fonction pour classer les formations
+        getTrainingsScore(){
+            this.$http.get("api/trainingscore").then(
+                function (response) {
+                    console.log("success to get all training score");
+                    this.allTrainingScore = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        getAllTrainingsToGiveFeedbacks(){
+            this.$http.get("api/givefeedbacks").then(
+                function (response) {
+                    console.log("success to get all trainings to give feedbacks");
+                    this.allTrainingsToGiveFeedbacks = response.data;
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
         }
     },
     watch: {
         value: function (lastName) {
             this.verifyLastName(lastName, 'lastNameRegexErrorMessage');
-            if(this.requestedCollaboratorsMemo.length>0 && this.value)
+            if (this.requestedCollaboratorsMemo.length > 0 && this.value)
                 this.storeCollaboratorsFound();
-            if(this.value==""){
+            if (this.value == "") {
                 this.requestedCollaborators = this.requestedCollaboratorsMemo;
             }
         },
-        sessionIdChosen: function(value) {
-            if(value) {
+
+        sessionIdChosen: function (value) {
+            if (value) {
                 this.verifyCheckedNames();
                 this.clearGreyPanel();
             }
         },
-        checkedNames: function(value) {
-            this.allCollaboratorsName.splice(0,this.allCollaboratorsName.length);
-            this.allCollaboratorsAlreadyInSessions.splice(0,this.allCollaboratorsAlreadyInSessions.length);
+        checkedNames: function (value) {
+            this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
+            this.allCollaboratorsAlreadyInSessions.splice(0, this.allCollaboratorsAlreadyInSessions.length);
             this.verifyCheckedNames();
         },
-        noCollaboratorsFound: function(){
-            if(this.collaboratorsRequesting.length>0){
+        noCollaboratorsFound: function () {
+            if (this.collaboratorsRequesting.length > 0) {
                 this.noCollaboratorsFound = false;
             }
             else {
                 this.noCollaboratorsFound = true;
             }
         },
-        validatedCollab: function(){
+        validatedCollab: function () {
             this.numberAddedCollabCounter();
 
         }

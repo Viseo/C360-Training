@@ -5,12 +5,12 @@ Vue.use(VueResource);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
-        return (request.method === item.method && request.url === item.url);
+        return (request.method === item.method && request.url === item.url );
     });
     if (!route) {
         // we're just going to return a 404 here, since we don't want our test suite making a real HTTP request
         next(request.respondWith({status: 404, statusText: 'Oh no! Not found!'}));
-    } else {
+    }else {
         next(
             request.respondWith(
                 route.response,
@@ -96,7 +96,7 @@ describe('assign collaborator test', function () {
     });
 
     it('should check if all available sessions are in the drop-down ', function () {
-        vmAssignCollaborator.GatherAllSessions();
+        vmAssignCollaborator.gatherAllSessions();
         var response = [{
             "id": 6,
             "version": 0,
@@ -114,14 +114,16 @@ describe('assign collaborator test', function () {
             "location": "Salle Bora Bora"
         }];
         expect(vmAssignCollaborator.state.allSessions).toEqual(response);
+    });
 
+    it('should check if all available sessions are in the drop-down ko', function () {
+        var reponseApi = vmAssignCollaborator.gatherAllSessions();
+        console.log("reponseApi " +reponseApi);
     });
 
     it('should check if fields are greys when there are no sessions selected ', function () {
-
         expect(vmAssignCollaborator.isDisabled).toBe(true);
         expect(vmAssignCollaborator.sessionIdChosen).toBe(0);
-
     });
 
     it('should check if fields are not greys when sessions are selected ', function () {
@@ -148,7 +150,7 @@ describe('assign collaborator test', function () {
         //         "version": 0
         //     }
         // ];
-        //vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+        //vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
     });
     it('should check if collaborators are displayed when checkbox is checked false', function () {
         //vmAssignCollaborator.verifyCheckedNames();
@@ -166,7 +168,7 @@ describe('assign collaborator test', function () {
                 "version": 0
             }
         ];
-        vmAssignCollaborator.VerifyAllCollaboratorsNotYetAccepted();
+        vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
 
     });
 
@@ -411,8 +413,5 @@ describe('assign collaborator test', function () {
         vmAssignCollaborator.verifyLastName(vmAssignCollaborator.value, 'lastNameRegexErrorMessage');
         expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
         expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
-
-
-
     });
 });

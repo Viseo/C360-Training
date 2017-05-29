@@ -1,250 +1,299 @@
 let profilToUpdate = Vue.component('profil-to-update', {
     template: `
-<form id="registr-form" @submit.prevent="updateCollaboratorInfo()">
+<form id="register-form"
+      @submit.prevent="updateCollaboratorInfo()"
+      enctype="multipart/form-data">
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-header">
-                    <span class="glyphicon glyphicon-user"> 1. Mes coordonnées</span>
-                    <a id="box" style="background-image:url('img/IMGTEST.JPG');"></a>
-                </div>
-                <div class="panel-body">
-                        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                                    <!-- PRENOM -->
-                                    <customInput
-                                        label="prenom"
-                                        labelText="Prénom"
-                                        icon="glyphicon-user"
-                                        type="text"
-                                        tab="2"
-                                        v-model="firstName"
-                                        maxlength="125" minlength="2"
-                                        @focus="setFirstNameEmptyToFalse()" 
-                                        @blur="isFirstNameEmpty()" 
-                                        :emptyField="firstNameEmpty"
-                                        :errorField="isErrorFirstName()"
-                                        :errorMessage="errorMessageFirstName">
-                                    </customInput>
-                                </div>
-                                <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
-                                    <!-- FONCTION -->
-                                    <customInput
-                                        label="fonction"
-                                        labelText="Fonction"
-                                        icon="glyphicon-tag"
-                                        type="text"
-                                        tab="2"
-                                        v-model="fonction"
-                                        maxlength="50">
-                                    </customInput>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                                    <!-- NOM -->
-                                    <customInput
-                                        label="nom"
-                                        labelText="Nom"
-                                        icon="glyphicon-user"
-                                        type="text"
-                                        tab="2"
-                                        v-model="lastName"
-                                        maxlength="125" minlength="2"
-                                        @focus="setLastNameEmptyToFalse()" 
-                                        @blur="isLastNameEmpty()" 
-                                        :emptyField="lastNameEmpty"
-                                        :errorField="isErrorLastName()"
-                                        :errorMessage="errorMessageLastName">
-                                    </customInput>
-                                </div>
-                                <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
-                                    <!-- BUSINESS UNIT -->
-                                    <table style="border-spacing: 0px">
-                                        <div class="form-group has-feedback">
-                                            <label>Business Unit</label>
-                                            <div class="inner-addon left-addon">
-                                                <tr><td style="width: 500px;">
-                                                    <i class="glyphicon"></i>
-                                                    <select class="form-control" v-model="businessUnit">
-                                                        <option >VISEO DATA & PROCESS</option>
-                                                        <option >VISEO TECHNOLOGIES</option>
-                                                        <option >VISEO DIGITAL</option>
-                                                    </select>
-                                                </td></tr>
-                                            </div>
-                                        </div>
-                                    </table>
-                                </div>
-                            </div>
-                            <br>
-                        </div>
+        <div class="panel panel-default">
+            <div class="panel-header">
+                <span>
+                    <span class="glyphicon glyphicon-user"></span>
+                    1. Mes coordonnées
+                </span>
+                <div class="boxon">
+                    <img id="profilImageToChange"
+                         @error="imageLoadOnError"
+                         :src="imagePath"
+                         class="image"/>
+                    <p class="text">
+                        <input ref="loadProfilImage"
+                               id="loadProfilImage"
+                               type="file"
+                               accept="image/*"
+                               style="opacity: 0.0;
+                                      position: absolute;
+                                      top:0;
+                                      left: 0;
+                                      bottom: 0;
+                                      right:0;
+                                      width: 100%;
+                                      height:100%;
+                                      cursor:pointer;"/>
+                        <br><br><br><b>MODIFIER</b>
+                    </p>
                 </div>
             </div>
-    </div>
-    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-header">
-                    <span class="glyphicon glyphicon-user"> 2. Mes identifiants</span>
-                </div>
-                <div class="panel-body">
-                        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
-                            <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                                    <!-- MOT DE PASSE -->
-                                    <customPasswordInput
-                                        label="ancienmdp"
-                                        labelText="Ancien mot de passe"
-                                        v-model="password"
-                                        @focus="setOldPasswordEmptyToFalse()" 
-                                        @blur="isOldPasswordEmpty()"
-                                        :emptyField="oldPasswordEmpty"
-                                        :errorField="isErrorOldPassword()"
-                                        :errorMessage="errorMessageOldPassword"
-                                        :show="showPass"
-                                        @click="toggleShowPassword()"
-                                        :isValid="isValidOldPassword"
-                                        :isNotValid="isNotValidOldPassword">
-                                    </customPasswordInput>
-                                </div>
-                                <div class="col-lg-6 col-lg-offset-1 col-md-offset-0">
-                                    <!-- EMAIL-->
-                                    <customInput
-                                        label="email"
-                                        labelText="Email"
-                                        icon="glyphicon-envelope"
-                                        type="text"
-                                        tab="2"
-                                        v-model="email"
-                                        @focus="setEmailAlreadyExistToTrue()" 
-                                        @blur="isEmailEmpty()"
-                                        :emptyField="emailEmpty"
-                                        :errorField="isErrorEmail()"
-                                        :errorMessage="errorMessageEmail">
-                                    </customInput>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                                    <!-- NOUVEAU MOT DE PASSE -->
-                                    <customPasswordInput
-                                        label="nouveaumdp"
-                                        labelText="Nouveau mot de passe"
-                                        v-model="newPassword"
-                                        @focus="setPasswordEmptyToFalse()" 
-                                        @blur="isPasswordEmpty()"
-                                        :emptyField="passwordEmpty"
-                                        :errorField="isErrorPassword()"
-                                        :errorMessage="errorMessagePassword"
-                                        :show="showPass"
-                                        @click="toggleShowPassword()"
-                                        :isValid="isValidPassword"
-                                        :isNotValid="isNotValidPassword">
-                                    </customPasswordInput>
-                                    
-                                </div>
-                                <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
-                                    <span><b>Remarque:</b></span><br>
-                                    <p>Votre nouveau mot de passe doit contenir au minimum 6 caractères.</p>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                                    <!-- CONFIRMATION MOT DE PASSE -->
-                                    <customPasswordInput
-                                        label="mdpc"
-                                        labelText="Confirmation mot de passe"
-                                        v-model="confirmPassword"
-                                        @focus="setConfirmPasswordEmptyToFalse()" 
-                                        @blur="isConfirmPasswordEmpty()"
-                                        :emptyField="confirmPasswordEmpty"
-                                        :errorField="isErrorConfirmPassword()"
-                                        :errorMessage="errorMessageConfirmPassword"
-                                        :show="showPass"
-                                        @click="toggleShowPassword()"
-                                        :isValid="isValidConfirmPassword"
-                                        :isNotValid="isNotValidConfirmPassword">
-                                    </customPasswordInput>
-                                </div>
-                            </div>
+            <div class="panel-body">
+                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-10 col-lg-offset-1 col-md-offset-1"> 
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6"> 
+
+                            <!-- PRENOM -->
+                            <customInput
+                                    label="prenom"
+                                    labelText="Prénom"
+                                    icon="glyphicon-user"
+                                    type="text"
+                                    tab="2"
+                                    v-model="firstName"
+                                    maxlength="125" minlength="2"
+                                    @focus="setFirstNameEmptyToFalse()"
+                                    @blur="isFirstNameEmpty()"
+                                    :emptyField="firstNameEmpty"
+                                    :errorField="isErrorFirstName()"
+                                    :errorMessage="errorMessageFirstName">
+                            </customInput>
                         </div>
-                </div>
-            </div>
-    </div>
-    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-        <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-1">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-lg-6 col-sm-6 col-xs-6 col-md-3 col-lg-offset-0 col-md-offset-0">
-                        <div class="col-xs-6 col-xm-6 col-md-6 cold-lg-6 col-lg-offset-6 col-md-offset-6">
-                            <button type="submit" name="register-submit" id="register-submit"
-                            tabindex="4" class="form-control btn btn-primary">Enregistrer
-                            </button>
+                        <div class="col-lg-6 col-md-6"> 
+
+                            <!-- FONCTION -->
+                            <customInput
+                                    label="fonction"
+                                    labelText="Fonction"
+                                    icon="glyphicon-tag"
+                                    type="text"
+                                    tab="2"
+                                    v-model="fonction"
+                                    maxlength="50">
+                            </customInput>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-lg-offset-0 col-md-offset-0">
-                        <div class="col-xs-6 col-xm-6 col-md-6 cold-lg-6 ">
-                            <button @click="changePage()" name="register-submit" id="register-submit"
-                            tabindex="4" class="form-control btn btn-primary">Annuler
-                            </button>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6"> 
+                            <!-- NOM -->
+                            <customInput
+                                    label="nom"
+                                    labelText="Nom"
+                                    icon="glyphicon-user"
+                                    type="text"
+                                    tab="2"
+                                    v-model="lastName"
+                                    maxlength="125" minlength="2"
+                                    @focus="setLastNameEmptyToFalse()"
+                                    @blur="isLastNameEmpty()"
+                                    :emptyField="lastNameEmpty"
+                                    :errorField="isErrorLastName()"
+                                    :errorMessage="errorMessageLastName">
+                            </customInput>
+                        </div>
+                        <div class="col-lg-6 col-md-6 "> 
+                            <!-- BUSINESS UNIT -->
+                            <table style="border-spacing: 0px">
+                                <div class="form-group has-feedback">
+                                    <label>Business Unit</label>
+                                    <div class="inner-addon left-addon">
+                                        <tr>
+                                            <td style="width: 500px;">
+                                                <i class="glyphicon"></i>
+                                                <select class="form-control" v-model="businessUnit">
+                                                    <option>VISEO DATA & PROCESS</option>
+                                                    <option>VISEO TECHNOLOGIES</option>
+                                                    <option>VISEO DIGITAL</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-header">
+                <span>
+                    <span class="glyphicon glyphicon-user"></span>
+                    2. Mes identifiants
+                </span>
+            </div>
+            <div class="panel-body">
+                <div class="col-lg-10 col-sm-12 col-xs-12 col-md-6 col-lg-offset-1 col-md-offset-3">
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
+                            <!-- MOT DE PASSE -->
+                            <customPasswordInput
+                                    label="ancienmdp"
+                                    labelText="Ancien mot de passe"
+                                    v-model="password"
+                                    @focus="setOldPasswordEmptyToFalse()"
+                                    @blur="isOldPasswordEmpty()"
+                                    :emptyField="oldPasswordEmpty"
+                                    :errorField="isErrorOldPassword()"
+                                    :errorMessage="errorMessageOldPassword"
+                                    :show="showPass"
+                                    @click="toggleShowPassword()"
+                                    :isValid="isValidOldPassword"
+                                    :isNotValid="isNotValidOldPassword">
+                            </customPasswordInput>
+                        </div>
+                        <div class="col-lg-6 col-lg-offset-1 col-md-12"> 
+                            <!-- EMAIL-->
+                            <customInput
+                                    label="email"
+                                    labelText="Email"
+                                    icon="glyphicon-envelope"
+                                    type="text"
+                                    tab="2"
+                                    v-model="email"
+                                    @focus="setEmailAlreadyExistToTrue()"
+                                    @blur="isEmailEmpty()"
+                                    :emptyField="emailEmpty"
+                                    :errorField="isErrorEmail()"
+                                    :errorMessage="errorMessageEmail">
+                            </customInput>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
+                            <!-- NOUVEAU MOT DE PASSE -->
+                            <customPasswordInput
+                                    label="nouveaumdp"
+                                    labelText="Nouveau mot de passe"
+                                    v-model="newPassword"
+                                    @focus="setPasswordEmptyToFalse()"
+                                    @blur="isPasswordEmpty()"
+                                    :emptyField="passwordEmpty"
+                                    :errorField="isErrorPassword()"
+                                    :errorMessage="errorMessagePassword"
+                                    :show="showPass"
+                                    @click="toggleShowPassword()"
+                                    :isValid="isValidPassword"
+                                    :isNotValid="isNotValidPassword">
+                            </customPasswordInput>
+
+                        </div>
+                        <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
+                            <span><b>Remarque:</b></span><br>
+                            <p>Votre nouveau mot de passe doit contenir au minimum 6 caractères.</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-6 col-xs-6 col-md-12"> 
+                            <!-- CONFIRMATION MOT DE PASSE -->
+                            <customPasswordInput
+                                    label="mdpc"
+                                    labelText="Confirmation mot de passe"
+                                    v-model="confirmPassword"
+                                    @focus="setConfirmPasswordEmptyToFalse()"
+                                    @blur="isConfirmPasswordEmpty()"
+                                    :emptyField="confirmPasswordEmpty"
+                                    :errorField="isErrorConfirmPassword()"
+                                    :errorMessage="errorMessageConfirmPassword"
+                                    :show="showPass"
+                                    @click="toggleShowPassword()"
+                                    :isValid="isValidConfirmPassword"
+                                    :isNotValid="isNotValidConfirmPassword">
+                            </customPasswordInput>
+                        </div>
+                        <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
+                            <br>
+                            <span v-show="!isRightOldPassword" class="color-red">
+                                        <b>Ancien mot de passe incorrect.</b>
+                                    </span>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</form>`,
+    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-5 col-lg-offset-1 col-md-3 col-md-offset-3 col-sm-6 col-xs-6">
+                            <button type="submit"
+                                    name="register-submit"
+                                    id="register-submit"
+                                    tabindex="4"
+                                    class="form-control btn btn-primary">
+                                Enregistrer
+                            </button>
+                    </div>
+                    <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3">
+                            <button @click="goTo('registerTrainingCollaborator')"
+                                    name="cancel-submit"
+                                    id="cancel-submit"
+                                    tabindex="4"
+                                    class="form-control btn btn-primary">Annuler
+                            </button>
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+</form>
+`,
 
     data: function () {
         return {
-            firstName:'',
-            fonction:'',
-            lastName:'',
-            businessUnit:'',
-            email:'',
-            password:'',
-            newPassword:'',
-            confirmPassword:'',
+            firstName: '',
+            fonction: '',
+            lastName: '',
+            businessUnit: '',
+            email: '',
+            password: '',
+            newPassword: '',
+            confirmPassword: '',
 
             lastNameEmpty: false,
-            isLastNameValid:true,
-            errorMessageLastName:'',
+            isLastNameValid: true,
+            errorMessageLastName: '',
 
             firstNameEmpty: false,
-            isFirstNameValid:true,
-            errorMessageFirstName:'',
+            isFirstNameValid: true,
+            errorMessageFirstName: '',
 
             emailEmpty: false,
-            isEmailValid:true,
-            errorMessageEmail:'',
+            isEmailValid: true,
+            errorMessageEmail: '',
 
             passwordEmpty: false,
-            isPasswordValid:true,
-            errorMessagePassword:'',
-            isValidPassword:false,
-            isNotValidPassword:false,
+            isPasswordValid: true,
+            errorMessagePassword: '',
+            isValidPassword: false,
+            isNotValidPassword: false,
 
             oldPasswordEmpty: false,
-            isOldPasswordValid:true,
-            errorMessageOldPassword:'',
-            isValidOldPassword:false,
-            isNotValidOldPassword:false,
+            isOldPasswordValid: true,
+            errorMessageOldPassword: '',
+            isValidOldPassword: false,
+            isNotValidOldPassword: false,
 
             confirmPasswordEmpty: false,
-            isConfirmPasswordValid:true,
-            errorMessageConfirmPassword:'',
-            isValidConfirmPassword:false,
-            isNotValidConfirmPassword:false,
+            isConfirmPasswordValid: true,
+            errorMessageConfirmPassword: '',
+            isValidConfirmPassword: false,
+            isNotValidConfirmPassword: false,
+
+            isRightOldPassword: true,
 
             showPass: false,
-            infoCollab:[],
-            CollabToUpdate:{}
+            infoCollab: [],
+            CollabToUpdate: {},
+            imagePathName: 'img/profile.jpg',
+            imageHasBeenChanged: false,
+            imagePath: ''
 
         }
     },
+
     watch: {
         lastName: function (value) {
             this.verifyLastName(value);
@@ -267,11 +316,43 @@ let profilToUpdate = Vue.component('profil-to-update', {
             this.verifyConfirmPassword(value);
         }
     },
-    mounted:function () {
+
+    mounted: function () {
+        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getCookies();
         this.getInfoCollaborator();
+        this.checkIfProfilImageHasBeenChanged("#loadProfilImage");
+        this.imagePath = "img/" + this.collaborator_id + ".jpg";
     },
+
     methods: {
+        checkIfProfilImageHasBeenChanged(idImage) {
+            let currentProfilImage = $(idImage);
+            let self = this;
+
+            function displayNewImageFile(input, idImage) {
+                let imageFile = input.files[0];
+                let isImageSelected = input.files && input.files[0];
+                let newProfilImage = $(idImage);
+
+                if (isImageSelected) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        newProfilImage.attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(imageFile);
+                    console.log("File: " + imageFile.name + " selected");
+                }
+
+            };
+
+            currentProfilImage.change(function () {
+                displayNewImageFile(this, '#profilImageToChange');
+                self.imageHasBeenChanged = true;
+            });
+        },
+
         setLastNameEmptyToFalse() {
             this.lastNameEmpty = false;
         },
@@ -327,7 +408,6 @@ let profilToUpdate = Vue.component('profil-to-update', {
         verifyEmail(email){
             if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((([0-9]{1,3}\.)+[0-9]{1,3})|(([a-zA-ZàÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-0-9]+\.)+[a-zA-Z0-9]{2,}))$/
                     .test(email)) {
-
                 this.errorMessageEmail = '';
                 this.isEmailValid = true;
             } else {
@@ -349,6 +429,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
         setConfirmPasswordEmptyToFalse(){
             this.confirmPasswordEmpty = false;
         },
+
         isConfirmPasswordEmpty(){
             if (this.confirmPassword == '') {
                 this.confirmPasswordEmpty = true;
@@ -357,34 +438,47 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
             }
         },
+
         isErrorConfirmPassword(){
             return !this.isConfirmPasswordValid && !this.confirmPasswordEmpty;
         },
+
         setOldPasswordEmptyToFalse(){
             this.oldPasswordEmpty = false;
         },
+
         isOldPasswordEmpty(){
             if (this.password == '') {
                 this.oldPasswordEmpty = true;
+                this.isValidOldPassword = false;
+                this.isNotValidOldPassword = true;
             }
         },
+
         isErrorOldPassword(){
             return !this.isOldPasswordValid && !this.oldPasswordEmpty;
         },
+
         setPasswordEmptyToFalse(){
             this.passwordEmpty = false;
         },
+
         isPasswordEmpty(){
             if (this.newPassword == '') {
                 this.passwordEmpty = true;
+                this.isValidPassword = false;
+                this.isNotValidPassword = true;
             }
         },
+
         isErrorPassword(){
             return !this.isPasswordValid && !this.passwordEmpty;
         },
+
         toggleShowPassword(){
             this.showPass = !this.showPass;
         },
+
         verifyOldPassword(password) {
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessageOldPassword = '';
@@ -398,6 +492,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 this.isNotValidOldPassword = true;
             }
         },
+
         verifyPassword(password) {
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessagePassword = '';
@@ -411,6 +506,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 this.isNotValidPassword = true;
             }
         },
+
         verifyConfirmPassword(confirmPassword) {
             if (this.confirmPassword === this.newPassword) {
                 this.errorMessageConfirmPassword = '';
@@ -424,22 +520,21 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 this.isNotValidConfirmPassword = true;
             }
         },
-        changePage(){
-            this.$router.push('/registerTrainingCollaborator');
-        },
+
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
+            if (regexCookieToken) {
+                if (!regexCookieToken[0].includes('undefined')) {
+                    if (this.token != 'undefined') {
                         this.token = String(regexCookieToken.pop());
                         this.collaborator_id = jwt_decode(this.token).id;
                     }
                 }
             }
         },
+
         getInfoCollaborator(){
-            this.$http.get("api/getcollaborator/"+this.collaborator_id).then(
+            this.$http.get("api/getcollaborator/" + this.collaborator_id).then(
                 function (response) {
                     console.log("success to get user information");
                     this.infoCollab = response.data;
@@ -449,31 +544,68 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     this.fonction = this.infoCollab.function;
                     this.businessUnit = this.infoCollab.businessUnit;
                 },
-                function(response) {
+                function (response) {
                     console.log("Error: ", response);
                     console.error(response);
                 });
         },
+
+        updateCollaboratorImage(){
+            let dataToSend = new FormData();
+            let imageCollaboratorFile = this.$refs.loadProfilImage.files[0];
+            dataToSend.append("file", imageCollaboratorFile);
+            dataToSend.append("idCollaborator", this.collaborator_id);
+            this.$http.post('/fileUpload', dataToSend).then(function (response) {
+                console.log(response);
+            }, function (response) {
+
+            });
+        },
+
+        saveUpdateCollaborator(){
+            let saveModification = (response) => {
+                if (response) {
+                    console.log("success to update user information");
+                    this.imageHasBeenChanged = false;
+                    this.$router.go(this.$router.currentRoute);
+                }
+            };
+            this.put("api/updatecollaborator", this.CollabToUpdate, saveModification);
+        },
+
         updateCollaboratorInfo(){
-            if (this.infoCollab.password ==  this.password){
-                if(this.newPassword == this.confirmPassword){
-                    this.CollabToUpdate = this.infoCollab;
-                    this.CollabToUpdate.firstName = this.firstName;
-                    this.CollabToUpdate.lastName = this.lastName;
-                    this.CollabToUpdate.email = this.email;
-                    this.CollabToUpdate.function = this.fonction;
-                    this.CollabToUpdate.businessUnit = this.businessUnit;
-                    this.CollabToUpdate.password = this.newPassword;
-                    this.$http.put("api/updatecollaborator",this.CollabToUpdate).then(
-                        function (response) {
-                            console.log("success to update user information");
-                        },
-                        function(response) {
-                            console.log("Error: ", response);
-                            console.error(response);
-                        });
+
+            this.isFirstNameEmpty();
+            this.isLastNameEmpty();
+            this.isEmailEmpty();
+            this.isOldPasswordEmpty();
+            this.isPasswordEmpty();
+            this.isConfirmPasswordEmpty();
+            if (!this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.oldPasswordEmpty && !this.passwordEmpty && !this.confirmPasswordEmpty) {
+                if (this.infoCollab.password == this.password) {
+                    this.isRightOldPassword = true;
+                    if (this.newPassword == this.confirmPassword) {
+                        this.CollabToUpdate = this.infoCollab;
+                        this.CollabToUpdate.firstName = this.firstName;
+                        this.CollabToUpdate.lastName = this.lastName;
+                        this.CollabToUpdate.email = this.email;
+                        this.CollabToUpdate.function = this.fonction;
+                        this.CollabToUpdate.businessUnit = this.businessUnit;
+                        this.CollabToUpdate.password = this.newPassword;
+                        if (this.imageHasBeenChanged === true) {
+                            this.updateCollaboratorImage();
+                        };
+                        this.saveUpdateCollaborator();
+                    }
+                } else {
+                    this.isRightOldPassword = false;
                 }
             }
+        },
+
+        imageLoadOnError () {
+            let defaultImagePath = "img/profile.jpg";
+            this.imagePath = defaultImagePath;
         }
     }
 });

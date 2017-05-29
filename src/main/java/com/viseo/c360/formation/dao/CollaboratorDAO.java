@@ -79,7 +79,14 @@ public class CollaboratorDAO {
     @Transactional
     public List<Wish> getIsNotCheckedWishes(){
         List<Wish> listWish = daoFacade.getList(
-                "select w from Wish w where w.isChecked = false");
+                "select w from Wish w where w.isChecked IS NULL");
+        return listWish;
+    }
+
+    @Transactional
+    public List<Wish> getIsValidatedWishes(){
+        List<Wish> listWish = daoFacade.getList(
+                "select w from Wish w where w.isChecked = true");
         return listWish;
     }
 
@@ -90,10 +97,24 @@ public class CollaboratorDAO {
         return listWish;
     }
 
+    @Transactional
+    public Wish updateIsChecked(Wish wish){
+        wish = daoFacade.merge(wish);
+        daoFacade.flush();
+        return wish;
+    }
+
     //collaborateur
     @Transactional
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {
         daoFacade.persist(collaborator);
+        daoFacade.flush();
+        return collaborator;
+    }
+
+    @Transactional
+    public Collaborator updateCollaborator(Collaborator collaborator) throws PersistenceException {
+        collaborator = daoFacade.merge(collaborator);
         daoFacade.flush();
         return collaborator;
     }
@@ -113,6 +134,15 @@ public class CollaboratorDAO {
                 (Collaborator) daoFacade.getSingle(
                         "select c from Collaborator c where c.email = :personnalEmail",
                         param("personnalEmail",personnalEmail));
+        return registredUser;
+    }
+
+    public Collaborator getCollaboratorById(Long collab_id){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        Collaborator registredUser =
+                (Collaborator) daoFacade.getSingle(
+                        "select c from Collaborator c where c.id = :id",
+                        param("id",collab_id));
         return registredUser;
     }
 

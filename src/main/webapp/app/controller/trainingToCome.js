@@ -10,7 +10,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         </div>
     </div>
     <div class="row">
-        <div class="panel panel-default" style="height:355px; margin-left:10px; ">
+        <div class="panel panel-default" style="height:362px; margin-left:10px; ">
             <div class="panel-body" style="padding:5px;">
                 <div class="row">
                     <div class="col-lg-12" style="margin-bottom:20px">
@@ -136,14 +136,13 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         },
 
         changePage(){
-            this.$router.push('/WishToVote')
+            this.goTo('WishToVote')
         },
 
         sendWish(){
             this.wishToRegister.label = this.wish;
             this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
                 function (response) {
-                    console.log("success to send a wish");
                     this.wishAlreadyExisted=false;
                     this.wishSuccess = true;
                     setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
@@ -155,7 +154,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.error(response);
                 }
             );
-
         },
 
         getIdCollaboratorWithTokenCookies() {
