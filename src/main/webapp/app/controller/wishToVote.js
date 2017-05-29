@@ -11,7 +11,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                  <div class="panel-body" style="padding:5px; height:364px;">
                     <div class="row">
                         <div class="col-lg-12" style="margin-bottom:30px">
-                             <span class="glyphicon glyphicon-remove-sign" style="cursor: pointer; color:darkred; position:absolute; margin-top:10px; left:95%;" @click="changePage()"></span>
+                             <router-link :to="{name: 'registerTrainingCollaborator'}"><span class="glyphicon glyphicon-remove-sign" style="cursor: pointer; color:darkred; position:absolute; margin-top:10px; left:95%;"></span></router-link>
                         </div>
                            <div class="col-lg-12" style="margin-bottom:30px">
                                  <img v-show="showChevrons" src="css/up.png" id="scroll-up-4" width="60" height="20" style="position: absolute; left:45%; z-index:1; margin-top:5px;">
@@ -75,9 +75,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         });
     },
     methods: {
-        changePage(){
-            this.goTo('registerTrainingCollaborator');
-        },
+
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             if(regexCookieToken){

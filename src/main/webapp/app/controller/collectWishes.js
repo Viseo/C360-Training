@@ -27,11 +27,12 @@ let collectWishes = Vue.component('collect-wishes', {
                                 <div id="collectWishes">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-2 col-lg-2">
+                                            <router-link :to="{name: 'addTrainingTopic'}">
                                             <img src="css/left-arrow.png"
                                                  width="40"
                                                  height="40"
-                                                 @click="goTo('addTrainingTopic')"
                                                  style="cursor: pointer;">
+                                            </router-link>
                                         </div>
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>

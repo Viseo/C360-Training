@@ -178,7 +178,7 @@ let Header = Vue.component('header-component', {
             };
 
             let preventCollaboratorToGoToAdminPage = () => {
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'WishToVote' && this.getPageName() !='skillsStatementByCollaborators' && this.getPageName() != 'profiltoupdate') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'wishToVote' && this.getPageName() !='skillsStatementByCollaborators' && this.getPageName() != 'profiltoupdate') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
@@ -261,6 +261,11 @@ let Header = Vue.component('header-component', {
     }
 });
 
+// For 404 page
+var notFound = Vue.extend({
+    template: '<h1>Not Found</h1>'
+});
+
 const router = new VueRouter({
     mode: 'hash',
     routes: [
@@ -277,30 +282,32 @@ const router = new VueRouter({
                             <show-formation-panel></show-formation-panel>
                         </div>
                         <div class="col-sm-12 col-md-5 col-lg-5">
-                            <assign-collaborator></assign-collaborator>
+                            <router-view></router-view>
                         </div>
                     </div>
                 </div>`
             },
-        },
-        {
-            path: "/collectWishes",
-            name: 'collectWishes',
-            component: {
-                template: `
-                <div id="newVue" v-cloak>
-                    <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
-                    <div class="container-fluid">
-                        <div class="col-sm-12 col-md-7 col-lg-7">
-                            <add-formation-panel></add-formation-panel>
-                            <show-formation-panel></show-formation-panel>
-                        </div>
-                        <div class="col-sm-12 col-md-5 col-lg-5">
-                            <collect-wishes></collect-wishes>
-                        </div>
-                    </div>
-                </div>`
+            children: [{
+                name: 'addTrainingTopic',
+                path: "/addTrainingTopic",
+                component: {
+                    template: `<assign-collaborator></assign-collaborator>`
+                }
             },
+                {
+                    name: "collectWishes",
+                    path:'collectWishes',
+                    component: {
+                        template: `<collect-wishes></collect-wishes>`
+                    }
+                },
+                {
+                    name: "trainingRanking",
+                    path:'trainingRanking',
+                    component: {
+                        template: `<training-ranking></training-ranking>`
+                    }
+                }]
         },
         {
             path: "/registerTrainingCollaborator",
@@ -314,28 +321,25 @@ const router = new VueRouter({
                                         </div>
                                         <div class="col-sm-12 col-md-5 col-lg-5">
                                             <state-request></state-request>
-                                            <training-to-come></training-to-come>
+                                            <router-view></router-view>
                                         </div>
                                     </div>
                            </div>`
-            }
-        }, {
-            path: "/WishToVote",
-            name: 'WishToVote',
-            component: {
-                template: `<div id="newVue" v-cloak>
-                                <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
-                                    <div class="container-fluid">
-                                        <div class="col-sm-12 col-md-7 col-lg-7">
-                                            <collaborator-formation ref="myComponent" ></collaborator-formation>
-                                        </div>
-                                        <div class="col-sm-12 col-md-5 col-lg-5">
-                                            <state-request></state-request>
-                                            <wish-to-vote></wish-to-vote>
-                                        </div>
-                                    </div>
-                           </div>`
-            }
+            },
+            children: [{
+                name: 'registerTrainingCollaborator',
+                path: "/registerTrainingCollaborator",
+                component: {
+                    template: `<training-to-come></training-to-come>`
+                }
+            },
+                {
+                    name: "wishToVote",
+                    path:'wishToVote',
+                    component: {
+                        template: `<wish-to-vote></wish-to-vote>`
+                    }
+                }]
         },
         {
             path: "/login",
@@ -402,25 +406,6 @@ const router = new VueRouter({
             }
         },
         {
-            path: "/trainingRanking",
-            name: 'trainingRanking',
-            component: {
-                template: `
-               <div id="newVue" v-cloak>
-                    <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
-                   <div class="container-fluid">
-                       <div class="col-sm-12 col-md-7 col-lg-7">
-                           <add-formation-panel></add-formation-panel>
-                           <show-formation-panel></show-formation-panel>
-                       </div>
-                       <div class="col-sm-12 col-md-5 col-lg-5">
-                           <training-ranking></training-ranking>
-                       </div>
-                   </div>
-               </div>`
-            },
-        },
-        {
             path: "/profiltoupdate",
             name: 'profiltoupdate',
             component: {
@@ -434,14 +419,20 @@ const router = new VueRouter({
                            </div>`
             }
         },
+        {
+            path: "*",
+            component: notFound
+        }
     ]
 });
+
+
 
 const PAGE_TITLE = {
     "login": "Accueil C360",
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
-    "WishToVote": "Gestion des formations",
+    "wishToVote": "Gestion des formations",
     "addTrainingTopic": "Gestion des formations",
     "profiltoupdate" : "Modifier mon profil",
     "collectWishes": "Gestion des formations",
@@ -454,7 +445,7 @@ const PAGE_FAVICON = {
     "login": "img/icon_accueil.png",
     "resetPassword": "img/icon_accueil.png",
     "registerTrainingCollaborator": "img/icon_formation.png",
-    "WishToVote": "img/icon_formation.png",
+    "wishToVote": "img/icon_formation.png",
     "addTrainingTopic": "img/icon_formation.png",
     "profiltoupdate" : "img/icon_accueil.png",
     "collectWishes": "img/icon_formation.png",
