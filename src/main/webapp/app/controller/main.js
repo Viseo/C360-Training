@@ -250,6 +250,7 @@ let Header = Vue.component('header-component', {
                     if (!this.dialog)
                         this.goTo('login')
                 }
+                document.cookie="alreadyShownPopUp=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
             };
 
             this.post("api/userdisconnect", this.token, disconnect);
