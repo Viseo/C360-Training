@@ -75,7 +75,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                placeholder="Nom ou prénom du collaborateur"></typeahead>
                                 </div>
                                 <br/><br/>
-                                <div id="collaboratorsList" data-simplebar style="overflow-y:auto; overflow-x: hidden; height:235px;">
+                                <div class="collaboratorsList" data-simplebar>
                                     <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
                                     </div>
                                     <table class="tabCentring">
