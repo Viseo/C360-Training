@@ -154,7 +154,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     @blur="isEmailEmpty()"
                                     :emptyField="emailEmpty"
                                     :errorField="isErrorEmail()"
-                                    :errorMessage="errorMessageEmail">
+                                    :errorMessage="errorMessageEmail"
+                                    :disabled = "true" >
                             </customInput>
                         </div>
                     </div>

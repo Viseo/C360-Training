@@ -16,7 +16,8 @@ let stateRequest = Vue.component('state-request', {
                 collaboratorIdentity: {
                     id: '',
                     lastName: '',
-                    firstName: ''
+                    firstName: '',
+                    alreadyShownPopUp:false,
                 },
                 requestedTrainingByCollaborator:[],
                 requestedTraining:[{
@@ -91,7 +92,7 @@ let stateRequest = Vue.component('state-request', {
              <div v-show = "showModal" style="position: fixed;z-index: 9998;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, .5);display: table;transition: opacity .3s ease;">
                  <alert type = "info" placement = "top" width="40%" style="top:25%;background-color:white;">
                      <center><h2 style="color:rgba(66, 139, 202,0.8);">Notez vos formations!</h2></center> 
-                     <span style="top:-60px;left:98%" class="glyphicon glyphicon-remove-sign color-red" @click="showModal = false;"></span>
+                     <span style="top:-60px;left:98%" class="glyphicon glyphicon-remove-sign color-red" @click="showModal = false;createCookie();"></span>
                      <br><br>
                      <accordion id="accordionId" :one-at-atime="true" type="info" style="height:100%">
                             <div v-for="training in allTrainingsToGiveFeedbacks">
@@ -120,7 +121,7 @@ let stateRequest = Vue.component('state-request', {
                                                                     <input type="text" class="form-control" placeholder="Commentaire" v-model="comment">
                                                          </div>
                                                          <div class="col-sm-1 col-md-1 col-lg-1">
-                                                                     <button type="button" class="btn btn-default" @click="addFeedback(training)">Enregistrer</button>
+                                                                     <button type="button" class="btn btn-default" @click="addFeedback(training);createCookie();">Enregistrer</button>
                                                          </div>
                                                          </center>
                                                     </div>                        
@@ -155,6 +156,7 @@ let stateRequest = Vue.component('state-request', {
 
             getCookies(){
                 let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
+                this.alreadyShownPopUp=this.getCookie("alreadyShownPopUp");
                 if(regexCookieToken){
                     if(!regexCookieToken[0].includes('undefined')) {
                         if (this.token != 'undefined'){
@@ -165,6 +167,22 @@ let stateRequest = Vue.component('state-request', {
                         }
                     }
                 }
+            },
+            getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        console.log(c.substring(name.length, c.length));
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
             },
             orderSessions(){
                 this.requestedTrainingByCollaborator.sort(function(a, b) {
@@ -219,6 +237,9 @@ let stateRequest = Vue.component('state-request', {
                     );
                 }
             },
+            createCookie(){
+                document.cookie = "alreadyShownPopUp=true;"
+            },
             collectAllTrainingsToGiveFeedbacks(){
                 this.$http.get("api/trainingstogivefeedbacks/"+this.collaboratorIdentity.id).then(
                     function (response) {
@@ -229,7 +250,7 @@ let stateRequest = Vue.component('state-request', {
                         });
                         if(this.allTrainingsToGiveFeedbacks.length == 0){
                             this.showModal = false;
-                        }else{
+                        }else if(!this.alreadyShownPopUp){
                             this.showModal = true;
                         }
                     },
@@ -243,56 +264,6 @@ let stateRequest = Vue.component('state-request', {
     }
 );
 
-Vue.component('modal',{
-        template:`
-                <div class="modal fade" id="myModal" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                               <div class="modal-header">
-                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                     <h4 class="modal-title">Notez votre formation</h4>
-                               </div>
-                               <div class="modal-body">
-                                     <accordion id="accordionId" :one-at-atime="true" type="info">
-                                            <div v-for="training in allTrainingsToGiveFeedbacks">
-                                                  <panel :is-open="openPanel" type="default">
-                                                        <p  slot="header" style="color: black;">{{training.trainingTitle}}</p>
-                                                             <div class="container">
-                                                                    <div class="row">
-                                                                         <div class="col-sm-4 col-md-4 col-lg-4">
-                                                                               <div class="stars " >
-                                                                                    <input class="star star-5" id="star-5" type="radio" name="star" @click="setScore(5)"/>
-                                                                                    <label class="star star-5" for="star-5" @click="setScore(5)"></label>
-                                                                                    <input class="star star-4" id="star-4" type="radio" name="star" @click="setScore(4)"/>
-                                                                                    <label class="star star-4" for="star-4" @click="setScore(4)"></label>
-                                                                                    <input class="star star-3" id="star-3" type="radio" name="star" @click="setScore(3)"/>
-                                                                                    <label class="star star-3" for="star-3" @click="setScore(3)"></label>
-                                                                                    <input class="star star-2" id="star-2" type="radio" name="star" @click="setScore(2)"/>
-                                                                                    <label class="star star-2" for="star-2" @click="setScore(2)"></label>
-                                                                                    <input class="star star-1" id="star-1" type="radio" name="star" @click="setScore(1)"/>
-                                                                                    <label class="star star-1" for="star-1" @click="setScore(1)"></label>
-                                                                               </div>
-                                                                         </div>
-                                                                         <div class="col-sm-3 col-md-3 col-lg-3"> <br/>
-                                                                                    <input type="text" class="form-control" placeholder="Laissez un commentaire" aria-describedby="basic-addon1" v-model="comment">
-                                                                         </div>
-                                                                         <div class="col-sm-4 col-md-4 col-lg-4"> <br/>
-                                                                                     <button type="button" class="btn btn-default" @click="addFeedback(training)">Enregistrer</button>
-                                                                         </div>
-                                                                    </div>                        
-                                                             </div>
-                                                  </panel>
-                                            </div>
-                                            <div class="footer">
-                                                  <button type="button" class="btn btn-default" data-dismiss="modal">Abandonner</button>
-                                            </div>
-                                     </accordion>
-                               </div>
-                          </div>
-                    </div>
-             </div>
-`
-});
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('panel', VueStrap.panel);
 Vue.component('alert', VueStrap.alert);

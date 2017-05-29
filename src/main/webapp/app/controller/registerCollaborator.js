@@ -698,7 +698,7 @@ let ConnexionForm = Vue.component('connexionForm', {
 
 let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
-        "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage"],
+        "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage","disabled"],
     template: `
                 <table style="border-spacing: 0px">
                 <div class="form-group">
@@ -720,7 +720,8 @@ let CustomInput = Vue.component('customInput', {
                                :value="value"
                                onblur="this.placeholder = placeholder " 
                                maxlength="maxlength" 
-                               minlength="minlength">
+                               minlength="minlength"
+                               :disabled = "disabled">
                         <input v-if="type=='email'" 
                                type="email" 
                                :id="label" 

@@ -10,7 +10,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         </div>
     </div>
     <div class="row">
-        <div class="panel panel-default" style="height:355px; margin-left:10px; ">
+        <div class="panel panel-default" style="height:362px; margin-left:10px; ">
             <div class="panel-body" style="padding:5px;">
                 <div class="row">
                     <div class="col-lg-12" style="margin-bottom:20px">
@@ -136,7 +136,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         },
 
         sendWish(){
-            this.wishToRegister.label = this.wish;
+            this.wishToRegister.label = this.wish.toUpperCase();
             this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
                 function (response) {
                     this.wishAlreadyExisted=false;
