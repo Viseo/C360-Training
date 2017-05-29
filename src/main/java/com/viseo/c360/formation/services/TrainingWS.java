@@ -64,6 +64,7 @@ public class TrainingWS {
             Collaborator collaborator = collaboratorDAO.getCollaborator(collab_id);
             myFeedbackDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
             myFeedbackDescription.setDate(new Date());
+            myFeedbackDescription.setLikers(new ArrayList<>());
             Feedback feedback = trainingDAO.addFeedback(new DescriptionToFeedback().convert(myFeedbackDescription));
             return new FeedbackToDescription().convert(feedback);
         } catch (PersistenceException pe) {
@@ -105,6 +106,22 @@ public class TrainingWS {
     @ResponseBody
     public Feedback delateFeedbackComment(@RequestBody Feedback myFeedback) {
         Feedback feedback = trainingDAO.delateFeedbackComment(myFeedback);
+        return feedback;
+    }
+
+    @RequestMapping(value = "${endpoint.addfeedbacklikes}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Feedback addFeedbackLikes(@RequestBody Feedback myFeedback, @PathVariable Long collaborator_id) {
+        Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
+        Feedback feedback = trainingDAO.addFeedbackLikes(myFeedback,collaborator);
+        return feedback;
+    }
+
+    @RequestMapping(value = "${endpoint.removefeedbacklikes}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Feedback removeFeedbackLikes(@RequestBody Feedback myFeedback, @PathVariable Long collaborator_id) {
+        Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
+        Feedback feedback = trainingDAO.removeFeedbackLikes(myFeedback,collaborator);
         return feedback;
     }
 

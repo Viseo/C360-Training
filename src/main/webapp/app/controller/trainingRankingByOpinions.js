@@ -7,7 +7,7 @@ let trainingRanking = Vue.component('training-ranking', {
             return {
                 allTrainingScore: [],
                 //US13
-                training_id:'14',
+                collaborator_id:'1',
                 feedbackComments:[],
                 feedbackCommentToDelete:{}
             }
@@ -23,8 +23,10 @@ let trainingRanking = Vue.component('training-ranking', {
                     </div>
                     <div class="row">
                         <div id="rankingTraining">
-                        <button @click="delateFeedbackComment(feedbackComments[0])">delate Feedback Comment</button>
-                            <div class="row">
+                        <button @click="delateFeedbackComment(feedbackComments[0])">Delate Feedback Comment</button>
+                        <button @click="addLiker(feedbackComments[0],collaborator_id)">Add Liker</button>
+                        <button @click="removeLiker(feedbackComments[0],collaborator_id)">Remove Liker</button>
+                        <div class="row">
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                     <img src="css/left-arrow.png"
                                          width="40"
@@ -122,8 +124,29 @@ let trainingRanking = Vue.component('training-ranking', {
                         console.error(response);
                     }
                 );
+            },
+            addLiker(feedbackToAdd,collaborator_id){
+                this.$http.put("api/addfeedbacklikes/"+collaborator_id,feedbackToAdd).then(
+                    function (response) {
+                        console.log("success to add liker");
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            removeLiker(feedbackToRemove,collaborator_id){
+                this.$http.put("api/removefeedbacklikes/"+collaborator_id,feedbackToRemove).then(
+                    function (response) {
+                        console.log("success to remove liker");
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
             }
-
         }
     }
 );

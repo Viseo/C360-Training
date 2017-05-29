@@ -1,9 +1,11 @@
 package com.viseo.c360.formation.dto.training;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.dto.BaseDTO;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 
 import java.util.Date;
+import java.util.List;
 
 public class FeedbackDescription extends BaseDTO {
     public static class Regex {
@@ -15,6 +17,8 @@ public class FeedbackDescription extends BaseDTO {
     int score;
 
     String comment;
+
+    List<Collaborator> likers;
 
     CollaboratorDescription collaborator;
 
@@ -44,12 +48,21 @@ public class FeedbackDescription extends BaseDTO {
         this.comment = comment;
     }
 
+
     public CollaboratorDescription getCollaborator() {
         return collaborator;
     }
 
     public void setCollaborator(CollaboratorDescription collaborator) {
         this.collaborator = collaborator;
+    }
+
+    public List<Collaborator> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(List<Collaborator> likers) {
+        this.likers = likers;
     }
 
     public Training getTraining() {

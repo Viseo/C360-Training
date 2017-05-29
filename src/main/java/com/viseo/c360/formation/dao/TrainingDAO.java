@@ -99,6 +99,22 @@ public class TrainingDAO {
         return feedback;
     }
 
+    @Transactional
+    public Feedback addFeedbackLikes(Feedback feedback, Collaborator collaborator){
+        feedback = daoFacade.merge(feedback);
+        feedback.addLikers(collaborator);
+        daoFacade.flush();
+        return feedback;
+    }
+
+    @Transactional
+    public Feedback removeFeedbackLikes(Feedback feedback,Collaborator collaborator){
+        feedback = daoFacade.merge(feedback);
+        feedback.removeLiker(collaborator);
+        daoFacade.flush();
+        return feedback;
+    }
+
 
 
 
