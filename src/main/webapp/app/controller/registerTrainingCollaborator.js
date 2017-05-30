@@ -309,7 +309,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     let trainingToComeComponent = this.$parent.$children[3];
                     trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
                 }
-
             } else {
                 this.noSessionsSelectedError = true;
             }

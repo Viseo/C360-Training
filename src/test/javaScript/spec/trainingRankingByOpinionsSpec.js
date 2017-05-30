@@ -53,25 +53,6 @@ describe('training-ranking test', function () {
 
     });
 
-    it('it should get feedback comment by training', function (done) {
-        var response = [{
-                "id":11,
-                "version":0,
-                "date":1496061070548,
-                "score":3,
-                "comment":"HHHHH",
-                "collaborator":
-                    {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
-                "training":
-                    {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
-            }];
-        vmTrainingRanking.getFeedbackCommentByTraining(9);
-        setTimeout(function () {
-            expect(vmTrainingRanking.feedbackComments).toEqual(response);
-            done();
-        },0);
-    });
-
     it('it should delete feedback comment', function (done) {
         var feedbackCommentToDelete = [{
             "id":11,
@@ -79,6 +60,7 @@ describe('training-ranking test', function () {
             "date":1496061070548,
             "score":3,
             "comment":"HHHHH",
+            "likers":[],
             "collaborator":
                 {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
             "training":
@@ -90,6 +72,7 @@ describe('training-ranking test', function () {
             "date":1496061070548,
             "score":3,
             "comment":"",
+            "likers":[],
             "collaborator":
                 {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
             "training":
@@ -98,6 +81,66 @@ describe('training-ranking test', function () {
         vmTrainingRanking.delateFeedbackComment(feedbackCommentToDelete);
         setTimeout(function () {
             expect(vmTrainingRanking.feedback).toEqual(response);
+            done();
+        },0);
+    });
+
+    it('it should get feedback comment by training', function (done) {
+        var response = [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "likers":[],
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }];
+        vmTrainingRanking.getFeedbackCommentByTraining(9);
+        setTimeout(function () {
+            expect(vmTrainingRanking.feedbackComments).toEqual(response);
+            done();
+        },0);
+    });
+
+    it('it should add liker to feedback', function (done) {
+        var feedbackToAdd = [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "likers":[],
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }];
+        vmTrainingRanking.addLiker(feedbackToAdd,1);
+        setTimeout(function () {
+            done();
+        },0);
+    });
+
+    it('it should remove liker to feedback', function (done) {
+        var feedbackToAdd = [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "likers":[
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            ],
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }];
+        vmTrainingRanking.removeLiker(feedbackToAdd,1);
+        setTimeout(function () {
             done();
         },0);
     });

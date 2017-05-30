@@ -840,6 +840,7 @@ let routes = [
             "date":1496061070548,
             "score":3,
             "comment":"HHHHH",
+            "likers":[],
             "collaborator":
                 {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
             "training":
@@ -855,6 +856,42 @@ let routes = [
             "date":1496061070548,
             "score":3,
             "comment":"",
+            "likers":[],
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }]
+    },
+    {
+        method: 'PUT',
+        url: 'api/addfeedbacklikes/1',
+        response: [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "likers":[
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            ],
+            "collaborator":
+                {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
+            "training":
+                {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
+        }]
+    },
+    {
+        method: 'PUT',
+        url: 'api/removefeedbacklikes/1',
+        response: [{
+            "id":11,
+            "version":0,
+            "date":1496061070548,
+            "score":3,
+            "comment":"HHHHH",
+            "likers":[
+            ],
             "collaborator":
                 {"id":7,"version":0,"personnalIdNumber":"BBB1234","lastName":"njcksdql","firstName":"cdjksndk","email":"mxzsdef@163.com","password":"123456","isAdmin":false,"function":null,"businessUnit":null,"admin":false},
             "training":
