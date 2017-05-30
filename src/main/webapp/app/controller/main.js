@@ -389,7 +389,7 @@ const router = new VueRouter({
                                 </div>
                             </div>
                         </div>`
-            },
+            }
         },
         {
             path:"/skillsStatementByCollaborators",

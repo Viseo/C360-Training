@@ -28,6 +28,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/registerTrainingTopic.js',
             'src/main/webapp/app/controller/registerTrainingCollaborator.js',
             'src/main/webapp/app/controller/assignCollaborator.js',
+            'src/main/webapp/app/controller/addSession.js',
             'src/main/webapp/app/controller/trainingToCome.js',
             'src/main/webapp/app/controller/wishToVote.js',
             'src/main/webapp/app/controller/collectWishes.js',
