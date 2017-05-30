@@ -177,14 +177,14 @@ describe('profil to update test', function () {
         vmProfilToUpdate.isOldPasswordEmpty();
         expect(vmProfilToUpdate.oldPasswordEmpty).toBe(true);
         expect(vmProfilToUpdate.isValidOldPassword).toBe(false);
-        expect(vmProfilToUpdate.isNotValidOldPassword).toBe(true);
+        expect(vmProfilToUpdate.isNotValidOldPassword).toBe(false);
     });
 
     it('it should test if the password is empty', function (){
         vmProfilToUpdate.isPasswordEmpty();
         expect(vmProfilToUpdate.passwordEmpty).toBe(true);
         expect(vmProfilToUpdate.isValidPassword).toBe(false);
-        expect(vmProfilToUpdate.isNotValidPassword).toBe(true);
+        expect(vmProfilToUpdate.isNotValidPassword).toBe(false);
     });
 
     it('it should test if the confirm password is empty', function (){
@@ -194,7 +194,7 @@ describe('profil to update test', function () {
         expect(vmProfilToUpdate.isNotValidConfirmPassword).toBe(true);
     });
 
-    it('it should update collaborator information', function (done){
+    it('it should update collaborator information with password changed', function (done){
         vmProfilToUpdate.imageHasBeenChanged = true;
         vmProfilToUpdate.function = '';
         vmProfilToUpdate.lastName = 'DUPONT';
@@ -211,8 +211,25 @@ describe('profil to update test', function () {
             expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
             done();
         },0);
+    });
 
-
+    it('it should update collaborator information', function (done){
+        vmProfilToUpdate.imageHasBeenChanged = true;
+        vmProfilToUpdate.function = '';
+        vmProfilToUpdate.lastName = 'DUPONT';
+        vmProfilToUpdate.firstName = 'Eric';
+        vmProfilToUpdate.email = 'eric.dupont@viseo.com';
+        vmProfilToUpdate.oldPassword = '';
+        vmProfilToUpdate.newPassword = '';
+        vmProfilToUpdate.confirmPassword = '';
+        vmProfilToUpdate.password = '';
+        vmProfilToUpdate.infoCollab.password = '123456';
+        vmProfilToUpdate.updateCollaboratorInfo();
+        setTimeout(function () {
+            expect(vmProfilToUpdate.imageHasBeenChanged).toBe(false);
+            expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
+            done();
+        },0);
     });
 
     it('it should the collaborator information empty pass false', function (){

@@ -80,7 +80,7 @@ describe('test registerTrainingCollaborator', function () {
         expect(vmCollaboratorFormation.trainingSelected).toBe(trainingSelected);
         vmCollaboratorFormation.reinitialize(trainingSelectedWithoutSessions);
         setTimeout(function () {
-            expect(vmCollaboratorFormation.trainingrequested).toBe(false);
+            expect(vmCollaboratorFormation.trainingrequested).toBe(true);
             expect(vmCollaboratorFormation.listTrainingSession.length).toBe(0);
             expect(vmCollaboratorFormation.displayTrainings).toBe(true);
             expect(vmCollaboratorFormation.isNoSession).toBe(true);
