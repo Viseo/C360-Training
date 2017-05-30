@@ -130,12 +130,12 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     <div class="row">
                     
                         <center class="row col-sm-6 col-md-6 col-lg-6 ">
-                        <a @click="loadCollectWishesPanel" id="box">{{numberOfWishesNotChecked}}</a>
+                        <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a></router-link>
                             <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
                         </center>
                         
                         <center class="row col-sm-6 col-md-6 col-lg-6 ">
-                            <span @click="goTo('trainingRanking')" class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;" @click="goTo('trainingRanking')">Classement des formations</span>
+                            <router-link :to="{name: 'trainingRanking'}"><span class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;">Classement des formations</span></router-link>
                         </center>
                        </div>
                     <div class="row ">
@@ -155,9 +155,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         this.gatherAllSessions();
     },
     methods: {
-        loadCollectWishesPanel(){
-            this.$router.push('/collectWishes')
-        },
+
         getCookies(){
             let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
             if (regexCookieToken) {

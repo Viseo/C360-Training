@@ -59,7 +59,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         <tr>
             <td>
                 <p>
-                    <span @click="changePage()" style="position:absolute; top: 560px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span>
+                   <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 560px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
                 </p>
             </td>
             <td>
@@ -133,10 +133,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
     methods: {
         updateV1 (v) {
             this.wish = v;
-        },
-
-        changePage(){
-            this.goTo('WishToVote')
         },
 
         sendWish(){
