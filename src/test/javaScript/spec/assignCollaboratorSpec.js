@@ -2,6 +2,7 @@
  * Created by NBE3663 on 18/04/2017.
  */
 Vue.use(VueResource);
+Vue.use(VueRouter);
 
 Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
@@ -20,11 +21,18 @@ Vue.http.interceptors.unshift((request, next) => {
     }
 });
 
+var vmAssignCollab = new Vue({
+    template: '<div><assign-collaborator></assign-collaborator></div>',
+    router: router,
+    components: {
+        'assignCollaborator': assignCollaborator
+    }
+}).$mount();
 
 describe('assign collaborator test', function () {
 
     beforeEach(function () {
-        vmAssignCollaborator = new assignCollaborator().$mount();
+        vmAssignCollaborator = vmAssignCollab.$children[0];
     });
 
     afterEach(function () {
@@ -71,7 +79,7 @@ describe('assign collaborator test', function () {
 
     });
 
-    it('should check if there is no result when collaborator does not exist ', function (done) {
+    it('should check if there is no result when collaborator does not exist ', function () {
         vmAssignCollaborator.requestedCollaboratorsMemo = [{
             email: "benjamin.batista@viseo.com",
             firstName: "Benjamin",
@@ -81,17 +89,9 @@ describe('assign collaborator test', function () {
             version: 0
         }];
 
-        expect(vmAssignCollaborator.requestedCollaboratorsMemo.length).toBe(1);
-        setTimeout(function () {
-
-            vmAssignCollaborator.value = "Batista";
-        }, 0);
-
-        setTimeout(function () {
-
-            expect(vmAssignCollaborator.requestedCollaborators.length).toEqual(0);
-            done();
-        }, 0);
+        expect(vmAssignCollaborator.requestedCollaboratorsMemo.length).toEqual(1);
+        vmAssignCollaborator.value = "Atista";
+        expect(vmAssignCollaborator.requestedCollaborators.length).toEqual(1);
 
     });
 
@@ -136,21 +136,7 @@ describe('assign collaborator test', function () {
     });
 
     it('should check if collaborators are displayed when checkbox is checked true', function () {
-        //vmAssignCollaborator.verifyCheckedNames();
-        //expect(vmAssignCollaborator.checkedNames).toBe(true);
-        //vmAssignCollaborator.checkedNames = false;
         vmAssignCollaborator.verifyCheckedNames();
-        // vmAssignCollaborator.allCollaborators = [
-        //     {
-        //         "email": 'eric.dupon@viseo.com',
-        //         "firstName": 'Eric',
-        //         "id": 5,
-        //         "lastName": 'Dupond',
-        //         "password": '123456',
-        //         "version": 0
-        //     }
-        // ];
-        //vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
     });
     it('should check if collaborators are displayed when checkbox is checked false', function () {
         //vmAssignCollaborator.verifyCheckedNames();
@@ -348,7 +334,7 @@ describe('assign collaborator test', function () {
             "lastName": 'gadomski',
             "password": '689547',
             "version": 77
-        }]
+        }];
         var vmLengthRequestedCollaborators = vmAssignCollaborator.requestedCollaborators.length;
         vmAssignCollaborator.moveCollabLeft();
         expect(vmLengthRequestedCollaborators).not.toBeNull();
@@ -368,7 +354,7 @@ describe('assign collaborator test', function () {
             "lastName": 'gadomski',
             "password": '689547',
             "version": 77
-        }]
+        }];
         var vmValidatedCollab = vmAssignCollaborator.validatedCollab.length;
         vmAssignCollaborator.moveCollabRight();
         expect(vmValidatedCollab).not.toBeNull();
@@ -385,11 +371,9 @@ describe('assign collaborator test', function () {
             password: "123456",
             version: 0
         }];
-        setTimeout(function () {
             vmAssignCollaborator.sessionIdChosen = 15;
             vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
-            done();
-        }, 0);
+
         vmAssignCollaborator.saveCollabInSessions();
 
         expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(true);
@@ -405,7 +389,8 @@ describe('assign collaborator test', function () {
         expect(vmAssignCollaborator.value).toBe('');
         setTimeout(function () {
             expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
-        }, 0);
+            done();
+        }, 2001);
     });
 
     it('should check if error message is displayed when there are  type error in search field ', function () {

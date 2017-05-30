@@ -2,6 +2,18 @@
  * Created by BBA3616 on 09/05/2017.
  */
 
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
+var vm3 = new Vue({
+    template: '<div><training-to-come></training-to-come></div>',
+    router: router,
+    components: {
+        'trainingToCome': TrainingToComeComponent
+    }
+}).$mount();
+
+
 describe('training to come Panel test', function () {
 
     beforeEach(function () {
@@ -18,7 +30,7 @@ describe('training to come Panel test', function () {
             }
         };
         document.cookie = "token="+ collaboratorToken;
-        vmTrainingToCome = new TrainingToComeComponent().$mount();
+        vmTrainingToCome =  vm3.$children[0];
         vmTrainingToCome.$parent = new Vue();
         vmTrainingToCome.$parent.$children[1] = vmCollaboratorFormation;
     });

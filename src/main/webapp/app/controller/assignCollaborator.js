@@ -342,8 +342,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     this.requestedCollaborators.push(this.requestedCollaboratorsMemo[index]);
                 }
             }
-
-
         },
         selectCollaborators(){
             for (index in this.requestedCollaborators) {
@@ -388,58 +386,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.isSearchNameValid = false;
             }
         },
-        addFeedback(feedback){
-            this.$http.post("api/feedback/"+this.collaborator_id,feedback).then(
-                function (response) {
-                    console.log("success to add a feedback");
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
-
-        getAllFeedbacks(){
-            this.$http.get("api/feedbacks").then(
-                function (response) {
-                    console.log("success to get all feedbacks");
-
-                    this.allFeedbacks = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
-
-        //fonction pour classer les formations
-        getTrainingsScore(){
-            this.$http.get("api/trainingscore").then(
-                function (response) {
-                    console.log("success to get all training score");
-                    this.allTrainingScore = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        },
-
-        getAllTrainingsToGiveFeedbacks(){
-            this.$http.get("api/givefeedbacks").then(
-                function (response) {
-                    console.log("success to get all trainings to give feedbacks");
-                    this.allTrainingsToGiveFeedbacks = response.data;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
-        }
     },
     watch: {
         value: function (lastName) {
