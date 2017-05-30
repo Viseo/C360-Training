@@ -558,7 +558,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
             this.state.idSession = '';
             this.trainingStore.collectInformationOfTrainingChosen();
             this.gatherSessionsByTrainingFromDatabase();
-            this.goTo('addSession');
         },
 
         gatherSessionsByTrainingFromDatabase(){
@@ -631,7 +630,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                         <tr v-for="trainings in topicTraining" >
                                                                             <td  v-for="training in trainings" width="25%" style="position: relative">
                                                                                <a  @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
-                                                                               <button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button>
+                                                                               <router-link :to="{name: 'addSession'}"><button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button></router-link>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>

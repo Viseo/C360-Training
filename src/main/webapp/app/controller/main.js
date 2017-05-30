@@ -1,24 +1,41 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-
-
 let Header = Vue.component('header-component', {
-    props: ['title','headerColor'],
+    props: ['title',
+        'headerColor'],
     template: `<div id="wrap">
-            <div class="navbar navbar-default navbar-fixed-top" :class="headerColor">
-                <div class="container-fluid" id="header-component">
+            <div class="navbar navbar-default navbar-fixed-top" 
+                 :class="headerColor">
+                <div class="container-fluid" 
+                     id="header-component">
                     <div class="row">
-                        <div id="custom-navbar" class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
-                            <p id="navbar-title" href="#">Collaborateur 360</p>
+                        <div id="custom-navbar" 
+                             class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
+                            <p id="navbar-title" 
+                               href="#">Collaborateur 360</p>
                             <p id="navbar-subtitle">{{title}}</p>
                         </div>
-                        <div id="navbar-right-part" class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()" >
-                                 <span class="text-left" v-show="showPicture()" style="font-size: 15px;">
-                                 
-                                    <img id="profilImage" @error="imageLoadOnError" :src="imagePath" class="image-min" /><span v-show="showName()" @mouseover="setDisconnectedToTrue()">{{firstName}} {{lastName}}</span></span>
-                                 <dropdown type="default"  v-show="showDisconnexion()" text="Choisissez une action" id="menu">
+                        <div id="navbar-right-part" 
+                             class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 
+                                 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()" >
+                                 <span class="text-left" 
+                                       v-show="showPicture()" 
+                                       style="font-size: 15px;">
+                                    <img id="profilImage" 
+                                         @error="imageLoadOnError" 
+                                         :src="imagePath" 
+                                         class="image-min" />
+                                    <span v-show="showName()" 
+                                          @mouseover="setDisconnectedToTrue()">
+                                          {{firstName}} {{lastName}}
+                                    </span>
+                                 </span>
+                                 <dropdown type="default"  
+                                           v-show="showDisconnexion()" 
+                                           text="Choisissez une action" 
+                                           id="menu">
                                     <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
                                     <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
                                     <li role="separator" class="divider"></li>
@@ -28,13 +45,41 @@ let Header = Vue.component('header-component', {
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
                                 <ul class="nav navbar-nav">
                                     <li class="dropdown">
-                                        <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span>
-                                        <ul id="dropdown-app" class="dropdown-menu">
+                                        <span id="navbar-app" 
+                                              class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" 
+                                              href="#">
+                                        </span>
+                                        <ul id="dropdown-app" 
+                                            class="dropdown-menu">
                                             <li>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a @click="goTo('skillsStatementByCollaborators')"> <img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" class="text-center icon-app"><p>GCon</p></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" class="text-center icon-app"><p>GM</p></span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
+                                                      v-show="!app.skills">
+                                                      <a @click="goTo('skillsStatementByCollaborators')"> 
+                                                            <img src="/img/icon_cv.png" 
+                                                                 class="text-center icon-app">
+                                                            <p>GCv</p>
+                                                      </a>
+                                                </span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
+                                                      v-show="!app.leave">
+                                                      <img src="/img/icon_conge.png" 
+                                                           class="text-center icon-app">
+                                                      <p>GCon</p>
+                                                </span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
+                                                      v-show="!app.training">
+                                                      <a @click="goTo('registerTrainingCollaborator')">
+                                                            <img src="/img/icon_formation.png" 
+                                                                 class="text-center icon-app">
+                                                            <p>GF</p>
+                                                      </a>
+                                                </span>
+                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
+                                                       v-show="!app.mission">
+                                                            <img src="/img/icon_mission.png" 
+                                                                 class="text-center icon-app">
+                                                            <p>GM</p>
+                                                </span>
                                             </li>
                                         </ul>
                                     </li> 
@@ -55,7 +100,7 @@ let Header = Vue.component('header-component', {
             </div>
         </div>
   `,
-    data: function() {
+    data: function () {
         return {
             lastName: '',
             firstName: '',
@@ -74,8 +119,8 @@ let Header = Vue.component('header-component', {
             dialog: false,
             timeConnected: 0,
             imagePath: 'img/profile.jpg',
-            collaboratorId : '',
-            validateToken : ''
+            collaboratorId: '',
+            validateToken: ''
         }
     },
     mounted: function () {
@@ -86,10 +131,10 @@ let Header = Vue.component('header-component', {
         }
         $('ul.nav li.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-        }, function() {
+        }, function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
         });
-        if(this.title == "Gestion des formations"){
+        if (this.title == "Gestion des formations") {
             this.app.training = true;
         } else {
             (this.skills == "Gestion des formations")
@@ -105,7 +150,7 @@ let Header = Vue.component('header-component', {
         checkIfTokenExist(){
             let isTokenValid = (response) => {
                 this.validateToken = response.body;
-                if(!this.validateToken){
+                if (!this.validateToken) {
                     this.disconnectUser();
                 }
             };
@@ -137,16 +182,16 @@ let Header = Vue.component('header-component', {
                     this.dialog = true;
                     this.disconnectUser();
                 }
-            document.onclick = function() {
+            document.onclick = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onmousemove = function() {
+            document.onmousemove = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            document.onkeypress = function() {
+            document.onkeypress = function () {
                 this.idleSecondsCounter = 0;
             }.bind(this);
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
                 if (!this.disconnect && !this.dialog)
                     document.cookie = "timeConnected=" + new Date().getHours() + new Date().getMinutes();
             }.bind(this);
@@ -178,13 +223,13 @@ let Header = Vue.component('header-component', {
             };
 
             let preventCollaboratorToGoToAdminPage = () => {
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'wishToVote' && this.getPageName() !='skillsStatementByCollaborators' && this.getPageName() != 'profiltoupdate') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'wishToVote' && this.getPageName() != 'skillsStatementByCollaborators' && this.getPageName() != 'profiltoupdate') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
-                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() !='trainingRanking' && this.getPageName() != 'addSession' ) {
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() != 'trainingRanking' && this.getPageName() != 'addSession') {
                     this.goTo('addTrainingTopic');
                 }
             };
@@ -250,7 +295,7 @@ let Header = Vue.component('header-component', {
                     if (!this.dialog)
                         this.goTo('login')
                 }
-                document.cookie="alreadyShownPopUp=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                document.cookie = "alreadyShownPopUp=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
             };
 
             this.post("api/userdisconnect", this.token, disconnect);
@@ -280,7 +325,8 @@ const router = new VueRouter({
                     <div class="container-fluid">
                         <div class="col-sm-12 col-md-7 col-lg-7">
                             <add-formation-panel></add-formation-panel>
-                            <show-formation-panel></show-formation-panel>
+                            <!--<show-formation-panel></show-formation-panel> -->
+                            <router-view name="showFormationPanel"></router-view>
                         </div>
                         <div class="col-sm-12 col-md-5 col-lg-5">
                             <router-view></router-view>
@@ -288,25 +334,37 @@ const router = new VueRouter({
                     </div>
                 </div>`
             },
-            children: [{
-                name: 'addTrainingTopic',
-                path: "/addTrainingTopic",
-                component: {
-                    template: `<assign-collaborator></assign-collaborator>`
-                }
-            },
+            children: [
+                {
+                    name: 'defaultChildren',
+                    path: '/addTrainingTopic',
+                    components: {
+                        default: Vue.component('assign-collaborator'),
+                        showFormationPanel: Vue.component('show-formation-panel')
+                    }
+                },
                 {
                     name: "collectWishes",
-                    path:'collectWishes',
-                    component: {
-                        template: `<collect-wishes></collect-wishes>`
+                    path: 'collectWishes',
+                    components: {
+                        default: Vue.component('collect-wishes'),
+                        showFormationPanel: Vue.component('show-formation-panel')
                     }
                 },
                 {
                     name: "trainingRanking",
-                    path:'trainingRanking',
-                    component: {
-                        template: `<training-ranking></training-ranking>`
+                    path: 'trainingRanking',
+                    components: {
+                        default: Vue.component('training-ranking'),
+                        showFormationPanel: Vue.component('show-formation-panel')
+                    }
+                },
+                {
+                    name: "addSession",
+                    path: 'addSession',
+                    components: {
+                        default: Vue.component('assign-collaborator'),
+                        showFormationPanel: Vue.component('add-session-panel')
                     }
                 }]
         },
@@ -330,16 +388,12 @@ const router = new VueRouter({
             children: [{
                 name: 'registerTrainingCollaborator',
                 path: "/registerTrainingCollaborator",
-                component: {
-                    template: `<training-to-come></training-to-come>`
-                }
+                component: Vue.component('training-to-come')
             },
                 {
                     name: "wishToVote",
-                    path:'wishToVote',
-                    component: {
-                        template: `<wish-to-vote></wish-to-vote>`
-                    }
+                    path: 'wishToVote',
+                    component: Vue.component('wish-to-vote')
                 }]
         },
         {
@@ -379,27 +433,9 @@ const router = new VueRouter({
             redirect: "/login"
         },
         {
-            path: "/addSession",
-            name: 'addSession',
+            path: "/skillsStatementByCollaborators",
+            name: 'skillsStatementByCollaborators',
             component: {
-                template: `<div id="newVue" v-cloak>
-                        <header-component headerColor="blue-header"></header-component>
-                            <div class="container-fluid">
-                                <div class="col-sm-12 col-md-7 col-lg-7">
-                                    <add-formation-panel></add-formation-panel>
-                                    <add-session-panel></add-session-panel>
-                                </div>
-                                <div class="col-sm-12 col-md-5 col-lg-5">
-                                    <assign-collaborator></assign-collaborator>
-                                </div>
-                            </div>
-                        </div>`
-            },
-        },
-        {
-            path:"/skillsStatementByCollaborators",
-            name:'skillsStatementByCollaborators',
-            component:{
                 template: `<div id="newVue" v-cloak>
                             <header-component title="Gestion des compétences" headerColor="red-header"></header-component>
                             <statement-skills></statement-skills>
@@ -428,18 +464,17 @@ const router = new VueRouter({
 });
 
 
-
 const PAGE_TITLE = {
     "login": "Accueil C360",
     "resetPassword": "Mise à jour mot de passe",
     "registerTrainingCollaborator": "Gestion des formations",
     "wishToVote": "Gestion des formations",
     "addTrainingTopic": "Gestion des formations",
-    "profiltoupdate" : "Modifier mon profil",
+    "profiltoupdate": "Modifier mon profil",
     "collectWishes": "Gestion des formations",
-    "addSession":"Gestion des sessions",
+    "addSession": "Gestion des sessions",
     "skillsStatementByCollaborators": "Gestion des compétences",
-    "trainingRanking" : "Gestion des formations"
+    "trainingRanking": "Gestion des formations"
 };
 
 const PAGE_FAVICON = {
@@ -448,7 +483,7 @@ const PAGE_FAVICON = {
     "registerTrainingCollaborator": "img/icon_formation.png",
     "wishToVote": "img/icon_formation.png",
     "addTrainingTopic": "img/icon_formation.png",
-    "profiltoupdate" : "img/icon_accueil.png",
+    "profiltoupdate": "img/icon_accueil.png",
     "collectWishes": "img/icon_formation.png",
     "addSession": "img/icon_formation.png",
     "trainingRanking": "img/icon_formation.png"
