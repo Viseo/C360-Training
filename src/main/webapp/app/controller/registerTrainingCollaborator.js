@@ -42,98 +42,157 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             displayTrainings: false,
             openPanel: false,
             state: training_store.state,
-            test:false
+            test:false,
+            feedbackComments: [],
+            collaboratorLike: false,
+            allFeedbacks: [],
+            showComment: false
         }
     },
 
     template: `<div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-8 col-sm-8" ></div>
-                            
-                                <div class="row">
-                                    <div class="col-lg-8 col-md-8 text-center">
-                                        <legend>Demande de formation</legend>
+    <div class="row">
+        <div class="col-md-12 col-lg-8 col-sm-8"></div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 text-center">
+                <legend>Demande de formation</legend>
+            </div>
+        </div>
+        <div class="row">
+            <div id="trainingContainer">
+                <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <select required class="form-control" v-model="selectedTraining">
+                            <option value="" disabled hidden>Formations disponibles</option>
+                            <option v-for="training in allTrainings" :value="training.id">{{training.trainingTitle}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit"
+                               class="btn btn-primary" value="Valider"/>
+                    </div>
+                    <div @keyup.enter="storeTrainingsFound(capitalizeSearch)"
+                         class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
+                        <span ref="btnLoadTrainings" class="glyphicon glyphicon-search"
+                              @click="storeTrainingsFound(capitalizeSearch)"></span>
+                        <typeahead v-model="value" v-bind:data="allTrainingTitles"
+                                   placeholder="Entrer une formation"></typeahead>
+                        <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}
+                        </div>
+                        <div class="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat
+                            trouvé
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">
+                        {{emptyTrainingErrorMessage}}</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
+                        <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20"
+                             style="position: absolute; left:50%; z-index:1;">
+                    </div>
+                </div>
+                <div id="scroll" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+                    <accordion id="accordionId" :one-at-atime="true" type="info">
+                        <div v-for="training in trainingsFound">
+                            <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training)"
+                                   type="default">
+                                                         <span slot="header"
+                                                               style="color: rgba(66, 139, 202,0.8); text-align: none !important;">
+                                                            <span>{{training.trainingTitle}}</span>
+                                                            <span id="petittest" v-if="commentsExist(training.id)" 
+                                                                  style="float:right"
+                                                                  @click="showComments" v-show="!showComment">Commentaires</span>
+                                                              <span v-if="commentsExist(training.id)" v-show="showComment"style="float:right" @click="hideComments">  X  </span>
+                                                        </span>
+                                <div v-show="!showComment">
+                                    <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
+                                    <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox"
+                                                                                       @click="disabling(training.id)">Indifférent
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div id="trainingContainer">
-                                        <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
-                                            <div class="col-lg-4 col-md-4 col-sm-12">
-                                                <select required class="form-control" v-model="selectedTraining">
-                                                    <option  value="" disabled hidden>Formations disponibles</option>
-                                                    <option v-for="training in allTrainings" :value="training.id">{{training.trainingTitle}}</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-12">
-                                                <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit" class="btn btn-primary" value="Valider"/>
-                                            </div>
-                                            <div @keyup.enter="storeTrainingsFound(capitalizeSearch)" class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">
-                                                <span ref="btnLoadTrainings" class="glyphicon glyphicon-search" @click="storeTrainingsFound(capitalizeSearch)"></span>
-                                                <typeahead v-model="value" v-bind:data="allTrainingTitles" placeholder="Entrer une formation"></typeahead>
-                                                <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
-                                                <div class="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat trouvé </div>                                    
+                                    <div :id="training.id">
+                                        <div class="col-lg-12" v-for="i in listTrainingSession">
+                                            <div v-if="i.trainingDescription.id == training.id">
+                                                <input :id="i.id" type="checkbox" v-model="checkedSessions" :value="i">
+                                                <span>{{i.beginning}} - {{i.ending}} - {{i.location}} </span>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">{{emptyTrainingErrorMessage}}</p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
-                                                  <img v-show="showChevrons" src="css/up.png" id="scroll-up-2" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
-                                            </div>
-                                        </div>
-                                        <div id="scroll"class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
-                                            <accordion id="accordionId" :one-at-atime="true" type="info" >
-                                                <div v-for="training in trainingsFound">
-                                                    <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training)"type="default" >
-                                                         <p  slot="header" style="color: rgba(66, 139, 202,0.8); text-align: none !important;"><u>{{training.trainingTitle}}</u></p> 
-                                                        <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
-                                                        <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox" @click="disabling(training.id)">Indifférent</div>
-                                                        <div :id="training.id">
-                                                            <div  class="col-lg-12"  v-for="i in listTrainingSession">
-                                                                <div v-if="i.trainingDescription.id == training.id" >
-                                                                    <input :id="i.id" type="checkbox" v-model="checkedSessions" :value="i"> 
-                                                                    <span>{{i.beginning}} - {{i.ending}} - {{i.location}} </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <center>
-                                                                <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
-                                                                <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button :disabled="disableSendButton" v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
-                                                                <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
-                                                                <p style="color:orange" v-show="test"> Vous avez déjà effectué une demande pour cette formation </p>
-                                                            </center>
-                                                        </div>
-                                                    </panel>
-                                                </div>
-                                            </accordion>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-12" style="margin-top:10px">
-                                                <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20" style="position: relative; left:50%; z-index:1;">
-                                            </div>
-                                        </div>
-                                        <center v-show="showChevrons">
-                                            <p style="margin:10px;">
-                                                <span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>
-                                                Toutes les formations démarrent à 9h00
-                                            </p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <center>
+                                            <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez
+                                                sélectionné aucune session </p>
+                                            <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune
+                                                session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
+                                            <button :disabled="disableSendButton" v-show="trainingrequested"
+                                                    ref="btnSendRequest" class="btn btn-primary"
+                                                    value="Envoyer une demande"
+                                                    @click="verifyTrainingSessionCollaborator">Envoyer une demande
+                                            </button>
+                                            <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec
+                                                succès </p>
+                                            <p style="color:orange" v-show="test"> Vous avez déjà effectué une demande
+                                                pour cette formation </p>
                                         </center>
                                     </div>
                                 </div>
+                                <div id="feedback-collab" v-show="showComment" class="row" v-for="feedback in allFeedbacks">
+                                    <div v-if="feedback.training.id == training.id" class="col-lg-12">
+                                        <img class="profile-picture" src="img/profile.jpg">
+                                        <div style="padding-top:15px;">
+                                            <span>{{feedback.collaborator.firstName}} {{feedback.collaborator.lastName}} </span>
+                                            <span class="date-on-right">
+                                                <i class="glyphicon glyphicon-time"></i> {{getDate(feedback.date)}}
+                                            </span>
+                                            <hr>
+                                            <p>{{feedback.comment}}</p>
+                                            <div style="float:right">
+                                                <span>{{feedback.likers.length}}</span>
+                                                <span v-if="collaboratorLikesFeedback(feedback)"
+                                                      class="glyphicon glyphicon-heart"
+                                                      @click="removeLiker(feedback, collaboratorIdentity.id)"></span>
+                                                <span v-else class="glyphicon glyphicon-heart-empty"
+                                                      @click="addLiker(feedback, collaboratorIdentity.id)"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </panel>
                         </div>
+                    </accordion>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" style="margin-top:10px">
+                        <img v-show="showChevrons" src="css/down.png" id="scroll-down-2" width="60" height="20"
+                             style="position: relative; left:50%; z-index:1;">
                     </div>
-                </div>`,
+                </div>
+                <center v-show="showChevrons">
+                    <p style="margin:10px;">
+                        <span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>
+                        Toutes les formations démarrent à 9h00
+                    </p>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+`,
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+        $('.panel-collapse').click(function(e){
+                e.stopPropagation();
+        });
         this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
         this.getCookies();
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
         this.activateScrollWheel('#scroll');
+        this.getAllFeedbacks();
     },
 
     watch: {
@@ -152,7 +211,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         showChevrons(){
             let numberOfTrainings = this.trainingsFound.length;
             return numberOfTrainings;
-        }
+        },
     },
 
     methods: {
@@ -393,7 +452,106 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
               $("#trainingContainer div div div").addClass("has-error");
 
           }
-        }
+        },
+
+        getFeedbackCommentByTraining(training_id){
+            this.$http.get("api/feedbackcomment/"+ training_id).then(
+                function (response) {
+                    console.log("success to get all feedback comments of the same training");
+                    this.feedbackComments = response.data;
+                    this.orderFeedbacks();
+                    console.log(this.feedbackComments);
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        addLiker(feedbackToAdd,collaborator_id){
+            this.$http.put("api/addfeedbacklikes/"+collaborator_id,feedbackToAdd).then(
+                function (response) {
+                    console.log("success to add liker");
+                    this.getAllFeedbacks();
+
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        removeLiker(feedbackToRemove,collaborator_id){
+            this.$http.put("api/removefeedbacklikes/"+collaborator_id,feedbackToRemove).then(
+                function (response) {
+                    console.log("success to remove liker");
+                    this.getAllFeedbacks();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+
+        },
+
+        collaboratorLikesFeedback(feedback) {
+          for(let i in feedback.likers) {
+              if(feedback.likers[i].id == this.collaboratorIdentity.id) {
+                  return true;
+              }
+          }
+          return false;
+        },
+
+        getDate(date){
+            let dateToConvert = new Date(date);
+            let addZero = "";
+            if((dateToConvert.getMonth()+1)<10) addZero="0";
+            formattedDate = dateToConvert.getDate()+"/"+addZero+(dateToConvert.getMonth()+1)+ "/" + dateToConvert.getFullYear()+ " à " + dateToConvert.getHours()+ "h"+ dateToConvert.getMinutes();
+            return formattedDate;
+        },
+
+        getAllFeedbacks(){
+            this.$http.get("api/feedbacks").then(
+                function (response) {
+                    console.log("success to get all feedbacks");
+                    this.allFeedbacks = response.data;
+                    this.orderFeedbacks();
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        commentsExist(trainingId){
+          for(let i in this.allFeedbacks){
+              if(this.allFeedbacks[i].training.id == trainingId){
+                  if(this.allFeedbacks[i].comment!=null){
+                      return true;
+                  }
+              }
+          }
+          return false;
+        },
+
+        showComments(){
+            this.showComment= true;
+        },
+
+        hideComments(){
+            this.showComment= false;
+        },
+        orderFeedbacks(){
+            this.allFeedbacks.sort(function(a, b) {
+                    return parseFloat(a.date) - parseFloat(b.date);
+            });
+        },
+
     }
 });
 

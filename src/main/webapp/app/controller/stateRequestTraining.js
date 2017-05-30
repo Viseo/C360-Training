@@ -186,7 +186,6 @@ let stateRequest = Vue.component('state-request', {
                                 this.noSessionForCollaborator = false;
                             }
                             this.orderSessions();
-
                         }
                         console.log(this.requestedTrainingByCollaborator);
                         this.orderSessions();

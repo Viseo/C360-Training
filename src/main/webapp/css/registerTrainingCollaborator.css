@@ -134,3 +134,50 @@ label.star:before {
 .notepanel panel.panel-default.panel-heading{
     background-color: rgba(66, 139, 202,0.8); !important;
 }
+
+div.panel-heading.accordion-toggle{
+    padding-bottom:10px;
+}
+
+/*------- FEEDBACKS -------- */
+
+#feedback-collab .profile-picture{
+    float:left;
+    margin-right:2%;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+
+#feedback-collab .date-on-right{
+    float:right;
+    margin-right: 2%;
+}
+
+#feedback-collab hr{
+    width: 90%;
+    margin-top: 5px;
+    margin-right: 2%;
+}
+
+#feedback-collab p{
+    margin-left:3%;
+}
+
+#feedback-collab .glyphicon-heart, #feedback-collab .glyphicon-heart-empty{
+    display:inline;
+    margin-right:20px;
+    font-size:20px;
+    color:#ff68ac;
+}
+
+#feedback-collab .glyphicon-heart::before, #feedback-collab .glyphicon-heart-empty::before{
+    vertical-align:middle;
+}
+
+#feedback-collab.row {
+    background-color: rgba(211, 211, 211, 0.18);
+    margin: 0 15px 10px 5px;
+    border-radius: 5px;
+    padding: 10px 0;
+}
