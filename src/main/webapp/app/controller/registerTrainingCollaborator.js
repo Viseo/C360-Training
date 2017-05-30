@@ -8,6 +8,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
             sessionAlreadybooked:[],
             trainingsFound: [],
+            numberOfSessionsToDisable:0,
             disableSendButton:false,
             sessionAlreadyBookedMessage:false,
             noTrainingFound: false,
@@ -100,10 +101,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                         <div class="col-lg-12">
                                                             <center>
                                                                 <p style="color:#B22222" v-show="noSessionsSelectedError"> Vous n'avez sélectionné aucune session </p>
-                                                                <p style="color:blue" v-show="isNoSession && trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
-                                                                <button :disabled="disableSendButton" v-show="trainingrequested" ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
+                                                                <p style="color:blue" v-show="isNoSession && !trainingrequested"> Aucune session n'est prévue, vous pouvez néanmoins envoyer une demande</p>
+                                                                <button :disabled="disableSendButton" v-show="!trainingrequested || !isNoSession "ref="btnSendRequest" class="btn btn-primary" value="Envoyer une demande" @click="verifyTrainingSessionCollaborator">Envoyer une demande</button>
                                                                 <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec succès </p>
-                                                                <p style="color:orange" v-show="test"> Vous avez déjà effectué une demande pour cette formation </p>
+                                                                <p style="color:orange" v-show="isNoSession && trainingrequested"> Vous avez déjà effectué une demande pour cette formation </p>
                                                             </center>
                                                         </div>
                                                     </panel>
@@ -157,6 +158,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     methods: {
         disablingSessions(){
+            this.disableSendButton = false;
+            this.trainingalreadyrequested(this.trainingSelected.id);
+            this.numberOfSessionsToDisable = 0;
             if(this.listTrainingSessionSelected != null && this.sessionsByCollab != null && this.listTrainingSession.length == this.sessionsByCollab.length){
                 this.test = true;
             }
@@ -164,16 +168,26 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 temp = document.getElementById(this.sessionsByCollab[i].id);
                 if(temp!=null) {
                     temp.disabled =true;
+                    temp.checked = false;
                     this.sessionAlreadyBookedMessage = true;
                     temp.nextElementSibling.innerHTML="";
                     $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
                 }
             }
+            for(i in this.sessionsByCollab){
+                for(j in this.listTrainingSession){
+                    if(i==j)
+                        this.numberOfSessionsToDisable++;
+                }
+            }
+            if(this.numberOfSessionsToDisable == this.listTrainingSession.length && this.listTrainingSession.length != 0)
+                this.disableSendButton = true;
+            if(this.isNoSession && this.trainingrequested)
+                this.disableSendButton = true;
         },
 
         reinitialize(training){
             this.disableSendButton = false;
-            this.trainingrequested = true;
             this.trainingalreadyrequested(training.id);
             this.checkedSessions.splice(0, this.checkedSessions.length);
             this.storeTrainingSessions(training.id);
@@ -298,7 +312,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         verifyTrainingSessionCollaborator(){
             this.addingRequestSucceeded = false;
             this.noSessionsSelectedError = false;
-            this.disableSendButton = true;
             if (this.isNoSession == true || this.checkedSessions.length != 0) {
                 this.requestToRegister.trainingDescription = this.trainingSelected;
                 this.requestToRegister.collaboratorIdentity = this.collaboratorIdentity;
@@ -306,7 +319,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.requestToRegister = JSON.parse(JSON.stringify(this.requestToRegister));
                 this.SaveTrainingSessionCollaborator();
                 if(this.$parent.$children[3]){
-                    let trainingToComeComponent = this.$parent.$children[3];
+                    let trainingToComeComponent = this.$parent.$children[3].$children[0];
                     trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
                 }
 
@@ -314,6 +327,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.noSessionsSelectedError = true;
             }
             this.storeSessionsByCollab(this.trainingSelected.id);
+            this.checkedSessions = [];
         },
 
         SaveTrainingSessionCollaborator(){
@@ -377,9 +391,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         trainingalreadyrequested(training_id){
             this.$http.get("api/listrequests/" + training_id + "/" + this.collaboratorIdentity.id).then(
                 function (response) {
-                    this.trainingrequested = true;
-                    if (response.data.length != this.listTrainingSessions.length) {
-                        this.trainingrequested = false;
+                    this.trainingrequested = false;
+                    if (response.data.length != 0) {
+                        this.trainingrequested = true;
                      }
                 });
         },
