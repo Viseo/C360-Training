@@ -1,10 +1,21 @@
 /**
  * Created by XME3612 on 11/05/2017.
  */
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
+var vm5 = new Vue({
+    template: '<div><wish-to-vote></wish-to-vote></div>',
+    router: router,
+    components: {
+        'wishToVoteComponent': wishToVoteComponent
+    }
+}).$mount();
+
 describe('wish to vote Panel test', function () {
 
     beforeEach(function () {
-        vmWishToVote = new wishToVoteComponent().$mount();
+        vmWishToVote = vm5.$children[0];
 
     });
 

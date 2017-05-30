@@ -2,10 +2,21 @@
  * Created by SJO3662 on 22/05/2017.
  */
 
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
+var vmClassify = new Vue({
+    template: '<div><classify-training></classify-training></div>',
+    router: router,
+    components: {
+        'classifyTraining': classifyTraining
+    }
+}).$mount();
+
 describe('classify training test', function () {
     beforeEach(function () {
 
-        vmClassifyTraining = new classifyTraining().$mount();
+        vmClassifyTraining = vmClassify.$children[0];
         vmClassifyTraining.collaborator_id = 1;
 
     });

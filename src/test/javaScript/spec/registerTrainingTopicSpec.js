@@ -1,7 +1,23 @@
+var vmAddSession = new Vue({
+    template: '<div><add-session-panel></add-session-panel></div>',
+    router: router,
+    components: {
+        'addSessionPanel': AddSessionPanel
+    }
+}).$mount();
+
+var vmShowFormationPanel= new Vue({
+    template: '<div><show-formation-panel></show-formation-panel></div>',
+    router: router,
+    components: {
+        'showFormation': ShowFormation
+    }
+}).$mount();
+
 beforeEach(function () {
     vmAddFormationPanel = new AddFormationPanel().$mount();
-    vmShowFormation = new ShowFormation().$mount();
-    vmAddSessionPanel = new AddSessionPanel().$mount();
+    vmShowFormation = vmShowFormationPanel.$children[0];
+    vmAddSessionPanel = vmAddSession.$children[0];
     vmDatePicker = new DatePicker().$mount();
     vmInputText = new InputText().$mount();
 });
@@ -50,6 +66,7 @@ describe('test registerTrainingTopic.js', function () {
     describe('vmAddSessionPanel', function () {
 
         it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
+            //console.log("valeur : "+vm);
             vmAddSessionPanel.returnToPageTraining();
             setTimeout(function () {
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
@@ -685,6 +702,7 @@ describe('test registerTrainingTopic.js', function () {
     });
 
     describe('vmShowFormation', function () {
+
         it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
             vmShowFormation.state.allTrainings = [
                 {
@@ -765,8 +783,6 @@ describe('test registerTrainingTopic.js', function () {
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
             vmShowFormation.createSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
             setTimeout(function () {
-                expect(vmShowFormation.state.changePageToSession).toBe(true);
-                expect(vmShowFormation.state.changePageToTraining).toBe(false);
                 expect(vmShowFormation.state.idTraining).toEqual(5);
                 expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
                 expect(vmShowFormation.state.isNoSession).toBe(false);

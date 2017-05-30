@@ -1,13 +1,26 @@
 /**
  * Created by BBA3616 on 18/05/2017.
  */
+
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
+var vmCollectWishe = new Vue({
+    template: '<div><collect-wishes></collect-wishes></div>',
+    router: router,
+    components: {
+        'collectWishes': collectWishes
+    }
+}).$mount();
+
 describe('collect wishes panel test', function () {
 
     beforeEach(function () {
-        vmCollectWishes = new collectWishes().$mount();
+        vmCollectWishes = vmCollectWishe.$children[0];
     });
 
     afterEach(function () {
+        vmCollectWishes.listWishesToUpdate = [];
 
     });
 
@@ -70,8 +83,8 @@ describe('collect wishes panel test', function () {
         }, 0);
     });
 
-    it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function (done) {
-        wish =
+    it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function () {
+        var wish =
             [
                 {
                     "id": 98,
@@ -95,14 +108,14 @@ describe('collect wishes panel test', function () {
             ];
         vmCollectWishes.addWishToListWishes(wish,true);
 
-        setTimeout(function () {
+        //setTimeout(function () {
             expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(true);
-            done();
-        }, 0);
+            /*done();
+        }, 0);*/
     });
 
-    it('should check if wish is ready to be update and icon is changed from color to grey when administrator dont validate the wish', function (done) {
-        wish =
+    it('should check if wish is ready to be update and icon is changed from color to grey when administrator dont validate the wish', function () {
+        var wish =
             [
                 {
                     "id": 98,
@@ -126,10 +139,11 @@ describe('collect wishes panel test', function () {
             ];
         vmCollectWishes.addWishToListWishes(wish,false);
 
-        setTimeout(function () {
-            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
-            done();
-        }, 0);
+        console.log(vmCollectWishes.listWishesToUpdate[0]);
+        //setTimeout(function () {
+        expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
+        /*done();
+         }, 0);*/
     });
 
 });

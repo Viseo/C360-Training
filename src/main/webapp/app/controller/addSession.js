@@ -63,7 +63,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         this.getDate();
         if (this.state.idTraining == null || this.state.idTraining == '') {
             this.goTo('addTrainingTopic');
-        }
+        };
     },
 
     watch:{

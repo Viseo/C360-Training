@@ -42,14 +42,12 @@ describe('Header test', function () {
 
     });
 
-    it('should check variable initialization from Header component', function (done) {
+    it('should check variable initialization from Header component with the token', function (done) {
         setTimeout( function () {
-            expect(headerComponent.lastName).toBe('');
-            expect(headerComponent.firstName).toBe('');
-            expect(headerComponent.token).toBe('');
+            expect(headerComponent.lastName).toBe('Lhote');
+            expect(headerComponent.firstName).toBe('Caroline');
+            expect(headerComponent.token).toBe('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg');
             expect(headerComponent.disconnect).toBe(false);
-            expect(headerComponent.app).toEqual({training:true, skills:false, mission:false, leave:false});
-            expect(headerComponent.IDLE_TIMEOUT).toBe(60);
             expect(headerComponent.idleSecondsCounter).toBe(0);
             expect(headerComponent.myInterval).toBe('');
             expect(headerComponent.stayConnected).toBe(true);
