@@ -15,14 +15,14 @@
 }
 #navbar-right-part {
     float:right;
-    margin:20px 10px 20px 0px;
+    margin:10px 0px;
     padding:0px;
 }
 
 #navbar-user {
     display: inline-block;
     text-align:right;
-    padding-right:3em;
+    /*padding-right:3em;*/
     color: #6a6a6a;
 }
 .dropdown-menu {
@@ -171,10 +171,9 @@ i.glyphicon {
     right:10px;
 }
 
-
 #menu ul.dropdown-menu{
-    left:-120px;
-    top:10px;
+    left:13px;
+    top: 32px;
     width:170px;
 }
 
@@ -183,9 +182,7 @@ i.glyphicon {
     text-align: left;
 }
 #menu button.btn.btn-default{
-    position: absolute;
-    top:-10px;
-    left:-120px;
+    margin-top:10px;
     padding:1% 5%;
     font-size:100%;
     box-shadow: none;
@@ -195,9 +192,9 @@ i.glyphicon {
 }
 
 .image-min {
-    left: 8%;
-    position: absolute;
-    margin-top: -14px;
+    /*left: 8%;*/
+    /*position: absolute;*/
+    /*margin-top: -14px;*/
     /* margin-left: 10%; */
     cursor: pointer;
     margin-right: 10px;
