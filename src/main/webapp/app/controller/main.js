@@ -325,7 +325,6 @@ const router = new VueRouter({
                     <div class="container-fluid">
                         <div class="col-sm-12 col-md-7 col-lg-7">
                             <add-formation-panel></add-formation-panel>
-                            <!--<show-formation-panel></show-formation-panel> -->
                             <router-view name="showFormationPanel"></router-view>
                         </div>
                         <div class="col-sm-12 col-md-5 col-lg-5">
@@ -336,7 +335,7 @@ const router = new VueRouter({
             },
             children: [
                 {
-                    name: 'defaultChildren',
+                    name: 'addTrainingTopic',
                     path: '/addTrainingTopic',
                     components: {
                         default: Vue.component('assign-collaborator'),
