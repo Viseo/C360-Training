@@ -389,7 +389,7 @@ let Formulaire = Vue.component('inscription-form', {
         },
         handleCookie(token) {
                 document.cookie = "token=" + token;
-                document.cookie = "stayconnected=false";
+                document.cookie = "stayconnected=true";
         },
 
         saveAction() {
