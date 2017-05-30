@@ -205,6 +205,17 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 });
         },
 
+        addCollaboratorsToRequest(){
+            this.$http.post("api/requestsassign/" + this.sessionIdChosen + "/" + this.allCollaboratorsIdChosen).then(
+                function (response) {
+                    console.log("success to modify the table requestingTraining_trainingsession");
+                },
+                function (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                });
+        },
+
         gatherCollaboratorsRequestingBySession(){
             this.$http.get("api/requests/session/" + this.sessionIdChosen + "/collaborators").then(
                 function (response) {
@@ -310,6 +321,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     this.allCollaboratorsIdChosen.push(this.validatedCollab[i].id);
                 }
                 this.addCollaboratorsToTrainingSession();
+                this.addCollaboratorsToRequest();
                 this.resetAssignCollaboratorsForm();
                 this.confirmCollaboratorAddedSession = true;
                 setTimeout(function () {
