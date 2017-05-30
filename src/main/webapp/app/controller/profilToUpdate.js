@@ -205,10 +205,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         </div>
                         <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
                             <br>
-                            <span v-show="!isRightOldPassword" class="color-red">
+                            <span v-show="!isRightOldPassword " class="color-red">
                                         <b>Ancien mot de passe incorrect.</b>
                                     </span>
-
                         </div>
                     </div>
                 </div>
@@ -452,7 +451,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             if (this.password == '') {
                 this.oldPasswordEmpty = true;
                 this.isValidOldPassword = false;
-                this.isNotValidOldPassword = true;
+                this.isNotValidOldPassword = false;
             }
         },
 
@@ -468,7 +467,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             if (this.newPassword == '') {
                 this.passwordEmpty = true;
                 this.isValidPassword = false;
-                this.isNotValidPassword = true;
+                this.isNotValidPassword = false;
             }
         },
 
@@ -575,36 +574,43 @@ let profilToUpdate = Vue.component('profil-to-update', {
         },
 
         updateCollaboratorInfo(){
-
             this.isFirstNameEmpty();
             this.isLastNameEmpty();
             this.isEmailEmpty();
-            this.isOldPasswordEmpty();
-            this.isPasswordEmpty();
-            this.isConfirmPasswordEmpty();
-            if (!this.lastNameEmpty && !this.firstNameEmpty && !this.emailEmpty && !this.oldPasswordEmpty && !this.passwordEmpty && !this.confirmPasswordEmpty) {
-                if (this.infoCollab.password == this.password) {
-                    this.isRightOldPassword = true;
-                    if (this.newPassword == this.confirmPassword) {
-                        this.CollabToUpdate = this.infoCollab;
-                        this.CollabToUpdate.firstName = this.firstName;
-                        this.CollabToUpdate.lastName = this.lastName;
-                        this.CollabToUpdate.email = this.email;
-                        this.CollabToUpdate.function = this.fonction;
-                        this.CollabToUpdate.businessUnit = this.businessUnit;
-                        this.CollabToUpdate.password = this.newPassword;
+            this.CollabToUpdate = this.infoCollab;
+            this.CollabToUpdate.firstName = this.firstName;
+            this.CollabToUpdate.lastName = this.lastName;
+            this.CollabToUpdate.email = this.email;
+            this.CollabToUpdate.function = this.fonction;
+            this.CollabToUpdate.businessUnit = this.businessUnit;
+           if (this.password == '' && this.newPassword == '' && this.confirmPassword == '') {
+                        this.oldPasswordEmpty = false;
+                        this.passwordEmpty = false;
+                        this.confirmPasswordEmpty = false;
+                        this.isRightOldPassword = true;
                         if (this.imageHasBeenChanged === true) {
                             this.updateCollaboratorImage();
-                        };
+                        }
                         this.saveUpdateCollaborator();
-                    }
-                } else {
+           } else {
+               if (this.infoCollab.password == this.password){
+                    this.isRightOldPassword = true;
+                    this.oldPasswordEmpty = false;
+                    this.passwordEmpty = false;
+                    if (this.newPassword == this.confirmPassword) {
+                            this.CollabToUpdate.password = this.newPassword;
+                            if (this.imageHasBeenChanged === true) {
+                                this.updateCollaboratorImage();
+                            }
+                            this.saveUpdateCollaborator();
+                   }
+                }else {
                     this.isRightOldPassword = false;
                 }
-            }
+           }
         },
 
-        imageLoadOnError () {
+            imageLoadOnError () {
             let defaultImagePath = "img/profile.jpg";
             this.imagePath = defaultImagePath;
         }

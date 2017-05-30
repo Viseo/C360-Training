@@ -136,10 +136,9 @@ let Header = Vue.component('header-component', {
         });
         if (this.title == "Gestion des formations") {
             this.app.training = true;
-        } else {
-            (this.skills == "Gestion des formations")
+        } else if (this.skills == "Gestion des formations"){
             this.app.skills = true;
-        }
+        };
 
         this.checkIfTokenExist();
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
@@ -461,7 +460,6 @@ const router = new VueRouter({
         }
     ]
 });
-
 
 const PAGE_TITLE = {
     "login": "Accueil C360",
