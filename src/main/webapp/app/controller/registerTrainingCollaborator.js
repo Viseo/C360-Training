@@ -145,7 +145,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                 <br>
                                 <div id="feedback-collab" v-if="feedback.training.id == training.id" v-show="showComment" class="row" v-for="feedback in allFeedbacks">
                                     <div class="col-lg-12">
-                                        <img class="profile-picture" src="img/profile.jpg">
+                                        <img class="profile-picture" v-if="feedback.collaborator.defaultPicture" src="img/profile.jpg">
+                                        <img class="profile-picture" v-else :src="'img/'+feedback.collaborator.id+'.jpg'">
                                         <div style="padding-top:15px;">
                                             <span>{{feedback.collaborator.firstName}} {{feedback.collaborator.lastName}} </span>
                                             <span class="date-on-right">
