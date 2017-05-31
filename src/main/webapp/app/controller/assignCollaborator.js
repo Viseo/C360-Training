@@ -130,8 +130,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                             <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
                         </center>
                         
-                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
-                            <router-link :to="{name: 'trainingRanking'}"><span class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;">Classement des formations</span></router-link>
+                        <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 ">
+                            <router-link :to="{name: 'trainingRanking'}"><span class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;"> Classement des formations</span></router-link>
                         </center>
                        </div>
                     <div class="row ">

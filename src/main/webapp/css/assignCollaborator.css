@@ -85,3 +85,19 @@ display:none;
     height:235px;
     padding-left: 10px;
 }
+
+#goToRanking a{
+    color:black;
+}
+
+#goToRanking a:hover{
+    text-decoration: none;
+}
+#goToRanking a:hover > .glyphicon-star:before{
+    color: #dcae2e;
+}
+
+#goToRanking .glyphicon-star:before{
+    color: #ffcf21;
+    vertical-align: middle;
+}
