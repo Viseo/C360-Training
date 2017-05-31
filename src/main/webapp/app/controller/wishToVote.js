@@ -65,7 +65,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
     },
     mounted:function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getCookies();
+        this.initializeInformationsFromCookie();
         this.getAllWishes();
         $('#scroll-up-4').click(function() {
             $('#test1').animate({scrollTop: "-=100"}, 500);
@@ -77,14 +77,10 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
     methods: {
 
         getCookies(){
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
-                        this.token = String(regexCookieToken.pop());
-                        this.collaborator_id = jwt_decode(this.token).id;
-                    }
-                }
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+            if(isCollaboratorInfoNotEmpty){
+                this.collaborator_id = collaboratorInfo.id;
             }
         },
         hideMessage(){

@@ -28,12 +28,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             confirmCollaboratorAddedSession: false,
             isSearchNameValid: true,
             lastNameRegexErrorMessage: '',
-            token: '',
             collaborator_id: '',
             numberOfWishesNotChecked: '',
-
-            //feedback
-            //training dans feedback est sous la forme training au lieu de trianingdescription
             allFeedbacks:[],
             allTrainingScore:[]
         }
@@ -150,21 +146,17 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 </div>`,
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getCookies();
+        this.initializeInformationsFromCookie();
         this.getIsNotCheckedWishes();
         this.gatherAllSessions();
     },
     methods: {
 
-        getCookies(){
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if (regexCookieToken) {
-                if (!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined') {
-                        this.token = String(regexCookieToken.pop());
-                        this.collaborator_id = jwt_decode(this.token).id;
-                    }
-                }
+        initializeInformationsFromCookie(){
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+            if(isCollaboratorInfoNotEmpty){
+                this.collaborator_id = collaboratorInfo.id;
             }
         },
 

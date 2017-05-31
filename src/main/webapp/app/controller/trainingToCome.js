@@ -124,7 +124,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
 
     mounted:function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getIdCollaboratorWithTokenCookies();
+        this.initializeInformationsFromCookie();
         this.gatherTrainingsAlreadyHaveSessionsFromDatabase();
         this.activateScrollUp('#scroll-up-training-to-come','#sessionsPanel');
         this.activeScrollDown('#scroll-down-training-to-come','#sessionsPanel');
@@ -152,12 +152,11 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             );
         },
 
-        getIdCollaboratorWithTokenCookies() {
-            let cookiesToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(cookiesToken) {
-                let token = String(cookiesToken.pop());
-                let tokenIdCollaborator = jwt_decode(token).id;
-                this.collaborator_id = tokenIdCollaborator;
+        initializeInformationsFromCookie(){
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+            if(isCollaboratorInfoNotEmpty){
+                this.collaborator_id = collaboratorInfo.id;
             }
         },
 

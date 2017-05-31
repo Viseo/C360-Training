@@ -319,7 +319,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getCookies();
+        this.initializeInformationsFromCookie();
         this.getInfoCollaborator();
         this.checkIfProfilImageHasBeenChanged("#loadProfilImage");
         this.imagePath = "img/" + this.collaborator_id + ".jpg";
@@ -521,15 +521,11 @@ let profilToUpdate = Vue.component('profil-to-update', {
             }
         },
 
-        getCookies(){
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if (regexCookieToken) {
-                if (!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined') {
-                        this.token = String(regexCookieToken.pop());
-                        this.collaborator_id = jwt_decode(this.token).id;
-                    }
-                }
+        initializeInformationsFromCookie(){
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+            if(isCollaboratorInfoNotEmpty){
+                this.collaborator_id = collaboratorInfo.id;
             }
         },
 

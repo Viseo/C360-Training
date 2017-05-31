@@ -131,7 +131,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
-        this.getCookies();
+        this.initializeInformationsFromCookie();
         this.activateScrollUp('#scroll-up-2','#scroll');
         this.activeScrollDown('#scroll-down-2','#scroll');
         this.activateScrollWheel('#scroll');
@@ -295,18 +295,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             storeTrainings("");
         },
 
-        getCookies(){
-            let regexCookieToken = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
-            if(regexCookieToken){
-                if(!regexCookieToken[0].includes('undefined')) {
-                    if (this.token != 'undefined'){
-                        this.token = String(regexCookieToken.pop());
-                        this.collaboratorIdentity.id = jwt_decode(this.token).id;
-                        this.collaboratorIdentity.lastName = jwt_decode(this.token).lastName;
-                        this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
-                    }
-                }
-            } 
+        initializeInformationsFromCookie(){
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+            if(isCollaboratorInfoNotEmpty){
+                this.collaboratorIdentity.id = collaboratorInfo.id;
+                this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
+                this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
+            }
         },
 
         verifyTrainingSessionCollaborator(){
