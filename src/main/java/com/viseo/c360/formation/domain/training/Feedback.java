@@ -6,12 +6,10 @@ import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +23,7 @@ public class Feedback extends BaseEntity{
     @NotNull
     int score;
 
+    @Column(length = 500)
     String comment;
 
     @Valid

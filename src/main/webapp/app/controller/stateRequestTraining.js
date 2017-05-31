@@ -112,7 +112,7 @@ let stateRequest = Vue.component('state-request', {
                                                     <div class="row">
                                                         <center>
                                                          <div class="col-sm-2 col-md-2 col-lg-2 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                                                                    <input type="text" class="form-control" placeholder="Commentaire" v-model="comment">
+                                                                    <input type="text" class="form-control" placeholder="Commentaire" v-model="comment" maxlength="500">
                                                          </div>
                                                          <div class="col-sm-1 col-md-1 col-lg-1">
                                                                      <button type="button" class="btn btn-default" @click="addFeedback(training)">Enregistrer</button>
