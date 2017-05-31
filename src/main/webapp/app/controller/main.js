@@ -9,101 +9,65 @@ Vue.component('typeahead', VueStrap.typeahead);
 let Header = Vue.component('header-component', {
     props: ['title',
         'headerColor'],
-    template: `<div id="wrap">
-            <div class="navbar navbar-default navbar-fixed-top" 
-                 :class="headerColor">
-                <div class="container-fluid" 
-                     id="header-component">
-                    <div class="row">
-                        <div id="custom-navbar" 
-                             class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header">
-                            <p id="navbar-title" 
-                               href="#">Collaborateur 360</p>
-                            <p id="navbar-subtitle">{{title}}</p>
-                        </div>
-                        <div id="navbar-right-part" 
-                             class="col-lg-3 col-lg-offset-5 col-md-5 col-sm-5 col-xs-5">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9 
-                                 text-right" id="navbar-user" @mouseleave="setDisconnectedToFalse()" >
-                                 <span class="text-left" 
-                                       v-show="showPicture()" 
-                                       style="font-size: 15px;">
-                                    <img id="profilImage" 
-                                         @error="imageLoadOnError" 
-                                         :src="imagePath" 
-                                         class="image-min" />
-                                    <span v-show="showName()" 
-                                          @mouseover="setDisconnectedToTrue()">
-                                          {{firstName}} {{lastName}}
-                                    </span>
-                                 </span>
-                                 <dropdown type="default"  
-                                           v-show="showDisconnexion()" 
-                                           text="Choisissez une action" 
-                                           id="menu">
-                                    <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li>
-                                    <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a @click="disconnectUser">Déconnexion</a></li>
-                                 </dropdown>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
-                                <ul class="nav navbar-nav">
-                                    <li class="dropdown">
-                                        <span id="navbar-app" 
-                                              class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" 
-                                              href="#">
-                                        </span>
-                                        <ul id="dropdown-app" 
-                                            class="dropdown-menu">
-                                            <li>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
-                                                      v-show="!app.skills">
-                                                      <a @click="goTo('skillsStatementByCollaborators')"> 
-                                                            <img src="/img/icon_cv.png" 
-                                                                 class="text-center icon-app">
-                                                            <p>GCv</p>
-                                                      </a>
-                                                </span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
-                                                      v-show="!app.leave">
-                                                      <img src="/img/icon_conge.png" 
-                                                           class="text-center icon-app">
-                                                      <p>GCon</p>
-                                                </span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
-                                                      v-show="!app.training">
-                                                      <a @click="goTo('registerTrainingCollaborator')">
-                                                            <img src="/img/icon_formation.png" 
-                                                                 class="text-center icon-app">
-                                                            <p>GF</p>
-                                                      </a>
-                                                </span>
-                                                <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" 
-                                                       v-show="!app.mission">
-                                                            <img src="/img/icon_mission.png" 
-                                                                 class="text-center icon-app">
-                                                            <p>GM</p>
-                                                </span>
-                                            </li>
-                                        </ul>
+    template: `<div id="wrap"> 
+    <div class="navbar navbar-default navbar-fixed-top" :class="headerColor"> 
+        <div class="container-fluid" id="header-component"> 
+            <div class="row"> 
+                <div id="custom-navbar" 
+                    class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header"> 
+                    <p id="navbar-title" 
+                        href="#">Collaborateur 360</p> 
+                    <p id="navbar-subtitle">{{ title }}</p> 
+                </div> 
+                <div id="navbar-right-part" 
+                    class="col-lg-4 col-lg-offset-4 col-md-5 col-sm-5 col-xs-5" 
+                    @mouseleave="setDisconnectedToFalse()" > 
+                    <div id="navbar-user" 
+                        class="col-lg-7 col-lg-offset-1 col-md-8 col-sm-8 col-xs-9 text-right" @mouseover="setDisconnectedToTrue()"> 
+                        <div v-show="showPicture()" class="col-lg-2"> 
+                            <img id="profilImage" 
+                                @error="imageLoadOnError" 
+                                :src="imagePath" 
+                                class="image-min"/> 
+                        </div> 
+                        <span class="text-left col-lg-8 col-lg-offset-2" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
+                        <dropdown class="col-lg-8 col-lg-offset-2" type="default" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
+                            <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li> 
+                            <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li> 
+                            <li role="separator" class="divider"></li> 
+                            <li><a @click="disconnectUser">Déconnexion</a></li> 
+                        </dropdown> 
+                    </div> 
+                    <div style="margin-top:10px" class="col-lg-4 col-md-4 col-sm-4 col-xs-3"> 
+                        <ul class="nav navbar-nav"> 
+                            <li class="dropdown"> 
+                                <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span> 
+                                <ul id="dropdown-app" class="dropdown-menu"> 
+                                    <li> 
+                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a @click="goTo('skillsStatementByCollaborators')"><img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span> 
+                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" class="text-center icon-app"><p>GCon</p></span> 
+                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span> 
+                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
                                     </li> 
-                                 </ul>
-                            </div>
-                        </div>     
-                    </div>
-                </div>
-            </div>
-            <div v-if="dialog" class="dialog">
-                <div class="dialog-bg">
-                    <div class="dialog-title">Oups....</div>
-                    <div class="dialog-description">{{ firstName }} {{ lastName }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div>
-                    <div class="dialog-buttons">
-                        <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link>
-                    </div>
-                </div>	
-            </div>
-        </div>
+                                </ul> 
+                            </li> 
+                        </ul> 
+                    </div> 
+                </div>      
+            </div> 
+        </div> 
+    </div> 
+    <div v-if="dialog" class="dialog"> 
+        <div class="dialog-bg"> 
+            <div class="dialog-title">Oups....</div> 
+            <div class="dialog-description">{{ firstName }} {{ lastName }},vous êtes restés trop longtemps inactif.</br>Vous venez d'être déconnecté</div> 
+            <div class="dialog-buttons"> 
+                <router-link to="/login" class="large blue button">Retour à la page de connexion</router-link> 
+            </div> 
+        </div> 
+    </div> 
+</div > 
+
   `,
     data: function () {
         return {
