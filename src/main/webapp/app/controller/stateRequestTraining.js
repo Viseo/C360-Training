@@ -24,6 +24,7 @@ let stateRequest = Vue.component('state-request', {
                     trainingSessions: [],
                     title:''
                 }],
+                openPanel: false,
                 allTrainingsAlreadyHaveSessions:[],
                 allTrainingsAndSessions:[{
                     collaborators: []

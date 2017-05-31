@@ -105,8 +105,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                             <span>{{training.trainingTitle}}</span>
                                                             <span id="petittest" v-if="commentsExist(training.id)" 
                                                                   style="float:right"
-                                                                  @click="showComments" v-show="!showComment">Commentaires</span>
-                                                              <span v-if="commentsExist(training.id)" v-show="showComment"style="float:right" @click="hideComments">  X  </span>
+                                                                  @click.stop="showComments" v-show="!showComment">Commentaires</span>
+                                                              <span v-if="commentsExist(training.id)" v-show="showComment"style="float:right" @click.stop="hideComments"><i class="glyphicon glyphicon-remove"></i>  </span>
                                                         </span>
                                 <div v-show="!showComment">
                                     <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
@@ -139,8 +139,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                         </center>
                                     </div>
                                 </div>
-                                <div id="feedback-collab" v-show="showComment" class="row" v-for="feedback in allFeedbacks">
-                                    <div v-if="feedback.training.id == training.id" class="col-lg-12">
+                                <div id="feedback-collab" v-if="feedback.training.id == training.id" v-show="showComment" class="row" v-for="feedback in allFeedbacks">
+                                    <div class="col-lg-12">
                                         <img class="profile-picture" src="img/profile.jpg">
                                         <div style="padding-top:15px;">
                                             <span>{{feedback.collaborator.firstName}} {{feedback.collaborator.lastName}} </span>
@@ -184,9 +184,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        $('.panel-collapse').click(function(e){
-                e.stopPropagation();
-        });
         this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
         this.getCookies();
         this.activateScrollUp('#scroll-up-2','#scroll');
@@ -231,6 +228,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         reinitialize(training){
+            this.showComment = false;
             this.disableSendButton = false;
             this.trainingrequested = true;
             this.trainingalreadyrequested(training.id);
