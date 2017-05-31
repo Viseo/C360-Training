@@ -7,6 +7,7 @@ public class CollaboratorIdentity extends BaseDTO {
     String firstName;
     String email;
     String password;
+    Boolean defaultPicture;
 
     public CollaboratorIdentity() {
     }
@@ -41,5 +42,13 @@ public class CollaboratorIdentity extends BaseDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getDefaultPicture() {
+        return defaultPicture;
+    }
+
+    public void setDefaultPicture(Boolean defaultPicture) {
+        this.defaultPicture = defaultPicture;
     }
 }

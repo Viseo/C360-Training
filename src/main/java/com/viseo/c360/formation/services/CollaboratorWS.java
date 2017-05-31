@@ -275,6 +275,7 @@ public class CollaboratorWS {
     @ResponseBody
     public CollaboratorDescription addCollaborator(@RequestBody CollaboratorDescription collaboratorDescription) {
         try {
+            collaboratorDescription.setDefaultPicture(true);
             Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
             return new CollaboratorToDescription().convert(collaborator);
         } catch (PersistenceException pe) {

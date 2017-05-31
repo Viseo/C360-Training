@@ -45,6 +45,9 @@ public class Collaborator extends BaseEntity {
 
 	String businessUnit;
 
+	@NotNull
+	Boolean defaultPicture;
+
 	public Collaborator() {
 		super();
 	}
@@ -100,5 +103,13 @@ public class Collaborator extends BaseEntity {
 
 	public void setBusinessUnit(String businessUnit) {
 		this.businessUnit = businessUnit;
+	}
+
+	public Boolean getDefaultPicture() {
+		return defaultPicture;
+	}
+
+	public void setDefaultPicture(Boolean defaultPicture) {
+		this.defaultPicture = defaultPicture;
 	}
 }
