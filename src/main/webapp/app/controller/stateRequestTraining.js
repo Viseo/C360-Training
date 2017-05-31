@@ -24,6 +24,7 @@ let stateRequest = Vue.component('state-request', {
                     trainingSessions: [],
                     title:''
                 }],
+                openPanel: false,
                 allTrainingsAlreadyHaveSessions:[],
                 allTrainingsAndSessions:[{
                     collaborators: []
@@ -186,7 +187,6 @@ let stateRequest = Vue.component('state-request', {
                                 this.noSessionForCollaborator = false;
                             }
                             this.orderSessions();
-
                         }
                         console.log(this.requestedTrainingByCollaborator);
                         this.orderSessions();

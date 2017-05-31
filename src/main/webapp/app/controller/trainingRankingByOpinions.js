@@ -23,7 +23,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     </div>
                     <div class="row">
                         <div id="rankingTraining">
-                        <button @click="delateFeedbackComment(feedbackComments[0])">Delate Feedback Comment</button>
+                        <button @click="deleteFeedbackComment(feedbackComments[0])">Delete Feedback Comment</button>
                         <button @click="addLiker(feedbackComments[0],collaborator_id)">Add Liker</button>
                         <button @click="removeLiker(feedbackComments[0],collaborator_id)">Remove Liker</button>
                         <div class="row">
@@ -113,7 +113,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
-            delateFeedbackComment(feedbackCommentToDelete){
+            deleteFeedbackComment(feedbackCommentToDelete){
                 this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
                     function (response) {
                         console.log("success to delete feedback comment");
