@@ -56,6 +56,41 @@ function BaseComponent(prototype) {
             });
         },
 
+        getCookie: function(cookieName) {
+            let name = cookieName + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    console.log(c.substring(name.length, c.length));
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        },
+
+        getCollaboratorInfoFromCookie: function (){
+            let collaboratorInfo = {id:'', lastName:'', firstName:'', admin:''};
+            let token = this.getCookie("token");
+            if (token != ""){
+                collaboratorInfo.id = jwt_decode(token).id;
+                collaboratorInfo.lastName = jwt_decode(token).lastName;
+                collaboratorInfo.firstName = jwt_decode(token).sub;
+                collaboratorInfo.admin = jwt_decode(token).roles;
+                return collaboratorInfo;
+            }
+            return "";
+        },
+
+        getStayconnetedFromCookie: function(){
+            let stayConnected = this.getCookie("stayconnected");
+            return stayConnected;
+        },
+
         verifyLastName(lastName) {
             if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(lastName)) {
                 this.errorMessageLastName = '';

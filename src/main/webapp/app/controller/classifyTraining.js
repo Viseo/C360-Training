@@ -48,4 +48,3 @@ let classifyTraining = Vue.component('classify-training', {
         }
     }
 });
-Vue.component('typeahead', VueStrap.typeahead);

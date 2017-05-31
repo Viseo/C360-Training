@@ -412,7 +412,3 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     }
 });
 
-Vue.component('typeahead', VueStrap.typeahead);
-Vue.component('accordion', VueStrap.accordion);
-Vue.component('panel', VueStrap.panel);
-

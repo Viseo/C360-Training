@@ -1,5 +1,10 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
+Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('accordion', VueStrap.accordion);
+Vue.component('panel', VueStrap.panel);
+Vue.component('alert', VueStrap.alert);
+Vue.component('typeahead', VueStrap.typeahead);
 
 let Header = Vue.component('header-component', {
     props: ['title',
@@ -500,8 +505,6 @@ router.afterEach((toRoute, fromRoute) => {
     }
     window.document.head.appendChild(pageNewIconTab);
 });
-
-Vue.component('dropdown', VueStrap.dropdown);
 
 new Vue({
     el: '#newVue',

@@ -422,4 +422,3 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         }
     },
 });
-Vue.component('typeahead', VueStrap.typeahead);
