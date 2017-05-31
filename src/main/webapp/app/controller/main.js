@@ -24,14 +24,14 @@ let Header = Vue.component('header-component', {
                     @mouseleave="setDisconnectedToFalse()" > 
                     <div id="navbar-user" 
                         class="col-lg-7 col-lg-offset-1 col-md-8 col-sm-8 col-xs-9 text-right" @mouseover="setDisconnectedToTrue()"> 
-                        <div v-show="showPicture()" class="col-lg-2"> 
+                        <div v-show="showPicture()" class="col-lg-2 col-md-5 col-sm-5 col-xs-5"> 
                             <img id="profilImage" 
                                 @error="imageLoadOnError" 
                                 :src="imagePath" 
                                 class="image-min"/> 
                         </div> 
-                        <span class="text-left col-lg-8 col-lg-offset-2" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
-                        <dropdown class="col-lg-8 col-lg-offset-2" type="default" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
+                        <span class="text-left col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
+                        <dropdown class="col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" type="default" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
                             <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li> 
                             <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li> 
                             <li role="separator" class="divider"></li> 
