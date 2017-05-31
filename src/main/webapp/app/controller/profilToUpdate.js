@@ -583,31 +583,33 @@ let profilToUpdate = Vue.component('profil-to-update', {
             this.CollabToUpdate.email = this.email;
             this.CollabToUpdate.function = this.fonction;
             this.CollabToUpdate.businessUnit = this.businessUnit;
-            if (this.password == '' && this.newPassword == '' && this.confirmPassword == '') {
-                this.oldPasswordEmpty = false;
-                this.passwordEmpty = false;
-                this.confirmPasswordEmpty = false;
-                this.isRightOldPassword = true;
-                if (this.imageHasBeenChanged === true) {
-                    this.updateCollaboratorImage();
-                }
-                this.saveUpdateCollaborator();
-            } else {
-                if (this.infoCollab.password == this.password) {
+           if (this.password == '' && this.newPassword == '' && this.confirmPassword == '') {
+                        this.oldPasswordEmpty = false;
+                        this.passwordEmpty = false;
+                        this.confirmPasswordEmpty = false;
+                        this.isRightOldPassword = true;
+                        if (this.imageHasBeenChanged === true) {
+                            this.updateCollaboratorImage();
+                            this.CollabToUpdate.defaultPicture = false;
+                        }
+                        this.saveUpdateCollaborator();
+           } else {
+               if (this.infoCollab.password == this.password){
                     this.isRightOldPassword = true;
                     this.oldPasswordEmpty = false;
                     this.passwordEmpty = false;
                     if (this.newPassword == this.confirmPassword) {
-                        this.CollabToUpdate.password = this.newPassword;
-                        if (this.imageHasBeenChanged === true) {
-                            this.updateCollaboratorImage();
-                        }
-                        this.saveUpdateCollaborator();
-                    }
-                } else {
+                            this.CollabToUpdate.password = this.newPassword;
+                            if (this.imageHasBeenChanged === true) {
+                                this.updateCollaboratorImage();
+                                this.CollabToUpdate.defaultPicture = false;
+                            }
+                            this.saveUpdateCollaborator();
+                   }
+                }else {
                     this.isRightOldPassword = false;
                 }
-            }
+           }
         },
 
             imageLoadOnError () {
