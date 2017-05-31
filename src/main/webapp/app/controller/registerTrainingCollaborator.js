@@ -46,7 +46,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             feedbackComments: [],
             collaboratorLike: false,
             allFeedbacks: [],
-            showComment: false
+            showComment: false,
         }
     },
 
@@ -103,12 +103,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                                          <span slot="header"
                                                                style="color: rgba(66, 139, 202,0.8); text-align: none !important;">
                                                             <span>{{training.trainingTitle}}</span>
-                                                            <span id="petittest" v-if="commentsExist(training.id)" 
-                                                                  style="float:right"
-                                                                  @click.stop="showComments" v-show="!showComment">Commentaires</span>
-                                                              <span v-if="commentsExist(training.id)" v-show="showComment"style="float:right" @click.stop="hideComments"><i class="glyphicon glyphicon-remove"></i>  </span>
                                                         </span>
                                 <div v-show="!showComment">
+                                <span v-if="commentsExist(training.id)" v-show="!showComment" style="cursor:pointer; float:right; margin-right:10px;" @click="showComments()">
+                                    <i class="glyphicon glyphicon-list"></i> Commentaires
+                                </span>
                                     <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                     <div v-show="!isNoSession" class="col-lg-4"><input type="checkbox"
                                                                                        @click="disabling(training.id)">Indifférent
@@ -139,9 +138,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                         </center>
                                     </div>
                                 </div>
+                                <div>
+                                <span v-if="commentsExist(training.id)" v-show="showComment" style="cursor:pointer; float:right; margin-right:15px; color:red;" @click="hideComments">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </span>
+                                <br>
                                 <div id="feedback-collab" v-if="feedback.training.id == training.id" v-show="showComment" class="row" v-for="feedback in allFeedbacks">
                                     <div class="col-lg-12">
-                                        <img class="profile-picture" src="img/profile.jpg">
+                                        <img class="profile-picture" v-if="feedback.collaborator.defaultPicture" src="img/profile.jpg">
+                                        <img class="profile-picture" v-else :src="'img/'+feedback.collaborator.id+'.jpg'">
                                         <div style="padding-top:15px;">
                                             <span>{{feedback.collaborator.firstName}} {{feedback.collaborator.lastName}} </span>
                                             <span class="date-on-right">
@@ -159,6 +164,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 </div>
                             </panel>
                         </div>
@@ -349,7 +355,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.collaboratorIdentity.firstName = jwt_decode(this.token).sub;
                     }
                 }
-            } 
+            }
         },
 
         verifyTrainingSessionCollaborator(){
