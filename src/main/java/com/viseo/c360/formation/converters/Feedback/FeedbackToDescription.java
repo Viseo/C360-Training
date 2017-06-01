@@ -19,6 +19,7 @@ public class FeedbackToDescription {
         dto.setDate(source.getDate());
         dto.setScore(source.getScore());
         dto.setComment(source.getComment());
+        dto.setLikers(source.getLikers());
         dto.setCollaborator(new CollaboratorToDescription().convert(source.getCollaborator()));
         dto.setTraining(source.getTraining());
         return dto;

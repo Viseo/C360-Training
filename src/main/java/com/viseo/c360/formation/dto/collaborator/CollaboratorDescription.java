@@ -19,6 +19,7 @@ public class CollaboratorDescription extends BaseDTO {
     Boolean isAdmin;
     String function;
     String businessUnit;
+    Boolean defaultPicture;
 
     public CollaboratorDescription() {
         this.isAdmin = false;
@@ -92,5 +93,13 @@ public class CollaboratorDescription extends BaseDTO {
 
     public void setBusinessUnit(String businessUnit) {
         this.businessUnit = businessUnit;
+    }
+
+    public Boolean getDefaultPicture() {
+        return defaultPicture;
+    }
+
+    public void setDefaultPicture(Boolean defaultPicture) {
+        this.defaultPicture = defaultPicture;
     }
 }

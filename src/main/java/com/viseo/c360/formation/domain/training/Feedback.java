@@ -3,11 +3,15 @@ package com.viseo.c360.formation.domain.training;
 
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -19,7 +23,14 @@ public class Feedback extends BaseEntity{
     @NotNull
     int score;
 
+    @Column(length = 500)
     String comment;
+
+    @Valid
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(name="feedback_like")
+    List<Collaborator> likers;
 
     @NotNull
     @Valid
@@ -58,6 +69,25 @@ public class Feedback extends BaseEntity{
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public List<Collaborator> getLikers() {
+        return likers;
+    }
+
+    public void setLikers(List<Collaborator> likers) {
+        this.likers = likers;
+    }
+
+    public void addLikers(Collaborator collaborator) {
+        System.out.println(collaborator);
+        this.likers.add(collaborator);
+    }
+    public void removeLiker(Collaborator collaborator) {
+        this.likers.remove(collaborator);
+    }
+    public void removeLikers(){
+        this.likers.clear();
     }
 
     public Collaborator getCollaborator() {

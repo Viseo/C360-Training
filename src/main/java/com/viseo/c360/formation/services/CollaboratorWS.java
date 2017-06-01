@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.persistence.PersistenceException;
 
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
@@ -21,6 +22,7 @@ import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.collaborator.Wish;
 import com.viseo.c360.formation.domain.training.Topic;
+import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
@@ -273,6 +275,7 @@ public class CollaboratorWS {
     @ResponseBody
     public CollaboratorDescription addCollaborator(@RequestBody CollaboratorDescription collaboratorDescription) {
         try {
+            collaboratorDescription.setDefaultPicture(true);
             Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
             return new CollaboratorToDescription().convert(collaborator);
         } catch (PersistenceException pe) {
@@ -352,6 +355,33 @@ public class CollaboratorWS {
         RequestTraining requestTraining = new DescriptionToRequestTraining().convert(requestTrainingDescription, collaborator, topic);
         requestTraining = collaboratorDAO.addRequestTraining(requestTraining);
         return new RequestTrainingToDescription().convert(requestTraining);
+    }
+
+    @RequestMapping(value = "${endpoint.requestsassign}", method = RequestMethod.POST)
+    @ResponseBody
+    public List<RequestTraining> addRequestTrainingAssign(@PathVariable Long session_id,@PathVariable List<Long> id_collaborators) {
+        try {
+            List<RequestTraining> requestTrainings = new ArrayList<>();
+            List<Collaborator> collaborators=new ArrayList<>();
+            for(int i=0;i<id_collaborators.size();i++){
+                collaborators.add(collaboratorDAO.getCollaborator(id_collaborators.get(i)));
+            }
+            TrainingSession session = trainingDAO.getSessionTraining(session_id);
+            Training training = session.getTraining();
+            for(int i=0; i<collaborators.size();i++){
+                RequestTraining requestTraining = new RequestTraining();
+                requestTraining.setTraining(training);
+                requestTraining.addSession(session);
+                requestTraining.setValidated(true);
+                requestTraining.setCollaborator(collaborators.get(i));
+                requestTraining = collaboratorDAO.addRequestTraining(requestTraining);
+                requestTrainings.add(requestTraining);
+            }
+            return requestTrainings;
+        } catch (PersistentObjectNotFoundException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
     }
 
     @RequestMapping(value = "${endpoint.listrequests}", method = RequestMethod.GET)

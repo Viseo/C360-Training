@@ -24,6 +24,7 @@ public class DescriptionToFeedback {
             domain.setDate(dto.getDate());
             domain.setScore(dto.getScore());
             domain.setComment(dto.getComment());
+            domain.setLikers(dto.getLikers());
             domain.setCollaborator(new DescriptionToCollaborator().convert(dto.getCollaborator()));
             domain.setTraining(dto.getTraining());
             return domain;

@@ -58,6 +58,7 @@ public class TrainingDAO {
     //Feedback
     @Transactional
     public Feedback addFeedback(Feedback feedback) throws PersistenceException {
+        if(feedback.getComment() == ""){ feedback.setComment(null); }
         daoFacade.persist(feedback);
         daoFacade.flush();
         return feedback;
@@ -83,6 +84,37 @@ public class TrainingDAO {
                 param("collaborator", collaborator));
     }
 
+    @Transactional
+    public List<Feedback> getFeedbackByTraining(Training training){
+        daoFacade.setFlushMode(FlushModeType.COMMIT);
+        return daoFacade.getList("SELECT f FROM Feedback f WHERE f.training = :training AND f.comment IS NOT NULL",
+                param("training", training));
+    }
+
+    @Transactional
+    public Feedback delateFeedbackComment(Feedback feedback){
+        feedback = daoFacade.merge(feedback);
+        feedback.setComment(null);
+        daoFacade.flush();
+        return feedback;
+    }
+
+    @Transactional
+    public Feedback addFeedbackLikes(Feedback feedback, Collaborator collaborator){
+        feedback = daoFacade.merge(feedback);
+        feedback.addLikers(collaborator);
+        daoFacade.flush();
+        return feedback;
+    }
+
+    @Transactional
+    public Feedback removeFeedbackLikes(Feedback feedback,Collaborator collaborator){
+        feedback = daoFacade.merge(feedback);
+        feedback.removeLiker(collaborator);
+        daoFacade.flush();
+        return feedback;
+    }
+
 
 
 
@@ -101,6 +133,7 @@ public class TrainingDAO {
         daoFacade.executeSQLRequest("Delete from requesttraining_trainingsession rtt where rtt.requesttraining_id in (select rt.id from requesttraining rt where rt.training_id in (select t.id from training t where t.topic_id =:id))",param("id",topic.getId()));
         daoFacade.executeRequest("Delete FROM RequestTraining rt WHERE rt.training.id in (SELECT t.id from Training t where t.topic.id =:id)",param("id",topic.getId()));
         daoFacade.executeRequest("Delete FROM TrainingSession ts WHERE ts.training.id in (SELECT t.id from Training t where t.topic.id =:id)",param("id",topic.getId()));
+        daoFacade.executeRequest("Delete FROM Feedback f WHERE f.training.id in (select t.id from Training t where t.topic.id = :id)",param("id",topic.getId()));
         daoFacade.executeRequest("Delete FROM Training t WHERE t.topic.id =:id",param("id",topic.getId()));
         daoFacade.remove(topic);
         daoFacade.flush();
@@ -109,9 +142,10 @@ public class TrainingDAO {
     @Transactional
     public Training removeTraining(Training training) throws PersistenceException {
         daoFacade.executeSQLRequest("Delete from trainingsession_collaborator tc where tc.trainingsession_id in (select ts.id from trainingsession ts where ts.training_id =:training_id)",param("training_id",training.getId()));
-        daoFacade.executeSQLRequest("Delete from requesttraining_trainingsession rtt where rtt.requesttraining_id =:training_id ",param("training_id",training.getId()));
+        daoFacade.executeSQLRequest("Delete from requesttraining_trainingsession rtt where rtt.requesttraining_id in (select rt.id from requesttraining rt where rt.training_id = :training_id) ",param("training_id",training.getId()));
         daoFacade.executeRequest("Delete FROM RequestTraining rt WHERE rt.training.id=:training_id",param("training_id",training.getId()));
         daoFacade.executeRequest("Delete FROM TrainingSession ts WHERE ts.training.id=:training_id",param("training_id",training.getId()));
+        daoFacade.executeRequest("Delete FROM Feedback f WHERE f.training.id = :training_id",param("training_id",training.getId()));
         daoFacade.remove(training);
         daoFacade.flush();
         return training;

@@ -33,7 +33,8 @@ let stateRequest = Vue.component('state-request', {
                     training:''
                 },
                 allTrainingsToGiveFeedbacks:[],
-                showRatingTrainingsPopup:false
+                showRatingTrainingsPopup:false,
+                openPanel: false
             }
         },
         template: `
@@ -77,12 +78,12 @@ let stateRequest = Vue.component('state-request', {
                                                     <strong> {{training.title}}</strong>
                                                          <div v-for="session in training.sessionsValidated">
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                                              <span class="glyphicon glyphicon-time alignIcon"></span>
+                                                              <span class="glyphicon glyphicon-ok-circle alignIcon" 
+                                                                      style="color: green"></span>
                                                          </div>
                                                          <div v-for="session in training.sessionsPending">
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                                                <span class="glyphicon glyphicon-ok-circle alignIcon" 
-                                                                      style="color: green">
+                                                                <span class="glyphicon glyphicon-time alignIcon">
                                                                 </span>
                                                          </div>
                                                          <hr style="margin:4.5px"/>
@@ -196,7 +197,8 @@ let stateRequest = Vue.component('state-request', {
                                                                     <input type="text"
                                                                            class="form-control" 
                                                                            placeholder="Commentaire" 
-                                                                           v-model="comment">
+                                                                           v-model="comment"
+                                                                            maxlength="500">
                                                          </div>
                                                          <div class="col-sm-1 col-md-1 col-lg-1">
                                                                      <button type="button" 
@@ -268,13 +270,14 @@ let stateRequest = Vue.component('state-request', {
                         for (let i = 0; i < Object.keys(this.requestedTraining).length; i++) {
                             if (Object.values(this.requestedTraining)[i].requestTrainingList.length != 0 || Object.values(this.requestedTraining)[i].trainingSessions.length != 0) {
                                 this.requestedTrainingByCollaborator.push({
-                                    title: Object.keys(this.requestedTraining)[i],
-                                    sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
-                                    sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                                });
+                                title: Object.keys(this.requestedTraining)[i],
+                                sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
+                                sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
+                            });
                                 this.noSessionForCollaborator = false;
                             }
                         }
+                        console.log(this.requestedTrainingByCollaborator);
                         this.orderSessions();
                     }
                 };
@@ -290,7 +293,7 @@ let stateRequest = Vue.component('state-request', {
             },
 
             addFeedback(training){
-                let isCollaboratorHasAddedAScore = this.score != '' && this.comment != '';
+                let isCollaboratorHasAddedAScore = this.score != '';
                 if (isCollaboratorHasAddedAScore) {
                     this.feedback.training = training;
                     this.feedback.score = this.score;
@@ -338,5 +341,3 @@ let stateRequest = Vue.component('state-request', {
         }
     }
 );
-
-

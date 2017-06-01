@@ -5,7 +5,11 @@ let trainingRanking = Vue.component('training-ranking', {
         props: [],
         data: function() {
             return {
-                allTrainingScore: []
+                allTrainingScore: [],
+                //US13
+                collaborator_id:'1',
+                feedbackComments:[],
+                feedbackCommentToDelete:{}
             }
         },
         template: `
@@ -19,7 +23,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     </div>
                     <div class="row">
                         <div id="rankingTraining">
-                            <div class="row">
+                        <div class="row">
                                 <div class="col-sm-12 col-md-2 col-lg-2">
                                 <router-link :to="{path: '/addTrainingTopic'}">
                                     <img src="css/left-arrow.png"
@@ -45,7 +49,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                         overflow-y:hidden; 
                                         overflow-x:hidden;">
                                          <div v-for=" training in allTrainingScore">
-                                         <span class="col-lg-8">{{training[0].trainingTitle}}</span>
+                                         <span class="col-lg-8" @click="getFeedbackCommentByTraining(training[0].id)" style="cursor: pointer;">{{training[0].trainingTitle}}</span>
                                          <span class="col-lg-4"><span v-for="i in training[1]"><span class="glyphicon glyphicon-star fullStar"></span></span>
                                          <span v-for="i in (5-training[1])"><span class="glyphicon glyphicon-star-empty emptyStar"></span></span>
                                          </span>
@@ -86,8 +90,6 @@ let trainingRanking = Vue.component('training-ranking', {
                         this.allTrainingScore = response.data;
                         for (let index in this.allTrainingScore){
                             this.allTrainingScore[index][1]= Math.floor(this.allTrainingScore[index][1])
-
-                            console.log(this.allTrainingScore[index][1]);
                         }
 
                     },
@@ -97,7 +99,52 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
-
+            getFeedbackCommentByTraining(training_id){
+                this.$http.get("api/feedbackcomment/"+ training_id).then(
+                    function (response) {
+                        console.log("success to get all feedback comments of the same training");
+                        this.feedbackComments = response.data;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            deleteFeedbackComment(feedbackCommentToDelete){
+                this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
+                    function (response) {
+                        console.log("success to delete feedback comment");
+                        this.feedback = response.data;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            addLiker(feedbackToAdd,collaborator_id){
+                this.$http.put("api/addfeedbacklikes/"+collaborator_id,feedbackToAdd).then(
+                    function (response) {
+                        console.log("success to add liker");
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            },
+            removeLiker(feedbackToRemove,collaborator_id){
+                this.$http.put("api/removefeedbacklikes/"+collaborator_id,feedbackToRemove).then(
+                    function (response) {
+                        console.log("success to remove liker");
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            }
         }
     }
 );
