@@ -285,7 +285,7 @@ describe('training to come Panel test', function () {
 
     it('should check if the application identify the collaborator id thanks to the token cookies', function(){
         let collaboratorId = 1;
-        vmTrainingToCome.getIdCollaboratorWithTokenCookies();
+        vmTrainingToCome.initializeInformationsFromCookie();
         expect(vmTrainingToCome.collaborator_id).toBe(collaboratorId);
     });
 

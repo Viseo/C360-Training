@@ -170,6 +170,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     temp.disabled =true;
                     temp.checked = false;
                     this.sessionAlreadyBookedMessage = true;
+                    console.log(temp.nextElementSibling);
                     temp.nextElementSibling.innerHTML="";
                     $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
                 }

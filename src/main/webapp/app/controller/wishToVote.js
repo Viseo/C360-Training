@@ -76,7 +76,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
     },
     methods: {
 
-        getCookies(){
+        initializeInformationsFromCookie(){
             let collaboratorInfo = this.getCollaboratorInfoFromCookie();
             let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
             if(isCollaboratorInfoNotEmpty){

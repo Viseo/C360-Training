@@ -2,13 +2,21 @@
  * Created by CLH3623 on 18/04/2017.
  */
 
+var vmCollabFormation= new Vue({
+    template: '<div><collaborator-formation></collaborator-formation></div>',
+    router: router,
+    components: {
+        'collaboratorFormation': CollaboratorFormation
+    }
+}).$mount();
+
 afterEach(function () {
 });
 
 describe('test registerTrainingCollaborator', function () {
 
     beforeEach(function () {
-        vmCollaboratorFormation = new CollaboratorFormation().$mount();
+        vmCollaboratorFormation = vmCollabFormation.$children[0];
         vmCollaboratorFormation.collaboratorIdentity = {
             id: 2,
             lastName: 'Dupont',
@@ -68,8 +76,8 @@ describe('test registerTrainingCollaborator', function () {
         vmCollaboratorFormation.value = 'FOR';
         setTimeout(function () {
             expect(vmCollaboratorFormation.noTrainingFound).toBe(false);
-            expect(vmCollaboratorFormation.trainingsFound.length).toBe(3);
-            expect(vmCollaboratorFormation.trainingsFound[0].trainingTitle).toBe("FORMATION1");
+            expect(vmCollaboratorFormation.trainingsFound.length).toBe(1);
+            expect(vmCollaboratorFormation.trainingsFound[0].trainingTitle).toBe("FORMATION2");
             done();
         }, 0);
 
