@@ -570,6 +570,9 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     else{
                         this.state.isNoSession = false;
                     }
+                },function (error) {
+                    console.log('error:');
+
                 });
         },
 

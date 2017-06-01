@@ -21,6 +21,7 @@ module.exports = function (config) {
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-router.js',
             'src/main/webapp/lib/jwt-decode.js',
+            'src/test/javaScript/spec/test-util.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
             'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/base.js',
@@ -47,6 +48,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/stateRequestTrainingSpec.js',
             'src/test/javaScript/spec/profilToUpdateSpec.js',
             'src/test/javaScript/spec/trainingRankingByOpinionsSpec.js',
+
 
 
         ],

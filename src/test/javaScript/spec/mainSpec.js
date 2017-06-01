@@ -1,10 +1,9 @@
 /**
  * Created by XME3612 on 10/04/2017.
  */
-Vue.use(VueResource);
 Vue.use(VueRouter);
 
-Vue.http.interceptors.unshift((request, next) => {
+/*Vue.http.interceptors.unshift((request, next) => {
     let route = routes.find((item) => {
         return (request.method === item.method && request.url === item.url );
     });
@@ -19,7 +18,7 @@ Vue.http.interceptors.unshift((request, next) => {
             )
         );
     }
-});
+});*/
 
 const collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
 
@@ -69,7 +68,7 @@ describe('Header test', function () {
     });
 
     it('should get the Cookie information', function () {
-        document = {
+        /*document = {
             value_: '',
 
             get cookie() {
@@ -80,7 +79,7 @@ describe('Header test', function () {
                 this.value_ += value + ';';
             }
         };
-        document.cookie = "token="+ collaboratorToken;
+        document.cookie = "token="+ collaboratorToken;*/
         expect(headerComponent.stayConnected).toBe(true);
     });
 

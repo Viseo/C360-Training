@@ -20,6 +20,7 @@ beforeEach(function () {
     vmAddSessionPanel = vmAddSession.$children[0];
     vmDatePicker = new DatePicker().$mount();
     vmInputText = new InputText().$mount();
+    clearRequests();
 });
 
 afterEach(function () {
@@ -289,9 +290,46 @@ describe('test registerTrainingTopic.js', function () {
             }
         );
 
-        it('should check whether we can connect to the database in order to get all trainings', function () {
+        fit('should check whether we can connect to the database in order to get all trainings', function (done) {
+            let response = [
+                {
+                    "id": 7,
+                    "version": 0,
+                    "trainingDescription": {
+                        "id": 5,
+                        "version": 0,
+                        "trainingTitle": "FORMATION1",
+                        "numberHalfDays": 1,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    },
+                    "beginning": "15/04/2017",
+                    "ending": "15/04/2017",
+                    "beginningTime": "09:00",
+                    "endingTime": "18:00",
+                    "location": "Salle Escale"
+                }, {
+                    "id": 8,
+                    "version": 0,
+                    "trainingDescription": {
+                        "id": 5,
+                        "version": 0,
+                        "trainingTitle": "FORMATION1",
+                        "numberHalfDays": 1,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    },
+                    "beginning": "18/05/2017",
+                    "ending": "18/05/2017",
+                    "beginningTime": "09:00",
+                    "endingTime": "18:00",
+                    "location": "Salle Bali"
+                }
+            ];
+                prepareRequest('GET', 'api/formations/5/sessions', 500, response);
                 vmAddSessionPanel.state.idTraining = 5;
                 vmAddSessionPanel.gatherSessionsByTrainingFromDatabase();
+                setTimeout(() => {
+                    done();
+                }, 0);
             }
         );
 

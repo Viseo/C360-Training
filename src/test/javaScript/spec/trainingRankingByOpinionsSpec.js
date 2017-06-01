@@ -1,10 +1,18 @@
 /**
  * Created by XME3612 on 29/05/2017.
  */
+var vm8 = new Vue({
+    template: '<div><training-ranking></training-ranking></div>',
+    router: router,
+    components: {
+        'blueHeader': Header
+    }
+}).$mount();
+
 describe('training-ranking test', function () {
     beforeEach(function () {
 
-        vmTrainingRanking = new trainingRanking().$mount();
+        vmTrainingRanking = vm8.$children[0];
 
     });
 

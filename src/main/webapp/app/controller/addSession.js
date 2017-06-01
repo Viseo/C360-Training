@@ -253,6 +253,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         gatherSessionsByTrainingFromDatabase(){
+            console.log("api/formations/" + this.state.idTraining + "/sessions");
             this.$http.get("api/formations/" + this.state.idTraining + "/sessions").then(
                 function (response) {
                     this.state.listTrainingSession = response.data;
@@ -262,6 +263,9 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     else{
                         this.state.isNoSession = false;
                     }
+                },function (error) {
+                    console.log('error:');
+
                 });
         },
 
