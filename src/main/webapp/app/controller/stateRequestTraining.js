@@ -305,6 +305,8 @@ let stateRequest = Vue.component('state-request', {
                             }
                     };
                     this.post("api/feedback/"+this.collaboratorIdentity.id,this.feedback,addFeedbackSuccess);
+                    this.comment = '';
+                    this.score = '';
                 }
             },
 

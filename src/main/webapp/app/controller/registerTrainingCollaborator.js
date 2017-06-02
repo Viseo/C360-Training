@@ -382,7 +382,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.SaveTrainingSessionCollaborator();
                 console.log(this);
                 if(this.$parent.$children[3]){
-                    let trainingToComeComponent = this.$parent.$children[3].$children[0];
+                    let trainingToComeComponent = this.$parent.$children[3];
                     trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
                 }
             } else {

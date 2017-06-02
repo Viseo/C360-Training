@@ -31,7 +31,7 @@ let Header = Vue.component('header-component', {
                                 class="image-min"/> 
                         </div> 
                         <span class="text-left col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
-                        <dropdown class="col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" type="default" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
+                        <dropdown class="col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" type="default" v-if="showPicture()" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
                             <li><a @click="goTo('registerTrainingCollaborator');">Espace formations</a></li> 
                             <li><a @click="goTo('profiltoupdate');">Modifier mon profil</a></li> 
                             <li role="separator" class="divider"></li> 

@@ -193,6 +193,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isTrainingTitleInAddSessionEmpty();
                 this.isBeginningDateEmpty();
                 this.isLocationEmpty();
+                console.log(this.locationErrorMessage);
                 if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                     this.saveSessionIntoDatabase();
