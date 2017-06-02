@@ -137,7 +137,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
 
         sendWish(){
             this.wishToRegister.label = this.wish.toUpperCase();
-            this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
+            this.$http.post("api/addwish/"+this.collaborator_id,this.wishToRegister).then(
                 function (response) {
                     this.wishAlreadyExisted=false;
                     this.wishSuccess = true;

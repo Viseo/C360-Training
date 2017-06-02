@@ -290,7 +290,7 @@ describe('test registerTrainingTopic.js', function () {
             }
         );
 
-        fit('should check whether we can connect to the database in order to get all trainings', function (done) {
+        it('should check whether we can connect to the database in order to get all trainings', function (done) {
             let response = [
                 {
                     "id": 7,

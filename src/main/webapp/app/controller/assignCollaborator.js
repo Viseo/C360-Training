@@ -28,7 +28,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             confirmCollaboratorAddedSession: false,
             isSearchNameValid: true,
             lastNameRegexErrorMessage: '',
-            collaborator_id: '',
             numberOfWishesNotChecked: '',
             allFeedbacks:[],
             allTrainingScore:[]
@@ -146,30 +145,24 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 </div>`,
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.initializeInformationsFromCookie();
-        this.getIsNotCheckedWishes();
+        this.getNumberOfWhisesForNotification();
         this.gatherAllSessions();
     },
     methods: {
 
-        initializeInformationsFromCookie(){
-            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
-            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
-            if(isCollaboratorInfoNotEmpty){
-                this.collaborator_id = collaboratorInfo.id;
-            }
-        },
+        getNumberOfWhisesForNotification(){
+            let successGetNumberOfWhisesForNotification = (response) => {
+                console.log("success to get all wishes which are not checked");
+                this.numberOfWishesNotChecked = response.data.length;
+            };
 
-        getIsNotCheckedWishes(){
-            this.$http.get("api/wish/" + this.collaborator_id).then(
-                function (response) {
-                    console.log("success to get all wishes which are not checked");
-                    this.numberOfWishesNotChecked = response.data.length;
-                },
-                function (response) {
-                    console.log("Error: ", response);
-                    console.error(response);
-                });
+            let errorGetNumberOfWhisesForNotification = (response) => {
+                this.numberOfWishesNotChecked = 0;
+                console.log("Error: ", response);
+                console.error(response);
+            };
+
+            this.get("api/isnotcheckedwishes", successGetNumberOfWhisesForNotification, errorGetNumberOfWhisesForNotification)
         },
 
         gatherAllSessions(){
@@ -401,11 +394,9 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             }
         },
 
-        sessionIdChosen: function (value) {
-            if (value) {
+        sessionIdChosen: function () {
                 this.verifyCheckedNames();
                 this.clearGreyPanel();
-            }
         },
         checkedNames: function (value) {
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
