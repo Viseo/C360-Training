@@ -197,7 +197,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                     this.saveSessionIntoDatabase();
-                    this.goTo('addTrainingTopic');
                 }
             }
         },
@@ -222,6 +221,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.resetSessionForm();
                 this.gatherSessionsByTrainingFromDatabase();
                 this.gatherAllSessions();
+                this.goTo('addTrainingTopic');
             };
 
             let saveSessionError = (response) => {
