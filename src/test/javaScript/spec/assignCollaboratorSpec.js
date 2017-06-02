@@ -14,7 +14,7 @@ var newGlobalVue = new Vue({
 
 var vmAssignCollaborator;
 
-fdescribe('assign collaborator test', function () {
+describe('assign collaborator test', function () {
 
     beforeEach(function () {
         vmAssignCollaborator = newGlobalVue.$children[0];
@@ -192,30 +192,9 @@ fdescribe('assign collaborator test', function () {
         },0);
     });
 
-    fit('should check if collaborators that did a session request (and is not accepted yet) are displayed when admin check the checkbox and has already chosen a session and that there is a server error', function (done) {
+    it('should check if collaborators that did a session request (and is not accepted yet) are displayed when admin check the checkbox and has already chosen a session and that there is a server error', function (done) {
         vmAssignCollaborator.sessionIdChosen = 6;
         vmAssignCollaborator.checkedNames = true;
-        var collaboratorThatDidARequestForSessionWithId6 = [
-            {
-                "email": "eric.dupon@viseo.com",
-                "firstName": "Eric",
-                "id": 5,
-                "lastName": "Dupond",
-                "password": "123456",
-                "version": 0
-            }
-        ];
-        var collaboratorThatIsAlreadyInSessionWithId6 = [
-            {
-                "email": 'benjamin.batista@viseo.com',
-                "firstName": 'Benjamin',
-                "id": 10,
-                "lastName": 'BATISTA',
-                "password": '123456',
-                "version": 0
-            },
-
-        ];
         vmAssignCollaborator.verifyCheckedNames();
         vmAssignCollaborator.verifyCollaboratorsRequestingNotYetAccepted();
 
@@ -285,25 +264,62 @@ fdescribe('assign collaborator test', function () {
         },0);
     });
 
-    it('should check if all collaborators (even whose are displayed when checkbox is checked false', function () {
-        //vmAssignCollaborator.verifyCheckedNames();
+    it('should check if collaborators that did not a session request (and is not accepted yet) are displayed when admin uncheck the checkbox and has already chosen a session', function (done) {
         vmAssignCollaborator.sessionIdChosen = 6;
-        //expect(vmAssignCollaborator.checkedNames).toBe(true);
         vmAssignCollaborator.checkedNames = false;
-        vmAssignCollaborator.verifyCheckedNames();
-        vmAssignCollaborator.allCollaborators = [
+        var collaboratorThatDidNotARequestForSessionWithId6 = [
             {
-                "email": 'eric.dupon@viseo.com',
-                "firstName": 'Eric',
+                "email": "eric.dupon@viseo.com",
+                "firstName": "Eric",
                 "id": 5,
-                "lastName": 'Dupond',
+                "lastName": "Dupond",
+                "password": "123456",
+                "version": 0
+            },
+            {
+                "email": 'stefani.zala@viseo.com',
+                "firstName": 'Stefani',
+                "id": 20,
+                "lastName": 'Zala',
+                "password": '123456',
+                "version": 0
+            },
+        ];
+        var collaboratorThatIsAlreadyInSessionWithId6 = [
+            {
+                "email": 'benjamin.batista@viseo.com',
+                "firstName": 'Benjamin',
+                "id": 10,
+                "lastName": 'BATISTA',
                 "password": '123456',
                 "version": 0
             }
         ];
+        prepareRequest('GET', 'api/collaborateurs', 200, collaboratorThatDidNotARequestForSessionWithId6);
+        vmAssignCollaborator.verifyCheckedNames();
+        prepareRequest('GET', 'api/sessions/6/collaborators', 200, collaboratorThatIsAlreadyInSessionWithId6);
         vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
 
+        setTimeout(function(){
+            expect(vmAssignCollaborator.requestedCollaborators).toEqual(collaboratorThatDidNotARequestForSessionWithId6);
+            expect(vmAssignCollaborator.allCollaboratorsAlreadyInSessions).toEqual(collaboratorThatIsAlreadyInSessionWithId6);
+            done();
+        },0);
     });
+
+    it('should check if collaborators that did not a session request (and is not accepted yet) are displayed when admin uncheck the checkbox and has already chosen a session and there is a server problem', function (done) {
+        vmAssignCollaborator.sessionIdChosen = 6;
+        vmAssignCollaborator.checkedNames = false;
+        vmAssignCollaborator.verifyCheckedNames();
+        vmAssignCollaborator.verifyAllCollaboratorsNotYetAccepted();
+
+        setTimeout(function(){
+            expect(vmAssignCollaborator.requestedCollaborators).toEqual([]);
+            expect(vmAssignCollaborator.allCollaboratorsAlreadyInSessions).toEqual([]);
+            done();
+        },0);
+    });
+
 
     it('should check if counter is increased when collaborators has been added', function () {
         vmAssignCollaborator.validatedCollab = [{
@@ -314,16 +330,16 @@ fdescribe('assign collaborator test', function () {
             "password": '123456',
             "version": 0
 
-        }],
-            vmAssignCollaborator.allCollaboratorsAlreadyInSessions = [{
-                "email": 'julien.tallon@viseo.com',
-                "firstName": 'Julien',
-                "id": 6,
-                "lastName": 'Tallon',
-                "password": '654321',
-                "version": 7
+        }];
+        vmAssignCollaborator.allCollaboratorsAlreadyInSessions = [{
+            "email": 'julien.tallon@viseo.com',
+            "firstName": 'Julien',
+            "id": 6,
+            "lastName": 'Tallon',
+            "password": '654321',
+            "version": 7
 
-            }]
+        }];
 
         var vmLengthValidatedCollab = vmAssignCollaborator.validatedCollab.length;
         var vmAllCollaboratorsAlreadyInSessions = vmAssignCollaborator.allCollaboratorsAlreadyInSessions.length;
@@ -486,6 +502,7 @@ fdescribe('assign collaborator test', function () {
         vmAssignCollaborator.moveCollabLeft();
         expect(vmLengthRequestedCollaborators).not.toBeNull();
     });
+
     it('should check if collaborators are moved from right list to left list ', function () {
         vmAssignCollaborator.validatedCollab = [{
             "email": 'norine.dumas@viseo.com',
@@ -508,7 +525,7 @@ fdescribe('assign collaborator test', function () {
 
     });
 
-    it('should check if confirmation message appear and fields are greys when collaborators are saved ', function (done) {
+    it('should check if confirmation message appear and fields are greys when collaborators are saved for the specific session', function (done) {
         vmAssignCollaborator.isRegistrationAvailable = true;
         vmAssignCollaborator.validatedCollab = [{
             email: "viseo@viseo.com",
@@ -518,11 +535,26 @@ fdescribe('assign collaborator test', function () {
             password: "123456",
             version: 0
         }];
-            vmAssignCollaborator.sessionIdChosen = 15;
-            vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
-
+        var response = [{
+            "id": 15,
+            "version": 0,
+            "trainingDescription": {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            },
+            "beginning": "13/05/2017",
+            "ending": "13/05/2017",
+            "beginningTime": "09:00",
+            "endingTime": "18:00",
+            "location": "Salle Bora Bora"
+        }];
+        prepareRequest('PUT', 'api/sessions/15/15,10,18,4,4/collaborators', 200, response);
+        vmAssignCollaborator.sessionIdChosen = 15;
+        vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
         vmAssignCollaborator.saveCollabInSessions();
-
         expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(true);
         expect(vmAssignCollaborator.validatedCollab.length).toBe(0);
         expect(vmAssignCollaborator.allCollaboratorsIdChosen.length).toBe(0);
@@ -534,16 +566,59 @@ fdescribe('assign collaborator test', function () {
         expect(vmAssignCollaborator.requestedCollaborators.length).toBe(0);
         expect(vmAssignCollaborator.isRegistrationAvailable).toBe(true);
         expect(vmAssignCollaborator.value).toBe('');
+
         setTimeout(function () {
             expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
             done();
         }, 2001);
     });
 
-    it('should check if error message is displayed when there are  type error in search field ', function () {
+    it('should check if confirmation message appear and fields are greys when collaborators are saved for the specific session (and there is an error server)', function (done) {
+        vmAssignCollaborator.isRegistrationAvailable = true;
+        vmAssignCollaborator.validatedCollab = [{
+            email: "viseo@viseo.com",
+            firstName: "viseo",
+            id: 4,
+            lastName: "technologie",
+            password: "123456",
+            version: 0
+        }];
+        vmAssignCollaborator.sessionIdChosen = 15;
+        vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
+        vmAssignCollaborator.saveCollabInSessions();
+        expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(true);
+        expect(vmAssignCollaborator.validatedCollab.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaboratorsIdChosen.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaboratorsAlreadyInSessions.length).toBe(0);
+        expect(vmAssignCollaborator.sessionIdChosen).toBe(0);
+        expect(vmAssignCollaborator.isDisabled).toBe(true);
+        expect(vmAssignCollaborator.allCollaboratorsName.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaborators.length).toBe(0);
+        expect(vmAssignCollaborator.requestedCollaborators.length).toBe(0);
+        expect(vmAssignCollaborator.isRegistrationAvailable).toBe(true);
+        expect(vmAssignCollaborator.value).toBe('');
+
+        setTimeout(function () {
+            expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
+            done();
+        }, 2001);
+    });
+
+    it('should check if error message is displayed when there are type error in search field (when administrator is looking for a collaborator)', function (done) {
         vmAssignCollaborator.value = "@";
-        vmAssignCollaborator.verifyLastName(vmAssignCollaborator.value, 'lastNameRegexErrorMessage');
-        expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
-        expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
+        setTimeout(function(){
+            expect(vmAssignCollaborator.isSearchNameValid).toBe(false);
+            expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual("Veuillez entrer un nom ou prénom valide");
+            done();
+        }, 0);
+    });
+
+    it('should check if error message is not displayed when there are no type error in search field (when administrator is looking for a collaborator)', function (done) {
+        vmAssignCollaborator.value = "Ben";
+        setTimeout(function(){
+            expect(vmAssignCollaborator.isSearchNameValid).toBe(true);
+            expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual('');
+            done();
+        }, 0);
     });
 });
