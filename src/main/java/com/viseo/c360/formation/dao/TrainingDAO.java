@@ -2,6 +2,7 @@ package com.viseo.c360.formation.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -80,8 +81,10 @@ public class TrainingDAO {
     @Transactional
     public List<Training> getTrainingsToGiveFeedbacks(Collaborator collaborator){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("SELECT DISTINCT ts.training FROM TrainingSession ts JOIN ts.collaborators tsc WHERE :collaborator IN tsc AND ts.training NOT IN (SELECT f.training FROM Feedback f WHERE f.collaborator = :collaborator)",
-                param("collaborator", collaborator));
+        Date today = new Date();
+        return daoFacade.getList("SELECT DISTINCT ts.training FROM TrainingSession ts JOIN ts.collaborators tsc WHERE :collaborator IN tsc AND ts.training NOT IN (SELECT f.training FROM Feedback f WHERE f.collaborator = :collaborator) AND ts.ending < :today",
+                param("collaborator", collaborator),
+                param("today", today));
     }
 
     @Transactional
