@@ -1,11 +1,10 @@
 /**
  * Created by BBA3616 on 18/05/2017.
  */
-
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var vmCollectWishe = new Vue({
+var newGlobalVue = new Vue({
     template: '<div><collect-wishes></collect-wishes></div>',
     router: router,
     components: {
@@ -13,18 +12,77 @@ var vmCollectWishe = new Vue({
     }
 }).$mount();
 
-describe('collect wishes panel test', function () {
+var vmCollectWishes;
+
+fdescribe('collect wishes panel test', function () {
 
     beforeEach(function () {
-        vmCollectWishes = vmCollectWishe.$children[0];
+        vmCollectWishes = newGlobalVue.$children[0];
     });
 
     afterEach(function () {
-        vmCollectWishes.listWishesToUpdate = [];
-
+        Object.assign(vmCollectWishes.$data, vmCollectWishes.$options.data());
+        clearRequests();
     });
 
-    it('should check if all wishes are gathered when administrator is in the wishes collected panel', function (done) {
+    it('should check if all wishes are gathered when administrator load the collect wishes panel', function (done) {
+        var response = [
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "vote_ko": [],
+                "checked": false
+            },
+            {
+                "id": 3,
+                "version": 4,
+                "label": "SSCAAS",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "vote_ko": [],
+                "checked": false
+            }
+        ];
+        prepareRequest('GET', 'api/allwishes', 200, response);
         vmCollectWishes.getAllWishes();
         setTimeout(function () {
             let AllWishesInDatabase =
@@ -75,7 +133,47 @@ describe('collect wishes panel test', function () {
                     "checked": false
                 }
             ];
+        response = [
+            {
+                "id": 98,
+                "version": 0,
+                "label": "JAVASCRIPT",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": true
+            },
+            {
+                "id": 93,
+                "version": 4,
+                "label": "PHP",
+                "collaborator": {
+                    "id": 8,
+                    "version": 0,
+                    "personnalIdNumber": "POP1234",
+                    "lastName": "Batista",
+                    "firstName": "Benjamin",
+                    "email": "benjamin.batista@viseo.com",
+                    "password": "bibimbaps",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [],
+                "checked": false
+            }
+        ];
+        prepareRequest('POST', 'api/ischeckedwishestoupdate', 200, response);
         vmCollectWishes.updateWish();
+
         setTimeout(function () {
             expect(vmCollectWishes.disableSaveButton).toBe(true);
             expect(vmCollectWishes.showConfirmUpdateWishesMessage).toBe(true);
@@ -83,8 +181,8 @@ describe('collect wishes panel test', function () {
         }, 0);
     });
 
-    it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function () {
-        var wish =
+    it('should check if wishes are not updated when administrator click on the save button and there is a server error', function (done) {
+        vmCollectWishes.listWishesToUpdate =
             [
                 {
                     "id": 98,
@@ -100,50 +198,127 @@ describe('collect wishes panel test', function () {
                         "password": "bibimbaps",
                         "isAdmin": false
                     },
-
+                    "vote_ok": [],
+                    "vote_ko": [],
+                    "checked": true
+                },
+                {
+                    "id": 93,
+                    "version": 4,
+                    "label": "PHP",
+                    "collaborator": {
+                        "id": 8,
+                        "version": 0,
+                        "personnalIdNumber": "POP1234",
+                        "lastName": "Batista",
+                        "firstName": "Benjamin",
+                        "email": "benjamin.batista@viseo.com",
+                        "password": "bibimbaps",
+                        "isAdmin": false
+                    },
                     "vote_ok": [],
                     "vote_ko": [],
                     "checked": false
                 }
             ];
-        vmCollectWishes.addWishToListWishes(wish,true);
+        vmCollectWishes.updateWish();
 
-        //setTimeout(function () {
-            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(true);
-            /*done();
-        }, 0);*/
+        setTimeout(function () {
+            expect(vmCollectWishes.disableSaveButton).toBe(false);
+            expect(vmCollectWishes.showConfirmUpdateWishesMessage).toBe(false);
+            done();
+        }, 2001);
     });
 
-    it('should check if wish is ready to be update and icon is changed from color to grey when administrator dont validate the wish', function () {
+    it('should check if wish is ready to be update and icon is changed from grey to color when administrator validate the wish', function (done) {
         var wish =
-            [
                 {
-                    "id": 98,
-                    "version": 0,
-                    "label": "JAVASCRIPT",
-                    "collaborator": {
-                        "id": 8,
-                        "version": 0,
-                        "personnalIdNumber": "POP1234",
-                        "lastName": "Batista",
-                        "firstName": "Benjamin",
-                        "email": "benjamin.batista@viseo.com",
-                        "password": "bibimbaps",
-                        "isAdmin": false
+                    id : 98,
+                    version: 0,
+                    label: "JAVASCRIPT",
+                    collaborator: {
+                        id: 8,
+                        version: 0,
+                        personnalIdNumber: "POP1234",
+                        lastName: "Batista",
+                        firstName: "Benjamin",
+                        email: "benjamin.batista@viseo.com",
+                        password: "bibimbaps",
+                        isAdmin: false
                     },
 
-                    "vote_ok": [],
-                    "vote_ko": [],
-                    "checked": true
-                }
-            ];
-        vmCollectWishes.addWishToListWishes(wish,false);
+                    vote_ok: [],
+                    vote_ko: [],
+                    checked: false
+                };
+        vmCollectWishes.addWishToListWishes(wish,true);
+        setTimeout(function(){
+            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(true);
+            expect(vmCollectWishes.listWishesToUpdate[0].id).toBe(98);
+            expect(vmCollectWishes.listWishesToUpdate[0].label).toBe("JAVASCRIPT");
+            done();
+        }, 0);
+    });
 
-        console.log(vmCollectWishes.listWishesToUpdate[0]);
-        //setTimeout(function () {
-        expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
-        /*done();
-         }, 0);*/
+    it('should check if wish is ready to be update and icon is changed from color to grey when administrator do not validate the wish', function (done) {
+        var wish =
+                {
+                    id: 98,
+                    version: 0,
+                    label: "JAVASCRIPT",
+                    collaborator: {
+                        id: 8,
+                        version: 0,
+                        personnalIdNumber: "POP1234",
+                        lastName: "Batista",
+                        firstName: "Benjamin",
+                        email: "benjamin.batista@viseo.com",
+                        password: "bibimbaps",
+                        isAdmin: false
+                    },
+
+                    vote_ok: [],
+                    vote_ko: [],
+                    checked: true
+                };
+        vmCollectWishes.addWishToListWishes(wish,false);
+        setTimeout(function(){
+            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
+            expect(vmCollectWishes.listWishesToUpdate[0].id).toBe(98);
+            expect(vmCollectWishes.listWishesToUpdate[0].label).toBe("JAVASCRIPT");
+            done();
+        }, 0);
+    });
+
+    it('should check if wish is ready to be update and icon is changed from color to grey when administrator do not validate the wish and has already added the wish but did not click on save', function (done) {
+        var wishAlreadyInListToUpdate =
+            {
+                id: 98,
+                version: 0,
+                label: "JAVASCRIPT",
+                collaborator: {
+                    id: 8,
+                    version: 0,
+                    personnalIdNumber: "POP1234",
+                    lastName: "Batista",
+                    firstName: "Benjamin",
+                    email: "benjamin.batista@viseo.com",
+                    password: "bibimbaps",
+                    isAdmin: false
+                },
+
+                vote_ok: [],
+                vote_ko: [],
+                checked: true
+            };
+        vmCollectWishes.listWishesToUpdate.push(wishAlreadyInListToUpdate);
+        vmCollectWishes.addWishToListWishes(wishAlreadyInListToUpdate,false);
+        setTimeout(function(){
+            expect(vmCollectWishes.listWishesToUpdate[0].checked).toBe(false);
+            expect(vmCollectWishes.listWishesToUpdate[0].id).toBe(98);
+            expect(vmCollectWishes.listWishesToUpdate[0].label).toBe("JAVASCRIPT");
+            done();
+        }, 0);
     });
 
 });
