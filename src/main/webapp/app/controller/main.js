@@ -25,10 +25,10 @@ let Header = Vue.component('header-component', {
                     <div id="navbar-user" 
                         class="col-lg-7 col-lg-offset-1 col-md-8 col-sm-8 col-xs-9 text-right" @mouseover="setDisconnectedToTrue()"> 
                         <div v-show="showPicture()" class="col-lg-2 col-md-5 col-sm-5 col-xs-5"> 
-                            <img id="profilImage" 
-                                @error="imageLoadOnError" 
-                                :src="imagePath" 
-                                class="image-min"/> 
+                             <img class="image-min" v-if="defaultPicture"
+                                                 src="img/profile.jpg">
+                                            <img class="image-min" v-else
+                                                 :src="'img/'+collaboratorId+'.jpg'"> 
                         </div> 
                         <span class="text-left col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
                         <dropdown class="col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" type="default" v-if="showPicture()" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
@@ -89,7 +89,8 @@ let Header = Vue.component('header-component', {
             timeConnected: 0,
             imagePath: 'img/profile.jpg',
             collaboratorId: '',
-            validateToken: ''
+            validateToken: '',
+            defaultPicture:''
         }
     },
     mounted: function () {
@@ -177,7 +178,28 @@ let Header = Vue.component('header-component', {
                 }
             }
         },
-
+        createDefautPictureCookie(){
+            let cookie = this.getCookie("defaultPicture");
+            console.log(cookie);
+            if (cookie == ""){
+                this.$http.get("api/getcollaborator/" + this.collaboratorId).then(
+                    function (response) {
+                        this.defaultPicture = response.data.defaultPicture;
+                        document.cookie = "defaultPicture=" + this.defaultPicture;
+                    },
+                    function (response) {
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                )
+            }else{
+                if(cookie == "false"){
+                    this.defaultPicture = false;
+                }else if(cookie == "true"){
+                    this.defaultPicture = true;
+                }
+            }
+        },
         getCookieInfos() {
             let isAdmin = () => jwt_decode(this.token).roles;
 
@@ -246,6 +268,8 @@ let Header = Vue.component('header-component', {
             else {
                 redirectToLoginPage();
             }
+
+            this.createDefautPictureCookie();
         },
 
         disconnectUser(){
@@ -257,6 +281,7 @@ let Header = Vue.component('header-component', {
                     if (getCookieToken && getCookieStayConnected) {
                         document.cookie = "token=" + this.token + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                         document.cookie = "stayconnected=" + this.stayConnected + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                        document.cookie = "defaultPicture=; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                         if (getCookieTimeConnected)
                             document.cookie = "timeConnected=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
                     }

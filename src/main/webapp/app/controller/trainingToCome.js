@@ -84,6 +84,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                 <br>
                 <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
                 <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
+                <center><span v-show="emptyWish" class="text-center color-red">Veuillez remplir le champ sélectionné.</span></center>
             </td>
         </tr>
     </table>
@@ -100,6 +101,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             collaborator_id:'',
             allTrainingsAlreadyHaveSessions:[],
             trainingSessions:[],
+            emptyWish:false,
             collaboratorsRequesting:[],
             numberOfAvailablePlaces:undefined,
             existCollaboratorRequest:false,
@@ -136,20 +138,30 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         },
 
         sendWish(){
-            this.wishToRegister.label = this.wish.toUpperCase();
-            this.$http.post("api/wish/"+this.collaborator_id,this.wishToRegister).then(
-                function (response) {
-                    this.wishAlreadyExisted=false;
-                    this.wishSuccess = true;
-                    setTimeout(function(){ this.wishSuccess=false; this.showWish = !this.showWish; }.bind(this), 2000);
-                },
-                function (response) {
-                    this.wishAlreadyExisted=true;
-                    this.showWish = !this.showWish;
-                    console.log("Error: ", response);
-                    console.error(response);
-                }
-            );
+            this.wishAlreadyExisted = false;
+            if(this.wish != '') {
+                this.emptyWish = false;
+                this.wishToRegister.label = this.wish.toUpperCase();
+                this.$http.post("api/addwish/" + this.collaborator_id, this.wishToRegister).then(
+                    function (response) {
+                        this.wishAlreadyExisted = false;
+                        this.wishSuccess = true;
+                        setTimeout(function () {
+                            this.wishSuccess = false;
+                            this.showWish = !this.showWish;
+                        }.bind(this), 2000);
+                    },
+                    function (response) {
+                        console.log(response.data);
+                        this.wishAlreadyExisted = true;
+                        this.showWish = !this.showWish;
+                        console.log("Error: ", response);
+                        console.error(response);
+                    }
+                );
+            }
+            else
+                this.emptyWish = true;
         },
 
         initializeInformationsFromCookie(){

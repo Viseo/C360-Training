@@ -9,6 +9,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             sessionAlreadybooked:[],
             trainingsFound: [],
             numberOfSessionsToDisable:0,
+            trainingOpened:'',
             disableSendButton:false,
             sessionAlreadyBookedMessage:false,
             noTrainingFound: false,
@@ -20,6 +21,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             selected: '',
             check: false,
             idTraining: '3',
+            panelOpen:false,
             listTrainingSessions: [],
             collaboratorIdentity: {
                 id: '',
@@ -96,18 +98,18 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>
                 <div id="scroll" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                     <accordion id="accordionId" :one-at-atime="true" type="info">
-                        <div v-for="training in trainingsFound">
-                            <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training)"
+                        <div v-for="(training, index) in trainingsFound">
+                            <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training);fonction(index);"
                                    type="default">
                                 <span slot="header"
                                       style="color: rgba(66, 139, 202,0.8); text-align: none !important;">
                                     <span>{{training.trainingTitle}}</span>
+                                    <span v-if="commentsExist(training.id)" 
+                                          style="cursor:pointer; float:right; margin-right:10px;">
+                                        <span v-show="trainingOpened != training" @click="showComments();trainingOpened=training;"><i class="glyphicon glyphicon-list"></i> Commentaires</span>
+                                    </span>
                                 </span>
                                 <div v-show="!showComment">
-                                    <span v-if="commentsExist(training.id)" v-show="!showComment"
-                                          style="cursor:pointer; float:right; margin-right:10px;" @click="showComments()">
-                                        <i class="glyphicon glyphicon-list"></i> Commentaires
-                                    </span>
                                     <h4 v-show="!isNoSession" class="col-lg-8"><u>Sessions disponibles</u></h4>
                                     <div v-show="!isNoSession" class="col-lg-4">
                                         <input type="checkbox" @click="disabling(training.id)">Indifférent
@@ -141,7 +143,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                 <div>
                                     <span v-if="commentsExist(training.id)" v-show="showComment"
                                           style="cursor:pointer; float:right; margin-right:15px; color:red;"
-                                          @click="hideComments">
+                                          @click="hideComments();reinitialize(training)">
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </span>
                                     <br>
@@ -222,6 +224,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
 
     methods: {
+        fonction(index){
+            this.openedPanelId = index;
+            if(this.$children[1].$children[index].open== true){
+                console.log(this.$children[1].$children[index].open);
+            }
+            else
+                this.$children[1].$children[index].open = true;
+        },
         disablingSessions(){
             this.disableSendButton = false;
             this.trainingalreadyrequested(this.trainingSelected.id);
@@ -252,17 +262,19 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         reinitialize(training){
-            this.showComment = false;
-            this.disableSendButton = false;
-            this.trainingalreadyrequested(training.id);
-            this.checkedSessions.splice(0, this.checkedSessions.length);
-            this.storeTrainingSessions(training.id);
-            this.trainingSelected = training;
-            this.storeSessionsByCollab(training.id);
-            this.check = false;
-            this.addingRequestSucceeded = false;
-            this.noSessionsSelectedError = false;
-            this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
+            if (this.showComment == false) {
+                this.showComment = false;
+                this.disableSendButton = false;
+                this.trainingalreadyrequested(training.id);
+                this.checkedSessions.splice(0, this.checkedSessions.length);
+                this.storeTrainingSessions(training.id);
+                this.trainingSelected = training;
+                this.storeSessionsByCollab(training.id);
+                this.check = false;
+                this.addingRequestSucceeded = false;
+                this.noSessionsSelectedError = false;
+                this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
+            }
         },
 
         disabling(id){
@@ -516,7 +528,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         collaboratorLikesFeedback(feedback) {
-          for(let i in feedback.likers) {
+            for(let i in feedback.likers) {
               if(feedback.likers[i].id == this.collaboratorIdentity.id) {
                   return true;
               }
@@ -558,10 +570,13 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         showComments(){
+            console.log(this.trainingSelected);
             this.showComment= true;
         },
 
         hideComments(){
+            this.trainingOpened = '';
+            this.reinitialize(this.trainingSelected);
             this.showComment= false;
         },
         orderFeedbacks(){

@@ -11,10 +11,10 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     1. Mes coordonnées
                 </span>
                 <div class="boxon">
-                    <img id="profilImageToChange"
-                         @error="imageLoadOnError"
-                         :src="imagePath"
-                         class="image"/>
+                    <img id="profilImageToChange" class="image" v-if="defaultPicture"
+                                                 src="img/profile.jpg">
+                                            <img id="profilImageToChange" class="image" v-else
+                                                 :src="'img/'+collaborator_id+'.jpg'"> 
                     <p class="text">
                         <input ref="loadProfilImage"
                                id="loadProfilImage"
@@ -289,7 +289,10 @@ let profilToUpdate = Vue.component('profil-to-update', {
             CollabToUpdate: {},
             imagePathName: 'img/profile.jpg',
             imageHasBeenChanged: false,
-            imagePath: ''
+            imagePath: '',
+
+            collaborator_id:'',
+            defaultPicture:''
 
         }
     },
@@ -326,6 +329,14 @@ let profilToUpdate = Vue.component('profil-to-update', {
     },
 
     methods: {
+        getDefautPictureCookie(){
+            let cookie = this.getCookie("defaultPicture");
+            if(cookie == "false"){
+                this.defaultPicture = false;
+            }else if(cookie == "true"){
+                this.defaultPicture = true;
+            }
+        },
         checkIfProfilImageHasBeenChanged(idImage) {
             let currentProfilImage = $(idImage);
             let self = this;
@@ -527,6 +538,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             if(isCollaboratorInfoNotEmpty){
                 this.collaborator_id = collaboratorInfo.id;
             }
+            this.getDefautPictureCookie();
         },
 
         getInfoCollaborator(){
@@ -587,6 +599,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         if (this.imageHasBeenChanged === true) {
                             this.updateCollaboratorImage();
                             this.CollabToUpdate.defaultPicture = false;
+                            document.cookie = "defaultPicture=false";
                         }
                         this.saveUpdateCollaborator();
            } else {
@@ -599,6 +612,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             if (this.imageHasBeenChanged === true) {
                                 this.updateCollaboratorImage();
                                 this.CollabToUpdate.defaultPicture = false;
+                                document.cookie = "defaultPicture=false";
+
                             }
                             this.saveUpdateCollaborator();
                    }

@@ -138,7 +138,7 @@ public class CollaboratorWS {
         }
     }
 
-    @RequestMapping(value = "${endpoint.wish}", method = RequestMethod.POST)
+    @RequestMapping(value = "${endpoint.addwish}", method = RequestMethod.POST)
     @ResponseBody
     public WishDescription addWish(@RequestBody WishDescription wishDescription,@PathVariable Long collaborator_id) {
         try {
@@ -155,9 +155,9 @@ public class CollaboratorWS {
         }
     }
 
-    @RequestMapping(value = "${endpoint.wish}", method = RequestMethod.GET)
+    @RequestMapping(value = "${endpoint.isnotcheckedwishes}", method = RequestMethod.GET)
     @ResponseBody
-    public List<WishDescription> getIsNotCheckedWishes(@PathVariable Long collaborator_id) {
+    public List<WishDescription> getIsNotCheckedWishes() {
         try {
             return new WishToDescription().convert(collaboratorDAO.getIsNotCheckedWishes());
         } catch (ConversionException e) {
