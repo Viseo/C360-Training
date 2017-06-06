@@ -196,25 +196,28 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             }
         },
         verifyTrainingFormBeforeSubmit() {
-            if(this.newTopic != ''){
+            this.trainingTitle = this.trainingTitle.replace(/ +/g, " ").replace(/ +$/, "");
+            this.training.trainingTitle = this.trainingTitle;
+            this.training.numberHalfDays = this.numberHalfDays;
+            for (let tmp in this.state.selectOptionsOfTopic){
+                if(this.topicDescription == this.state.selectOptionsOfTopic[tmp].name){
+                    this.training.topicDescription = this.state.selectOptionsOfTopic[tmp];
+                }
+            }
+            this.isTrainingTitleEmpty();
+            this.isNumberHalfDaysEmpty();
+            this.isTopicEmpty();
+            this.newTopicErrorMessage = false;
+            if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
+                this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
+                this.saveTrainingIntoDatabase();
+            }
+        },
+        verifyTrainingOrTopicBeforeSubmit(){
+            if(this.newTopic != '' && this.trainingTitle == ''){
                 this.verifyTopicFormBeforeSubmit();
             }else{
-                this.trainingTitle = this.trainingTitle.replace(/ +/g, " ").replace(/ +$/, "");
-                this.training.trainingTitle = this.trainingTitle;
-                this.training.numberHalfDays = this.numberHalfDays;
-                for (let tmp in this.state.selectOptionsOfTopic){
-                    if(this.topicDescription == this.state.selectOptionsOfTopic[tmp].name){
-                        this.training.topicDescription = this.state.selectOptionsOfTopic[tmp];
-                    }
-                }
-                this.isTrainingTitleEmpty();
-                this.isNumberHalfDaysEmpty();
-                this.isTopicEmpty();
-                this.newTopicErrorMessage = false;
-                if (!this.trainingTitleErrorMessage && !this.numberHalfDaysErrorMessage && !this.topicErrorMessage) {
-                    this.trainingToRegister = JSON.parse(JSON.stringify(this.training));
-                    this.saveTrainingIntoDatabase();
-                }
+                this.verifyTrainingFormBeforeSubmit();
             }
         },
         verifyTopicFormBeforeSubmit() {
@@ -390,7 +393,7 @@ template:`
                                   <legend>Ajouter une formation</legend>
                              </div>
                         </div>
-                        <form @submit.prevent="verifyTrainingFormBeforeSubmit">
+                        <form @submit.prevent="verifyTrainingOrTopicBeforeSubmit">
                             <table class="borderRadius">
                                 <tr>
                                     <input-text 
@@ -427,10 +430,12 @@ template:`
                                     <td class="text-center" width="20%">
                                         <div class="form-group">
                                              <label>&nbsp</label><br/>
-                                             <input type="submit" 
+                                             <input  
+                                                   @click="verifyTrainingFormBeforeSubmit"
                                                    class="btn btn-primary" 
                                                    value="Valider" 
                                                    style="width:80%"/>
+                                             <input v-show="false" type="submit">
                                         </div>
                                     </td>
                                     <input-text width="30%" 
