@@ -163,6 +163,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
+
             getFeedbackCommentByTraining(training_id){
                 this.$http.get("api/feedbackcomment/"+ training_id).then(
                     function (response) {
@@ -181,7 +182,7 @@ let trainingRanking = Vue.component('training-ranking', {
                 this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
                     function (response) {
                         console.log("success to delete feedback comment");
-                        this.feedback = response.data;
+                       // this.feedback = response.data;
                     },
                     function (response) {
                         console.log("Error: ", response);
