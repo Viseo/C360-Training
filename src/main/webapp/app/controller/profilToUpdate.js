@@ -11,9 +11,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     1. Mes coordonnées
                 </span>
                 <div class="boxon">
-                    <img id="profileImageToChange" class="image" v-if="defaultPicture"
+                    <img id="profilImageToChange" class="image" v-if="defaultPicture"
                                                  src="img/profile.jpg">
-                                            <img id="profileImageToChange" class="image" v-else
+                                            <img id="profilImageToChange" class="image" v-else
                                                  :src="'img/'+collaborator_id+'.jpg'"> 
                     <p class="text">
                         <input ref="loadProfilImage"
