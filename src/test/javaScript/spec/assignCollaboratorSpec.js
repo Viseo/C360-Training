@@ -14,7 +14,7 @@ var newGlobalVue = new Vue({
 
 var vmAssignCollaborator;
 
-describe('assign collaborator test', function () {
+describe('assign collaborator panel test', function () {
 
     beforeEach(function () {
         vmAssignCollaborator = newGlobalVue.$children[0];
@@ -551,6 +551,54 @@ describe('assign collaborator test', function () {
             "endingTime": "18:00",
             "location": "Salle Bora Bora"
         }];
+        prepareRequest('POST', 'api/requestsassign/15/15,10,18,4,4', 200, response);
+        vmAssignCollaborator.sessionIdChosen = 15;
+        vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
+        vmAssignCollaborator.saveCollabInSessions();
+        expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(true);
+        expect(vmAssignCollaborator.validatedCollab.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaboratorsIdChosen.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaboratorsAlreadyInSessions.length).toBe(0);
+        expect(vmAssignCollaborator.sessionIdChosen).toBe(0);
+        expect(vmAssignCollaborator.isDisabled).toBe(true);
+        expect(vmAssignCollaborator.allCollaboratorsName.length).toBe(0);
+        expect(vmAssignCollaborator.allCollaborators.length).toBe(0);
+        expect(vmAssignCollaborator.requestedCollaborators.length).toBe(0);
+        expect(vmAssignCollaborator.isRegistrationAvailable).toBe(true);
+        expect(vmAssignCollaborator.value).toBe('');
+
+        setTimeout(function () {
+            expect(vmAssignCollaborator.confirmCollaboratorAddedSession).toBe(false);
+            done();
+        }, 2001);
+    });
+
+    it('should check if collaborators are saved into database when admin click on save button', function (done) {
+        vmAssignCollaborator.isRegistrationAvailable = true;
+        vmAssignCollaborator.validatedCollab = [{
+            email: "viseo@viseo.com",
+            firstName: "viseo",
+            id: 4,
+            lastName: "technologie",
+            password: "123456",
+            version: 0
+        }];
+        var response = [{
+            "id": 15,
+            "version": 0,
+            "trainingDescription": {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            },
+            "beginning": "13/05/2017",
+            "ending": "13/05/2017",
+            "beginningTime": "09:00",
+            "endingTime": "18:00",
+            "location": "Salle Bora Bora"
+        }];
         prepareRequest('PUT', 'api/sessions/15/15,10,18,4,4/collaborators', 200, response);
         vmAssignCollaborator.sessionIdChosen = 15;
         vmAssignCollaborator.allCollaboratorsIdChosen = [15, 10, 18, 4];
@@ -618,6 +666,37 @@ describe('assign collaborator test', function () {
         setTimeout(function(){
             expect(vmAssignCollaborator.isSearchNameValid).toBe(true);
             expect(vmAssignCollaborator.lastNameRegexErrorMessage).toEqual('');
+            done();
+        }, 0);
+    });
+
+    it('should check if "no collaborator found" message is displayed when the admin is looking for a specific collaborator and the collaborator can not be found', function (done) {
+        vmAssignCollaborator.requestedCollaborators = [];
+        setTimeout(function(){
+            expect(vmAssignCollaborator.noCollaboratorsFound).toBe(true);
+            done();
+        }, 0);
+    });
+
+    it('should check if "no collaborator found" message is not displayed when the admin is looking for a specific collaborator and the collaborator can not be found', function (done) {
+        vmAssignCollaborator.requestedCollaborators = [{
+            "email": 'norine.dumas@viseo.com',
+            "firstName": 'norine',
+            "id": 88,
+            "lastName": 'dumas',
+            "password": '1234567',
+            "version": 5
+        }, {
+            "email": 'junifer.gadomski@viseo.com',
+            "firstName": 'jenifer',
+            "id": 75,
+            "lastName": 'gadomski',
+            "password": '689547',
+            "version": 77
+        }];
+
+        setTimeout(function(){
+            expect(vmAssignCollaborator.noCollaboratorsFound).toBe(false);
             done();
         }, 0);
     });

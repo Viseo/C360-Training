@@ -9,68 +9,128 @@ let trainingRanking = Vue.component('training-ranking', {
                 //US13
                 collaborator_id:'1',
                 feedbackComments:[],
-                feedbackCommentToDelete:{}
+                feedbackCommentToDelete:{},
+                allFeedbacks: [],
+                openPanel: false,
+                showComment: false
             }
         },
         template: `
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-12">
-                    <div class="row" >
-                        <div class="col-lg-9 col-md-9 text-center">
-                            <legend>Classement formations</legend>
+                        <div class="row" >
+                            <div class="col-lg-9 col-md-9 text-center">
+                                <legend>Classement formations</legend>
+                            </div>
                         </div>
-                    </div>
                     <div class="row">
-                        <div id="rankingTraining">
-                        <div class="row">
-                                <div class="col-sm-12 col-md-2 col-lg-2">
-                                <router-link :to="{path: '/addTrainingTopic'}">
-                                    <img src="css/left-arrow.png"
-                                         width="40"
-                                         height="40"
-                                         style="cursor: pointer;">
-                                </router-link>
-                                </div>
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
-                                    <br/>
-                                    <img 
-                                         src="css/up.png"
-                                         id="scroll-up-3"
-                                         width="60"
-                                         height="20"
-                                         style="position: absolute; 
-                                         left:50%; 
-                                         z-index:1;">
-                                </div>
-                            </div>
-                            <div id="scrollRanking"
-                                 style="width: 100%; 
-                                        overflow-y:hidden; 
-                                        overflow-x:hidden;">
-                                         <div v-for=" training in allTrainingScore">
-                                         <span class="col-lg-8" @click="getFeedbackCommentByTraining(training[0].id)" style="cursor: pointer;">{{training[0].trainingTitle}}</span>
-                                         <span class="col-lg-4"><span v-for="i in training[1]"><span class="glyphicon glyphicon-star fullStar"></span></span>
-                                         <span v-for="i in (5-training[1])"><span class="glyphicon glyphicon-star-empty emptyStar"></span></span>
-                                         </span>
-                                         <br>
-                                         <hr/>
-                                         </div>
-                                      
-                            </div>
-                           
-                            <div clas="row">
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
-                                    <img 
-                                         src="css/down.png"
-                                         id="scroll-down-3"
-                                         width="60" height="20"
-                                         style="position: absolute; 
-                                                left:50%; top:95%; 
-                                                z-index:1;">
-                                </div>
-                            </div>
-                        </div>
+                         <div id="rankingTraining">
+                              <div class="row">
+                                    <div class="col-sm-12 col-md-2 col-lg-2">
+                                        <router-link :to="{path: '/addTrainingTopic'}">
+                                                <img src="css/left-arrow.png"
+                                                width="40"
+                                                height="40"
+                                                style="cursor: pointer;">
+                                        </router-link>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                                            <br/>
+                                            <img 
+                                             src="css/up.png"
+                                             id="scroll-up-4"
+                                             width="60"
+                                             height="20"
+                                             style="position: absolute; 
+                                             left:50%; 
+                                             z-index:1;">
+                                    </div>
+                              </div>
+                              <div id="scrollRanking"
+                                            style="width: 100%; 
+                                            overflow-y:hidden; 
+                                            overflow-x:hidden;">
+                                            <accordion id="accordionIdAdmin" 
+                                                       :one-at-atime="true" 
+                                                       type="info" 
+                                                       style="height:100%;">
+                                                    <div class="row">
+                                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for=" training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
+                                                         <panel :is-open="openPanel"
+                                                                    type="default">
+                                                                    <p slot="header" 
+                                                                     style="color:#337ab7;padding-bottom: 10px;">
+                                                                        <span class="col-sx-4 col-sm-4 col-md-4 col-lg-4" >
+                                                                             {{training[0].trainingTitle}}
+                                                                        </span>
+                                                                        <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                            <span v-for="i in training[1]">
+                                                                                <span class="glyphicon glyphicon-star fullStar">
+                                                                                </span>
+                                                                            </span>
+                                                                            <span v-for="i in (5-training[1])">
+                                                                                <span class="glyphicon glyphicon-star-empty emptyStar">
+                                                                                </span>
+                                                                            </span>
+                                                                        </span>
+                                                                            <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4" > 
+                                                                            <i class="glyphicon glyphicon-list"></i> Commentaires
+                                                                        </span>
+                                                                    </p>
+                                                                     <div class="container-fluid">
+                                                                        <div class="row" style="font-weight: 600;">
+                                                                            <center><span> {{feedbackComments.length}} commentaires</span></center>
+                                                                        </div>
+                                                                        <br>
+                                                                        <div class="row" v-for="comments in feedbackComments">
+                                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                                                                <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2">
+                                                                                    <img class="profile-picture" v-if="comments.collaborator.defaultPicture"
+                                                                                    src="img/profile.jpg"
+                                                                                    style="width:60px; height:60px">
+                                                                                    <img class="profile-picture" v-else
+                                                                                    :src="'img/'+comments.collaborator.id+'.jpg'"
+                                                                                    style="-webkit-border-radius:50px;
+                                                                                    -moz-border-radius:50px;
+                                                                                    border-radius:50px;
+                                                                                    width:60px;
+                                                                                    height:60px;">
+                                                                                </div>
+                                                                                <br>
+                                                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><strong>{{comments.collaborator.firstName}} {{comments.collaborator.lastName}}<strong> </div>
+                                                                                <div class="date-on-right col-xs-4 col-sm-4 col-md-4 col-lg-4 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                                                                                    <i class="glyphicon glyphicon-time"></i> <strong>{{getDate(comments.date)}}</strong>
+                                                                                </div>
+                                                                                <br><br>
+                                                                                <br>
+                                                                                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                                                                                <p >{{comments.comment}}</p>
+                                                                                </div >
+                                                                                <a class="col-sm-offset-12 col-md-offset-7 col-lg-offset-7" @click="deleteFeedbackComment(comments)"> Supprimer le commentaire </a> 
+                                                                                 <hr>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                         </panel>
+                                                         </div>
+                                                    </div>
+                                            </accordion>
+                                       <br>
+                              </div>
+                                     
+                             <div class="row">
+                                  <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
+                                       <img 
+                                       src="css/down.png"
+                                       id="scroll-down-4"
+                                       width="60" height="20"
+                                       style="position: absolute; 
+                                       left:50%; top:95%; 
+                                       z-index:1;">
+                                  </div>
+                             </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -80,6 +140,10 @@ let trainingRanking = Vue.component('training-ranking', {
         mounted: function () {
             Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
             this.getTrainingsScore();
+            this.deleteFeedbackComment();
+            this.activateScrollUp('#scroll-up-4','#scrollRanking');
+            this.activeScrollDown('#scroll-down-4','#scrollRanking');
+            this.activateScrollWheel('#scrollRanking');
         },
 
         methods: {
@@ -104,6 +168,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     function (response) {
                         console.log("success to get all feedback comments of the same training");
                         this.feedbackComments = response.data;
+                        this.orderFeedbacks();
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -111,6 +176,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
+
             deleteFeedbackComment(feedbackCommentToDelete){
                 this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
                     function (response) {
@@ -123,6 +189,20 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
+
+            getDate(date){
+                let dateToConvert = new Date(date);
+                let addZero = "";
+                if((dateToConvert.getMonth()+1)<10) addZero="0";
+                formattedDate = dateToConvert.getDate()+"/"+addZero+(dateToConvert.getMonth()+1)+ "/" + dateToConvert.getFullYear()+ " à " + dateToConvert.getHours()+ "h"+ dateToConvert.getMinutes();
+                return formattedDate;
+            },
+            orderFeedbacks(){
+                this.allFeedbacks.sort(function(a, b) {
+                    return parseFloat(a.date) - parseFloat(b.date);
+                });
+            },
+
             addLiker(feedbackToAdd,collaborator_id){
                 this.$http.put("api/addfeedbacklikes/"+collaborator_id,feedbackToAdd).then(
                     function (response) {
