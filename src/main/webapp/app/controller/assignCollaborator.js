@@ -398,19 +398,22 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.verifyCheckedNames();
                 this.clearGreyPanel();
         },
+
         checkedNames: function (value) {
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
             this.allCollaboratorsAlreadyInSessions.splice(0, this.allCollaboratorsAlreadyInSessions.length);
             this.verifyCheckedNames();
         },
-        noCollaboratorsFound: function () {
-            if (this.collaboratorsRequesting.length > 0) {
+
+        requestedCollaborators: function () {
+            if (this.requestedCollaborators.length > 0) {
                 this.noCollaboratorsFound = false;
             }
-            else {
+            else if (this.requestedCollaborators.length === 0){
                 this.noCollaboratorsFound = true;
             }
         },
+
         validatedCollab: function () {
             this.numberAddedCollabCounter();
 
