@@ -185,7 +185,7 @@ let Formulaire = Vue.component('inscription-form', {
                 email: '',
                 password: ""
             },
-            userToConnect:'',
+            userToConnect: '',
             personnalIdNumber: '',
             lastName: '',
             firstName: '',
@@ -388,8 +388,8 @@ let Formulaire = Vue.component('inscription-form', {
             }
         },
         handleCookie(token) {
-                document.cookie = "token=" + token;
-                document.cookie = "stayconnected=true";
+            document.cookie = "token=" + token;
+            document.cookie = "stayconnected=true";
         },
 
         saveAction() {
@@ -468,7 +468,7 @@ let Formulaire = Vue.component('inscription-form', {
             }
         },
     }
-})
+});
 
 let ConnexionForm = Vue.component('connexionForm', {
     template: `
@@ -560,7 +560,7 @@ let ConnexionForm = Vue.component('connexionForm', {
             firstNameToSend: ''
         }
     },
-    mounted: function() {
+    mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
     methods: {
@@ -698,7 +698,7 @@ let ConnexionForm = Vue.component('connexionForm', {
 
 let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
-        "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage","disabled"],
+        "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage", "disabled"],
     template: `
                 <table style="border-spacing: 0px">
                 <div class="form-group">
@@ -763,7 +763,7 @@ let CustomInput = Vue.component('customInput', {
 });
 
 let customPasswordInput = Vue.component('customPasswordInput', {
-    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show','isValid','isNotValid'],
+    props: ['value', 'label', 'labelText', 'emptyField', 'errorField', 'errorMessage', 'show', 'isValid', 'isNotValid'],
     template: `<table style="border-spacing: 0px">
                 <div class="form-group"   :class="{'has-error': emptyField || errorField }">
                     <label for="label">{{labelText}}</label>

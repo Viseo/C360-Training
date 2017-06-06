@@ -144,7 +144,7 @@ let args;
             expect(vmFormulaire.confirmPasswordEmpty).toBe(true);
         });
 
-        it('Check registration process', function() {
+        it('Check registration process', function(done) {
             vmFormulaire.personnalIdNumber = "AZE1234";
             vmFormulaire.firstName = "Eric";
             vmFormulaire.lastName = "Dupont";
@@ -152,9 +152,14 @@ let args;
             vmFormulaire.password = "123456";
             vmFormulaire.confirmPassword = "123456";
             vmFormulaire.verifyForm();
-            expect(JSON.stringify(vmFormulaire.collaborator)).toEqual(JSON.stringify({"personnalIdNumber":"AZE1234","lastName":"Dupont","firstName":"Eric","email":"eric.dupont@viseo.com","password":"123456","confirmPassword":"123456"}));
-            expect(vmFormulaire.collaboratorToRegister['confirmPassword']).toBe(undefined);
+            setTimeout(function (){
+                expect(JSON.stringify(vmFormulaire.collaborator)).toEqual(JSON.stringify({"personnalIdNumber":"AZE1234","lastName":"Dupont","firstName":"Eric","email":"eric.dupont@viseo.com","password":"123456","confirmPassword":"123456"}));
+                expect(vmFormulaire.collaboratorToRegister['confirmPassword']).toBe(undefined);
+                done();
+            });
+
         });
+
         it('Test verifyForm',function () {
          vmFormulaire.personnalIdNumber = 'AZE1234';
          vmFormulaire.lastName = 'dupon';
@@ -224,7 +229,7 @@ let args;
         it('should check function handleBlur', function() {
             vmCustomInput.handleBlur();
         });
-    })
+    });
 
     describe("Test CustomPasswordInput", function() {
         it('should check function updateValue', function() {

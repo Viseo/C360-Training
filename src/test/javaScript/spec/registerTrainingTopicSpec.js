@@ -62,7 +62,7 @@ describe('test registerTrainingTopic.js', function () {
         it('should check function handleBlur', function() {
             vmInputText.handleBlur();
         });
-    })
+    });
 
     describe('vmAddSessionPanel', function () {
 
@@ -290,7 +290,7 @@ describe('test registerTrainingTopic.js', function () {
             }
         );
 
-        fit('should check whether we can connect to the database in order to get all trainings', function (done) {
+        it('should check whether we can connect to the database in order to get all trainings', function (done) {
             let response = [
                 {
                     "id": 7,
