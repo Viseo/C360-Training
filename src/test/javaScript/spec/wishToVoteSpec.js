@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var vm5 = new Vue({
+var wishToVote = new Vue({
     template: '<div><wish-to-vote></wish-to-vote></div>',
     router: router,
     components: {
@@ -12,11 +12,11 @@ var vm5 = new Vue({
     }
 }).$mount();
 
-describe('wish to vote Panel test', function () {
+fdescribe('wish to vote Panel test', function () {
 
     beforeEach(function () {
-        vmWishToVote = vm5.$children[0];
-
+        vmWishToVote = wishToVote.$children[0];
+        clearRequests();
     });
 
     afterEach(function () {
@@ -96,7 +96,45 @@ describe('wish to vote Panel test', function () {
         expect(vmWishToVote.collaboratorAlreadyVotedTheOppositeVote).toBe(false);
     });
 
-    it('should check if we can add a vote ok when the user did not vote ok or ko before', function(done){
+    it('should check if all the wish is collect', function(done){
+        var response = [{"id":3,"version":1,"label":"VUE.JS","collaborator":{"id":1,"version":0,"personnalIdNumber":"AAB1234","lastName":"DUPONT","firstName":"Eric","email":"dupont.eric@gmail.com","password":"123456","isAdmin":true,"function":null,"businessUnit":null,"defaultPicture":true,"admin":true},"vote_ok":[],"vote_ko":[],"checked":true},{"id":2,"version":1,"label":"JAVA","collaborator":{"id":1,"version":0,"personnalIdNumber":"AAB1234","lastName":"JOHN","firstName":"Soline","email":"john.soline@gmail.com","password":"123456","isAdmin":true,"function":null,"businessUnit":null,"defaultPicture":true,"admin":true},"vote_ok":[],"vote_ko":[],"checked":true}];
+        prepareRequest('GET', 'api/allvalidatedwishes', 200, response);
+
+        vmWishToVote.getAllWishes();
+        setTimeout(function () {
+            expect(vmWishToVote.allWishes).toBe(response);
+            done();
+        }, 0);
+    });
+
+    it('should check if we can add a vote ok when the user did not vote ok or ko before ', function(done){
+        var response = [{
+            "id": 2,
+            "version": 5,
+            "label": "SSC",
+            "collaborator": {
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            },
+            "vote_ok": [{
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            }],
+            "vote_ko": [],
+            "checked": false
+        }];
         var wish = {
             "id":2,
             "version":5,
@@ -106,14 +144,46 @@ describe('wish to vote Panel test', function () {
             "vote_ko":[],
             "checked":false
         };
+        prepareRequest('PUT', 'api/okwishtoupdate/1', 200, response);
         vmWishToVote.collaborator_id = 1;
         vmWishToVote.addVoteOk(wish);
+
         setTimeout(function () {
+            clearRequests();
+            prepareRequest('PUT', 'api/okwishtoupdate/1', 500, response);
+            vmWishToVote.addVoteOk(wish);
             done();
         }, 0);
     });
 
     it('should check if we can add a vote ok when the user voted ko before', function(done){
+        var response = {
+            "id": 2,
+            "version": 5,
+            "label": "SSC",
+            "collaborator": {
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            },
+            "vote_ok": [{
+                "id": 1,
+                "version": 0,
+                "personnalIdNumber": "AAA1234",
+                "lastName": "nckjzn",
+                "firstName": "ncdxkzn",
+                "email": "xiangzhe.meng@outlook.com",
+                "password": "123456",
+                "isAdmin": false
+            }],
+            "vote_ko": [],
+            "checked": false
+        };
         var wish = {
             "id":2,
             "version":5,
@@ -124,13 +194,47 @@ describe('wish to vote Panel test', function () {
             "checked":false
         };
         vmWishToVote.collaborator_id = 1;
+        prepareRequest('PUT', 'api/kowishtochange/1', 200, response);
         vmWishToVote.addVoteOk(wish);
         setTimeout(function () {
+            clearRequests();
+            prepareRequest('PUT', 'api/kowishtochange/1', 500, response);
+            vmWishToVote.addVoteOk(wish);
             done();
         }, 0);
     });
 
     it('should check if we can add a vote ko when the user did not vote ok or ko before', function(done){
+        var response = [
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "checked": false
+            }
+        ];
+
         var wish = {
             "id":2,
             "version":5,
@@ -141,13 +245,47 @@ describe('wish to vote Panel test', function () {
             "checked":false
         };
         vmWishToVote.collaborator_id = 1;
+        prepareRequest('PUT', 'api/kowishtoupdate/1', 200, response);
         vmWishToVote.addVoteKo(wish);
         setTimeout(function () {
+            clearRequests();
+            prepareRequest('PUT', 'api/kowishtoupdate/1', 500, response);
+            vmWishToVote.addVoteKo(wish);
             done();
         }, 0);
     });
 
     it('should check if we can add a vote ko when the user voted ok before', function(done){
+        var response = [
+            {
+                "id": 2,
+                "version": 5,
+                "label": "SSC",
+                "collaborator": {
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                },
+                "vote_ok": [],
+                "vote_ko": [{
+                    "id": 1,
+                    "version": 0,
+                    "personnalIdNumber": "AAA1234",
+                    "lastName": "nckjzn",
+                    "firstName": "ncdxkzn",
+                    "email": "xiangzhe.meng@outlook.com",
+                    "password": "123456",
+                    "isAdmin": false
+                }],
+                "checked": false
+            }
+        ];
+
         var wish = {
             "id":2,
             "version":5,
@@ -158,8 +296,12 @@ describe('wish to vote Panel test', function () {
             "checked":false
         };
         vmWishToVote.collaborator_id = 1;
+        prepareRequest('PUT', 'api/okwishtochange/1', 200, response);
         vmWishToVote.addVoteKo(wish);
         setTimeout(function () {
+            clearRequests();
+            prepareRequest('PUT', 'api/okwishtochange/1', 500, response);
+            vmWishToVote.addVoteKo(wish);
             done();
         }, 0);
     });
