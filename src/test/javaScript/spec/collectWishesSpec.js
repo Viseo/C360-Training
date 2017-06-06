@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var newGlobalVue = new Vue({
+var newGlobalVueCollectWishes = new Vue({
     template: '<div><collect-wishes></collect-wishes></div>',
     router: router,
     components: {
@@ -17,7 +17,7 @@ var vmCollectWishes;
 fdescribe('collect wishes panel test', function () {
 
     beforeEach(function () {
-        vmCollectWishes = newGlobalVue.$children[0];
+        vmCollectWishes = newGlobalVueCollectWishes.$children[0];
     });
 
     afterEach(function () {
