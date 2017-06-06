@@ -14,7 +14,7 @@ var newGlobalVue = new Vue({
 
 var vmCollectWishes;
 
-fdescribe('collect wishes panel test', function () {
+describe('collect wishes panel test', function () {
 
     beforeEach(function () {
         vmCollectWishes = newGlobalVue.$children[0];

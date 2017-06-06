@@ -502,7 +502,7 @@ describe('training to come Panel test', function () {
                 "checked": true
             }
         ];
-        prepareRequest('POST', 'api/wish/1', 200, response);
+        prepareRequest('POST', 'api/addwish/1', 200, response);
         vmTrainingToCome.updateV1('PHP');
         vmTrainingToCome.collaborator_id = 1;
         vmTrainingToCome.sendWish();
@@ -552,13 +552,23 @@ describe('training to come Panel test', function () {
                 "checked": true
             }
         ];
-        prepareRequest('POST', 'api/wish/1', 500, response);
+        prepareRequest('POST', 'api/addwish/1', 500, response);
         vmTrainingToCome.wish = "PHP";
         vmTrainingToCome.collaborator_id = 1;
         vmTrainingToCome.sendWish();
         setTimeout(function () {
             expect(vmTrainingToCome.wishAlreadyExisted).toBe(true);
-            //expect(vmTrainingToCome.wishSuccess).toBe(false);
+            done();
+        }, 2005);
+    });
+
+    it('Should check befor send wishes in the database if is not empty', function (done) {
+
+        vmTrainingToCome.updateV1('');
+        vmTrainingToCome.collaborator_id = 1;
+        vmTrainingToCome.sendWish();
+        setTimeout(function () {
+            expect(vmTrainingToCome.emptyWish).toBe(true);
             done();
         }, 2005);
     });

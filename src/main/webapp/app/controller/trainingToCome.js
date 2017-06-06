@@ -287,5 +287,5 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         }
 
         },
-
-});
+    }
+);
