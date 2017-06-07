@@ -1,8 +1,21 @@
 /**
  * Created by SJO3662 on 19/05/2017.
  */
+Vue.use(VueResource);
+Vue.use(VueRouter);
+
+var newGlobalVueProfilToUpdate = new Vue({
+    template: '<div><profil-to-update></profil-to-update></div>',
+    router: router,
+    components: {
+        'profilToUpdate': profilToUpdate
+    }
+}).$mount();
+
+var vmProfilToUpdate;
 
 describe('profil to update test', function () {
+
     beforeEach(function () {
         let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
         document = {
@@ -17,13 +30,13 @@ describe('profil to update test', function () {
             }
         };
         document.cookie = "token="+ collaboratorToken;
-        vmProfilToUpdate = new profilToUpdate().$mount();
-        vmProfilToUpdate.collaborator_id = 1;
+        vmProfilToUpdate = newGlobalVueProfilToUpdate.$children[0];
 
     });
 
     afterEach(function () {
-
+        Object.assign(vmProfilToUpdate.$data, vmProfilToUpdate.$options.data());
+        clearRequests();
     });
 
     it('it should collect the information of le collaborator', function (done){
@@ -40,7 +53,8 @@ describe('profil to update test', function () {
             "personnalIdNumber":"AAB1234",
             "version":0
         }];
-
+        prepareRequest('GET', 'api/getcollaborator/1', 200, collaboratorInformation);
+        vmProfilToUpdate.getInfoCollaborator();
         setTimeout( function() {
             expect(vmProfilToUpdate.infoCollab).toEqual(collaboratorInformation);
             expect(vmProfilToUpdate.firstName).toEqual(vmProfilToUpdate.infoCollab.firstName);
@@ -52,9 +66,12 @@ describe('profil to update test', function () {
         } ,0);
     });
 
-    it('it should check cookies collect', function (){
-        expect(vmProfilToUpdate.token).not.toBe('undefine');
-        expect(vmProfilToUpdate.collaborator_id).not.toBe('');
+    it('it should check cookies collect', function (done){
+        vmProfilToUpdate.initializeInformationsFromCookie();
+        setTimeout(function(){
+            expect(vmProfilToUpdate.collaborator_id).not.toBe('');
+            done();
+        }, 0);
     });
 
     it('it should verify first name is valide', function (){

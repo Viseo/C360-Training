@@ -22,7 +22,7 @@ import java.util.List;
 public class Wish extends BaseEntity{
 
     @NotNull
-    @Size(min = 3,max = 50)
+    @Size(max = 50)
     @Pattern(regexp = WishDescription.Regex.LABEL+"*")
     @Column(unique = true,nullable = false)
     String label;

@@ -4,7 +4,7 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var newGlobalVue = new Vue({
+var newGlobalVueAssignCollaborator = new Vue({
     template: '<div><assign-collaborator></assign-collaborator></div>',
     router: router,
     components: {
@@ -17,7 +17,7 @@ var vmAssignCollaborator;
 describe('assign collaborator panel test', function () {
 
     beforeEach(function () {
-        vmAssignCollaborator = newGlobalVue.$children[0];
+        vmAssignCollaborator = newGlobalVueAssignCollaborator.$children[0];
     });
 
     afterEach(function () {
