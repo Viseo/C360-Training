@@ -134,14 +134,17 @@ describe('training-ranking test', function () {
         },0);
     });
 
-    it('it should get feedback comment by training with error response of server', function () {
+    it('it should get feedback comment by training with error response of server', function (done) {
         var response = [];
         prepareRequest('GET', 'api/feedbackcomment/9', 500, response);
         vmTrainingRanking.getFeedbackCommentByTraining(9);
+        setTimeout(function () {
+            done();
+        },0);
 
     });
 
-    it('it should add a feedback for a training with success response of server', function () {
+    it('it should add a feedback for a training with success response of server', function (done) {
         var response = [];
         var feedbackToAdd = [{
             "id":11,
@@ -159,10 +162,13 @@ describe('training-ranking test', function () {
         }];
         prepareRequest('PUT', 'api/addfeedbacklikes/1', 200, response);
         vmTrainingRanking.addLiker(feedbackToAdd,1);
+        setTimeout(function () {
+            done();
+        },0);
 
     });
 
-    it('it should add a feedback for a training with error response of server', function () {
+    it('it should add a feedback for a training with error response of server', function (done) {
         var response = [];
         var feedbackToAdd = [{
             "id":11,
@@ -180,9 +186,12 @@ describe('training-ranking test', function () {
         }];
         prepareRequest('PUT', 'api/addfeedbacklikes/1', 500, response);
         vmTrainingRanking.addLiker(feedbackToAdd,1);
+        setTimeout(function () {
+            done();
+        },0);
     });
 
-    it('it should remove a feedback for a training with success response of server', function () {
+    it('it should remove a feedback for a training with success response of server', function (done) {
         var response = [];
         var feedbackToRemove = [{
             "id":11,
@@ -198,9 +207,12 @@ describe('training-ranking test', function () {
         }];
         prepareRequest('PUT', 'api/removefeedbacklikes/1', 200, response);
         vmTrainingRanking.removeLiker(feedbackToRemove,1);
+        setTimeout(function () {
+            done();
+        },0);
     });
 
-    it('it should remove a feedback for a training with error response of server', function () {
+    it('it should remove a feedback for a training with error response of server', function (done) {
         var response = [];
         var feedbackToRemove = [{
             "id":11,
@@ -216,6 +228,9 @@ describe('training-ranking test', function () {
         }];
         prepareRequest('PUT', 'api/removefeedbacklikes/1', 500, response);
         vmTrainingRanking.removeLiker(feedbackToRemove,1);
+        setTimeout(function () {
+            done();
+        },0);
     });
 
     it('it should convert a number in format date', function () {
