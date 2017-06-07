@@ -13,14 +13,15 @@ describe('training-ranking test', function () {
     beforeEach(function () {
 
         vmTrainingRanking = vm8.$children[0];
-
+        clearRequests();
     });
 
     afterEach(function () {
+        Object.assign(vmTrainingRanking.$data, vmTrainingRanking.$options.data());
 
     });
 
-    it('it should get all training score', function (done) {
+    it('it should get all training score with success', function (done) {
         var response = [
             [
                 {
@@ -53,7 +54,9 @@ describe('training-ranking test', function () {
                 3.0
             ]
         ];
+        prepareRequest('GET', 'api/trainingscore', 200, response);
         vmTrainingRanking.getTrainingsScore();
+
         setTimeout(function () {
             expect(vmTrainingRanking.allTrainingScore).toEqual(response);
             done();
@@ -61,7 +64,19 @@ describe('training-ranking test', function () {
 
     });
 
-    it('it should delete feedback comment', function (done) {
+    it('it should get all training score with error', function (done) {
+        var response = [];
+        prepareRequest('GET', 'api/trainingscore', 500, response);
+        vmTrainingRanking.getTrainingsScore();
+
+        setTimeout(function () {
+            expect(vmTrainingRanking.allTrainingScore).toEqual(response);
+            done();
+        },0);
+
+    });
+
+    it('it should delete feedback comment with success', function (done) {
         var feedbackCommentToDelete = [{
             "id":11,
             "version":0,
@@ -74,6 +89,7 @@ describe('training-ranking test', function () {
             "training":
                 {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
         }];
+
         var response = [{
             "id":11,
             "version":0,
@@ -86,9 +102,11 @@ describe('training-ranking test', function () {
             "training":
                 {"id":9,"version":0,"trainingTitle":"FORMATION2","numberHalfDays":5,"topic":{"id":3,"version":0,"name":"JAVA"}}
         }];
+
+        prepareRequest('PUT', 'api/deletefeedbackcomment', 200, response);
         vmTrainingRanking.deleteFeedbackComment(feedbackCommentToDelete);
         setTimeout(function () {
-            expect(vmTrainingRanking.feedback).toEqual(response);
+           //expect(vmTrainingRanking.feedback).toEqual(response);
             done();
         },0);
     });

@@ -124,9 +124,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </br>
                     <div class="row">
                     
-                        <center class="row col-sm-6 col-md-6 col-lg-6 ">
-                        <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a></router-link>
-                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span>Souhaits de formations</span>
+                        <center id="goToWish" class="row col-sm-6 col-md-6 col-lg-6 ">
+                        <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a>
+                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span> Souhaits de formations</span>
+                        </router-link>
                         </center>
                         
                         <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 ">

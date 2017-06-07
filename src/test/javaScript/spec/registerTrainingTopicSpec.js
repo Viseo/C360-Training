@@ -62,7 +62,7 @@ describe('test registerTrainingTopic.js', function () {
         it('should check function handleBlur', function() {
             vmInputText.handleBlur();
         });
-    })
+    });
 
     describe('vmAddSessionPanel', function () {
 

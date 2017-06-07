@@ -62,9 +62,10 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                    <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 560px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
                 </p>
             </td>
+                <form @submit.prevent="sendWish">
             <td>
                 <p>
-                    <input-text
+                  <input-text
                             v-show="!showWish"
                             :value = "wish"
                             style ="width:300px;position:absolute; left:300px; top:535px;"
@@ -78,6 +79,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:565px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
                 </p>
             </td>
+        </form>
         </tr>
         <tr>
             <td colspan="2">
@@ -149,12 +151,14 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                         setTimeout(function () {
                             this.wishSuccess = false;
                             this.showWish = !this.showWish;
+                            this.wish = "";
                         }.bind(this), 2000);
                     },
                     function (response) {
                         console.log(response.data);
                         this.wishAlreadyExisted = true;
                         this.showWish = !this.showWish;
+                        this.wish = "";
                         console.log("Error: ", response);
                         console.error(response);
                     }
@@ -287,5 +291,5 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         }
 
         },
-
-});
+    }
+);

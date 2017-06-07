@@ -243,7 +243,7 @@ let stateRequest = Vue.component('state-request', {
                 let isPopUpAlreadyShownDuringFirstConnection = this.getCookie("alreadyShownPopUp");
                 this.alreadyShownPopUp= isPopUpAlreadyShownDuringFirstConnection;
                 let collaboratorInfo = this.getCollaboratorInfoFromCookie();
-                let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
+                let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
                 if(isCollaboratorInfoNotEmpty){
                     this.collaboratorIdentity.id = collaboratorInfo.id;
                     this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
@@ -299,12 +299,12 @@ let stateRequest = Vue.component('state-request', {
                     this.feedback.score = this.score;
                     this.feedback.comment = this.comment;
                     let addFeedbackSuccess = (response) => {
-                            if (response) {
-                                console.log("success to add a feedback");
-                                this.collectAllTrainingsToGiveFeedbacks();
-                            }
+                        if (response) {
+                            console.log("success to add a feedback");
+                            this.collectAllTrainingsToGiveFeedbacks();
+                        }
                     };
-                    this.post("api/feedback/"+this.collaboratorIdentity.id,this.feedback,addFeedbackSuccess);
+                    this.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback, addFeedbackSuccess);
                     this.comment = '';
                     this.score = '';
                 }
