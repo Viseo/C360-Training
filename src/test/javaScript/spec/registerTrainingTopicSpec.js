@@ -44,7 +44,7 @@ afterEach(function () {
 });
 
 
-fdescribe('test registerTrainingTopic.js', function () {
+describe('test registerTrainingTopic.js', function () {
 
     describe("Test customInput", function() {
         it('should check function updateValue', function() {
