@@ -182,7 +182,6 @@ let trainingRanking = Vue.component('training-ranking', {
                 this.$http.put("api/deletefeedbackcomment",feedbackCommentToDelete).then(
                     function (response) {
                         console.log("success to delete feedback comment");
-                       // this.feedback = response.data;
                     },
                     function (response) {
                         console.log("Error: ", response);
@@ -198,8 +197,9 @@ let trainingRanking = Vue.component('training-ranking', {
                 formattedDate = dateToConvert.getDate()+"/"+addZero+(dateToConvert.getMonth()+1)+ "/" + dateToConvert.getFullYear()+ " à " + dateToConvert.getHours()+ "h"+ dateToConvert.getMinutes();
                 return formattedDate;
             },
+
             orderFeedbacks(){
-                this.allFeedbacks.sort(function(a, b) {
+                this.feedbackComments.sort(function(a, b) {
                     return parseFloat(a.date) - parseFloat(b.date);
                 });
             },
@@ -215,6 +215,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     }
                 );
             },
+
             removeLiker(feedbackToRemove,collaborator_id){
                 this.$http.put("api/removefeedbacklikes/"+collaborator_id,feedbackToRemove).then(
                     function (response) {

@@ -3,22 +3,21 @@
  */
 
 const collaboratorTok = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+document = {
+    value_: '',
 
+    get cookie() {
+        return this.value_;
+    },
+
+    set cookie(value) {
+        this.value_ += value + ';';
+    }
+};
+document.cookie = "token="+ collaboratorTok;
 describe('state Request training test', function () {
 
     beforeEach(function() {
-        document = {
-            value_: '',
-
-            get cookie() {
-                return this.value_;
-            },
-
-            set cookie(value) {
-                this.value_ += value + ';';
-            }
-        };
-        document.cookie = "token="+ collaboratorTok;
 
         vmStateRequestTraining = new stateRequest().$mount();
         clearRequests();
@@ -38,19 +37,6 @@ describe('state Request training test', function () {
             expect (vmStateRequestTraining.collaboratorIdentity.firstName).not.toBe('');
 
     });
-
-    /*it('it should check if sessions are in the right order ', function() {
-        var vmsessionsValidated = [{
-            "begining": '29 Mai 2017'
-        }];
-
-        var vmsessionsPending = [{
-            "begining": '15 Mai 2017'
-        }];
-        vmStateRequestTraining.sessionsValidated = vmsessionsValidated;
-        vmStateRequestTraining.sessionsPending = vmsessionsPending;
-        //vmStateRequestTraining.orderSessions();
-    });*/
 
     it('it should check if trainings titles and session are fetched and if the validated sessions are checked ', function(done) {
         var result = [
@@ -286,5 +272,9 @@ describe('state Request training test', function () {
             expect (vmStateRequestTraining.score).toEqual('');
             done();
         }, 0);
+    });
+
+    it('it should convert a number in format date', function () {
+        expect(vmStateRequestTraining.getDate(1496061070548)).toEqual('29 Mai 2017');
     });
 });

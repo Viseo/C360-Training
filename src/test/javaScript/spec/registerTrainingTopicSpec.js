@@ -44,7 +44,7 @@ afterEach(function () {
 });
 
 
-describe('test registerTrainingTopic.js', function () {
+fdescribe('test registerTrainingTopic.js', function () {
 
     describe("Test customInput", function() {
         it('should check function updateValue', function() {
@@ -67,7 +67,7 @@ describe('test registerTrainingTopic.js', function () {
     describe('vmAddSessionPanel', function () {
 
         it('should check if the panel change from session panel to training panel when click on a training button', function (done) {
-            //console.log("valeur : "+vm);
+
             vmAddSessionPanel.returnToPageTraining();
             setTimeout(function () {
                 expect(vmAddSessionPanel.isDisabledTrainingTitle).toBe(true);
