@@ -575,7 +575,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 if (response) {
                     console.log("success to update user information");
                     this.imageHasBeenChanged = false;
-                    this.$router.go(this.$router.currentRoute);
+                    this.goTo('profiltoupdate');
                 }
             };
             this.put("api/updatecollaborator", this.CollabToUpdate, saveModification);
