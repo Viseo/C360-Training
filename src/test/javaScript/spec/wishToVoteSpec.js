@@ -12,7 +12,7 @@ var wishToVote = new Vue({
     }
 }).$mount();
 
-fdescribe('wish to vote Panel test', function () {
+describe('wish to vote Panel test', function () {
 
     beforeEach(function () {
         vmWishToVote = wishToVote.$children[0];

@@ -69,12 +69,6 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         this.getAllWishes();
         this.activateScrollUp('#scroll-up-4','#test1');
         this.activeScrollDown('#scroll-down-4','#test1');
-        /*$('#scroll-up-4').click(function() {
-            $('#test1').animate({scrollTop: "-=100"}, 500);
-        });
-        $('#scroll-down-4').click(function() {
-            $('#test1').animate({scrollTop: "+=100"}, 500);
-        });*/
     },
     methods: {
 
