@@ -7,9 +7,9 @@ Vue.component('customcircle', {
     props:["cx","cy", "content", "custom"],
     template: `<svg>
             
-            <line v-show="show1()" :x1="cx" :y1="cy" :x2="cx1" :y2="cy1" style="stroke:#09aa76;stroke-width:2;" /> 
-            <line v-show="show2()" :x1="cx" :y1="cy" :x2="cx2" :y2="cy2" style="stroke:#09aa76;stroke-width:2;" /> 
-            <line v-show="show3()" :x1="cx" :y1="cy" :x2="cx3" :y2="cy3" style="stroke:#09aa76;stroke-width:2;" />
+            <line v-show="show1()" :x1="cxLine" :y1="cyLine" :x2="cx1" :y2="cy1" style="stroke:#09aa76;stroke-width:2;" /> 
+            <line v-show="show2()" :x1="cxLine" :y1="cyLine" :x2="cx2" :y2="cy2" style="stroke:#09aa76;stroke-width:2;" /> 
+            <line v-show="show3()" :x1="cxLine" :y1="cyLine" :x2="cx3" :y2="cy3" style="stroke:#09aa76;stroke-width:2;" />
             <circle :id="cx+''+cy" @click="checkLine" :cx="cx" :cy="cy" r="50" fill="#09aa76" stroke="#075338" stroke-width="2"></circle> 
             <text :x="cx-25" :class="mySize" :y="cy+8" style="fill: #fff;">{{content}}</text>
             </svg>
@@ -23,7 +23,9 @@ Vue.component('customcircle', {
             cx2: "",
             cy2: "",
             cx3: "",
-            cy3: ""
+            cy3: "",
+            cyLine:"",
+            cxLine:""
         }
     },
     computed: {
@@ -44,10 +46,54 @@ Vue.component('customcircle', {
                 el.style.fill="#075338";
                 el.style.stroke="#09aa76"
             }
-            else {
+            else { //state.cx --> cx1 state.cy -- cy1 state.cx1 --> cx state.cy1 --> cy
                 var el = document.getElementById(this.state.cx+''+this.state.cy);
-                this.state.cx1 = this.cx;
-                this.state.cy1 = this.cy;
+                if(this.state.cx == this.cx && this.state.cy > this.cy){ //haut
+                    this.state.cy = this.state.cy - 50;
+                    this.cxLine = this.cx;
+                    this.cyLine = this.cy + 50;
+                }
+                else if(this.state.cx == this.cx && this.state.cy < this.cy){ //bas
+                    this.state.cy = this.state.cy + 50;
+                    this.cxLine = this.cx;
+                    this.cyLine = this.cy - 50;
+                }
+                else if(this.state.cx > this.cx && this.state.cy == this.cy){ //gauche
+                    this.state.cx = this.state.cx - 50;
+                    this.cxLine = this.cx + 50;
+                    this.cyLine = this.cy;
+                }
+                else if(this.state.cx < this.cx && this.state.cy == this.cy){ //droit
+                    this.state.cx = this.state.cx + 50;
+                    this.cxLine = this.cx - 50;
+                    this.cyLine = this.cy;
+                }else if(this.state.cx > this.cx && this.state.cy > this.cy){ //gauche haut
+                    console.log("HELLO gauche haut");
+                    this.state.cx = this.state.cx - Math.sqrt(50);
+                    this.state.cy = this.state.cy - Math.sqrt(50);
+                    this.cxLine = this.cx + Math.sqrt(50);
+                    this.cyLine = this.cy + Math.sqrt(50);
+                }else if(this.state.cx < this.cx && this.state.cy > this.cy){ //droit haut
+                    console.log("HELLO droit haut");
+                    this.state.cx = this.state.cx + Math.sqrt(50);
+                    this.state.cy = this.state.cy - Math.sqrt(50);
+                    this.cxLine = this.cx - Math.sqrt(50);
+                    this.cyLine = this.cy + Math.sqrt(50);
+                }else if(this.state.cx > this.cx && this.state.cy < this.cy){ //gauche bas
+                    console.log("HELLO gauche bas");
+                    this.state.cx = this.state.cx - Math.sqrt(50);
+                    this.state.cy = this.state.cy + Math.sqrt(50);
+                    this.cxLine = this.cx + Math.sqrt(50);
+                    this.cyLine = this.cy - Math.sqrt(50);
+                }else if(this.state.cx < this.cx && this.state.cy < this.cy){ //droit bas
+                    console.log("HELLO droit bas");
+                    this.state.cx = this.state.cx + Math.sqrt(50);
+                    this.state.cy = this.state.cy + Math.sqrt(50);
+                    this.cxLine = this.cx - Math.sqrt(50);
+                    this.cyLine = this.cy - Math.sqrt(50);
+                }
+                this.state.cx1 = this.cxLine;
+                this.state.cy1 = this.cyLine;
                 if (this.cx1=="" && this.cy1==""){
                     el.style.fill="#09aa76";
                     el.style.stroke="#075338";
