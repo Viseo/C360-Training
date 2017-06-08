@@ -225,9 +225,13 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
     methods: {
         fonction(index){
-            this.openedPanelId = index;
+            if((this.commentsExist(this.trainingSelected.id)) == false){
+            this.hideComments();
+                console.log("hahaah");
+            }
+            else
+                this.showComments();
             if(this.$children[1].$children[index].open== true){
-                console.log(this.$children[1].$children[index].open);
             }
             else
                 this.$children[1].$children[index].open = true;
@@ -275,6 +279,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.noSessionsSelectedError = false;
                 this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
             }
+            this.trainingSelected = training;
         },
 
         disabling(id){
@@ -392,7 +397,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.requestToRegister.trainingSessionsDescriptions = this.checkedSessions;
                 this.requestToRegister = JSON.parse(JSON.stringify(this.requestToRegister));
                 this.SaveTrainingSessionCollaborator();
-                console.log(this);
                 if(this.$parent.$children[3]){
                     let trainingToComeComponent = this.$parent.$children[3];
                     trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
@@ -570,7 +574,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         showComments(){
-            console.log(this.trainingSelected);
             this.showComment= true;
         },
 
