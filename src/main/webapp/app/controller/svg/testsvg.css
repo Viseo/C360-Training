@@ -8,6 +8,15 @@ svg-content{
     overflow: hidden;
 }
 
+.defaultSize{
+    font-size:24px;
+}
+
+.smallSize{
+    font-size:17px;
+    transform: translate(-10px,0px);
+}
+
 body {
     color: #075338;
     margin:0;
