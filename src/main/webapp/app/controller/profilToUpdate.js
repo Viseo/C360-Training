@@ -575,9 +575,16 @@ let profilToUpdate = Vue.component('profil-to-update', {
         saveUpdateCollaborator(){
             let saveModification = (response) => {
                 if (response) {
+                    let updateUserToken = (userPersistedToken) => {
+                        document.cookie = "token=" + userPersistedToken.data['userConnected'] ;
+                        console.log(userPersistedToken.data['userConnected']);
+                       this.$router.go(this.$router.currentRoute);
+
+                    };
                     console.log("success to update user information");
                     this.imageHasBeenChanged = false;
-                    this.goTo('profiltoupdate');
+                    this.post("api/user", this.CollabToUpdate,updateUserToken);
+
                 }
             };
             this.put("api/updatecollaborator", this.CollabToUpdate, saveModification);
