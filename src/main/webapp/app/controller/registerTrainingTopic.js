@@ -213,6 +213,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                 this.saveTrainingIntoDatabase();
             }
         },
+
         verifyTrainingOrTopicBeforeSubmit(){
             if(this.newTopic != '' && this.trainingTitle == ''){
                 this.verifyTopicFormBeforeSubmit();
@@ -243,6 +244,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.newTopic = '';
             this.topicToRegister = {};
         },
+
         saveTrainingIntoDatabase() {
             this.trainingToRegister.trainingTitle = this.training.trainingTitle.toUpperCase();  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
@@ -545,7 +547,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 this.gatherAllSessions();
                 this.gatherTopicsFromDatabase();
             };
-
             this.post("api/removetopic", topicToRemove, removeTopicSuccess)
         },
 
@@ -577,7 +578,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     }
                 },function (error) {
                     console.log('error:');
-
                 });
         },
 

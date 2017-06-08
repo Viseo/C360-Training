@@ -14,22 +14,16 @@ var vmShowFormationPanel= new Vue({
     }
 }).$mount();
 
-beforeEach(function () {
-    vmAddFormationPanel = new AddFormationPanel().$mount();
-    vmShowFormation = vmShowFormationPanel.$children[0];
-    vmAddSessionPanel = vmAddSession.$children[0];
-    vmInputText = new InputText().$mount();
-});
-
-afterEach(function () {
-    clearRequests();
-    Object.assign(vmAddFormationPanel.$data, vmAddFormationPanel.$options.data());
-});
-
-
 describe('test registerTrainingTopic.js', function () {
 
     describe("Test customInput", function() {
+        beforeEach(function () {
+            vmInputText = new InputText().$mount();
+        });
+
+        afterEach(function () {
+        });
+
         it('should check function updateValue', function() {
             vmInputText.updateValue('HELLO');
         });
@@ -48,7 +42,18 @@ describe('test registerTrainingTopic.js', function () {
     });
 
     describe('vmAddFormationPanel', function () {
-        let TRAINING = '{"id":1,"version":0,"name":"PROGRAMMATION"}';
+        let TRAINING = [{"id":1,"version":0,"name":"PROGRAMMATION"}];
+        beforeEach(function () {
+         vmAddFormationPanel = new AddFormationPanel().$mount();
+         vmShowFormation = vmShowFormationPanel.$children[0];
+         /*vmAddSessionPanel = vmAddSession.$children[0];
+         vmInputText = new InputText().$mount();*/
+         });
+
+         afterEach(function () {
+         clearRequests();
+         Object.assign(vmAddFormationPanel.$data, vmAddFormationPanel.$options.data());
+         });
 
         it('should check variable initialization from AddFormationPanel component and ShowFormation component', function () {
             expect(vmAddFormationPanel.training).toEqual({trainingTitle: '', numberHalfDays: '', topicDescription: ''});
@@ -99,7 +104,7 @@ describe('test registerTrainingTopic.js', function () {
                 vmAddFormationPanel.updateV4('HELLO');
                 expect(vmAddFormationPanel.newTopic).toBe('HELLO');
             });
-        })
+        });
 
         //verifyTrainingField
         it('should check verify field Training', function () {
@@ -184,17 +189,11 @@ describe('test registerTrainingTopic.js', function () {
 
         //resetTopicForm
         it('should check whether the topic form is reset', function () {
-            vmAddFormationPanel.resetTrainingForm();
+            vmAddFormationPanel.resetTopicForm();
             expect(vmAddFormationPanel.newTopic).toBe('');
             expect(vmAddFormationPanel.topicToRegister).toEqual({});
-            vmAddFormationPanel.numberHalfDays = 2;
         });
 
-        it('should add a topic', function () {
-            var sessionDescription = TRAINING;
-            vmAddFormationPanel.newTopic = 'PROGRAMMATION';
-            let resp = vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
-        });
         //removeDuplicates
         it('should check whether the function removeDuplicates can remove those duplicates', function () {
             var arrayWithDuplicates = [
@@ -362,11 +361,58 @@ describe('test registerTrainingTopic.js', function () {
             vmAddFormationPanel.trainingStore.reorganizeAllTopicsAndTrainings();
             expect(vmAddFormationPanel.state.allTopicTraining).toEqual(result);
         });
-        it('should check if training is added into the database', function () {
+
+        it('should check if training is added into the database with success response of server', function (done) {
+            var response = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                }
+            ];
+            prepareRequest('POST','api/formations',200,response);
             vmAddFormationPanel.trainingTitle = "FORMATION1";
             vmAddFormationPanel.numberHalfDays = 1;
-            vmAddFormationPanel.topicDescription = "C";
+            vmAddFormationPanel.topicDescription = "PROGRAMMATION";
+            vmAddFormationPanel.state.selectOptionsOfTopic = [{"id":1,"version":0,"name":"PROGRAMMATION"}];
             vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.isNewTrainingTitle).toBe(true);
+                expect(vmAddFormationPanel.confirmFormation).toBe(true);
+                done()
+            },0);
+
+        });
+
+        it('should check if training is added into the database with error response of server and the response have not a message', function (done) {
+            var response = [];
+            response.message = '';
+            prepareRequest('POST','api/formations',500,response);
+            vmAddFormationPanel.trainingTitle = "FORMATION1";
+            vmAddFormationPanel.numberHalfDays = 1;
+            vmAddFormationPanel.topicDescription = "PROGRAMMATION";
+            vmAddFormationPanel.state.selectOptionsOfTopic = [{"id":1,"version":0,"name":"PROGRAMMATION"}];
+            vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
+            setTimeout(function () {
+                done()
+            },0);
+
+        });
+        it('should check if training is added into the database with error response of server and the response have a message', function (done) {
+            var response = [];
+            response.message = 'trainingTitle';
+            prepareRequest('POST','api/formations',500,response);
+            vmAddFormationPanel.trainingTitle = "FORMATION1";
+            vmAddFormationPanel.numberHalfDays = 1;
+            vmAddFormationPanel.topicDescription = "PROGRAMMATION";
+            vmAddFormationPanel.state.selectOptionsOfTopic = [{"id":1,"version":0,"name":"PROGRAMMATION"}];
+            vmAddFormationPanel.verifyTrainingFormBeforeSubmit();
+            setTimeout(function () {
+                done()
+            },0);
+
         });
 
         it('should check if variables are reset by Input trainingTopic', function () {
@@ -402,17 +448,177 @@ describe('test registerTrainingTopic.js', function () {
             expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
             expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
         });
+
+        it('it should check if collect all trainings in the database  with success response of server', function (done) {
+            var response = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 6,
+                    "version": 0,
+                    "trainingTitle": "FORMATION2",
+                    "numberHalfDays": 2,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 7,
+                    "version": 0,
+                    "trainingTitle": "JAVA",
+                    "numberHalfDays": 3,
+                    "topicDescription": {"id": 4, "version": 0, "name": "C++"}
+                }
+            ];
+            prepareRequest('GET', 'api/formations', 200, response);
+            vmAddFormationPanel.gatherTrainingsFromDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.selectOptionsOfTraining).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all trainings in the database  with error response of server', function (done) {
+            var response = [];
+            prepareRequest('GET', 'api/formations', 500, response);
+            vmAddFormationPanel.gatherTrainingsFromDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.selectOptionsOfTraining).toEqual(response);
+                done();
+            },0);
+        });
     });
 
     describe('vmShowFormationPanel', function () {
-        it('should delete topic and its trainings',function (){
+        beforeEach(function () {
+            vmShowFormation = vmShowFormationPanel.$children[0];
+        });
+
+        afterEach(function () {
+            clearRequests();
+            Object.assign(vmShowFormation.$data, vmShowFormation.$options.data());
+        });
+
+        it('it should check if collect all trainings in the database  with success response of server', function (done) {
+            var response = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 6,
+                    "version": 0,
+                    "trainingTitle": "FORMATION2",
+                    "numberHalfDays": 2,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                {
+                    "id": 7,
+                    "version": 0,
+                    "trainingTitle": "JAVA",
+                    "numberHalfDays": 3,
+                    "topicDescription": {"id": 4, "version": 0, "name": "C++"}
+                }
+            ];
+            prepareRequest('GET', 'api/formations', 200, response);
+            vmShowFormation.gatherTrainingsFromDatabase();
+            setTimeout(function () {
+                expect(vmShowFormation.allTrainings).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all trainings in the database  with error response of server', function (done) {
+            var response = [];
+            prepareRequest('GET', 'api/formations', 500, response);
+            vmShowFormation.gatherTrainingsFromDatabase();
+            setTimeout(function () {
+                expect(vmShowFormation.allTrainings).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all sessions in the database  with success response of server', function (done) {
+            var response = [{
+                "id": 6,
+                "version": 0,
+                "trainingDescription": {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                },
+                "beginning": "13/05/2017",
+                "ending": "13/05/2017",
+                "beginningTime": "09:00",
+                "endingTime": "18:00",
+                "location": "Salle Bora Bora"
+            }];
+            prepareRequest('GET', 'api/sessions', 200, response);
+            vmShowFormation.gatherAllSessions();
+            setTimeout(function () {
+                expect(vmShowFormation.state.allSessions).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all sessions in the database  with error response of server', function (done) {
+            var response = [];
+            prepareRequest('GET', 'api/sessions', 500, response);
+            vmShowFormation.gatherAllSessions();
+            setTimeout(function () {
+                done();
+            },0);
+        });
+
+        it('should delete topic and its trainings', function (done) {
             var topicToRemove = {id: "2", version: "0", name: "PROGRAMMATION"};
+            prepareRequest('POST','api/removetopic',200,topicToRemove);
             vmShowFormation.removeTopic(topicToRemove);
-        }),
-            it('should delete training and its sessions',function (){
-                var trainingToRemove = {"id": 3, "version": 0, "name": "C"};
-                vmShowFormation.removeTraining(trainingToRemove);
-            }),
+            setTimeout(function () {
+                done();
+            },0);
+        });
+
+        it('should delete training and its sessions', function (done) {
+            var trainingToRemove = {"id": 3, "version": 0, "name": "C"};
+            prepareRequest('POST','api/removetraining',200,trainingToRemove);
+            vmShowFormation.removeTraining(trainingToRemove);
+            setTimeout(function () {
+                done();
+            },0);
+        });
+
+        it('it should check if collect all themes in the database  with success response of server', function (done) {
+            var response = [
+                {id: "2", version: "0", name: "PROGRAMMATION"},
+                {id: "3", version: "0", name: "JAVA"},
+                {id: "4", version: "0", name: "WEB"}
+            ];
+            prepareRequest('GET', 'api/themes', 200, response);
+            vmShowFormation.gatherTopicsFromDatabase();
+            setTimeout(function () {
+                expect(vmShowFormation.state.selectOptionsOfTopic).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all themes in the database  with error response of server', function (done) {
+            var response = [];
+            prepareRequest('GET', 'api/themes', 500, response);
+            vmShowFormation.gatherTopicsFromDatabase();
+            setTimeout(function () {
+                done();
+            },0);
+        });
+
         //showChevrons
         it('should check whether the chevrons can be hidden', function () {
             vmShowFormation.state.allTopicTraining = [];
@@ -429,8 +635,17 @@ describe('test registerTrainingTopic.js', function () {
     });
 
     describe('vmShowFormation', function () {
+        beforeEach(function () {
+            vmAddFormationPanel = new AddFormationPanel().$mount();
+            vmShowFormation = vmShowFormationPanel.$children[0];
+        });
 
-        it('should check if the panel change from training panel to session panel when click on a training button', function (done) {
+        afterEach(function () {
+            clearRequests();
+            Object.assign(vmShowFormation.$data, vmShowFormation.$options.data());
+        });
+
+        it('should check if the panel change from training panel to session panel when click on a training button,the training have sessions with success response of server', function (done) {
             vmShowFormation.state.allTrainings = [
                 {
                     "id": 5,
@@ -507,8 +722,9 @@ describe('test registerTrainingTopic.js', function () {
                     "location": "Salle Bali"
                 }
             ];
+            prepareRequest('GET', 'api/formations/5/sessions', 200, reponseFormation1);
             //Click on FORMATION1 button (FORMATION1 got 2 sessions)
-            vmShowFormation.createSession(vmAddFormationPanel.state.allTopicTraining[0][0][0].id);
+            vmShowFormation.createSession(5);
             setTimeout(function () {
                 expect(vmShowFormation.state.idTraining).toEqual(5);
                 expect(vmShowFormation.state.trainingChosen).toEqual(vmAddFormationPanel.state.allTopicTraining[0][0][0]);
@@ -517,5 +733,110 @@ describe('test registerTrainingTopic.js', function () {
                 done();
             }, 0);
         });
+
+        it('should check if the panel change from training panel to session panel when click on a training button,the training have not sessions with success response of server', function (done) {
+            vmShowFormation.state.allTrainings = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                }, {
+                    "id": 6,
+                    "version": 0,
+                    "trainingTitle": "FORMATION2",
+                    "numberHalfDays": 2,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                }
+            ];
+            vmShowFormation.state.allTopicTraining = [
+                [
+                    [{
+                        "id": 5,
+                        "version": 0,
+                        "trainingTitle": "FORMATION1",
+                        "numberHalfDays": 1,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    }, {
+                        "id": 6,
+                        "version": 0,
+                        "trainingTitle": "FORMATION2",
+                        "numberHalfDays": 2,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    }]
+                ],
+                [
+                    [{
+                        "id": 7,
+                        "version": 0,
+                        "trainingTitle": "FORMATION3",
+                        "numberHalfDays": 3,
+                        "topicDescription": {"id": 4, "version": 0, "name": "C++"}
+                    }]
+                ]
+            ];
+            var reponseFormation1 = [];
+            prepareRequest('GET', 'api/formations/5/sessions', 200, reponseFormation1);
+            vmShowFormation.createSession(5);
+            setTimeout(function () {
+                expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
+                done();
+            }, 0);
+        });
+
+        it('should check if the panel change from training panel to session panel when click on a training button,the training have not sessions with error response of server', function (done) {
+            vmShowFormation.state.allTrainings = [
+                {
+                    "id": 5,
+                    "version": 0,
+                    "trainingTitle": "FORMATION1",
+                    "numberHalfDays": 1,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                }, {
+                    "id": 6,
+                    "version": 0,
+                    "trainingTitle": "FORMATION2",
+                    "numberHalfDays": 2,
+                    "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                }
+            ];
+            vmShowFormation.state.allTopicTraining = [
+                [
+                    [{
+                        "id": 5,
+                        "version": 0,
+                        "trainingTitle": "FORMATION1",
+                        "numberHalfDays": 1,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    }, {
+                        "id": 6,
+                        "version": 0,
+                        "trainingTitle": "FORMATION2",
+                        "numberHalfDays": 2,
+                        "topicDescription": {"id": 3, "version": 0, "name": "C"}
+                    }]
+                ],
+                [
+                    [{
+                        "id": 7,
+                        "version": 0,
+                        "trainingTitle": "FORMATION3",
+                        "numberHalfDays": 3,
+                        "topicDescription": {"id": 4, "version": 0, "name": "C++"}
+                    }]
+                ]
+            ];
+            var reponseFormation1 = [];
+            prepareRequest('GET', 'api/formations/5/sessions', 500, reponseFormation1);
+            vmShowFormation.createSession(5);
+            setTimeout(function () {
+                expect(vmShowFormation.state.listTrainingSession).toEqual(reponseFormation1);
+                done();
+            }, 0);
+        });
+
     });
+
+
 });

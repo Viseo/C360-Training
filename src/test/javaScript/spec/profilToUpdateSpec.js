@@ -296,7 +296,7 @@ describe('profil to update test', function () {
         expect(vmProfilToUpdate.showPass).toBe(true);
     });
 
-    it('it should check if the collaborator profil picture has been changed when the collaborator choose a specific picture', function (done){
+    it('it should check if the collaborator profil picture has been changed when the collaborator choose a specific picture', function (){
         var modifyPictureElement = document.createElement('input');
         modifyPictureElement.setAttribute("id", "loadProfilImage");
         document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(modifyPictureElement);
