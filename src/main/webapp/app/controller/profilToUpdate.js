@@ -206,7 +206,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
                             <br>
                             <span v-show="!isRightOldPassword " class="color-red">
-                                        <b>Ancien mot de passe incorrect.</b>
+                                        <b>{{errorMessageOnSubmit}}</b>
                                     </span>
                         </div>
                     </div>
@@ -273,6 +273,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             oldPasswordEmpty: false,
             isOldPasswordValid: true,
             errorMessageOldPassword: '',
+            errorMessageOnSubmit:'',
             isValidOldPassword: false,
             isNotValidOldPassword: false,
 
@@ -505,6 +506,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
         },
 
         verifyPassword(password) {
+            console.log(password)
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessagePassword = '';
                 this.isPasswordValid = true;
@@ -607,7 +609,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     this.isRightOldPassword = true;
                     this.oldPasswordEmpty = false;
                     this.passwordEmpty = false;
-                    if (this.newPassword == this.confirmPassword) {
+                    if(this.infoCollab.password != this.newPassword){
+                        if (this.newPassword == this.confirmPassword) {
                             this.CollabToUpdate.password = this.newPassword;
                             if (this.imageHasBeenChanged === true) {
                                 this.updateCollaboratorImage();
@@ -616,9 +619,17 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
                             }
                             this.saveUpdateCollaborator();
-                   }
+                        }
+                    }else{
+                        console.log("mot de passe" + this.infoCollab.password);
+                        this.isRightOldPassword = false;
+                        this.errorMessageOnSubmit ="Votre nouveau mot de passe doit être différent de votre ancien mot de passe."
+                    }
+
                 }else {
+                   console.log(this.infoCollab.password);
                     this.isRightOldPassword = false;
+                    this.errorMessageOnSubmit = "Ancien mot de passe incorrect."
                 }
            }
         },
