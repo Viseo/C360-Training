@@ -3,20 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <script src="lib/vue.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <title>Title</title>
 </head>
 <body>
-
-    <div id="pills">
-        <svg version="1.1" width="540" height="420">
-            <line v-show="show" :x1="x1Line" :y1="y1Line" :x2="x2Line" :y2="y2Line" style="stroke:black;stroke-width:2;" />
-            <circle @click="change(cxCircle1,cyCircle1,circle1)" :cx="cxCircle1" :cy="cyCircle1" :r="rCircle1" stroke="black" stroke-width="2" fill="white"/>
-            <circle @click="change(cxCircle2,cyCircle2,circle2)" :cx="cxCircle2" :cy="cyCircle2" :r="rCircle2" stroke="black" stroke-width="2" fill="white" />
-            <circle @click="change(cxCircle3,cyCircle3,circle3)" :cx="cxCircle3" :cy="cyCircle3" :r="rCircle3" stroke="black" stroke-width="2" fill="white" />
-        </svg>
-    </div>
-
-
-    <script src="app/controller/testsvg.js"></script>
+<div id="pills">
+    <container-svg></container-svg>
+</div>
+    <script src="app/controller/svg/testsvg.js"></script>
+    <link rel="stylesheet" href="app/controller/svg/testsvg.css">
 </body>
 </html>
