@@ -4,14 +4,14 @@
 
 
 Vue.component('customcircle', {
-    props:["cx","cy", "content", "custom"],
+    props:["cx","cy", "content"],
     template: `<svg>
             
             <line v-show="show1()" :x1="cxLine" :y1="cyLine" :x2="cx1" :y2="cy1" style="stroke:#09aa76;stroke-width:2;" /> 
             <line v-show="show2()" :x1="cxLine" :y1="cyLine" :x2="cx2" :y2="cy2" style="stroke:#09aa76;stroke-width:2;" /> 
             <line v-show="show3()" :x1="cxLine" :y1="cyLine" :x2="cx3" :y2="cy3" style="stroke:#09aa76;stroke-width:2;" />
-            <circle :id="cx+''+cy" @click="checkLine" :cx="cx" :cy="cy" r="50" fill="#09aa76" stroke="#075338" stroke-width="2"></circle> 
-            <text :x="cx-25" :class="mySize" :y="cy+8" style="fill: #fff;">{{content}}</text>
+            <circle class="test" :id="cx+''+cy" @click="checkLine" :cx="cx" :cy="cy" r="50" fill="#09aa76" stroke="#075338" stroke-width="2"></circle> 
+            <text text-anchor="middle" :x="cx" :class="mySize" :y="cy+8" style="fill: #fff;">{{content}}</text>
             </svg>
 `,
     data: function() {

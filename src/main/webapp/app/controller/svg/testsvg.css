@@ -14,7 +14,6 @@ svg-content{
 
 .smallSize{
     font-size:17px;
-    transform: translate(-10px,0px);
 }
 
 body {
@@ -33,4 +32,13 @@ h1 {
     background-color: #09aa76;
     height:80px;
     margin:0px 0px 25px 0px;
+}
+
+.test {
+    animation: mymove 0.5s 1;
+}
+
+@keyframes mymove {
+    from {opacity:0}
+    to {opacity: 1}
 }
