@@ -13,11 +13,11 @@ describe('training-ranking test', function () {
     beforeEach(function () {
 
         vmTrainingRanking = trainingRankingComponent.$children[0];
-        clearRequests();
     });
 
     afterEach(function () {
-        //Object.assign(vmTrainingRanking.$data, vmTrainingRanking.$options.data());
+        clearRequests();
+        Object.assign(vmTrainingRanking.$data, vmTrainingRanking.$options.data());
 
     });
 

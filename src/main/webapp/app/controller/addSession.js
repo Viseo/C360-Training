@@ -391,7 +391,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         },
 
         canNotUseButtonSupprimer(){
-            if(this.numberOfSessionSelected>=1){
+            if(this.numberOfSessionSelected >= 1){
                 return false;
             }else{
                 return true;
@@ -787,8 +787,8 @@ let DatePicker = Vue.component('datepicker', {
         },
 
         togglePanel () {
-            this.panelState = !this.panelState
-            this.rangeStart = false
+            this.panelState = !this.panelState;
+            this.rangeStart = false;
         },
 
         isSelected (type, item) {
@@ -854,23 +854,23 @@ let DatePicker = Vue.component('datepicker', {
         },
 
         prevMonthPreview () {
-            this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1
+            this.tmpMonth = this.tmpMonth === 0 ? 0 : this.tmpMonth - 1;
         },
 
         nextMonthPreview () {
-            this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1
+            this.tmpMonth = this.tmpMonth === 11 ? 11 : this.tmpMonth + 1;
         },
 
         selectYear (year) {
-            if (this.validateYear(year)) return
-            this.tmpYear = year
-            this.panelType = 'month'
+            if (this.validateYear(year)) return;
+            this.tmpYear = year;
+            this.panelType = 'month';
         },
 
         selectMonth (month) {
-            if (this.validateMonth(month)) return
-            this.tmpMonth = month
-            this.panelType = 'date'
+            if (this.validateMonth(month)) return;
+            this.tmpMonth = month;
+            this.panelType = 'date';
         },
 
         selectDate (date) {
@@ -933,7 +933,7 @@ let DatePicker = Vue.component('datepicker', {
                     this.rangeStart = false
                     this.panelState = false
                 }
-            }, 0)
+            }, 0);
         },
 
         validateYear (year) {
