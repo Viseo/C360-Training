@@ -1,0 +1,27 @@
+
+svg-content{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+body {
+    color: #075338;
+    margin:0;
+    font-family: 'Lato', sans-serif;
+}
+
+h1 {
+    color:white;
+    text-align: center;
+    margin:0;
+}
+
+.header {
+    background-color: #09aa76;
+    height:80px;
+    margin:0px 0px 25px 0px;
+}
