@@ -7,9 +7,9 @@ Vue.component('customcircle', {
     props:["cx","cy", "content"],
     template: `<svg>
             
-            <line v-show="show1()" :x1="cxLine" :y1="cyLine" :x2="cx1" :y2="cy1" style="stroke:#09aa76;stroke-width:2;" /> 
-            <line v-show="show2()" :x1="cxLine" :y1="cyLine" :x2="cx2" :y2="cy2" style="stroke:#09aa76;stroke-width:2;" /> 
-            <line v-show="show3()" :x1="cxLine" :y1="cyLine" :x2="cx3" :y2="cy3" style="stroke:#09aa76;stroke-width:2;" />
+            <line v-show="show1()" :x1="cxLine1" :y1="cyLine1" :x2="cx1" :y2="cy1" style="stroke:black;stroke-width:2;" /> 
+            <line v-show="show2()" :x1="cxLine2" :y1="cyLine2" :x2="cx2" :y2="cy2" style="stroke:black;stroke-width:2;" /> 
+            <line v-show="show3()" :x1="cxLine3" :y1="cyLine3" :x2="cx3" :y2="cy3" style="stroke:black;stroke-width:2;" />
             <circle class="test" :id="cx+''+cy" @click="checkLine" :cx="cx" :cy="cy" r="50" fill="#09aa76" stroke="#075338" stroke-width="2"></circle> 
             <text text-anchor="middle" :x="cx" :class="mySize" :y="cy+8" style="fill: #fff;">{{content}}</text>
             </svg>
@@ -24,8 +24,12 @@ Vue.component('customcircle', {
             cy2: "",
             cx3: "",
             cy3: "",
-            cyLine:"",
-            cxLine:""
+            cyLine1:"",
+            cxLine1:"",
+            cyLine2:"",
+            cxLine2:"",
+            cyLine3:"",
+            cxLine3:"",
         }
     },
     computed: {
@@ -38,6 +42,69 @@ Vue.component('customcircle', {
         }
     },
     methods: {
+        calculatePosition(cxLine,cyLine){
+            if(this.state.cx == this.cx && this.state.cy == this.cy + 150){ //haut
+                this.state.cy = this.state.cy - 50;
+                cxLine = this.cx;
+                cyLine = this.cy + 50;
+            }
+            else if(this.state.cx == this.cx && this.state.cy == this.cy - 150){ //bas
+                this.state.cy = this.state.cy + 50;
+                cxLine = this.cx;
+                cyLine = this.cy - 50;
+            }
+            else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy){ //gauche
+                this.state.cx = this.state.cx - 50;
+                cxLine = this.cx + 50;
+                cyLine = this.cy;
+            }
+            else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy){ //droit
+                this.state.cx = this.state.cx + 50;
+                cxLine = this.cx - 50;
+                cyLine = this.cy;
+            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy + 150){ //gauche haut
+                console.log("HELLO gauche haut");
+                this.state.cx = this.state.cx - 50/Math.sqrt(2);
+                this.state.cy = this.state.cy - 50/Math.sqrt(2);
+                cxLine = this.cx + 50/Math.sqrt(2);
+                cyLine = this.cy + 50/Math.sqrt(2)
+                console.log(this.state.cx + '  ' +this.state.cy);
+            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy + 150){ //droit haut
+                console.log("HELLO droit haut");
+                this.state.cx = this.state.cx + 50/Math.sqrt(2);
+                this.state.cy = this.state.cy - 50/Math.sqrt(2);
+                cxLine = this.cx - 50/Math.sqrt(2);
+                cyLine = this.cy + 50/Math.sqrt(2);
+                console.log(this.state.cx + '  ' +this.state.cy);
+            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy - 150){ //gauche bas
+                console.log("HELLO gauche bas");
+                this.state.cx = this.state.cx - 50/Math.sqrt(2);
+                this.state.cy = this.state.cy + 50/Math.sqrt(2);
+                cxLine = this.cx + 50/Math.sqrt(2);
+                cyLine = this.cy - 50/Math.sqrt(2);
+                console.log(this.state.cx + '  ' +this.state.cy);
+            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy - 150){ //droit bas
+                console.log("HELLO droit bas");
+                this.state.cx = this.state.cx + 50/Math.sqrt(2);
+                this.state.cy = this.state.cy + 50/Math.sqrt(2);
+                cxLine = this.cx - 50/Math.sqrt(2);
+                cyLine = this.cy - 50/Math.sqrt(2);
+                console.log(this.state.cx + '  ' +this.state.cy);
+            }else{ //ne pas generer le trait
+                this.state.cx = 0;
+                this.state.cy = 0;
+                cxLine = 0;
+                cyLine = 0;
+            }
+            this.state.cx1 = cxLine;
+            this.state.cy1 = cyLine;
+            var resulat = [];
+            resulat.push(cxLine);
+            resulat.push(cyLine);
+            resulat.push(this.state.cx);
+            resulat.push(this.state.cy);
+            return resulat;
+        },
         checkLine(){
             if(this.state.cx == "" && this.state.cy == ""){
                 var el = document.getElementById(this.cx+''+this.cy);
@@ -46,75 +113,38 @@ Vue.component('customcircle', {
                 el.style.fill="#075338";
                 el.style.stroke="#09aa76"
             }
-            else { //state.cx --> cx1 state.cy -- cy1 state.cx1 --> cx state.cy1 --> cy
+            else {
                 var el = document.getElementById(this.state.cx+''+this.state.cy);
-                if(this.state.cx == this.cx && this.state.cy > this.cy){ //haut
-                    this.state.cy = this.state.cy - 50;
-                    this.cxLine = this.cx;
-                    this.cyLine = this.cy + 50;
-                }
-                else if(this.state.cx == this.cx && this.state.cy < this.cy){ //bas
-                    this.state.cy = this.state.cy + 50;
-                    this.cxLine = this.cx;
-                    this.cyLine = this.cy - 50;
-                }
-                else if(this.state.cx > this.cx && this.state.cy == this.cy){ //gauche
-                    this.state.cx = this.state.cx - 50;
-                    this.cxLine = this.cx + 50;
-                    this.cyLine = this.cy;
-                }
-                else if(this.state.cx < this.cx && this.state.cy == this.cy){ //droit
-                    this.state.cx = this.state.cx + 50;
-                    this.cxLine = this.cx - 50;
-                    this.cyLine = this.cy;
-                }else if(this.state.cx > this.cx && this.state.cy > this.cy){ //gauche haut
-                    console.log("HELLO gauche haut");
-                    this.state.cx = this.state.cx - Math.sqrt(50);
-                    this.state.cy = this.state.cy - Math.sqrt(50);
-                    this.cxLine = this.cx + Math.sqrt(50);
-                    this.cyLine = this.cy + Math.sqrt(50);
-                }else if(this.state.cx < this.cx && this.state.cy > this.cy){ //droit haut
-                    console.log("HELLO droit haut");
-                    this.state.cx = this.state.cx + Math.sqrt(50);
-                    this.state.cy = this.state.cy - Math.sqrt(50);
-                    this.cxLine = this.cx - Math.sqrt(50);
-                    this.cyLine = this.cy + Math.sqrt(50);
-                }else if(this.state.cx > this.cx && this.state.cy < this.cy){ //gauche bas
-                    console.log("HELLO gauche bas");
-                    this.state.cx = this.state.cx - Math.sqrt(50);
-                    this.state.cy = this.state.cy + Math.sqrt(50);
-                    this.cxLine = this.cx + Math.sqrt(50);
-                    this.cyLine = this.cy - Math.sqrt(50);
-                }else if(this.state.cx < this.cx && this.state.cy < this.cy){ //droit bas
-                    console.log("HELLO droit bas");
-                    this.state.cx = this.state.cx + Math.sqrt(50);
-                    this.state.cy = this.state.cy + Math.sqrt(50);
-                    this.cxLine = this.cx - Math.sqrt(50);
-                    this.cyLine = this.cy - Math.sqrt(50);
-                }
-                this.state.cx1 = this.cxLine;
-                this.state.cy1 = this.cyLine;
                 if (this.cx1=="" && this.cy1==""){
                     el.style.fill="#09aa76";
                     el.style.stroke="#075338";
-                    this.cx1 = this.state.cx;
-                    this.cy1 = this.state.cy;
+                    var tmp = this.calculatePosition(this.cxLine1,this.cyLine1);
+                    this.cxLine1 = tmp[0];
+                    this.cyLine1 = tmp[1];
+                    this.cx1 = tmp[2];
+                    this.cy1 = tmp[3];
                     this.state.cx = '';
                     this.state.cx1 = '';
                     this.state.cy = '';
                     this.state.cy1 = '';
                 }
                 else if (this.cx2=="" && this.cy2==""){
-                    this.cx2 = this.state.cx;
-                    this.cy2 = this.state.cy;
+                    var tmp = this.calculatePosition(this.cxLine2,this.cyLine2);
+                    this.cxLine2 = tmp[0];
+                    this.cyLine2 = tmp[1];
+                    this.cx2 = tmp[2];
+                    this.cy2 = tmp[3];
                     this.state.cx = '';
                     this.state.cx1 = '';
                     this.state.cy = '';
                     this.state.cy1 = '';
                 }
                 else if (this.cx3=="" && this.cy3==""){
-                    this.cx3 = this.state.cx;
-                    this.cy3 = this.state.cy;
+                    var tmp = this.calculatePosition(this.cxLine3,this.cyLine3);
+                    this.cxLine3 = tmp[0];
+                    this.cyLine3 = tmp[1];
+                    this.cx3 = tmp[2];
+                    this.cy3 = tmp[3];
                     this.state.cx = '';
                     this.state.cx1 = '';
                     this.state.cy = '';
