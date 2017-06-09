@@ -114,7 +114,7 @@ let stateRequest = Vue.component('state-request', {
                          height: 100%;
                          background-color: rgba(0, 0, 0, .5);
                          display: table;
-                         transition: opacity .3s ease;" @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
+                         transition: opacity .3s ease;">
                  <alert type="info" 
                         placement="top" 
                         width="40%" 
@@ -125,7 +125,7 @@ let stateRequest = Vue.component('state-request', {
                      </center> 
                      <span style="top:-60px;left:98%" 
                            class="glyphicon glyphicon-remove-sign color-red" 
-                          >
+                           @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
                      </span>
                      <br><br>
                      <accordion id="accordionId" 
