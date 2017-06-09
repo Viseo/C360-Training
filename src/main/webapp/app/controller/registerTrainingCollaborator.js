@@ -226,15 +226,19 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     methods: {
         fonction(index){
             if((this.commentsExist(this.trainingSelected.id)) == false){
-            this.hideComments();
+                this.reinitialize(this.trainingSelected);
+                this.hideComments();
                 console.log("hahaah");
             }
             else
-                this.showComments();
+                this.reinitialize(this.trainingSelected);
             if(this.$children[1].$children[index].open== true){
+                this.reinitialize(this.trainingSelected);
             }
-            else
+            else {
+                this.reinitialize(this.trainingSelected);
                 this.$children[1].$children[index].open = true;
+            }
         },
         disablingSessions(){
             this.disableSendButton = false;
@@ -266,20 +270,20 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         reinitialize(training){
+            this.trainingSelected = training;
             if (this.showComment == false) {
+                this.trainingSelected = training;
                 this.showComment = false;
                 this.disableSendButton = false;
                 this.trainingalreadyrequested(training.id);
                 this.checkedSessions.splice(0, this.checkedSessions.length);
                 this.storeTrainingSessions(training.id);
-                this.trainingSelected = training;
                 this.storeSessionsByCollab(training.id);
                 this.check = false;
                 this.addingRequestSucceeded = false;
                 this.noSessionsSelectedError = false;
                 this.sessionAlreadybooked.splice(0, this.sessionAlreadybooked.length);
             }
-            this.trainingSelected = training;
         },
 
         disabling(id){
