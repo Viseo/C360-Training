@@ -125,7 +125,7 @@ let stateRequest = Vue.component('state-request', {
                      </center> 
                      <span style="top:-60px;left:98%" 
                            class="glyphicon glyphicon-remove-sign color-red" 
-                           @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
+                          >
                      </span>
                      <br><br>
                      <accordion id="accordionId" 
