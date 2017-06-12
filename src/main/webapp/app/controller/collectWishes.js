@@ -6,7 +6,7 @@ let collectWishes = Vue.component('collect-wishes', {
 
     data: function () {
         return {
-            showChevrons: true,
+            showChevrons: false,
             allWishes: [],
             listWishesToUpdate: [],
             showConfirmUpdateWishesMessage: false
@@ -142,11 +142,16 @@ let collectWishes = Vue.component('collect-wishes', {
                     return (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0);
                 });
             };
+
             let gatherAllWishesSuccess = (response) => {
                 if (response) {
+                    let self=this;
                     console.log("success to get all wishes");
                     this.allWishes = response.data;
                     sortWishesFromTheYoungestToTheOldest();
+                    setTimeout(function(){
+                        self.showChevrons = self.checkForChevrons("scroll", "hello")
+                    },0)
                 }
             };
             let gatherAllWishesError = (response) => {

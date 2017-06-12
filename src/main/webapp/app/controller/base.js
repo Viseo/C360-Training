@@ -73,10 +73,11 @@ function BaseComponent(prototype) {
             return "";
         },
 
-        checkForChevrons(idContainer) {
+        checkForChevrons(idContainer,message) {
             var element = document.getElementById(idContainer);
             console.log(element.clientHeight);
             console.log(element.scrollHeight);
+            console.log(message)
             if (element.clientHeight < element.scrollHeight) {
                 return true;
             } else {
