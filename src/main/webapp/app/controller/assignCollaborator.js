@@ -112,7 +112,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                             </td>
                                         </tr>
                                         <br>
-                                    <tr v-for="validatedCollaboratorBySession in allCollaboratorsAlreadyInSessions">
+                                    <tr v-for="validatedCollaboratorBySession in allCollaboratorsAlreadyInSessions" 
+                                    class="valCollab" :class="{disabled : isDisabled}">
                                         {{validatedCollaboratorBySession.firstName}}
                                         {{validatedCollaboratorBySession.lastName}}
                                     </tr>
