@@ -146,7 +146,7 @@ let Header = Vue.component('header-component', {
             return this.disconnect && !this.dialog;
         },
         showPicture(){
-            return this.$route.name != ('login' && 'skillsStatementByCollaborators') ;
+            return (this.$route.name != 'login') && (this.$route.name !='skillsStatementByCollaborators') ;
         },
         setIdleSecondsCounter(value){
             this.idleSecondsCounter = value;
