@@ -34,7 +34,7 @@ let stateRequest = Vue.component('state-request', {
                 },
                 allTrainingsToGiveFeedbacks:[],
                 showRatingTrainingsPopup:false,
-                openPanel: false
+                openPanel: false,
             }
         },
         template: `
@@ -55,7 +55,7 @@ let stateRequest = Vue.component('state-request', {
                                        <div v-show="!noSessionForCollaborator" 
                                             class="col-lg-12" 
                                             style="margin-bottom:30px">
-                                             <img src="css/up.png" 
+                                             <img v-show="showChevrons" src="css/up.png" 
                                                   id="scroll-up-3" 
                                                   width="60" 
                                                   height="20" 
@@ -93,7 +93,7 @@ let stateRequest = Vue.component('state-request', {
                                 <div v-show="!noSessionForCollaborator" 
                                      class="col-lg-12" 
                                      style="margin-top:10px">
-                                       <img src="css/down.png" 
+                                       <img v-show="showChevrons" src="css/down.png" 
                                             id="scroll-down-3" 
                                             width="60" 
                                             height="20" 
@@ -229,7 +229,11 @@ let stateRequest = Vue.component('state-request', {
         this.collectAllTrainingsToGiveFeedbacks();
 
     },
-
+    computed: {
+      showChevrons: function() {
+          return this.requestedTrainingByCollaborator.length > 2;
+      }
+    },
         methods: {
             popUpDivClose(){
                 $('#outerdiv').on('click', function (e) {
@@ -345,7 +349,6 @@ let stateRequest = Vue.component('state-request', {
                         }
                     };
                     this.get("api/trainingstogivefeedbacks/" + this.collaboratorIdentity.id, collectAllTrainingsToGiveFeedbacksSuccess, collectAllTrainingsToGiveFeedbacksError);
-
                 },
             }
 

@@ -86,6 +86,12 @@ button + p {
     display: inline;
 }
 
+#scrollMyTrainings {
+    height: 140px;
+    overflow: hidden;
+    z-index: 5;
+}
+
 .alignIcon {
     vertical-align: middle;
     float:right;
