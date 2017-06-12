@@ -106,8 +106,15 @@ let Header = Vue.component('header-component', {
         });
         if (this.title == "Gestion des formations") {
             this.app.training = true;
-        } else if (this.skills == "Gestion des formations"){
-            this.app.skills = true;
+            this.app.skills=false;
+            this.app.mission = false;
+            this.app.leave= false;
+
+        } else if (this.title == "Gestion des compétences"){
+            this.app.training = false;
+            this.app.skills=true;
+            this.app.mission = false;
+            this.app.leave= false;
         };
 
         this.checkIfTokenExist();
