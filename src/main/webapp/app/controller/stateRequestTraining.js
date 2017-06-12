@@ -223,16 +223,19 @@ let stateRequest = Vue.component('state-request', {
         this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
         this.activateScrollWheel('#scrollMyTrainings');
+        this.popUpDivClose();
         this.initializeInformationsFromCookie();
         this.fetchTrainingsSessions();
         this.collectAllTrainingsToGiveFeedbacks();
-        $('#outerdiv').on('click', function(e){
-            e.stopPropagation();
-        });
 
     },
 
         methods: {
+            popUpDivClose(){
+                $('#outerdiv').on('click', function (e) {
+                    e.stopPropagation();
+                })
+            },
                 setScore(value){
                     this.score = value;
                 },
