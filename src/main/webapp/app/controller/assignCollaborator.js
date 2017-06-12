@@ -103,13 +103,21 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 <div data-simplebar class="collaboratorsList">
                                     <table class="tabCentring">
                                         <tr v-for="collaborator in validatedCollab">
-                                            <td @click="moveCollabLeft(collaborator)"><span
-                                                    class="glyphicon glyphicon-circle-arrow-left blue"
-                                                    style="top:2px"></span></td>
+                                            <td @click="moveCollabLeft(collaborator)">
+                                                <span class="glyphicon glyphicon-circle-arrow-left blue"
+                                                  style="top:2px"></span>
+                                            </td>
                                             <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}}
                                                 {{collaborator.firstName}}
                                             </td>
                                         </tr>
+                                        <br>
+                                    <tr v-for="validatedCollaboratorBySession in allCollaboratorsAlreadyInSessions" 
+                                    class="valCollab" :class="{disabled : isDisabled}">
+                                        {{validatedCollaboratorBySession.firstName}}
+                                        {{validatedCollaboratorBySession.lastName}}
+                                    </tr>
+                                    
                                     </table>
                                 </div>
                             </div>

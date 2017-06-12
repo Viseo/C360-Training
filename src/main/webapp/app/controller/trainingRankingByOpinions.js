@@ -61,10 +61,10 @@ let trainingRanking = Vue.component('training-ranking', {
                                                                     type="default">
                                                                     <p slot="header" 
                                                                      style="color:#337ab7;padding-bottom: 10px;">
-                                                                        <span class="col-sx-4 col-sm-4 col-md-4 col-lg-4" >
+                                                                        <span class="col-sx-3 col-sm-3 col-md-3 col-lg-3" >
                                                                              {{training[0].trainingTitle}}
                                                                         </span>
-                                                                        <span class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                        <span class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                                                             <span v-for="i in training[1]">
                                                                                 <span class="glyphicon glyphicon-star fullStar">
                                                                                 </span>
