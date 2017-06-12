@@ -231,7 +231,7 @@ let stateRequest = Vue.component('state-request', {
     },
     computed: {
       showChevrons: function() {
-          return this.requestedTrainingByCollaborator.length > 2;
+          return this.requestedTrainingByCollaborator.length > 1;
       }
     },
         methods: {
