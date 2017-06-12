@@ -233,9 +233,6 @@ let stateRequest = Vue.component('state-request', {
     },
 
         methods: {
-                test(){
-                    console.log(this);
-                },
                 setScore(value){
                     this.score = value;
                 },

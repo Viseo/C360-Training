@@ -146,7 +146,7 @@ let Header = Vue.component('header-component', {
             return this.disconnect && !this.dialog;
         },
         showPicture(){
-            return this.$route.name != 'login';
+            return this.$route.name != ('login' && 'skillsStatementByCollaborators') ;
         },
         setIdleSecondsCounter(value){
             this.idleSecondsCounter = value;
@@ -273,6 +273,7 @@ let Header = Vue.component('header-component', {
                 retrieveUserInfoFromToken();
             }
             else {
+                if(this.getPageName() != "skillsStatementByCollaborators")
                 redirectToLoginPage();
             }
 
