@@ -38,7 +38,7 @@ let stateRequest = Vue.component('state-request', {
             }
         },
         template: `
-        <div class="container-fluid">
+        <div id ="innerdiv" class="container-fluid" @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
              <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-7 text-center" 
                          style="width:200px">
@@ -115,7 +115,7 @@ let stateRequest = Vue.component('state-request', {
                          background-color: rgba(0, 0, 0, .5);
                          display: table;
                          transition: opacity .3s ease;">
-                 <alert type="info" 
+                 <alert id ="outerdiv" type="info" 
                         placement="top" 
                         width="40%" 
                         style="top:25%;
@@ -223,123 +223,131 @@ let stateRequest = Vue.component('state-request', {
         this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
         this.activateScrollWheel('#scrollMyTrainings');
+        this.popUpDivClose();
         this.initializeInformationsFromCookie();
         this.fetchTrainingsSessions();
         this.collectAllTrainingsToGiveFeedbacks();
+
     },
 
         methods: {
-            setScore(value){
-                this.score = value;
+            popUpDivClose(){
+                $('#outerdiv').on('click', function (e) {
+                    e.stopPropagation();
+                })
             },
+                setScore(value){
+                    this.score = value;
+                },
 
-            getDate(date){
-                dateToConvert = new Date(date);
-                formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
-                return formattedDate;
-            },
+                getDate(date){
+                    dateToConvert = new Date(date);
+                    formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
+                    return formattedDate;
+                },
 
-            initializeInformationsFromCookie(){
-                let isPopUpAlreadyShownDuringFirstConnection = this.getCookie("alreadyShownPopUp");
-                this.alreadyShownPopUp= isPopUpAlreadyShownDuringFirstConnection;
-                let collaboratorInfo = this.getCollaboratorInfoFromCookie();
-                let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
-                if(isCollaboratorInfoNotEmpty){
-                    this.collaboratorIdentity.id = collaboratorInfo.id;
-                    this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
-                    this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
-                }
-            },
-
-            orderSessions(){
-                this.requestedTrainingByCollaborator.sort(function(a, b) {
-                    if(a.sessionsValidated[0] && b.sessionsValidated[0]){
-                        return parseFloat(a.sessionsValidated[0].beginning) - parseFloat(b.sessionsValidated[0].beginning);
+                initializeInformationsFromCookie(){
+                    let isPopUpAlreadyShownDuringFirstConnection = this.getCookie("alreadyShownPopUp");
+                    this.alreadyShownPopUp= isPopUpAlreadyShownDuringFirstConnection;
+                    let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+                    let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
+                    if(isCollaboratorInfoNotEmpty){
+                        this.collaboratorIdentity.id = collaboratorInfo.id;
+                        this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
+                        this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
                     }
-                    else if(a.sessionsPending[0] && b.sessionsPending[0]){
-                        return parseFloat(a.sessionsPending[0].beginning) - parseFloat(b.sessionsPending[0].beginning);
-                    }
-                });
-            },
+                },
 
-            fetchTrainingsSessions(){
-                this.requestedTrainingByCollaborator.splice(0, this.requestedTrainingByCollaborator.length);
-                let fetchTrainingSessionsSuccess = (response) => {
-                    if (response) {
-                        this.requestedTraining = response.data;
-                        for (let i = 0; i < Object.keys(this.requestedTraining).length; i++) {
-                            if (Object.values(this.requestedTraining)[i].requestTrainingList.length != 0 || Object.values(this.requestedTraining)[i].trainingSessions.length != 0) {
-                                this.requestedTrainingByCollaborator.push({
-                                title: Object.keys(this.requestedTraining)[i],
-                                sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
-                                sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                            });
-                                this.noSessionForCollaborator = false;
-                            }
+                orderSessions(){
+                    this.requestedTrainingByCollaborator.sort(function(a, b) {
+                        if(a.sessionsValidated[0] && b.sessionsValidated[0]){
+                            return parseFloat(a.sessionsValidated[0].beginning) - parseFloat(b.sessionsValidated[0].beginning);
                         }
-                        console.log(this.requestedTrainingByCollaborator);
-                        this.orderSessions();
-                    }
-                };
+                        else if(a.sessionsPending[0] && b.sessionsPending[0]){
+                            return parseFloat(a.sessionsPending[0].beginning) - parseFloat(b.sessionsPending[0].beginning);
+                        }
+                    });
+                },
 
-                let fetchTrainingSessionsError = (response) => {
-                    if (response) {
-                        console.log("Error: ", response);
-                        console.error(response);
-                    }
-                };
-
-                this.get("api/sessions/" + this.collaboratorIdentity.id + "/requestedSessions", fetchTrainingSessionsSuccess, fetchTrainingSessionsError);
-            },
-
-            addFeedback(training){
-                let isCollaboratorHasAddedAScore = this.score != '';
-                if (isCollaboratorHasAddedAScore) {
-                    this.feedback.training = training;
-                    this.feedback.score = this.score;
-                    this.feedback.comment = this.comment;
-                    let addFeedbackSuccess = (response) => {
+                fetchTrainingsSessions(){
+                    this.requestedTrainingByCollaborator.splice(0, this.requestedTrainingByCollaborator.length);
+                    let fetchTrainingSessionsSuccess = (response) => {
                         if (response) {
-                            console.log("success to add a feedback");
-                            this.collectAllTrainingsToGiveFeedbacks();
+                            this.requestedTraining = response.data;
+                            for (let i = 0; i < Object.keys(this.requestedTraining).length; i++) {
+                                if (Object.values(this.requestedTraining)[i].requestTrainingList.length != 0 || Object.values(this.requestedTraining)[i].trainingSessions.length != 0) {
+                                    this.requestedTrainingByCollaborator.push({
+                                        title: Object.keys(this.requestedTraining)[i],
+                                        sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
+                                        sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
+                                    });
+                                    this.noSessionForCollaborator = false;
+                                }
+                            }
+                            console.log(this.requestedTrainingByCollaborator);
+                            this.orderSessions();
                         }
                     };
-                    this.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback, addFeedbackSuccess);
-                    this.comment = '';
-                    this.score = '';
-                }
-            },
 
-            createShowPopUpOnceCookie(){
-                document.cookie = "alreadyShownPopUp=true;"
-            },
-
-            collectAllTrainingsToGiveFeedbacks(){
-                let collectAllTrainingsToGiveFeedbacksSuccess = (response) => {
-                    if (response) {
-                        console.log("success to get all trainings to give feedbacks");
-                        this.allTrainingsToGiveFeedbacks = response.data;
-                        this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
-                            return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
-                        });
-                        let isThereTrainingsToGiveFeedbacks = this.allTrainingsToGiveFeedbacks.length != 0;
-                        if (isThereTrainingsToGiveFeedbacks && !this.alreadyShownPopUp) {
-                            this.showRatingTrainingsPopup = true;
-                        } else {
-                            this.showRatingTrainingsPopup = false;
+                    let fetchTrainingSessionsError = (response) => {
+                        if (response) {
+                            console.log("Error: ", response);
+                            console.error(response);
                         }
-                    }
-                };
+                    };
 
-                let collectAllTrainingsToGiveFeedbacksError = (response) => {
-                    if (response) {
-                        console.log("Error: ", response);
-                        console.error(response);
-                    }
-                };
-                this.get("api/trainingstogivefeedbacks/" + this.collaboratorIdentity.id, collectAllTrainingsToGiveFeedbacksSuccess, collectAllTrainingsToGiveFeedbacksError);
+                    this.get("api/sessions/" + this.collaboratorIdentity.id + "/requestedSessions", fetchTrainingSessionsSuccess, fetchTrainingSessionsError);
+                },
 
-            },
-        }
+                addFeedback(training){
+                    let isCollaboratorHasAddedAScore = this.score != '';
+                    if (isCollaboratorHasAddedAScore) {
+                        this.feedback.training = training;
+                        this.feedback.score = this.score;
+                        this.feedback.comment = this.comment;
+                        let addFeedbackSuccess = (response) => {
+                            if (response) {
+                                console.log("success to add a feedback");
+                                this.collectAllTrainingsToGiveFeedbacks();
+                            }
+                        };
+                        this.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback, addFeedbackSuccess);
+                        this.comment = '';
+                        this.score = '';
+                    }
+                },
+
+                createShowPopUpOnceCookie(){
+                    document.cookie = "alreadyShownPopUp=true;"
+                },
+
+                collectAllTrainingsToGiveFeedbacks(){
+                    let collectAllTrainingsToGiveFeedbacksSuccess = (response) => {
+                        if (response) {
+                            console.log("success to get all trainings to give feedbacks");
+                            this.allTrainingsToGiveFeedbacks = response.data;
+                            this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
+                                return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                            });
+                            let isThereTrainingsToGiveFeedbacks = this.allTrainingsToGiveFeedbacks.length != 0;
+                            if (isThereTrainingsToGiveFeedbacks && !this.alreadyShownPopUp) {
+                                this.showRatingTrainingsPopup = true;
+                            } else {
+                                this.showRatingTrainingsPopup = false;
+                            }
+                        }
+                    };
+
+                    let collectAllTrainingsToGiveFeedbacksError = (response) => {
+                        if (response) {
+                            console.log("Error: ", response);
+                            console.error(response);
+                        }
+                    };
+                    this.get("api/trainingstogivefeedbacks/" + this.collaboratorIdentity.id, collectAllTrainingsToGiveFeedbacksSuccess, collectAllTrainingsToGiveFeedbacksError);
+
+                },
+            }
+
     }
 );
