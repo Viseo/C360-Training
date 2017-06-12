@@ -68,7 +68,7 @@ button + p {
 
 }
 
-#scroll{
+#scrollTrainingCollaborator{
     height: 420px;
     overflow: hidden;
     z-index: 5;
@@ -84,12 +84,6 @@ button + p {
 
 .alwaysshowme:hover .showmeonhover {
     display: inline;
-}
-
-#scrollMyTrainings {
-    height: 140px;
-    overflow: hidden;
-    z-index: 5;
 }
 
 .alignIcon {

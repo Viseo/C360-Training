@@ -150,7 +150,7 @@ let collectWishes = Vue.component('collect-wishes', {
                     this.allWishes = response.data;
                     sortWishesFromTheYoungestToTheOldest();
                     setTimeout(function(){
-                        self.showChevrons = self.checkForChevrons("scroll", "hello")
+                        self.showChevrons = self.checkForChevrons("scroll")
                     },0)
                 }
             };

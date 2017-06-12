@@ -540,8 +540,6 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 }
             ).then(
                 function(){
-                    console.log("hey")
-                    console.log("showchevrons : " + this.checkForChevrons("adminTrainingContainer"));
                     this.state.showChevrons = this.checkForChevrons("adminTrainingContainer");
                 }
             );

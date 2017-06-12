@@ -50,6 +50,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             collaboratorLike: false,
             allFeedbacks: [],
             showComment: false,
+            showChevrons: false
         }
     },
 
@@ -96,7 +97,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                              style="position: absolute; left:50%; z-index:1;">
                     </div>
                 </div>
-                <div id="scroll" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+                <div id="scrollTrainingCollaborator" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                     <accordion id="accordionId" :one-at-atime="true" type="info">
                         <div v-for="(training, index) in trainingsFound">
                             <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training);fonction(index);"
@@ -198,9 +199,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
         this.initializeInformationsFromCookie();
-        this.activateScrollUp('#scroll-up-2','#scroll');
-        this.activeScrollDown('#scroll-down-2','#scroll');
-        this.activateScrollWheel('#scroll');
+        this.activateScrollUp('#scroll-up-2','#scrollTrainingCollaborator');
+        this.activeScrollDown('#scroll-down-2','#scrollTrainingCollaborator');
+        this.activateScrollWheel('#scrollTrainingCollaborator');
         this.getAllFeedbacks();
     },
 
@@ -216,11 +217,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
                 else return null;
         },
-
-        showChevrons(){
-            let numberOfTrainings = this.trainingsFound.length;
-            return numberOfTrainings;
-        }
     },
 
     methods: {
@@ -228,7 +224,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             if((this.commentsExist(this.trainingSelected.id)) == false){
                 this.reinitialize(this.trainingSelected);
                 this.hideComments();
-                console.log("hahaah");
             }
             else
                 this.reinitialize(this.trainingSelected);
@@ -271,6 +266,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
         reinitialize(training){
             this.trainingSelected = training;
+            this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
             if (this.showComment == false) {
                 this.trainingSelected = training;
                 this.showComment = false;
@@ -379,7 +375,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     console.log("Error: ", response);
                     console.error(response);
                 }
-            );
+            )
         },
 
         initializeInformationsFromCookie(){
@@ -443,6 +439,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 if (this.trainingsFound.length != 1)
                     this.openPanel = false;
                 this.value = null;
+            }).then(function() {
+                this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
             });
         },
 
