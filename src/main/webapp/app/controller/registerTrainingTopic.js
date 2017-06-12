@@ -323,6 +323,11 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     console.log("Error: ", response);
                     console.error(response);
                 }
+            ).then(
+                function(){
+                    console.log("showchevrons : " + this.checkForChevrons("adminTrainingContainer"));
+                    this.state.showChevrons = this.checkForChevrons("adminTrainingContainer");
+                }
             );
         },
 
@@ -432,7 +437,7 @@ template:`
                                     <td class="text-center" width="20%">
                                         <div class="form-group">
                                              <label>&nbsp</label><br/>
-                                             <input  
+                                             <input type="button"  
                                                    @click="verifyTrainingFormBeforeSubmit"
                                                    class="btn btn-primary" 
                                                    value="Valider" 
@@ -491,20 +496,15 @@ let ShowFormation = Vue.component('show-formation-panel', {
             trainingStore: training_store,
             upHere: false,
             trainingIdSelected:'',
-            allTrainings: []
+            allTrainings: [],
         }
     },
     mounted: function() {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
     computed: {
-        showChevrons(){
-            if (this.state.allTopicTraining.length > 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        noFormation(){
+            return this.state.allTopicTraining.length == 0
         }
     },
     methods:{
@@ -537,6 +537,12 @@ let ShowFormation = Vue.component('show-formation-panel', {
                 function (response) {
                     console.log("Error: ", response);
                     console.error(response);
+                }
+            ).then(
+                function(){
+                    console.log("hey")
+                    console.log("showchevrons : " + this.checkForChevrons("adminTrainingContainer"));
+                    this.state.showChevrons = this.checkForChevrons("adminTrainingContainer");
                 }
             );
         },
@@ -618,11 +624,11 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                 </div>
                             </div>
                             <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
-                                  <img v-show="showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
+                                  <img v-show="state.showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                         <table class="fix tabnonborder" >
                                             <tbody>
                                                   <tr>
-                                                      <td v-show="!showChevrons" >Aucune formation n'a été créé.</td>
+                                                      <td v-show="noFormation" >Aucune formation n'a été créé.</td>
                                                       <td>
                                                            <template v-for="topicTraining in state.allTopicTraining">
                                                                 <table class="table table-borderless tabnonborder fix">                               
@@ -648,13 +654,14 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                   </tr>
                                             </tbody>
                                         </table>
-                                  <img v-show="showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                                  <img v-show="state.showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                          </div>`
 });
 
 class trainingStore {
     constructor () {
         this.state = {
+            showChevrons:false,
             trainingsChosen:[],
             allTopicTraining:[],
             changePageToTraining:true,

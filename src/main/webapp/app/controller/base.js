@@ -73,6 +73,17 @@ function BaseComponent(prototype) {
             return "";
         },
 
+        checkForChevrons(idContainer) {
+            var element = document.getElementById(idContainer);
+            console.log(element.clientHeight);
+            console.log(element.scrollHeight);
+            if (element.clientHeight < element.scrollHeight) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
         getCollaboratorInfoFromCookie: function (){
             let collaboratorInfo = {id:'', lastName:'', firstName:'', admin:''};
             let token = this.getCookie("token");
