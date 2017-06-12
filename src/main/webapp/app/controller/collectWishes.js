@@ -9,8 +9,7 @@ let collectWishes = Vue.component('collect-wishes', {
             showChevrons: true,
             allWishes: [],
             listWishesToUpdate: [],
-            showConfirmUpdateWishesMessage: false,
-            disableSaveButton: true
+            showConfirmUpdateWishesMessage: false
         }
     },
 
@@ -48,7 +47,7 @@ let collectWishes = Vue.component('collect-wishes', {
                                     </div>
                                     <div id="scroll"
                                          style="width: 100%; 
-                                                height: 360px; 
+                                                height: 470px; 
                                                 overflow-y:hidden; 
                                                 overflow-x:hidden;">
                                         <div class="row">
@@ -105,17 +104,6 @@ let collectWishes = Vue.component('collect-wishes', {
                                                         left:50%; top:95%; 
                                                         z-index:1;">
                                         </div>
-                                        <br/>
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-5 col-md-offset-5 col-lg-offset-5">
-                                                <br/>
-                                                <button :disabled="disableSaveButton"
-                                                        class="btn btn-primary"
-                                                        @click="updateWish()">
-                                                    Enregistrer
-                                                </button>
-                                            </div>
-                                        </div>
                                         <div style="width: 100%; height: 30px;">
                                             <br/>
                                             <span v-show="showConfirmUpdateWishesMessage"
@@ -134,19 +122,6 @@ let collectWishes = Vue.component('collect-wishes', {
                     </div>
                 </div>
 `,
-
-    watch: {
-        listWishesToUpdate: function disableOrEnableSaveButton() {
-            let isAdminChooseAtLeastOneWishToUpdate = (this.listWishesToUpdate.length === 0);
-            if (isAdminChooseAtLeastOneWishToUpdate) {
-                this.disableSaveButton = true;
-            }
-            else {
-                this.disableSaveButton = false;
-            }
-        }
-    },
-
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.activateScrollUp('#scroll-up-3', '#scroll');
@@ -156,17 +131,9 @@ let collectWishes = Vue.component('collect-wishes', {
     methods: {
 
         addWishToListWishes(wish, isWishValidate){
-            this.wishAlreadyInList = false;
-            for (var index in this.listWishesToUpdate) {
-                if (this.listWishesToUpdate[index].id == wish.id) {
-                    this.listWishesToUpdate[index].checked = isWishValidate;
-                    this.wishAlreadyInList = true;
-                }
-            }
-            if (!this.wishAlreadyInList) {
-                wish.checked = isWishValidate;
-                this.listWishesToUpdate.push(wish);
-            }
+            wish.checked = isWishValidate;
+            this.listWishesToUpdate.push(wish);
+            this.updateWish();
         },
 
         getAllWishes(){
@@ -191,22 +158,13 @@ let collectWishes = Vue.component('collect-wishes', {
             this.get("api/allwishes", gatherAllWishesSuccess, gatherAllWishesError);
         },
 
-        showConfirmUpdateWishMessageDuring2Seconds(){
-            this.showConfirmUpdateWishesMessage = true;
-            setTimeout(function () {
-                this.showConfirmUpdateWishesMessage = false;
-            }.bind(this), 2000);
-        },
-
         updateWish(){
             let isAdminChooseAtLeastOneWishToUpdate = this.listWishesToUpdate.length > 0;
             if (isAdminChooseAtLeastOneWishToUpdate) {
                 let updateSuccess = (response) => {
                     if (response) {
                         console.log("success to update wishes");
-                        this.disableSaveButton = true;
-                        this.showConfirmUpdateWishMessageDuring2Seconds();
-                        this.getAllWishes();
+                        this.listWishesToUpdate = [];
                     }
                 };
                 let updateError = (response) => {
