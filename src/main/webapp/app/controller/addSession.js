@@ -112,13 +112,18 @@ let AddSessionPanel = Vue.component('add-session-panel', {
         isBeginningDateEmpty(){
             if (this.beginningDate == '' || this.beginningDate == undefined) {
                 this.beginningDateErrorMessage = true;
+            }else{
+                this.beginningDateErrorMessage = false;
             }
         },
 
         isLocationEmpty(){
             if (this.location == '' || this.location == undefined) {
                 this.locationErrorMessage = true;
+            }else{
+                this.locationErrorMessage = false;
             }
+
         },
 
         activeFieldTrainingTitle(){
@@ -193,7 +198,6 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                 this.isTrainingTitleInAddSessionEmpty();
                 this.isBeginningDateEmpty();
                 this.isLocationEmpty();
-                console.log(this.locationErrorMessage);
                 if (!this.trainingTitleInAddSessionErrorMessage && !this.beginningDateErrorMessage && !this.locationErrorMessage) {
                     this.sessionToRegister = JSON.parse(JSON.stringify(this.session));
                     this.saveSessionIntoDatabase();
@@ -570,7 +574,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                             :isValid = "isBeginningDateValid" 
                                             :disabled = "canNotRegisterForm"
                                             @blur = "calculateEndingDate()"
-                                            @focus="resetVarialbesByDate()"
+                                            @focus = "resetVarialbesByDate()"
                                             @input = "updateV2"
                                             :min = "toDay">                                                                                       
                                         </datepicker>
