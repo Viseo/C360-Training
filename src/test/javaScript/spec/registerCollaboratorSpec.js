@@ -173,8 +173,8 @@ let args;
 
     });
 
-
     describe("Test connexion of a collaborator", function() {
+
         it('Check empty fields', function() {
             vmConnexionForm.email = "";
             var mailInput = vmConnexionForm.$refs.inputMail;
@@ -213,7 +213,25 @@ let args;
             vmConnexionForm.sendInformationToCookie();
         });
 
+        fit('should check if informations of user exists in database',function () {
+            let allUsers = {
+                "id": 0,
+                "firstName": "dupont",
+                "lastName": "dupont",
+                "email": "user@vsieo.com",
+                "password": 123456,
+            };
+            vmConnexionForm.email = 'user@vsieo.com';
+            vmConnexionForm.isNotNewEmail = false;
+            vmConnexionForm.VerifyEmailFromDatabase();
+            expect(vmConnexionForm.emailToSend).toBe('user@vsieo.com');
+          /*  expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
+            expect(vmConnexionForm.idToSend).toBe(vmConnexionForm.allUsers[0].id);
+            expect(vmConnexionForm.lastNameToSend).toBe(vmConnexionForm[0].lastName);
+            expect(vmConnexionForm.firstNameToSend).toBe(vmConnexionForm[0].firstName);
+            expect(vmConnexionForm.isNotNewEmail).toBe(true)*/;
 
+        });
     })
 
     describe("Test customInput", function() {
