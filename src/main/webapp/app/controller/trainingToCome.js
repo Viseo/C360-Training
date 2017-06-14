@@ -116,16 +116,10 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             showMouseOverMessage: false,
             MouseOverMessage: "Désolé! Vous avez déja effectuer une demande",
             trainingSessionIdMouseOver: '',
-            changePageToVote:false
+            changePageToVote:false,
+            showChevrons: false
         }
     },
-
-    computed: {
-        showChevrons(){
-            return true;
-        }
-    },
-
     mounted:function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.initializeInformationsFromCookie();
@@ -224,7 +218,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 }
-            );
+            )
         },
 
         gatherAllSessionsAndCollaboratorsFromDatabase(){
@@ -249,7 +243,9 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.log("Error: ", response);
                     console.error(response);
                 }
-            );
+            ).then(function() {
+                this.showChevrons =  this.checkForChevrons('sessionsPanel')
+            });
         },
 
         reorganizeTrainingSessionsByTraining(sessions){

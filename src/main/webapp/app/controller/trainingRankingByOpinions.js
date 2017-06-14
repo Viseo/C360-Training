@@ -12,7 +12,8 @@ let trainingRanking = Vue.component('training-ranking', {
                 feedbackCommentToDelete:{},
                 allFeedbacks: [],
                 openPanel: false,
-                showComment: false
+                showComment: false,
+                showChevrons: false
             }
         },
         template: `
@@ -38,6 +39,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                     <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>
                                             <img 
+                                            v-show="showChevrons"
                                              src="css/up.png"
                                              id="scroll-up-4"
                                              width="60"
@@ -121,7 +123,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                      
                              <div class="row">
                                   <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
-                                       <img 
+                                       <img v-show="showChevrons"
                                        src="css/down.png"
                                        id="scroll-down-4"
                                        width="60" height="20"
@@ -161,11 +163,13 @@ let trainingRanking = Vue.component('training-ranking', {
                         console.log("Error: ", response);
                         console.error(response);
                     }
-                );
+                ).then(function() {
+                    this.showChevrons =  this.checkForChevrons('accordionIdAdmin')
+                });
             },
 
             getFeedbackCommentByTraining(training_id){
-                this.$http.get("api/feedbackcomment/"+ training_id).then(
+                this.$http.get("api/feedbackcomment/" + training_id).then(
                     function (response) {
                         console.log("success to get all feedback comments of the same training");
                         this.feedbackComments = response.data;
@@ -176,6 +180,10 @@ let trainingRanking = Vue.component('training-ranking', {
                         console.error(response);
                     }
                 );
+                let self = this;
+                setTimeout(function () {
+                    self.showChevrons = self.checkForChevrons('accordionIdAdmin')
+                },1000);
             },
 
             deleteFeedbackComment(feedbackCommentToDelete){
