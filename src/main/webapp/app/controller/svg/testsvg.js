@@ -142,6 +142,8 @@ Vue.component('customcircle', {
                     this.state.cy1 = '';
                 }
                 else if (this.cx2=="" && this.cy2==""){
+                    el.style.fill="#09aa76";
+                    el.style.stroke="#075338";
                     var tmp = this.calculatePosition(this.cxLine2,this.cyLine2);
                     this.cxLine2 = tmp[0];
                     this.cyLine2 = tmp[1];
@@ -153,6 +155,8 @@ Vue.component('customcircle', {
                     this.state.cy1 = '';
                 }
                 else if (this.cx3=="" && this.cy3==""){
+                    el.style.fill="#09aa76";
+                    el.style.stroke="#075338";
                     var tmp = this.calculatePosition(this.cxLine3,this.cyLine3);
                     this.cxLine3 = tmp[0];
                     this.cyLine3 = tmp[1];
@@ -226,6 +230,7 @@ Vue.component('container-svg', {
             return this.posY + Math.floor((integ-1)/8)*150;
         },
         addCircle() {
+            //if(this.text1.length>10) this.text1 = this.text1.splice(0,10)+"...";
             this.text.push(this.text1);
             this.numberOfCircle++;
             this.text1="";
