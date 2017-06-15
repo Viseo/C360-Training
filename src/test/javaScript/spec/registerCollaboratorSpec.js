@@ -1,4 +1,4 @@
-describe('test registerCollaborator.js', function () {
+fdescribe('test registerCollaborator.js', function () {
 let args;
 
     beforeEach(function () {
@@ -7,6 +7,21 @@ let args;
         vmConnexionForm = new ConnexionForm().$mount();
         vmCustomInput = new CustomInput().$mount();
         vmCustomPasswordInput = new customPasswordInput().$mount();
+
+        let token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+        document = {
+            value_: '',
+
+            get cookie() {
+                return this.value_;
+            },
+
+            set cookie(value) {
+                this.value_ += value + ';';
+            }
+        };
+        vmFormulaire.handleCookie(token);
+
     });
 
     afterEach(function () {
@@ -36,7 +51,7 @@ let args;
         })
     });
 
-    describe('Test registration of a collaborator', function() {
+   describe('Test registration of a collaborator', function() {
 
         beforeEach(function () {
            regex = {
@@ -142,6 +157,9 @@ let args;
             vmFormulaire.confirmPassword = '';
             vmFormulaire.isConfirmPasswordEmpty();
             expect(vmFormulaire.confirmPasswordEmpty).toBe(true);
+            vmFormulaire.confirmPassword = '123456';
+            vmFormulaire.setConfirmPasswordEmptyToFalse();
+            vmFormulaire.confirmPassword = false;
         });
 
         it('Check registration process', function(done) {
@@ -213,9 +231,10 @@ let args;
             vmConnexionForm.sendInformationToCookie();
         });
 
+
+/*
         it('should check if informations of user exists in database',function () {
-            let allUsers = {
-                "id": 0,
+ saveAction                "id": 0,
                 "firstName": "dupont",
                 "lastName": "dupont",
                 "email": "user@vsieo.com",
@@ -225,13 +244,14 @@ let args;
             vmConnexionForm.isNotNewEmail = false;
             vmConnexionForm.VerifyEmailFromDatabase();
             expect(vmConnexionForm.emailToSend).toBe('user@vsieo.com');
-          /*  expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
+          /!*  expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
             expect(vmConnexionForm.idToSend).toBe(vmConnexionForm.allUsers[0].id);
             expect(vmConnexionForm.lastNameToSend).toBe(vmConnexionForm[0].lastName);
             expect(vmConnexionForm.firstNameToSend).toBe(vmConnexionForm[0].firstName);
-            expect(vmConnexionForm.isNotNewEmail).toBe(true)*/;
+            expect(vmConnexionForm.isNotNewEmail).toBe(true)*!/;
 
         });
+*/
     })
 
     describe("Test customInput", function() {
