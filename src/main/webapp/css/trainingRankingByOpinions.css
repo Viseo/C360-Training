@@ -1,7 +1,7 @@
 #rankingTraining {
-    border:1px solid #dcdcdc ;
-    border-radius: 10px;
-    height:558px;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 3px 3px 0 0;
+    height:42em;
     width: 100%;
     padding:20px;
 }
@@ -27,4 +27,8 @@
 }
 #accordionIdAdmin .panel-heading {
     background-color: rgba(255, 85, 255, 0)!important;
+}
+
+#trainingRanking {
+    padding: 0;
 }

@@ -394,9 +394,9 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         }
     },
 template:`
-                  <div class="container-fluid">
+                  <div>
                         <div class="row">
-                             <div class="col-lg-7 col-md-7 text-center">
+                             <div class="col-lg-12 col-md-12 text-center">
                                   <legend>Ajouter une formation</legend>
                              </div>
                         </div>
@@ -615,13 +615,13 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
     },
     template: `
-                        <div  class="container-fluid" id="addFormation"  style="margin-top: 10px;">
+                        <div id="addFormation"  style="margin-top: 10px;">
                             <div class="row">
-                                <div class="col-lg-7 col-md-7 text-center">
+                                <div class="col-lg-12 col-md-12 text-center">
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
-                            <div style="width: 100%; height: 360px; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
+                            <div style="width: 100%; height: 28.5em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
                                   <img v-show="state.showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1;">
                                         <table class="fix tabnonborder" >
                                             <tbody>

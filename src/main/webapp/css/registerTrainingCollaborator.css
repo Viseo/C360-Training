@@ -11,13 +11,10 @@
 }
 
 legend{
-    display: block;
-    width: inherit;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 3px 3px 0 0;
     margin-bottom: -1%;
-    margin-left: 25px;
-    padding: 0 10px;
     border-bottom: none;
-    border-radius: 5px;
     background-color: #428bca;
     color: white;
 }

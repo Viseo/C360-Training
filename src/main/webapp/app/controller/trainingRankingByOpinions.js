@@ -17,11 +17,11 @@ let trainingRanking = Vue.component('training-ranking', {
             }
         },
         template: `
-        <div class="container-fluid">
+        <div>
             <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-12">
                         <div class="row" >
-                            <div class="col-lg-9 col-md-9 text-center">
+                            <div id="trainingRanking" class="col-lg-12 col-md-12 text-center">
                                 <legend>Classement formations</legend>
                             </div>
                         </div>
