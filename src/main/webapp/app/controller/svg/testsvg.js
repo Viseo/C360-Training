@@ -67,35 +67,6 @@ Vue.component('customcircle', {
                 cxLine = this.cx - 50;
                 cyLine = this.cy;
             }
-            /*else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy + 150){ //gauche haut
-                console.log("HELLO gauche haut");
-                this.state.cx = this.state.cx - 50/Math.sqrt(2);
-                this.state.cy = this.state.cy - 50/Math.sqrt(2);
-                cxLine = this.cx + 50/Math.sqrt(2);
-                cyLine = this.cy + 50/Math.sqrt(2)
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy + 150){ //droit haut
-                console.log("HELLO droit haut");
-                this.state.cx = this.state.cx + 50/Math.sqrt(2);
-                this.state.cy = this.state.cy - 50/Math.sqrt(2);
-                cxLine = this.cx - 50/Math.sqrt(2);
-                cyLine = this.cy + 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy - 150){ //gauche bas
-                console.log("HELLO gauche bas");
-                this.state.cx = this.state.cx - 50/Math.sqrt(2);
-                this.state.cy = this.state.cy + 50/Math.sqrt(2);
-                cxLine = this.cx + 50/Math.sqrt(2);
-                cyLine = this.cy - 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy - 150){ //droit bas
-                console.log("HELLO droit bas");
-                this.state.cx = this.state.cx + 50/Math.sqrt(2);
-                this.state.cy = this.state.cy + 50/Math.sqrt(2);
-                cxLine = this.cx - 50/Math.sqrt(2);
-                cyLine = this.cy - 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }*/
             else if(this.state.cx > this.cx && this.state.cy > this.cy){ //gauche haut
                 console.log("HELLO gauche haut");
                 var xDistance = Math.abs(this.state.cx - this.cx);
