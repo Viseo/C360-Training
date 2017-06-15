@@ -213,7 +213,7 @@ let args;
             vmConnexionForm.sendInformationToCookie();
         });
 
-        fit('should check if informations of user exists in database',function () {
+        it('should check if informations of user exists in database',function () {
             let allUsers = {
                 "id": 0,
                 "firstName": "dupont",
