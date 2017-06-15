@@ -43,54 +43,67 @@ Vue.component('customcircle', {
     },
     methods: {
         calculatePosition(cxLine,cyLine){
-            if(this.state.cx == this.cx && this.state.cy == this.cy + 150){ //haut
+            if(this.state.cx == this.cx && this.state.cy > this.cy){ //haut
+                console.log("HELLO haut");
                 this.state.cy = this.state.cy - 50;
                 cxLine = this.cx;
                 cyLine = this.cy + 50;
             }
-            else if(this.state.cx == this.cx && this.state.cy == this.cy - 150){ //bas
+            else if(this.state.cx == this.cx && this.state.cy < this.cy){ //bas
+                console.log("HELLO bas");
                 this.state.cy = this.state.cy + 50;
                 cxLine = this.cx;
                 cyLine = this.cy - 50;
             }
-            else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy){ //gauche
+            else if(this.state.cx > this.cx && this.state.cy == this.cy){ //gauche
+                console.log("HELLO gauche");
                 this.state.cx = this.state.cx - 50;
                 cxLine = this.cx + 50;
                 cyLine = this.cy;
             }
-            else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy){ //droit
+            else if(this.state.cx < this.cx && this.state.cy == this.cy){ //droit
+                console.log("HELLO droit");
                 this.state.cx = this.state.cx + 50;
                 cxLine = this.cx - 50;
                 cyLine = this.cy;
-            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy + 150){ //gauche haut
+            }
+            else if(this.state.cx > this.cx && this.state.cy > this.cy){ //gauche haut
                 console.log("HELLO gauche haut");
-                this.state.cx = this.state.cx - 50/Math.sqrt(2);
-                this.state.cy = this.state.cy - 50/Math.sqrt(2);
-                cxLine = this.cx + 50/Math.sqrt(2);
-                cyLine = this.cy + 50/Math.sqrt(2)
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy + 150){ //droit haut
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx < this.cx && this.state.cy > this.cy){ //droit haut
                 console.log("HELLO droit haut");
-                this.state.cx = this.state.cx + 50/Math.sqrt(2);
-                this.state.cy = this.state.cy - 50/Math.sqrt(2);
-                cxLine = this.cx - 50/Math.sqrt(2);
-                cyLine = this.cy + 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy - 150){ //gauche bas
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx > this.cx && this.state.cy < this.cy){ //gauche bas
                 console.log("HELLO gauche bas");
-                this.state.cx = this.state.cx - 50/Math.sqrt(2);
-                this.state.cy = this.state.cy + 50/Math.sqrt(2);
-                cxLine = this.cx + 50/Math.sqrt(2);
-                cyLine = this.cy - 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy - 150){ //droit bas
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx < this.cx && this.state.cy < this.cy){ //droit bas
                 console.log("HELLO droit bas");
-                this.state.cx = this.state.cx + 50/Math.sqrt(2);
-                this.state.cy = this.state.cy + 50/Math.sqrt(2);
-                cxLine = this.cx - 50/Math.sqrt(2);
-                cyLine = this.cy - 50/Math.sqrt(2);
-                console.log(this.state.cx + '  ' +this.state.cy);
-            }else{ //ne pas generer le trait
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else{ //ne pas generer le trait
                 this.state.cx = 0;
                 this.state.cy = 0;
                 cxLine = 0;
@@ -129,6 +142,8 @@ Vue.component('customcircle', {
                     this.state.cy1 = '';
                 }
                 else if (this.cx2=="" && this.cy2==""){
+                    el.style.fill="#09aa76";
+                    el.style.stroke="#075338";
                     var tmp = this.calculatePosition(this.cxLine2,this.cyLine2);
                     this.cxLine2 = tmp[0];
                     this.cyLine2 = tmp[1];
@@ -140,6 +155,8 @@ Vue.component('customcircle', {
                     this.state.cy1 = '';
                 }
                 else if (this.cx3=="" && this.cy3==""){
+                    el.style.fill="#09aa76";
+                    el.style.stroke="#075338";
                     var tmp = this.calculatePosition(this.cxLine3,this.cyLine3);
                     this.cxLine3 = tmp[0];
                     this.cyLine3 = tmp[1];
@@ -207,29 +224,13 @@ Vue.component('container-svg', {
     },
     methods: {
         positionX(integ){
-            if(Math.floor(integ/9)*150 ==0) {
-                if(integ!=0 && integ%9!=0) {
-                    return this.posX + (integ%9-1) * 150;
-                }
-                else {
-                    this.posX = 100;
-                    return this.posX;
-                }
-            }
-            else {
-                if(integ!=0 && integ%9!=0) {
-                    return this.posX + (integ%9) * 150;
-                }
-                else {
-                    this.posX = 100;
-                    return this.posX;
-                }
-            }
+            return this.posX + ((integ-1)%8) * 150;
         },
         positionY(integ){
-            return this.posY + Math.floor(integ/9)*150;
+            return this.posY + Math.floor((integ-1)/8)*150;
         },
         addCircle() {
+            //if(this.text1.length>10) this.text1 = this.text1.splice(0,10)+"...";
             this.text.push(this.text1);
             this.numberOfCircle++;
             this.text1="";
