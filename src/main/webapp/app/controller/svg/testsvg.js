@@ -220,27 +220,10 @@ Vue.component('container-svg', {
     },
     methods: {
         positionX(integ){
-            if(Math.floor(integ/9)*150 ==0) {
-                if(integ!=0 && integ%9!=0) {
-                    return this.posX + (integ%9-1) * 150;
-                }
-                else {
-                    this.posX = 100;
-                    return this.posX;
-                }
-            }
-            else {
-                if(integ!=0 && integ%9!=0) {
-                    return this.posX + (integ%9) * 150;
-                }
-                else {
-                    this.posX = 100;
-                    return this.posX;
-                }
-            }
+            return this.posX + ((integ-1)%8) * 150;
         },
         positionY(integ){
-            return this.posY + Math.floor(integ/9)*150;
+            return this.posY + Math.floor((integ-1)/8)*150;
         },
         addCircle() {
             this.text.push(this.text1);
