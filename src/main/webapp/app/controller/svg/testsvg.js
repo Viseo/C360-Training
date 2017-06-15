@@ -43,26 +43,31 @@ Vue.component('customcircle', {
     },
     methods: {
         calculatePosition(cxLine,cyLine){
-            if(this.state.cx == this.cx && this.state.cy == this.cy + 150){ //haut
+            if(this.state.cx == this.cx && this.state.cy > this.cy){ //haut
+                console.log("HELLO haut");
                 this.state.cy = this.state.cy - 50;
                 cxLine = this.cx;
                 cyLine = this.cy + 50;
             }
-            else if(this.state.cx == this.cx && this.state.cy == this.cy - 150){ //bas
+            else if(this.state.cx == this.cx && this.state.cy < this.cy){ //bas
+                console.log("HELLO bas");
                 this.state.cy = this.state.cy + 50;
                 cxLine = this.cx;
                 cyLine = this.cy - 50;
             }
-            else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy){ //gauche
+            else if(this.state.cx > this.cx && this.state.cy == this.cy){ //gauche
+                console.log("HELLO gauche");
                 this.state.cx = this.state.cx - 50;
                 cxLine = this.cx + 50;
                 cyLine = this.cy;
             }
-            else if(this.state.cx == this.cx - 150 && this.state.cy == this.cy){ //droit
+            else if(this.state.cx < this.cx && this.state.cy == this.cy){ //droit
+                console.log("HELLO droit");
                 this.state.cx = this.state.cx + 50;
                 cxLine = this.cx - 50;
                 cyLine = this.cy;
-            }else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy + 150){ //gauche haut
+            }
+            /*else if(this.state.cx == this.cx + 150 && this.state.cy == this.cy + 150){ //gauche haut
                 console.log("HELLO gauche haut");
                 this.state.cx = this.state.cx - 50/Math.sqrt(2);
                 this.state.cy = this.state.cy - 50/Math.sqrt(2);
@@ -90,7 +95,44 @@ Vue.component('customcircle', {
                 cxLine = this.cx - 50/Math.sqrt(2);
                 cyLine = this.cy - 50/Math.sqrt(2);
                 console.log(this.state.cx + '  ' +this.state.cy);
-            }else{ //ne pas generer le trait
+            }*/
+            else if(this.state.cx > this.cx && this.state.cy > this.cy){ //gauche haut
+                console.log("HELLO gauche haut");
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx < this.cx && this.state.cy > this.cy){ //droit haut
+                console.log("HELLO droit haut");
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx > this.cx && this.state.cy < this.cy){ //gauche bas
+                console.log("HELLO gauche bas");
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else if(this.state.cx < this.cx && this.state.cy < this.cy){ //droit bas
+                console.log("HELLO droit bas");
+                var xDistance = Math.abs(this.state.cx - this.cx);
+                var yDistance = Math.abs(this.state.cy - this.cy);
+                this.state.cx = this.state.cx + 50*Math.cos(Math.atan(yDistance/xDistance));
+                this.state.cy = this.state.cy + 50*Math.sin(Math.atan(yDistance/xDistance));
+                cxLine = this.cx - 50*Math.cos(Math.atan(yDistance/xDistance));
+                cyLine = this.cy - 50*Math.sin(Math.atan(yDistance/xDistance));
+            }
+            else{ //ne pas generer le trait
                 this.state.cx = 0;
                 this.state.cy = 0;
                 cxLine = 0;
