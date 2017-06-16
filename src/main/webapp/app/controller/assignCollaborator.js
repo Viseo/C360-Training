@@ -482,7 +482,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 
         checkedNames: function (value) {
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
-            this.allCollaboratorsAlreadyInSessions.splice(0, this.allCollaboratorsAlreadyInSessions.length);
             this.verifyCheckedNames();
         },
 

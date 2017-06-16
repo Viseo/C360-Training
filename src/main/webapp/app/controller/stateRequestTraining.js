@@ -40,16 +40,17 @@ let stateRequest = Vue.component('state-request', {
         template: `
         <div id ="innerdiv" class="container-fluid" @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
              <div class="row">
-                    <div class="col-lg-7 col-md-7 col-sm-7 text-center" 
-                         style="width:200px">
+                    <div style="padding:0" class="col-lg-12 col-md-12 col-sm-12 text-center">
                             <legend> Mes formations </legend>
                     </div>
              </div>
              <div class="row">
-                   <div class="panel panel-default" 
-                        style="margin-left:10px; margin-bottom:10px; ">
-                         <div class="panel-body" 
-                              style="padding:5px; 
+                   <div 
+                        style="margin-bottom:10px; ">
+                         <div  
+                              style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+                                    border-radius: 3px 3px 0 0;
+                                    padding:5px; 
                                      height:202px">
                                 <div class="row">
                                        <div v-show="!noSessionForCollaborator" 
