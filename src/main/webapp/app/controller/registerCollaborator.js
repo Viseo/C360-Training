@@ -63,6 +63,7 @@ let NavigationMenu = Vue.component('connect-user', {
     }
 });
 
+
 let Formulaire = Vue.component('inscription-form', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">

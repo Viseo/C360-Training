@@ -148,6 +148,7 @@ let Header = Vue.component('header-component', {
         showPicture(){
             return (this.$route.name != 'login') && (this.$route.name !='skillsStatementByCollaborators') ;
         },
+
         setIdleSecondsCounter(value){
             this.idleSecondsCounter = value;
         },

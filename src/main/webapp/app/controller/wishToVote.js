@@ -55,12 +55,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
             collaboratorAlreadyVotedTheOppositeVote:false,
             wish_id:'',
             changePageToTraining:false,
-        }
-    },
-
-    computed: {
-        showChevrons(){
-            return true;
+            showChevrons: false
         }
     },
     mounted:function () {
@@ -126,7 +121,9 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                 function(response) {
                     console.log("Error: ", response);
                     console.error(response);
-                });
+                }).then(function() {
+                this.showChevrons =  this.checkForChevrons('test1')
+            });;
         },
         addVoteOk(wish){
             this.userAlreadyVotedOk(wish);

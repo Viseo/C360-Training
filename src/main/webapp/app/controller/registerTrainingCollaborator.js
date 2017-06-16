@@ -50,6 +50,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             collaboratorLike: false,
             allFeedbacks: [],
             showComment: false,
+            showChevrons: false
         }
     },
 
@@ -96,7 +97,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                              style="position: absolute; left:50%; z-index:1;">
                     </div>
                 </div>
-                <div id="scroll" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
+                <div id="scrollTrainingCollaborator" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                     <accordion id="accordionId" :one-at-atime="true" type="info">
                         <div v-for="(training, index) in trainingsFound">
                             <panel :is-open="openPanel" ref="selectingTraining" @openPanel="reinitialize(training);fonction(index);"
@@ -198,9 +199,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.gatherTrainingsFromDatabase(this.storeTrainingsFound);
         this.initializeInformationsFromCookie();
-        this.activateScrollUp('#scroll-up-2', '#scroll');
-        this.activeScrollDown('#scroll-down-2', '#scroll');
-        this.activateScrollWheel('#scroll');
+        this.activateScrollUp('#scroll-up-2','#scrollTrainingCollaborator');
+        this.activeScrollDown('#scroll-down-2','#scrollTrainingCollaborator');
+        this.activateScrollWheel('#scrollTrainingCollaborator');
         this.getAllFeedbacks();
     },
 
@@ -217,11 +218,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             }
             else return null;
         },
-
-        showChevrons(){
-            let numberOfTrainings = this.trainingsFound.length;
-            return numberOfTrainings;
-        }
     },
 
     methods: {
@@ -274,6 +270,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
         reinitialize(training){
             this.trainingSelected = training;
+            this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
             if (this.showComment == false) {
                 this.trainingSelected = training;
                 this.showComment = false;
@@ -449,6 +446,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 if (this.trainingsFound.length != 1)
                     this.openPanel = false;
                 this.value = null;
+            }).then(function() {
+                this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
             });
         },
 
@@ -487,15 +486,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         verifySearch(search) {
-            if (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+# ]*$/.test(search)) {
-                this.isSearchValid = true;
-                $("#trainingContainer div div div").removeClass("has-error");
+          if  (/^[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9-.'_@:+# ]*$/.test(search))  {
+              this.isSearchValid = true;
+              $("#trainingContainer div div div").removeClass("has-error");
 
-            } else {
+          } else {
                 this.isSearchValid = false;
-                $("#trainingContainer div div div").addClass("has-error");
+              $("#trainingContainer div div div").addClass("has-error");
 
-            }
+          }
         },
 
         getFeedbackCommentByTraining(training_id){
@@ -513,8 +512,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             );
         },
 
-        addLiker(feedbackToAdd, collaborator_id){
-            this.$http.put("api/addfeedbacklikes/" + collaborator_id, feedbackToAdd).then(
+        addLiker(feedbackToAdd,collaborator_id){
+            this.$http.put("api/addfeedbacklikes/"+collaborator_id,feedbackToAdd).then(
                 function (response) {
                     console.log("success to add liker");
                     this.getAllFeedbacks();
@@ -527,8 +526,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             );
         },
 
-        removeLiker(feedbackToRemove, collaborator_id){
-            this.$http.put("api/removefeedbacklikes/" + collaborator_id, feedbackToRemove).then(
+        removeLiker(feedbackToRemove,collaborator_id){
+            this.$http.put("api/removefeedbacklikes/"+collaborator_id,feedbackToRemove).then(
                 function (response) {
                     console.log("success to remove liker");
                     this.getAllFeedbacks();
@@ -542,19 +541,19 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         collaboratorLikesFeedback(feedback) {
-            for (let i in feedback.likers) {
-                if (feedback.likers[i].id == this.collaboratorIdentity.id) {
-                    return true;
-                }
-            }
-            return false;
+            for(let i in feedback.likers) {
+              if(feedback.likers[i].id == this.collaboratorIdentity.id) {
+                  return true;
+              }
+          }
+          return false;
         },
 
         getDate(date){
             let dateToConvert = new Date(date);
             let addZero = "";
-            if ((dateToConvert.getMonth() + 1) < 10) addZero = "0";
-            formattedDate = dateToConvert.getDate() + "/" + addZero + (dateToConvert.getMonth() + 1) + "/" + dateToConvert.getFullYear() + " à " + dateToConvert.getHours() + "h" + dateToConvert.getMinutes();
+            if((dateToConvert.getMonth()+1)<10) addZero="0";
+            formattedDate = dateToConvert.getDate()+"/"+addZero+(dateToConvert.getMonth()+1)+ "/" + dateToConvert.getFullYear()+ " à " + dateToConvert.getHours()+ "h"+ dateToConvert.getMinutes();
             return formattedDate;
         },
 
@@ -573,28 +572,28 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         commentsExist(trainingId){
-            for (let i in this.allFeedbacks) {
-                if (this.allFeedbacks[i].training.id == trainingId) {
-                    if (this.allFeedbacks[i].comment != null) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+          for(let i in this.allFeedbacks){
+              if(this.allFeedbacks[i].training.id == trainingId){
+                  if(this.allFeedbacks[i].comment!=null){
+                      return true;
+                  }
+              }
+          }
+          return false;
         },
 
         showComments(){
-            this.showComment = true;
+            this.showComment= true;
         },
 
         hideComments(){
             this.trainingOpened = '';
             this.reinitialize(this.trainingSelected);
-            this.showComment = false;
+            this.showComment= false;
         },
         orderFeedbacks(){
-            this.allFeedbacks.sort(function (a, b) {
-                return parseFloat(a.date) - parseFloat(b.date);
+            this.allFeedbacks.sort(function(a, b) {
+                    return parseFloat(a.date) - parseFloat(b.date);
             });
         },
 

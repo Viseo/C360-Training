@@ -224,18 +224,37 @@ describe('profil to update test', function () {
         vmProfilToUpdate.password = '123456';
         prepareRequest('PUT', 'api/updatecollaborator', 200, collaboratorInformation);
         vmProfilToUpdate.updateCollaboratorInfo();
+        vmProfilToUpdate.updateCollaboratorImage();
 
         setTimeout(function () {
             expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
             expect(vmProfilToUpdate.oldPasswordEmpty).toBe(false);
             expect(vmProfilToUpdate.passwordEmpty).toBe(false);
+            expect(vmProfilToUpdate.infoCollab.password).not.toEqual('987654');
+            expect(vmProfilToUpdate.newPassword).toEqual('987654');
             expect(vmProfilToUpdate.imageHasBeenChanged).toBe(false);
-            expect(vmProfilToUpdate.CollabToUpdate.password).toEqual('987654');
+            expect(vmProfilToUpdate.CollabToUpdate.defaultPicture).toBe(false);
             done();
         },0);
     });
 
-    it('it should not update collaborator password when collaborator write a wrong old password', function (done){
+    it('it should check if old and new password are different',
+        function (done){
+            vmProfilToUpdate.infoCollab.password = '123456';
+            vmProfilToUpdate.newPassword = '123456';
+            vmProfilToUpdate.confirmPassword = '123456';
+            vmProfilToUpdate.password = '123456';
+            vmProfilToUpdate.updateCollaboratorInfo();
+
+        setTimeout(function () {
+            expect(vmProfilToUpdate.isRightOldPassword).toBe(false);
+
+            done();
+        },0);
+    });
+
+    it('it should not update collaborator password when collaborator' +
+        ' write a wrong old password', function (done){
         vmProfilToUpdate.newPassword = '987654';
         vmProfilToUpdate.confirmPassword = '987654';
         vmProfilToUpdate.password = '123459787887';
