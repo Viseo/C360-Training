@@ -584,7 +584,6 @@ let profilToUpdate = Vue.component('profil-to-update', {
                     console.log("success to update user information");
                     this.imageHasBeenChanged = false;
                     this.post("api/user", this.CollabToUpdate,updateUserToken);
-
                 }
             };
             this.put("api/updatecollaborator", this.CollabToUpdate, saveModification);
@@ -641,7 +640,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
            }
         },
 
-            imageLoadOnError () {
+        imageLoadOnError () {
             let defaultImagePath = "img/profile.jpg";
             this.imagePath = defaultImagePath;
         }

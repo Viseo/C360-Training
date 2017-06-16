@@ -10,7 +10,7 @@ var vmCollabFormation= new Vue({
     }
 }).$mount();
 
-//var vmCollaboratorFormation;
+var vmCollaboratorFormation;
 
 var dummyElement2= document.createElement('div');
 dummyElement2.setAttribute("id", "8");

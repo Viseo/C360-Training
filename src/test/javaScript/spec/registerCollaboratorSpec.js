@@ -1,4 +1,4 @@
-fdescribe('test registerCollaborator.js', function () {
+describe('test registerCollaborator.js', function () {
 let args;
 
     beforeEach(function () {

@@ -20,12 +20,12 @@ describe('state Request training test', function () {
     beforeEach(function() {
 
         vmStateRequestTraining = new stateRequest().$mount();
-        clearRequests();
 
     });
 
     afterEach(function() {
-
+        clearRequests();
+        Object.assign(vmStateRequestTraining.$data, vmStateRequestTraining.$options.data());
     });
 
     it('it should check cookies!!! ', function() {
@@ -213,20 +213,15 @@ describe('state Request training test', function () {
         prepareRequest('GET', 'api/sessions/6/requestedSessions', 200, result);
 
         vmStateRequestTraining.fetchTrainingsSessions();
-        //let vmRequestedTraining = vmStateRequestTraining.requestedTraining;
 
         setTimeout(function () {
-
             expect(vmStateRequestTraining.requestedTraining).toBe(result);
-            /*expect (Object.keys(vmRequestedTraining)[0].requestTrainingList)
-                ||
-                ( Object.keys(vmRequestedTraining)[0].trainingSessions ).toBe(true);*/
             done();
         }, 2);
 
     });
 
-    it('it should check if we can add a feedback with success', function(done) {
+    it('it should check if we can add a feedback and popup open with success', function(done) {
         vmStateRequestTraining.collaboratorIdentity.id = 1;
         var result = [
             {   "id":11,
@@ -234,6 +229,12 @@ describe('state Request training test', function () {
                 "trainingTitle":"FORMATION",
                 "numberHalfDays":3,
                 "topic":{"id":10,"version":0,"name":"JAVA"}
+            },
+            {   "id":12,
+                "version":0,
+                "trainingTitle":"FORMATION2",
+                "numberHalfDays":3,
+                "topic":{"id":11,"version":0,"name":"J2EE"}
             }
         ];
         prepareRequest('GET', 'api/trainingstogivefeedbacks/1', 200, result);
@@ -243,7 +244,18 @@ describe('state Request training test', function () {
             expect (vmStateRequestTraining.allTrainingsToGiveFeedbacks).toEqual(result);
             done();
         }, 0);
+    });
 
+    it('it should check if we can add a feedback and popup no open with success', function(done) {
+        vmStateRequestTraining.collaboratorIdentity.id = 1;
+        var result = [];
+        prepareRequest('GET', 'api/trainingstogivefeedbacks/1', 200, result);
+        vmStateRequestTraining.collectAllTrainingsToGiveFeedbacks();
+
+        setTimeout(function () {
+            expect (vmStateRequestTraining.allTrainingsToGiveFeedbacks).toEqual(result);
+            done();
+        }, 0);
     });
 
     it('it should check if we can add a feedback whit error', function(done) {
@@ -251,9 +263,7 @@ describe('state Request training test', function () {
         var result = [];
         prepareRequest('GET', 'api/trainingstogivefeedbacks/1', 500, result);
         vmStateRequestTraining.collectAllTrainingsToGiveFeedbacks();
-
         setTimeout(function () {
-            expect (vmStateRequestTraining.allTrainingsToGiveFeedbacks).toEqual(result);
             done();
         }, 0);
 
@@ -277,4 +287,5 @@ describe('state Request training test', function () {
     it('it should convert a number in format date', function () {
         expect(vmStateRequestTraining.getDate(1496061070548)).toEqual('29 Mai 2017');
     });
+
 });
