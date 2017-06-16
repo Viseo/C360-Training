@@ -66,7 +66,7 @@ let stateRequest = Vue.component('state-request', {
                                        </div>
                                 </div>
                                 <div id="scrollMyTrainings">
-                                       <div class="col-sm-12 col-md-11 col-lg-11" 
+                                       <div class="col-sm-12 col-md-12 col-lg-12" 
                                             style="line-height:2em; 
                                                    font-size:1em">
                                               <div v-show="noSessionForCollaborator">
