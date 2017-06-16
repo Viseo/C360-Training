@@ -53,7 +53,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </select>
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
-                            <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
+                            <h4 style="font-size: 1.8rem;
+    color: rgb(158, 158, 158);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                             <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
                                 <label><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher
                                     les demandes</label>
@@ -75,7 +76,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                     </div>
                                     <table class="tabCentring">
                                         <tr style="cursor:pointer;" v-for="collaborator in requestedCollaborators">
-                                            <td style="padding-bottom:5px;font-weight: bold; font-family: 'Open Sans', Arial, sans-serif; " @click="moveCollabRight(collaborator)">
+                                            <td style="padding-bottom:5px;font-size: 1.3rem;
+    color: rgb(158, 158, 158);font-weight: bold; font-family: 'Open Sans', Arial, sans-serif; " @click="moveCollabRight(collaborator)">
                                             <img  style="border-radius: 50%;" width="30; 
     object-fit: cover;" height="30" v-if="collaborator.defaultPicture"
                                                  src="img/profile.jpg">
@@ -102,10 +104,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
-                            <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés:
+                            <h4 class="col-sm-12 col-md-12 col-lg-12" style="font-size: 1.8rem;
+    color: rgb(158, 158, 158);">Collaborateurs ajoutés:
                                 {{validatedCollab.length}}</h4>
                             <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
-                                <label style = "padding-left:0px; cursor: default;">Nombre de places disponibles : {{15 -
+                                <label style = "padding-left:0px; cursor: default; ">Nombre de places disponibles : {{15 -
                                     allCollaboratorsAlreadyInSessions.length}}</label>
                             </div>
                         </div>
