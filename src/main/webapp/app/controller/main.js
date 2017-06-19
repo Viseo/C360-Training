@@ -227,6 +227,8 @@ let Header = Vue.component('header-component', {
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
+                console.log("this.getPageName(): "+this.getPageName());
+                console.log("isAdmin():" +isAdmin());
                 if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() != 'trainingRanking' && this.getPageName() != 'addSession') {
                     this.goTo('addTrainingTopic');
                 }
@@ -242,8 +244,12 @@ let Header = Vue.component('header-component', {
                 let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                 let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
 
-                if (!isTokenPresent) delete this.token;
-                if (this.token == 'undefined') isTokenPresent = false;
+                if (!isTokenPresent)
+                    delete this.token;
+
+                if (this.token == 'undefined')
+                    isTokenPresent = false;
+
                 if (isTokenPresent && stayConnectedDefined) {
                     this.token = String(isTokenPresent.pop());
                     return true;
@@ -303,9 +309,6 @@ let Header = Vue.component('header-component', {
             this.post("api/userdisconnect", this.token, disconnect);
         },
 
-        imageLoadOnError () {
-            this.imagePath = "img/profile.jpg"
-        }
     }
 });
 
