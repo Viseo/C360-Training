@@ -6,14 +6,14 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         return {
             isSearchValid: true,
             searchNotValidErrorMessage: "Veuillez entrer un nom de formation valide",
-            sessionAlreadybooked:[],
+            sessionAlreadybooked: [],
             trainingsFound: [],
-            numberOfSessionsToDisable:0,
-            trainingOpened:'',
-            disableSendButton:false,
-            sessionAlreadyBookedMessage:false,
+            numberOfSessionsToDisable: 0,
+            trainingOpened: '',
+            disableSendButton: false,
+            sessionAlreadyBookedMessage: false,
             noTrainingFound: false,
-            sessionsByCollab:[],
+            sessionsByCollab: [],
             allTrainings: [],
             addingRequestSucceeded: false,
             noSessionsSelectedError: false,
@@ -21,7 +21,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             selected: '',
             check: false,
             idTraining: '3',
-            panelOpen:false,
+            panelOpen: false,
             listTrainingSessions: [],
             collaboratorIdentity: {
                 id: '',
@@ -36,7 +36,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             allTrainingTitles: [],
             value: '',
             selectedTraining: '',
-            trainingrequested:false,
+            trainingrequested: false,
             trainingSelected: {},
             emptyTraining: false,
             emptyTrainingErrorMessage: "Veuillez sélectionner une formation",
@@ -45,7 +45,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             displayTrainings: false,
             openPanel: false,
             state: training_store.state,
-            test:false,
+            test: false,
             feedbackComments: [],
             collaboratorLike: false,
             allFeedbacks: [],
@@ -206,28 +206,30 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     },
 
     watch: {
-      value: function() {
-          this.verifySearch(this.value);
-      }
+        value: function () {
+            this.verifySearch(this.value);
+        }
     },
 
     computed: {
         capitalizeSearch: function () {
-            if(this.value) {return this.value.toUpperCase();
+            if (this.value) {
+                return this.value.toUpperCase();
             }
-                else return null;
+            else return null;
         },
     },
 
     methods: {
         fonction(index){
-            if((this.commentsExist(this.trainingSelected.id)) == false){
+            if ((this.commentsExist(this.trainingSelected.id)) == false) {
                 this.reinitialize(this.trainingSelected);
                 this.hideComments();
             }
             else
                 this.reinitialize(this.trainingSelected);
-            if(this.$children[1].$children[index].open== true){
+
+            if (this.$children[1].$children[index].open == true) {
                 this.reinitialize(this.trainingSelected);
             }
             else {
@@ -235,32 +237,34 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.$children[1].$children[index].open = true;
             }
         },
+
         disablingSessions(){
             this.disableSendButton = false;
             this.trainingalreadyrequested(this.trainingSelected.id);
             this.numberOfSessionsToDisable = 0;
-            if(this.listTrainingSessionSelected != null && this.sessionsByCollab != null && this.listTrainingSession.length == this.sessionsByCollab.length){
+            if (this.listTrainingSessionSelected != null && this.sessionsByCollab != null && this.listTrainingSession.length == this.sessionsByCollab.length) {
                 this.test = true;
             }
-            for(i in this.sessionsByCollab){
-                temp = document.getElementById(this.sessionsByCollab[i].id);
-                if(temp!=null) {
-                    temp.disabled =true;
+            for (i in this.sessionsByCollab) {
+                var temp = document.getElementById(this.sessionsByCollab[i].id);
+                if (temp != null) {
+                    temp.disabled = true;
                     temp.checked = false;
                     this.sessionAlreadyBookedMessage = true;
-                    temp.nextElementSibling.innerHTML="";
-                    $("#"+this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' +this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
+                    temp.nextElementSibling.innerHTML = "";
+                    $("#" + this.sessionsByCollab[i].id).after('<span class="alwaysshowme">' + this.sessionsByCollab[i].beginning + ' ' + this.sessionsByCollab[i].ending + ' ' + this.sessionsByCollab[i].location + '<span class="showmeonhover" style="background-color: #b8b8b8;margin-left: 10px"> Une demande est déjà en cours pour cette session </span></span>');
                 }
             }
-            for(i in this.sessionsByCollab){
-                for(j in this.listTrainingSession){
-                    if(i==j)
+            for (i in this.sessionsByCollab) {
+                for (j in this.listTrainingSession) {
+                    if (i == j)
                         this.numberOfSessionsToDisable++;
                 }
             }
-            if(this.numberOfSessionsToDisable == this.listTrainingSession.length && this.listTrainingSession.length != 0)
+            if (this.numberOfSessionsToDisable == this.listTrainingSession.length && this.listTrainingSession.length != 0)
                 this.disableSendButton = true;
-            if(this.isNoSession && this.trainingrequested)
+
+            if (this.isNoSession && this.trainingrequested)
                 this.disableSendButton = true;
         },
 
@@ -285,11 +289,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         disabling(id){
             this.check = !this.check;
             let isindifferentChecked = this.check;
-            let nodes;
+            let nodes = [];
             let getHTMLSessionInsideTraining = () => {
                 let idTrainingWithSession = document.getElementById(id);
-                if (idTrainingWithSession != null){
-                    nodes= document.getElementById(id).getElementsByTagName("*");
+                if (idTrainingWithSession != null) {
+                    nodes = document.getElementById(id).getElementsByTagName("*");
                 }
             };
 
@@ -314,11 +318,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             };
 
             let enableSessions = () => {
-                this.checkedSessions.splice(0, this.checkedSessions.length)
+                this.checkedSessions.splice(0, this.checkedSessions.length);
                 for (var i = 0; i < nodes.length; i++) {
                     nodes[i].disabled = false;
                 }
             };
+
             getHTMLSessionInsideTraining();
             if (isindifferentChecked == true) {
                 getSessionAlreadyBooked();
@@ -354,9 +359,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                             this.isNoSession = false;
                         }
                     },
-                function(error) {
+                    function (error) {
                         console.log(error);
-                });
+                    }
+                );
             }
         },
 
@@ -375,13 +381,13 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     console.log("Error: ", response);
                     console.error(response);
                 }
-            )
+            );
         },
 
         initializeInformationsFromCookie(){
             let collaboratorInfo = this.getCollaboratorInfoFromCookie();
-            let isCollaboratorInfoNotEmpty = collaboratorInfo!="";
-            if(isCollaboratorInfoNotEmpty){
+            let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
+            if (isCollaboratorInfoNotEmpty) {
                 this.collaboratorIdentity.id = collaboratorInfo.id;
                 this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
                 this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
@@ -396,8 +402,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 this.requestToRegister.collaboratorIdentity = this.collaboratorIdentity;
                 this.requestToRegister.trainingSessionsDescriptions = this.checkedSessions;
                 this.requestToRegister = JSON.parse(JSON.stringify(this.requestToRegister));
+
                 this.SaveTrainingSessionCollaborator();
-                if(this.$parent.$children[3]){
+                if (this.$parent.$children[3]) {
                     let trainingToComeComponent = this.$parent.$children[3];
                     trainingToComeComponent.gatherTrainingsAlreadyHaveSessionsFromDatabase();
                 }
@@ -429,7 +436,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         storeTrainingsFound(trainingTitle){
             this.trainingsFound.splice(0, this.trainingsFound.length);
             this.displayTrainings = true;
-            this.$http.get("api/formations").then(function(response) {
+            this.$http.get("api/formations").then(function (response) {
                 for (index in this.allTrainings) {
                     if (this.allTrainings[index].trainingTitle.indexOf(trainingTitle) != -1) {
                         this.trainingsFound.push(this.allTrainings[index]);
@@ -445,8 +452,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         storeSessionsByCollab(id){
-            this.$http.get("api/formations/"+id+"/alreadyrequestedsession/"+ this.collaboratorIdentity.id).then(
-                function (response){
+            this.$http.get("api/formations/" + id + "/alreadyrequestedsession/" + this.collaboratorIdentity.id).then(
+                function (response) {
                     this.sessionsByCollab = response.data;
                     this.disablingSessions();
                 }
@@ -474,7 +481,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     this.trainingrequested = false;
                     if (response.data.length != 0) {
                         this.trainingrequested = true;
-                     }
+                    }
                 });
         },
 
@@ -491,7 +498,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
 
         getFeedbackCommentByTraining(training_id){
-            this.$http.get("api/feedbackcomment/"+ training_id).then(
+            this.$http.get("api/feedbackcomment/" + training_id).then(
                 function (response) {
                     console.log("success to get all feedback comments of the same training");
                     this.feedbackComments = response.data;

@@ -13,28 +13,30 @@ var wishToVote = new Vue({
 }).$mount();
 
 let collabToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
-document = {
-    value_: '',
 
-    get cookie() {
-        return this.value_;
-    },
-
-    set cookie(value) {
-        this.value_ += value + ';';
-    }
-};
-document.cookie = "token="+ collabToken;
+var vmWishToVote;
 
 describe('wish to vote Panel test', function () {
 
     beforeEach(function () {
+        document = {
+            value_: '',
+
+            get cookie() {
+                return this.value_;
+            },
+
+            set cookie(value) {
+                this.value_ += value + ';';
+            }
+        };
+        document.cookie = "token="+ collabToken;
         vmWishToVote = wishToVote.$children[0];
-        clearRequests();
+
     });
 
     afterEach(function () {
-
+        clearRequests();
     });
 
     it('should check if user has already voted ok', function(){

@@ -23,7 +23,7 @@ describe('Header test', function () {
     });
 
     afterEach(function () {
-        Object.assign(vmCollectWishes.$data, vmCollectWishes.$options.data());
+        Object.assign(headerComponent.$data, headerComponent.$options.data());
         clearRequests();
     });
 

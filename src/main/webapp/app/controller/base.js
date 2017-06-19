@@ -77,7 +77,7 @@ function BaseComponent(prototype) {
             var element = document.getElementById(idContainer);
             console.log(element.clientHeight);
             console.log(element.scrollHeight);
-            console.log(message)
+            console.log(message);
             if (element.clientHeight < element.scrollHeight) {
                 return true;
             } else {

@@ -1,11 +1,3 @@
-var vmAddSession = new Vue({
-    template: '<div><add-session-panel></add-session-panel></div>',
-    router: router,
-    components: {
-        'addSessionPanel': AddSessionPanel
-    }
-}).$mount();
-
 var vmShowFormationPanel= new Vue({
     template: '<div><show-formation-panel></show-formation-panel></div>',
     router: router,
@@ -46,8 +38,6 @@ describe('test registerTrainingTopic.js', function () {
         beforeEach(function () {
          vmAddFormationPanel = new AddFormationPanel().$mount();
          vmShowFormation = vmShowFormationPanel.$children[0];
-         /*vmAddSessionPanel = vmAddSession.$children[0];
-         vmInputText = new InputText().$mount();*/
          });
 
          afterEach(function () {
@@ -490,6 +480,94 @@ describe('test registerTrainingTopic.js', function () {
                 done();
             },0);
         });
+
+        it('should verify training or topic before submit with the newTopic no empty', function () {
+            vmAddFormationPanel.newTopic = 'JAVA';
+            vmAddFormationPanel.trainingTitle = '';
+            vmAddFormationPanel.verifyTrainingOrTopicBeforeSubmit();
+            expect(vmAddFormationPanel.topic.name).toEqual(vmAddFormationPanel.newTopic);
+            expect(vmAddFormationPanel.trainingTitleErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.numberHalfDaysErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.topicErrorMessage).toBe(false);
+            expect(vmAddFormationPanel.isNewTopic).toBe(true);
+
+        });
+
+        it('should verify training or topic before submit with the newTopic empty', function () {
+            vmAddFormationPanel.newTopic = '';
+            vmAddFormationPanel.trainingTitle = '';
+            vmAddFormationPanel.verifyTrainingOrTopicBeforeSubmit();
+
+            expect(vmAddFormationPanel.topic.name).toEqual(vmAddFormationPanel.newTopic);
+            expect(vmAddFormationPanel.newTopicErrorMessage).toBe(false);
+        });
+
+        it('should check if modify the newTopic the watch start and verify syntax newTopic', function (done) {
+            vmAddFormationPanel.newTopic = 'grr';
+            setTimeout(function () {
+                expect(vmAddFormationPanel.isNewTopicValid).toBe(true);
+                done();
+            },0);
+        });
+
+        it('should check save a new topic into database with response success of server', function (done) {
+            var response = {};
+            prepareRequest('POST', 'api/themes', 200, response);
+            vmAddFormationPanel.newTopic = 'Html ';
+            vmAddFormationPanel.saveTopicIntoDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.topicToRegister.name).toEqual('HTML');
+                expect(vmAddFormationPanel.confirmTopic).toBe(false);
+                done();
+            },2005)
+        });
+
+        it('should check save a new topic into database with response error of server and return a message', function (done) {
+            var response = [];
+            response.message = "name";
+            prepareRequest('POST', 'api/themes', 500, response);
+            vmAddFormationPanel.newTopic = 'Html ';
+            vmAddFormationPanel.saveTopicIntoDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.topicToRegister.name).toEqual('HTML');
+                expect(vmAddFormationPanel.isNewTopic).toBe(false);
+                done();
+            },0)
+        });
+
+        it('should check save a new topic into database with response error of server and return without message', function (done) {
+            var response = [];
+            prepareRequest('POST', 'api/themes', 500, response);
+            vmAddFormationPanel.newTopic = 'Html ';
+            vmAddFormationPanel.saveTopicIntoDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.topicToRegister.name).toEqual('HTML');
+                done();
+            },0)
+        });
+
+        it('it should check if collect all themes in the database  with success response of server', function (done) {
+            var response = [
+                {id: "2", version: "0", name: "PROGRAMMATION"},
+                {id: "3", version: "0", name: "JAVA"},
+                {id: "4", version: "0", name: "WEB"}
+            ];
+            prepareRequest('GET', 'api/themes', 200, response);
+            vmAddFormationPanel.gatherTopicsFromDatabase();
+            setTimeout(function () {
+                expect(vmAddFormationPanel.state.selectOptionsOfTopic).toEqual(response);
+                done();
+            },0);
+        });
+
+        it('it should check if collect all themes in the database  with error response of server', function (done) {
+            var response = [];
+            prepareRequest('GET', 'api/themes', 500, response);
+            vmAddFormationPanel.gatherTopicsFromDatabase();
+            setTimeout(function () {
+                done();
+            },0);
+        });
     });
 
     describe('vmShowFormationPanel', function () {
@@ -619,19 +697,26 @@ describe('test registerTrainingTopic.js', function () {
             },0);
         });
 
+        it('should verify if show close button ', function () {
+            vmShowFormation.showCloseButton(2);
+            expect(vmShowFormation.verifyShowButtonOrNot(2)).toBe(true);
+            expect(vmShowFormation.upHere).toBe(true);
+            expect(vmShowFormation.trainingIdSelected).toEqual(2);
+        });
+
+        it('should verify if hide close button', function () {
+            vmShowFormation.hideCloseButton();
+            expect(vmShowFormation.verifyShowButtonOrNot(2)).toBe(false);
+            expect(vmShowFormation.upHere).toBe(false);
+            expect(vmShowFormation.trainingIdSelected).toBe(null);
+        });
+
         //showChevrons
         it('should check whether the chevrons can be hidden', function () {
             vmShowFormation.state.allTopicTraining = [];
-            expect(vmShowFormation.showChevrons).toBe(false);
+            expect(vmShowFormation.state.showChevrons).toBe(false);
         });
 
-        it('should check whether the chevrons can be showed when there is at least one training in the database', function () {
-            vmShowFormation.state.allTopicTraining = [
-                {"id": 3, "version": 0, "name": "C"},
-                {"id": 4, "version": 0, "name": "C++"}
-            ];
-            expect(vmShowFormation.showChevrons).toBe(true);
-        });
     });
 
     describe('vmShowFormation', function () {
