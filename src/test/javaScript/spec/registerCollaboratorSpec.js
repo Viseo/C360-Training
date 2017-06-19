@@ -57,10 +57,6 @@ let args;
         })
     });
 
-
-
-
-
    describe('Test registration of a collaborator', function() {
 
         beforeEach(function () {
@@ -204,9 +200,6 @@ let args;
 
        });
     });
-
-
-
 
    describe("Test connexion of a collaborator", function() {
 
