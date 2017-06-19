@@ -21,6 +21,10 @@ let args;
             }
         };
         vmFormulaire.handleCookie(token);
+        vmConnexionForm.stayConnected = true;
+        vmConnexionForm.handleCookie(token);
+        vmConnexionForm.stayConnected = false;
+        vmConnexionForm.handleCookie(token);
 
     });
 
@@ -232,26 +236,32 @@ let args;
         });
 
 
+
 /*
         it('should check if informations of user exists in database',function () {
- saveAction                "id": 0,
+            var allUsers = [{
+                "id": 0,
                 "firstName": "dupont",
                 "lastName": "dupont",
                 "email": "user@vsieo.com",
                 "password": 123456,
-            };
-            vmConnexionForm.email = 'user@vsieo.com';
+            }];
+
             vmConnexionForm.isNotNewEmail = false;
+            vmConnexionForm.email = 'user@vsieo.com';
+            vmConnexionForm.allUsers.email = 'user@vsieo.com'
+            vmConnexionForm.email = 'user@vsieo.com'
             vmConnexionForm.VerifyEmailFromDatabase();
             expect(vmConnexionForm.emailToSend).toBe('user@vsieo.com');
-          /!*  expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
+           /!* expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
             expect(vmConnexionForm.idToSend).toBe(vmConnexionForm.allUsers[0].id);
             expect(vmConnexionForm.lastNameToSend).toBe(vmConnexionForm[0].lastName);
             expect(vmConnexionForm.firstNameToSend).toBe(vmConnexionForm[0].firstName);
-            expect(vmConnexionForm.isNotNewEmail).toBe(true)*!/;
+            expect(vmConnexionForm.isNotNewEmail).toBe(true);*!/
 
         });
 */
+
     })
 
     describe("Test customInput", function() {
