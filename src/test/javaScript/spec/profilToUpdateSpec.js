@@ -18,7 +18,7 @@ describe('profil to update test', function () {
 
     beforeEach(function () {
         let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
-        document = {
+        /*document = {
             value_: '',
 
             get cookie() {
@@ -28,7 +28,7 @@ describe('profil to update test', function () {
             set cookie(value) {
                 this.value_ += value + ';';
             }
-        };
+        };*/
         document.cookie = "token=" + collaboratorToken;
         vmProfilToUpdate = newGlobalVueProfilToUpdate.$children[0];
     });

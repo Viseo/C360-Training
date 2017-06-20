@@ -1,4 +1,4 @@
-Vue.component('form-reset-password', {
+let resetPassword = Vue.component('form-reset-password', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
                 <!-- MOT DE PASSE -->
@@ -124,9 +124,8 @@ Vue.component('form-reset-password', {
         },
 
         getParameterFromUrl(){
-                var str = this.$route.params.id;
-                this.idParameter=str;
-
+            var str = this.$route.params.id;
+            this.idParameter = str;
         }
     }
 });
