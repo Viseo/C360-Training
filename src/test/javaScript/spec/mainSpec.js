@@ -225,15 +225,4 @@ describe('Header test', function () {
         expect(headerComponent.app.mission).toBe(false);
         expect(headerComponent.app.leave).toBe(false);
     });
-
-    it('should check if we are in application "Gestion des compétences"', function () {
-        headerComponent.title = "Gestion des compétences";
-        headerComponent.setTitle();
-
-        expect(headerComponent.app.training).toBe(false);
-        expect(headerComponent.app.skills).toBe(true);
-        expect(headerComponent.app.mission).toBe(false);
-        expect(headerComponent.app.leave).toBe(false);
-    });
-
 });

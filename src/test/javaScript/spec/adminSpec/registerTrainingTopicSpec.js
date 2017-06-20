@@ -519,7 +519,7 @@ describe('test registerTrainingTopic.js', function () {
                 expect(vmAddFormationPanel.topicToRegister.name).toEqual('HTML');
                 expect(vmAddFormationPanel.confirmTopic).toBe(false);
                 done();
-            },2005)
+            },2010)
         });
 
         it('should check save a new topic into database with response error of server and return a message', function (done) {
