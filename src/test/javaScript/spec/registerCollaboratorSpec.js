@@ -253,18 +253,12 @@ let args;
                 "password": "123486",
                 "isAdmin": false,
                 "defaultPicture": true
-            }]
+            }];
             prepareRequest('GET', 'api/collaborateurs', 200, response);
             vmConnexionForm.gatherUsersFromDatabaseToVerify();
             setTimeout(function () {
                 expect(vmConnexionForm.allUsers).toEqual(response);
             },0);
-
-           prepareRequest('POST', 'api/sendemail/1', 200, response);
-           vmConnexionForm.gatherUsersFromDatabaseToVerify();
-           setTimeout(function () {
-               expect(vmConnexionForm.showPopup).toBe(true);
-           },0);
 
 
        });
@@ -292,7 +286,7 @@ let args;
                "password": "103456",
                "isAdmin": false,
                "defaultPicture": true
-           }]
+           }];
            prepareRequest('GET', 'api/collaborateurs', 200, response);
            vmConnexionForm.sendInformationToCookie();
            setTimeout(function () {
@@ -302,7 +296,7 @@ let args;
        });
 
         it('should check function sendInformationIntoCokkie with error response of server',function(){
-            var response = []
+            var response = [];
             prepareRequest('GET', 'api/collaborateurs', 200, response);
             vmConnexionForm.sendInformationToCookie();
             setTimeout(function () {
@@ -334,7 +328,7 @@ let args;
         });
        */
 
-    })
+    });
 
     describe("Test customInput", function() {
         it('should check function updateValue', function() {
