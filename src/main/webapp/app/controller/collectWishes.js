@@ -14,11 +14,12 @@ let collectWishes = Vue.component('collect-wishes', {
     },
 
     template: `
-                <div class="container-fluid">
+                <div>
                     <div class="row">
                         <div class="col-sm-12 col-md-10 col-lg-12">
                             <div class="row">
-                                <div class="col-lg-9 col-md-9 text-center">
+                                <div style="padding-left: 0;
+                                   padding-right: 0;" class="col-lg-12 col-md-12 text-center">
                                     <legend>Souhaits reçus</legend>
                                 </div>
                             </div>

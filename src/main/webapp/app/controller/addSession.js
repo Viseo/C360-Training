@@ -523,14 +523,20 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     },
 
     template: `
-                 <div  class="container-fluid" id="addSession ">
+                 <div id="addSession ">
                     <div class="row" style="margin-top: 10px;">
-                        <div class="col-lg-7 col-md-7 text-center">
+                        <div class="col-lg-12 col-md-12 text-center">
                             <legend>Gérer une session</legend>
                         </div>
                     </div>
-                    <div style = "width: 100%; height: 360px; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
-                        <img @click="returnToPageTraining()" src="css/arrow_back.png" width="50" height="50" style="position: absolute; left:5%; top:45%; z-index:1;">
+                    <div style = "width: 100%; height: 28.5em; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
+                        <img @click="returnToPageTraining()" src="css/left-arrow.png"
+                                                 width="40"
+                                                 height="40"
+                                                 style="cursor: pointer;    
+                                                        top: 2em;
+                                                        left: 2em;
+                                                        position: relative;">
                         <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
                             <div id="glyphiconpencil" class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="modifyTrainingTopic()">

@@ -230,9 +230,7 @@ let Header = Vue.component('header-component', {
             };
 
             let preventAdminToGoToCollaboratorPage = () => {
-                console.log("this.getPageName(): "+this.getPageName());
-                console.log("isAdmin():" +isAdmin());
-                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() != 'trainingRanking' && this.getPageName() != 'addSession') {
+                if (isAdmin() && this.getPageName() != 'addTrainingTopic' && this.getPageName() != 'collectWishes' && this.getPageName() != 'trainingRanking' && this.getPageName() != 'addSession' && this.getPageName() != 'profiltoupdate') {
                     this.goTo('addTrainingTopic');
                 }
             };
@@ -385,7 +383,7 @@ const router = new VueRouter({
                                         <div class="col-sm-12 col-md-7 col-lg-7">
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
                                         </div>
-                                        <div class="col-sm-12 col-md-5 col-lg-5">
+                                        <div class="col-sm-12 col-md-7 col-lg-5">
                                             <state-request></state-request>
                                             <router-view></router-view>
                                         </div>

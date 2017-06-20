@@ -17,11 +17,11 @@ let trainingRanking = Vue.component('training-ranking', {
             }
         },
         template: `
-        <div class="container-fluid">
+        <div>
             <div class="row">
                 <div class="col-sm-12 col-md-10 col-lg-12">
                         <div class="row" >
-                            <div class="col-lg-9 col-md-9 text-center">
+                            <div id="trainingRanking" class="col-lg-12 col-md-12 text-center">
                                 <legend>Classement formations</legend>
                             </div>
                         </div>
@@ -58,6 +58,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                        type="info" 
                                                        style="height:100%;">
                                                     <div class="row">
+                                                        <p  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0">Aucune formation n'a été notée</p>
                                                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for=" training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
                                                          <panel :is-open="openPanel"
                                                                     type="default">
