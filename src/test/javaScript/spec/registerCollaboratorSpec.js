@@ -1,3 +1,4 @@
+
 describe('test registerCollaborator.js', function () {
 let args;
 
@@ -21,6 +22,10 @@ let args;
             }
         };
         vmFormulaire.handleCookie(token);
+        vmConnexionForm.stayConnected = true;
+        vmConnexionForm.handleCookie(token);
+        vmConnexionForm.stayConnected = false;
+        vmConnexionForm.handleCookie(token);
 
     });
 
@@ -29,6 +34,7 @@ let args;
     });
 
     describe('Test navigation between connexion and inscription forms', function() {
+
         it('should check variable initialization from navigation-menu component', function () {
             expect(vmNavigationMenu.color_connexion).toBe('color-blue');
             expect(vmNavigationMenu.color_inscription).toBe('color-blue');
@@ -186,12 +192,16 @@ let args;
          vmFormulaire.password = '123456';
          vmFormulaire.confirmPassword = '123456';
          vmFormulaire.verifyForm ();
-         console.log(vmFormulaire.collaborator.email);
          });
 
+
+       it('should check registration collaborator into data bases',function(){
+
+
+       });
     });
 
-    describe("Test connexion of a collaborator", function() {
+   describe("Test connexion of a collaborator", function() {
 
         it('Check empty fields', function() {
             vmConnexionForm.email = "";
@@ -231,27 +241,99 @@ let args;
             vmConnexionForm.sendInformationToCookie();
         });
 
+       it('should check function gatherUsersFromDatabaseToVerify with success response of server',function(){
+            var response = [{
+                "id": 4,
+                "version": 0,
+                "personnalIdNumber": "HBB1234",
+                "businessunit": "VISEO DIGITAL",
+                "email": "mzsdef@163.com",
+                "lastName": "nrek",
+                "firstName": "rnejk",
+                "password": "123486",
+                "isAdmin": false,
+                "defaultPicture": true
+            }]
+            prepareRequest('GET', 'api/collaborateurs', 200, response);
+            vmConnexionForm.gatherUsersFromDatabaseToVerify();
+            setTimeout(function () {
+                expect(vmConnexionForm.allUsers).toEqual(response);
+            },0);
+
+           prepareRequest('POST', 'api/sendemail/1', 200, response);
+           vmConnexionForm.gatherUsersFromDatabaseToVerify();
+           setTimeout(function () {
+               expect(vmConnexionForm.showPopup).toBe(true);
+           },0);
+
+
+       });
+
+       it('should check function sendInformationIntoCokkie with success response of server', function (done) {
+           var response = [{
+               "id": 5,
+               "version": 0,
+               "personnalIdNumber": "BBB1234",
+               "businessunit": "VISEO DIGITAL",
+               "email": "mxzsdef@163.com",
+               "lastName": "nrjek",
+               "firstName": "rnrejk",
+               "password": "123456",
+               "isAdmin": false,
+               "defaultPicture": true
+           }, {
+               "id": 6,
+               "version": 0,
+               "personnalIdNumber": "hBB1234",
+               "businessunit": "VISEO DIGITAL",
+               "email": "xzsdef@163.com",
+               "lastName": "rjek",
+               "firstName": "nrejk",
+               "password": "103456",
+               "isAdmin": false,
+               "defaultPicture": true
+           }]
+           prepareRequest('GET', 'api/collaborateurs', 200, response);
+           vmConnexionForm.sendInformationToCookie();
+           setTimeout(function () {
+               expect(vmConnexionForm.allUsers).toEqual(response);
+               done();
+           }, 0);
+       });
+
+        it('should check function sendInformationIntoCokkie with error response of server',function(){
+            var response = []
+            prepareRequest('GET', 'api/collaborateurs', 200, response);
+            vmConnexionForm.sendInformationToCookie();
+            setTimeout(function () {
+                expect(response.isNotNewEmail).toEqual(true);
+            },0);
+        });
 
 /*
-        it('should check if informations of user exists in database',function () {
- saveAction                "id": 0,
-                "firstName": "dupont",
-                "lastName": "dupont",
-                "email": "user@vsieo.com",
-                "password": 123456,
-            };
-            vmConnexionForm.email = 'user@vsieo.com';
-            vmConnexionForm.isNotNewEmail = false;
-            vmConnexionForm.VerifyEmailFromDatabase();
-            expect(vmConnexionForm.emailToSend).toBe('user@vsieo.com');
-          /!*  expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers[0].password);
-            expect(vmConnexionForm.idToSend).toBe(vmConnexionForm.allUsers[0].id);
-            expect(vmConnexionForm.lastNameToSend).toBe(vmConnexionForm[0].lastName);
-            expect(vmConnexionForm.firstNameToSend).toBe(vmConnexionForm[0].firstName);
-            expect(vmConnexionForm.isNotNewEmail).toBe(true)*!/;
+       it('should check if informations of user exists in database',function () {
+        var allUsers = [{
+            "id": 0,
+            "firstName": "dupont",
+            "lastName": "dupont",
+            "email": "user@vsieo.com",
+            "password": 123456,
+        }];
 
+        vmConnexionForm.isNotNewEmail = false;
+        vmConnexionForm.email = 'user@vsieo.com';
+        vmConnexionForm.allUsers.email = 'user@vsieo.com'
+        vmConnexionForm.email = 'user@vsieo.com'
+        vmConnexionForm.VerifyEmailFromDatabase();
+        expect(vmConnexionForm.emailToSend).toBe('user@vsieo.com');
+        expect(vmConnexionForm.passwordToSend).toBe(vmConnexionForm.allUsers.password);
+        expect(vmConnexionForm.idToSend).toBe(vmConnexionForm.allUsers.id);
+        expect(vmConnexionForm.lastNameToSend).toBe(vmConnexionForm.lastName);
+        expect(vmConnexionForm.firstNameToSend).toBe(vmConnexionForm.firstName);
+        expect(vmConnexionForm.isNotNewEmail).toBe(true);
         });
-*/
+       */
+
     })
 
     describe("Test customInput", function() {

@@ -64,6 +64,10 @@ let NavigationMenu = Vue.component('connect-user', {
 });
 
 
+
+
+
+
 let Formulaire = Vue.component('inscription-form', {
     template: `
              <form id="registr-form" @submit.prevent="verifyForm">
@@ -471,6 +475,7 @@ let Formulaire = Vue.component('inscription-form', {
     }
 });
 
+
 let ConnexionForm = Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
@@ -696,6 +701,8 @@ let ConnexionForm = Vue.component('connexionForm', {
         }
     }
 });
+
+
 
 let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
