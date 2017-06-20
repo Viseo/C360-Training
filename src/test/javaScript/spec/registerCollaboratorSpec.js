@@ -1,16 +1,22 @@
-fdescribe('test registerCollaborator.js', function () {
+describe('test registerCollaborator.js', function () {
     let args;
 
-    beforeEach(function () { });
+    beforeEach(function () {
+        var response = [
+            {status: "200"}
+        ];
+        prepareRequest('POST', 'api/sendtoken', 200, response);
+        vmNavigationMenu = new NavigationMenu().$mount();
+    });
 
     afterEach(function () { });
 
     describe('Test navigation between connexion and inscription forms', function () {
         beforeEach(function () {
-            var response = [
+            /*var response = [
                 {status: "200"}
             ];
-            prepareRequest('POST', 'api/sendtoken', 200, response);
+            prepareRequest('POST', 'api/sendtoken', 200, response);*/
             vmNavigationMenu = new NavigationMenu().$mount();
         });
 
@@ -289,7 +295,7 @@ fdescribe('test registerCollaborator.js', function () {
 
         beforeEach(function () {
             // originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-            // jasmine.DEFAULT_TIMEOUT_INTERVAL = 10100;
+            //jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
             vmConnexionForm = new ConnexionForm().$mount();
 
