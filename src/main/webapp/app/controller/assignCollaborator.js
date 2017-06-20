@@ -178,11 +178,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getNumberOfWhisesForNotification();
         this.gatherAllSessions();
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip({
                 placement: 'bottom'
             });
-        });
+        });*/
     },
     methods: {
 

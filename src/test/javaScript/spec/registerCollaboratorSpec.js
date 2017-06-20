@@ -13,10 +13,6 @@ describe('test registerCollaborator.js', function () {
 
     describe('Test navigation between connexion and inscription forms', function () {
         beforeEach(function () {
-            /*var response = [
-                {status: "200"}
-            ];
-            prepareRequest('POST', 'api/sendtoken', 200, response);*/
             vmNavigationMenu = new NavigationMenu().$mount();
         });
 
