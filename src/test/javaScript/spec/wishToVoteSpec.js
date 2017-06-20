@@ -12,14 +12,14 @@ var wishToVote = new Vue({
     }
 }).$mount();
 
-let collabToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+//let collabToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
 
 var vmWishToVote;
 
 describe('wish to vote Panel test', function () {
 
     beforeEach(function () {
-        document = {
+        /*document = {
             value_: '',
 
             get cookie() {
@@ -29,10 +29,9 @@ describe('wish to vote Panel test', function () {
             set cookie(value) {
                 this.value_ += value + ';';
             }
-        };
-        document.cookie = "token="+ collabToken;
+        };*/
+        document.cookie = "token="+ collaboratorToken;
         vmWishToVote = wishToVote.$children[0];
-
     });
 
     afterEach(function () {

@@ -22,11 +22,10 @@ describe('Header test', function () {
     beforeEach(function () {
 
         headerComponent = newGlobalVueMain.$children[0];
-        var mydate = new Date();
-        document.cookie = "token=" + collaboratorToken + ";expires=" + mydate.toGMTString();
-        document.cookie = "stayconnected=true;expires=" + mydate.toGMTString();
-        document.cookie = "timeConnected=2;expires=" + mydate.toGMTString();
-        document.cookie = "defaultPicture=;expires=" + mydate.toGMTString();
+        /*document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";*/
     });
 
     afterEach(function () {
@@ -52,6 +51,11 @@ describe('Header test', function () {
         expect(headerComponent.dialog).toBe(false);
         expect(headerComponent.timeConnected).toBe(2);
 
+        document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+
     });
 
     it('should check if the admin is connect and variables initialization from Header component with the token', function () {
@@ -71,6 +75,11 @@ describe('Header test', function () {
         expect(headerComponent.stayConnected).toBe(true);
         expect(headerComponent.dialog).toBe(false);
         expect(headerComponent.timeConnected).toBe(2);
+
+        document.cookie = "token=" + adminToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
     });
 
 
@@ -91,6 +100,10 @@ describe('Header test', function () {
         prepareRequest('POST', 'api/userdisconnect', 200, response);
         headerComponent.disconnectUser();
         setTimeout(function () {
+            document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             done();
         }, 0)
 
@@ -193,13 +206,34 @@ describe('Header test', function () {
         }, 0);
     });
 
-    it('should check if we are in application "Gestion des formations"', function (done) {
-
-        setTimeout(function () {
-            //expect(headerComponent.validateToken).toBe(response);
-            done();
-        }, 0);
+    it('should define if the user is connect', function () {
+        headerComponent.setDisconnectedToFalse();
+        expect(headerComponent.disconnect).toBe(false);
     });
 
+    it('should define if the user is disconnect', function () {
+        headerComponent.setDisconnectedToTrue();
+        expect(headerComponent.disconnect).toBe(true);
+    });
+
+    it('should check if we are in application "Gestion des formations"', function () {
+        headerComponent.title = "Gestion des formations";
+        headerComponent.setTitle();
+
+        expect(headerComponent.app.training).toBe(true);
+        expect(headerComponent.app.skills).toBe(false);
+        expect(headerComponent.app.mission).toBe(false);
+        expect(headerComponent.app.leave).toBe(false);
+    });
+
+    it('should check if we are in application "Gestion des compétences"', function () {
+        headerComponent.title = "Gestion des compétences";
+        headerComponent.setTitle();
+
+        expect(headerComponent.app.training).toBe(false);
+        expect(headerComponent.app.skills).toBe(true);
+        expect(headerComponent.app.mission).toBe(false);
+        expect(headerComponent.app.leave).toBe(false);
+    });
 
 });

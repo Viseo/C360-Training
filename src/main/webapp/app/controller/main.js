@@ -104,22 +104,10 @@ let Header = Vue.component('header-component', {
         }, function () {
             $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
         });
-        if (this.title == "Gestion des formations") {
-            this.app.training = true;
-            this.app.skills=false;
-            this.app.mission = false;
-            this.app.leave= false;
 
-        } else if (this.title == "Gestion des compétences"){
-            this.app.training = false;
-            this.app.skills=true;
-            this.app.mission = false;
-            this.app.leave= false;
-        };
-
+        this.setTitle();
         this.checkIfTokenExist();
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
-
     },
     methods: {
 
@@ -131,6 +119,21 @@ let Header = Vue.component('header-component', {
                 }
             };
             this.post('api/sendtoken', this.token, isTokenValid);
+        },
+
+        setTitle(){
+            if (this.title == "Gestion des formations") {
+                this.app.training = true;
+                this.app.skills=false;
+                this.app.mission = false;
+                this.app.leave= false;
+
+            } else if (this.title == "Gestion des compétences"){
+                this.app.training = false;
+                this.app.skills=true;
+                this.app.mission = false;
+                this.app.leave= false;
+            };
         },
 
         setDisconnectedToTrue(){
