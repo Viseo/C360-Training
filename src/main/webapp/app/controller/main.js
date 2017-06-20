@@ -106,6 +106,7 @@ let Header = Vue.component('header-component', {
         });
 
         this.setTitle();
+        if(this.token && this.token!='')
         this.checkIfTokenExist();
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
     },
@@ -240,13 +241,13 @@ let Header = Vue.component('header-component', {
                 let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                 let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
 
-                if (!isTokenPresent)
+                if (!isTokenPresent || isTokenPresent == null)
                     delete this.token;
 
-                if (this.token == 'undefined')
+                if (this.token == undefined)
                     isTokenPresent = false;
 
-                if (isTokenPresent && stayConnectedDefined) {
+                if (isTokenPresent != undefined && stayConnectedDefined != undefined && isTokenPresent != null && stayConnectedDefined != null) {
                     this.token = String(isTokenPresent.pop());
                     return true;
                 }
@@ -274,9 +275,11 @@ let Header = Vue.component('header-component', {
                 preventCollaboratorToGoToAdminPage();
                 preventAdminToGoToCollaboratorPage();
                 retrieveUserInfoFromToken();
+                this.createDefautPictureCookie();
             }
-
-            this.createDefautPictureCookie();
+            else {
+                redirectToLoginPage();
+            }
         },
 
         disconnectUser(){
