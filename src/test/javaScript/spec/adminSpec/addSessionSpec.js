@@ -564,6 +564,40 @@ describe('vmAddSessionPanel', function () {
         expect(vmAddSessionPanel.locationErrorMessage).toBe(false);
     });
 
+    it('should check collect all session with success response of server', function (done) {
+        var response = [{
+            "id": 6,
+            "version": 0,
+            "trainingDescription": {
+                "id": 5,
+                "version": 0,
+                "trainingTitle": "FORMATION1",
+                "numberHalfDays": 1,
+                "topicDescription": {"id": 3, "version": 0, "name": "C"}
+            },
+            "beginning": "13/05/2017",
+            "ending": "13/05/2017",
+            "beginningTime": "09:00",
+            "endingTime": "18:00",
+            "location": "Salle Bora Bora"
+        }];
+        prepareRequest('GET', 'api/sessions', 200, response);
+        vmAddSessionPanel.gatherAllSessions();
+        setTimeout(function () {
+            expect(vmAddSessionPanel.state.allSessions).toEqual(response);
+            done();
+        },0);
+    });
+
+    it('should check collect all session with error response of server', function (done) {
+        var response = [];
+        prepareRequest('GET', 'api/sessions', 500, response);
+        vmAddSessionPanel.gatherAllSessions();
+        setTimeout(function () {
+            done();
+        },0);
+    });
+
 });
 
 var DatePickerPanel = new Vue({

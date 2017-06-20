@@ -21,7 +21,7 @@ module.exports = function (config) {
             'src/main/webapp/lib/vue-resource.js',
             'src/main/webapp/lib/vue-router.js',
             'src/main/webapp/lib/jwt-decode.js',
-            'src/test/javaScript/spec/test-util.js',
+            'src/test/javaScript/spec/util/test-util.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
             'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/util/base.js',
@@ -38,16 +38,16 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/adminController/trainingRankingByOpinions.js',
             'src/test/javaScript/spec/mainSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
-            'src/test/javaScript/spec/registerTrainingTopicSpec.js',
-            'src/test/javaScript/spec/registerTrainingCollaboratorSpec.js',
-            'src/test/javaScript/spec/assignCollaboratorSpec.js',
-            'src/test/javaScript/spec/trainingToComeSpec.js',
-            'src/test/javaScript/spec/collectWishesSpec.js',
-            'src/test/javaScript/spec/wishToVoteSpec.js',
-            'src/test/javaScript/spec/stateRequestTrainingSpec.js',
+            'src/test/javaScript/spec/adminSpec/registerTrainingTopicSpec.js',
+            'src/test/javaScript/spec/collabSpec/registerTrainingCollaboratorSpec.js',
+            'src/test/javaScript/spec/adminSpec/assignCollaboratorSpec.js',
+            'src/test/javaScript/spec/collabSpec/trainingToComeSpec.js',
+            'src/test/javaScript/spec/adminSpec/collectWishesSpec.js',
+            'src/test/javaScript/spec/collabSpec/wishToVoteSpec.js',
+            'src/test/javaScript/spec/collabSpec/stateRequestTrainingSpec.js',
             'src/test/javaScript/spec/profilToUpdateSpec.js',
-            'src/test/javaScript/spec/trainingRankingByOpinionsSpec.js',
-            'src/test/javaScript/spec/addSessionSpec.js',
+            'src/test/javaScript/spec/adminSpec/trainingRankingByOpinionsSpec.js',
+            'src/test/javaScript/spec/adminSpec/addSessionSpec.js',
         ],
 
 
@@ -62,7 +62,9 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/main/webapp/app/controller/*.js':['coverage']
+            'src/main/webapp/app/controller/*.js':['coverage'],
+            'src/main/webapp/app/controller/adminController/*.js':['coverage'],
+            'src/main/webapp/app/controller/collabController/*.js':['coverage']
         },
 
 

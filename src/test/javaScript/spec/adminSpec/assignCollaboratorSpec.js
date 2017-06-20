@@ -489,7 +489,7 @@ describe('assign collaborator panel test', function () {
             "id": 88,
             "lastName": 'dumas',
             "password": '1234567',
-            "version": 5
+            "version": 5,
         }, {
             "email": 'junifer.gadomski@viseo.com',
             "firstName": 'jenifer',
@@ -499,7 +499,15 @@ describe('assign collaborator panel test', function () {
             "version": 77
         }];
         var vmLengthRequestedCollaborators = vmAssignCollaborator.requestedCollaborators.length;
-        vmAssignCollaborator.moveCollabLeft();
+        var collaboratorFromLeftToRight = {
+            "email": 'norine.dumas@viseo.com',
+            "firstName": 'norine',
+            "id": 88,
+            "lastName": 'dumas',
+            "password": '1234567',
+            "version": 5
+        };
+        vmAssignCollaborator.moveCollabRight(collaboratorFromLeftToRight);
         expect(vmLengthRequestedCollaborators).not.toBeNull();
     });
 
@@ -520,7 +528,15 @@ describe('assign collaborator panel test', function () {
             "version": 77
         }];
         var vmValidatedCollab = vmAssignCollaborator.validatedCollab.length;
-        vmAssignCollaborator.moveCollabRight();
+        var collaboratorFromRightToLeft = {
+            "email": 'norine.dumas@viseo.com',
+            "firstName": 'norine',
+            "id": 88,
+            "lastName": 'dumas',
+            "password": '1234567',
+            "version": 5
+        };
+        vmAssignCollaborator.moveCollabLeft(collaboratorFromRightToLeft);
         expect(vmValidatedCollab).not.toBeNull();
 
     });

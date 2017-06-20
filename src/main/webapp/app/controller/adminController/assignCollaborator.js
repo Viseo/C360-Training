@@ -317,10 +317,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 
         },
 
-        moveCollabRight(nameCollab){
-            this.validatedCollab.push(nameCollab);
-            this.requestedCollaborators.indexOf(nameCollab);
-            this.requestedCollaborators.splice(this.requestedCollaborators.indexOf(nameCollab), 1);
+        moveCollabRight(collaborator){
+            this.validatedCollab.push(collaborator);
+            this.requestedCollaborators.indexOf(collaborator);
+            this.requestedCollaborators.splice(this.requestedCollaborators.indexOf(collaborator), 1);
             this.reorganizeCollaborators();
         },
 
