@@ -29,6 +29,7 @@ let NavigationMenu = Vue.component('connect-user', {
                     </div>
                 </div>
             </div>
+           </div>
         `,
     beforeCreate: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
@@ -802,6 +803,7 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                         <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
                         <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>
                     </td></tr>
+                    </div>
                     </div>
                 </table>
     `, data: function () {
