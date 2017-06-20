@@ -46,7 +46,7 @@ let Header = Vue.component('header-component', {
                                     <li> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCon</p></span> 
-                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span> 
+                                        <span @click="goTo('registerTrainingCollaborator')" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></span> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/microservices_icon/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
                                     </li> 
                                 </ul> 
@@ -128,12 +128,7 @@ let Header = Vue.component('header-component', {
                 this.app.mission = false;
                 this.app.leave= false;
 
-            } else if (this.title == "Gestion des compétences"){
-                this.app.training = false;
-                this.app.skills=true;
-                this.app.mission = false;
-                this.app.leave= false;
-            };
+            }
         },
 
         setDisconnectedToTrue(){
@@ -149,7 +144,7 @@ let Header = Vue.component('header-component', {
             return this.disconnect && !this.dialog;
         },
         showPicture(){
-            return (this.$route.name != 'login') && (this.$route.name !='skillsStatementByCollaborators') ;
+            return (this.$route.name != 'login') && (this.$route.name !='resetPassword') ;
         },
 
         setIdleSecondsCounter(value){
@@ -224,7 +219,7 @@ let Header = Vue.component('header-component', {
             };
 
             let preventCollaboratorToGoToAdminPage = () => {
-                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'wishToVote' && this.getPageName() != 'skillsStatementByCollaborators' && this.getPageName() != 'profiltoupdate') {
+                if (!isAdmin() && this.getPageName() != 'registerTrainingCollaborator' && this.getPageName() != 'wishToVote' && this.getPageName() != 'profiltoupdate') {
                     this.goTo('registerTrainingCollaborator');
                 }
             };
@@ -279,10 +274,6 @@ let Header = Vue.component('header-component', {
                 preventCollaboratorToGoToAdminPage();
                 preventAdminToGoToCollaboratorPage();
                 retrieveUserInfoFromToken();
-            }
-            else {
-                if(this.getPageName() != "skillsStatementByCollaborators")
-                redirectToLoginPage();
             }
 
             this.createDefautPictureCookie();
@@ -438,16 +429,6 @@ const router = new VueRouter({
             redirect: "/login"
         },
         {
-            path: "/skillsStatementByCollaborators",
-            name: 'skillsStatementByCollaborators',
-            component: {
-                template: `<div id="newVue" v-cloak>
-                            <header-component title="Gestion des compétences" headerColor="red-header"></header-component>
-                            <statement-skills></statement-skills>
-                         </div>`
-            }
-        },
-        {
             path: "/profiltoupdate",
             name: 'profiltoupdate',
             component: {
@@ -477,7 +458,6 @@ const PAGE_TITLE = {
     "profiltoupdate": "Modifier mon profil",
     "collectWishes": "Gestion des formations",
     "addSession": "Gestion des sessions",
-    "skillsStatementByCollaborators": "Gestion des compétences",
     "trainingRanking": "Gestion des formations"
 };
 
