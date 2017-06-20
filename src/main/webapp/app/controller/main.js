@@ -25,9 +25,9 @@ let Header = Vue.component('header-component', {
                     <div id="navbar-user" 
                         class="col-lg-7 col-lg-offset-1 col-md-8 col-sm-8 col-xs-9 text-right" @mouseover="setDisconnectedToTrue()"> 
                         <div v-show="showPicture()" class="col-lg-2 col-md-5 col-sm-5 col-xs-5"> 
-                             <img class="image-min" v-if="defaultPicture"
+                             <img style="cursor:default;" class="image-min" v-if="defaultPicture"
                                                  src="img/profile.jpg">
-                                            <img class="image-min" v-else
+                             <img style="cursor:default;" class="image-min" v-else
                                                  :src="'img/'+collaboratorId+'.jpg'"> 
                         </div> 
                         <span class="text-left col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
@@ -41,13 +41,13 @@ let Header = Vue.component('header-component', {
                     <div style="margin-top:10px" class="col-lg-4 col-md-4 col-sm-4 col-xs-3"> 
                         <ul class="nav navbar-nav"> 
                             <li class="dropdown"> 
-                                <span id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span> 
+                                <span style="cursor:pointer;" id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span> 
                                 <ul id="dropdown-app" class="dropdown-menu"> 
                                     <li> 
-                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><a @click="goTo('skillsStatementByCollaborators')"><img src="/img/icon_cv.png" class="text-center  icon-app"><p>GCv</p></a></span> 
-                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/icon_conge.png" class="text-center icon-app"><p>GCon</p></span> 
-                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span> 
-                                        <span class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
+                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
+                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCon</p></span> 
+                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><a @click="goTo('registerTrainingCollaborator')"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></a></span> 
+                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/microservices_icon/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
                                     </li> 
                                 </ul> 
                             </li> 
@@ -482,15 +482,15 @@ const PAGE_TITLE = {
 };
 
 const PAGE_FAVICON = {
-    "login": "img/icon_accueil.png",
-    "resetPassword": "img/icon_accueil.png",
-    "registerTrainingCollaborator": "img/icon_formation.png",
-    "wishToVote": "img/icon_formation.png",
-    "addTrainingTopic": "img/icon_formation.png",
-    "profiltoupdate": "img/icon_accueil.png",
-    "collectWishes": "img/icon_formation.png",
-    "addSession": "img/icon_formation.png",
-    "trainingRanking": "img/icon_formation.png"
+    "login": "img/microservices_icon/icon_accueil.png",
+    "resetPassword": "img/microservices_icon/icon_accueil.png",
+    "registerTrainingCollaborator": "img/microservices_icon/icon_formation.png",
+    "wishToVote": "img/microservices_icon/icon_formation.png",
+    "addTrainingTopic": "img/microservices_icon/icon_formation.png",
+    "profiltoupdate": "img/microservices_icon/icon_accueil.png",
+    "collectWishes": "img/microservices_icon/icon_formation.png",
+    "addSession": "img/microservices_icon/icon_formation.png",
+    "trainingRanking": "img/microservices_icon/icon_formation.png"
 };
 
 router.afterEach((toRoute, fromRoute) => {

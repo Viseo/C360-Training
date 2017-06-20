@@ -30,7 +30,7 @@ let trainingRanking = Vue.component('training-ranking', {
                               <div class="row">
                                     <div class="col-sm-12 col-md-2 col-lg-2">
                                         <router-link :to="{path: '/addTrainingTopic'}">
-                                                <img src="css/left-arrow.png"
+                                                <img src="img/left-arrow.png"
                                                 width="40"
                                                 height="40"
                                                 style="cursor: pointer;">
@@ -40,7 +40,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                             <br/>
                                             <img 
                                             v-show="showChevrons"
-                                             src="css/up.png"
+                                             src="img/chevrons/up.png"
                                              id="scroll-up-4"
                                              width="60"
                                              height="20"
@@ -125,7 +125,7 @@ let trainingRanking = Vue.component('training-ranking', {
                              <div class="row">
                                   <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
                                        <img v-show="showChevrons"
-                                       src="css/down.png"
+                                       src="img/chevrons/down.png"
                                        id="scroll-down-4"
                                        width="60" height="20"
                                        style="position: absolute; 

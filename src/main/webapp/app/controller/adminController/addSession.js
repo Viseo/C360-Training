@@ -530,7 +530,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                         </div>
                     </div>
                     <div style = "width: 100%; height: 28.5em; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
-                        <img @click="returnToPageTraining()" src="css/left-arrow.png"
+                        <img @click="returnToPageTraining()" src="img/left-arrow.png"
                                                  width="40"
                                                  height="40"
                                                  style="cursor: pointer;    

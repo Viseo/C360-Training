@@ -6,16 +6,15 @@
     <link rel="stylesheet" href="css/simplebar.css"/>
     <link rel="stylesheet" href="css/signInSignUp.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/addTrainingTopic.css">
-    <link rel="stylesheet" href="css/registerTrainingCollaborator.css">
+    <link rel="stylesheet" href="css/admin/addTrainingTopic.css">
+    <link rel="stylesheet" href="css/collab/registerTrainingCollaborator.css">
     <link rel="stylesheet" href="css/signInSignUp.css">
-    <link rel="stylesheet" href="css/assignCollaborator.css">
-    <link rel="stylesheet" href="css/trainingToCome.css">
-    <link rel="stylesheet" href="css/wishToVote.css">
-    <link rel="stylesheet" href="css/collectWishes.css">
+    <link rel="stylesheet" href="css/admin/assignCollaborator.css">
+    <link rel="stylesheet" href="css/collab/trainingToCome.css">
+    <link rel="stylesheet" href="css/collab/wishToVote.css">
+    <link rel="stylesheet" href="css/admin/collectWishes.css">
     <link rel="stylesheet" href="css/profilToUpdate.css">
-    <link rel="stylesheet" href="css/skillsStatementByCollaborators.css">
-    <link rel="stylesheet" href="css/trainingRankingByOpinions.css">
+    <link rel="stylesheet" href="css/admin/trainingRankingByOpinions.css">
     <script src="lib/vue.js"></script>
     <script src="lib/jquery.min.js"></script>
     <script src="lib/simplebar.js"></script>
@@ -28,19 +27,19 @@
 <div id="newVue" v-cloak>
     <router-view></router-view>
 </div>
-<script src="app/controller/addSession.js"></script>
+<script src="app/controller/adminController/addSession.js"></script>
 <script src="app/controller/profilToUpdate.js"></script>
-<script src="app/controller/stateRequestTraining.js"></script>
-<script src="app/controller/collectWishes.js"></script>
-<script src="app/controller/wishToVote.js"></script>
-<script src="app/controller/base.js"></script>
-<script src="app/controller/trainingToCome.js"></script>
-<script src="app/controller/assignCollaborator.js"></script>
-<script src="app/controller/registerTrainingCollaborator.js"></script>
+<script src="app/controller/adminController/stateRequestTraining.js"></script>
+<script src="app/controller/adminController/collectWishes.js"></script>
+<script src="app/controller/collabController/wishToVote.js"></script>
+<script src="app/controller/util/base.js"></script>
+<script src="app/controller/collabController/trainingToCome.js"></script>
+<script src="app/controller/adminController/assignCollaborator.js"></script>
+<script src="app/controller/collabController/registerTrainingCollaborator.js"></script>
 <script src="app/controller/registerCollaborator.js"></script>
 <script src="app/controller/resetPassword.js"></script>
-<script src="app/controller/registerTrainingTopic.js"></script>
-<script src="app/controller/trainingRankingByOpinions.js"></script>
+<script src="app/controller/adminController/registerTrainingTopic.js"></script>
+<script src="app/controller/adminController/trainingRankingByOpinions.js"></script>
 <script src="app/controller/main.js"></script>
 </body>
 </html>

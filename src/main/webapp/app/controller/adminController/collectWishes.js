@@ -28,7 +28,7 @@ let collectWishes = Vue.component('collect-wishes', {
                                     <div class="row">
                                         <div class="col-sm-12 col-md-2 col-lg-2">
                                             <router-link :to="{path: '/addTrainingTopic'}">
-                                            <img src="css/left-arrow.png"
+                                            <img src="img/left-arrow.png"
                                                  width="40"
                                                  height="40"
                                                  style="cursor: pointer;">
@@ -37,7 +37,7 @@ let collectWishes = Vue.component('collect-wishes', {
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>
                                             <img v-show="showChevrons"
-                                                 src="css/up.png"
+                                                 src="img/chevrons/up.png"
                                                  id="scroll-up-3"
                                                  width="60"
                                                  height="20"
@@ -57,33 +57,33 @@ let collectWishes = Vue.component('collect-wishes', {
                                                     <a :title="wish.label">
                                                         <img v-if="wish.checked==true"
                                                              @click="addWishToListWishes(wish, false)"
-                                                             src="img/validate_icon.png"
+                                                             src="img/status_icon/validate_icon.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
                                                         <img v-else-if="wish.checked==null"
                                                              @click="addWishToListWishes(wish, true)"
-                                                             src="img/validate_icon_init.png"
+                                                             src="img/status_icon/validate_icon_init.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
                                                         <img v-else-if="wish.checked ==false"
                                                              @click="addWishToListWishes(wish, true)"
-                                                             src="img/refuse_icon.png"
+                                                             src="img/status_icon/refuse_icon.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:50px; 
                                                                     cursor:pointer;">
-                                                        <img src="img/thumbs_up.png"
+                                                        <img src="img/status_icon/thumbs_up.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:90px;">
                                                         <span style="color:#8c8c8c">
                                                               {{ wish.vote_ok.length}} votes
                                                         </span>
-                                                        <img src="img/thumbs_down.png"
+                                                        <img src="img/status_icon/thumbs_down.png"
                                                              width="25"
                                                              height="25"
                                                              style="margin-left:20px;">
@@ -98,7 +98,7 @@ let collectWishes = Vue.component('collect-wishes', {
                                     <div clas="row">
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
                                             <img v-show="showChevrons"
-                                                 src="css/down.png"
+                                                 src="img/chevrons/down.png"
                                                  id="scroll-down-3"
                                                  width="60" height="20"
                                                  style="position: absolute; 

@@ -94,7 +94,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                                                                     transform: scaleX(-1);
                                                                                                     filter: FlipH;
                                                                                                     -ms-filter: 'FlipH';" 
-                                                                                                    src="css/left-arrow.png" width="30" height="30"></td>
+                                                                                                    src="img/left-arrow.png" width="30" height="30"></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -125,7 +125,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                  src="img/profile.jpg">
                                             <img class="image-min" v-else
                                                  :src="'img/'+collaborator.id+'.jpg'">
-                                 <img v-if="collaborator.isAlreadyInSession" src="img/validate_icon.png" width="20" height="20" style="position: absolute; bottom:0em; left:2.7em; cursor: default;">
+                                 <img v-if="collaborator.isAlreadyInSession" src="img/status_icon/validate_icon.png" width="20" height="20" style="position: absolute; bottom:0em; left:2.7em; cursor: default;">
 
                                                 
 
@@ -178,11 +178,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getNumberOfWhisesForNotification();
         this.gatherAllSessions();
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip({
-                placement: 'bottom'
-            });
-        });
     },
     methods: {
 

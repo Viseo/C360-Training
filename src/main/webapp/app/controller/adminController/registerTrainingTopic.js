@@ -622,7 +622,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                 </div>
                             </div>
                             <div style="width: 100%; height: 28.5em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
-                                  <img v-show="state.showChevrons" src="css/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1; margin-top:1%;">
+                                  <img v-show="state.showChevrons" src="img/chevrons/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1; margin-top:1%;">
                                         <table class="fix tabnonborder" >
                                             <tbody>
                                                   <tr>
@@ -652,7 +652,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                   </tr>
                                             </tbody>
                                         </table>
-                                  <img v-show="state.showChevrons" src="css/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                                  <img v-show="state.showChevrons" src="img/chevrons/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
                          </div>`
 });
 
