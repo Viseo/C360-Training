@@ -54,11 +54,9 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         }
     },
 
-    template: `<div class="container-fluid">
+    template: `<div>
     <div class="row">
-        <!--<div class="col-md-12 col-lg-8 col-sm-8"></div>-->
-        <div class="row">
-            <div class="col-lg-8 col-md-8 text-center">
+            <div style="padding:0;" class="col-lg-12 col-md-12 text-center">
                 <legend>Demande de formation</legend>
             </div>
         </div>
@@ -184,7 +182,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                              style="position: relative; left:50%; z-index:1;">
                     </div>
                 </div>
-                <center v-show="showChevrons">
+                <center>
                     <p style="margin:10px;">
                         <span class="glyphicon glyphicon-info-sign" style="margin-right:5px;"></span>
                         Toutes les formations démarrent à 9h00
@@ -192,7 +190,6 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </center>
             </div>
         </div>
-    </div>
 </div>`,
 
     mounted: function () {

@@ -10,7 +10,8 @@ let NavigationMenu = Vue.component('connect-user', {
     },
     template: `
         <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
-            <div class="panel panel-default">
+            <div style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+                 border-radius: 3px 3px 0 0;">
                 <ul class="tab-group">
                     <li :class="tabinscription">
                         <a ref='inscriptionButton' @click="showInscriptionForm()">Inscription</a> 
@@ -28,6 +29,7 @@ let NavigationMenu = Vue.component('connect-user', {
                     </div>
                 </div>
             </div>
+           </div>
         `,
     beforeCreate: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
@@ -809,6 +811,7 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                         <span v-show="emptyField" class="color-red ">{{labelText}} est obligatoire</span>
                         <span v-show="errorField && !emptyField" class="color-red">{{errorMessage}}</span>
                     </td></tr>
+                    </div>
                     </div>
                 </table>
     `, data: function () {

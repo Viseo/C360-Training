@@ -12,6 +12,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             requestedCollaboratorsMemo: [],
             allCollaboratorsIdChosen: [],
             allCollaboratorsAlreadyInSessions: [],
+            allCollaboratorsRightPanel: [],
             collaboratorAlreadyInSession: false,
             checkedNames: true,
             isRegistrationAvailable: true,
@@ -34,11 +35,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
         }
     },
     template: `
-<div class="container-fluid">
+<div>
     <div class="row">
-        <div class="col-sm-12 col-md-10 col-lg-12">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 text-center">
+                <div style="padding-left: 0;
+                                   padding-right: 0;" class="col-lg-12 col-md-12 text-center">
                     <legend>Affecter un collaborateur</legend>
                 </div>
             </div>
@@ -53,8 +53,9 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </select>
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
-                            <h4 class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
-                            <div class="checkbox col-sm-12 col-md-12 col-lg-12">
+                            <h4 style="font-size: 1.8rem;
+    color: rgb(158, 158, 158);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
+                            <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
                                 <label><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher
                                     les demandes</label>
                             </div>
@@ -74,13 +75,26 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                     <div v-show="noCollaboratorsFound" style="margin-top:10px;"> Aucun résultat trouvé
                                     </div>
                                     <table class="tabCentring">
-                                        <tr v-for="collaborator in requestedCollaborators">
-                                            <td @click="moveCollabRight(collaborator)">{{collaborator.lastName}}
+                                        <tr style="cursor:pointer;" v-for="collaborator in requestedCollaborators">
+                                            <td style="padding-bottom:5px;font-size: 1.3rem;
+    color: rgb(158, 158, 158);font-weight: bold; font-family: 'Open Sans', Arial, sans-serif; " @click="moveCollabRight(collaborator)">
+                                            <img  style="border-radius: 50%;" width="30; 
+    object-fit: cover;" height="30" v-if="collaborator.defaultPicture"
+                                                 src="img/profile.jpg">
+                                            <img  style="border-radius: 50%;" width="30; 
+    object-fit: cover;" height="30 " v-else
+                                                 :src="'img/'+collaborator.id+'.jpg'"> 
+                                                 {{collaborator.lastName}}
                                                 {{collaborator.firstName}}
                                             </td>
-                                            <td @click="moveCollabRight(collaborator)"><span
-                                                    class="glyphicon glyphicon-circle-arrow-right green"
-                                                    style="top:2px"></span></td>
+                                            <td @click="moveCollabRight(collaborator)"><img style="cursor: pointer;
+                                                                                                    -moz-transform: scaleX(-1);
+                                                                                                    -o-transform: scaleX(-1);
+                                                                                                    -webkit-transform: scaleX(-1);
+                                                                                                    transform: scaleX(-1);
+                                                                                                    filter: FlipH;
+                                                                                                    -ms-filter: 'FlipH';" 
+                                                                                                    src="css/left-arrow.png" width="30" height="30"></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -90,34 +104,42 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
-                            <h4 class="col-sm-12 col-md-12 col-lg-12">Collaborateurs ajoutés:
+                            <h4 class="col-sm-12 col-md-12 col-lg-12" style="font-size: 1.8rem;
+    color: rgb(158, 158, 158);">Collaborateurs ajoutés:
                                 {{validatedCollab.length}}</h4>
-                            <div class="checkbox col-sm-12 col-md-12 col-lg-12">
-                                <label style = "padding-left:0px;">Nombre de places disponibles : {{15 -
+                            <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
+                                <label style = "padding-left:0px; cursor: default; ">Nombre de places disponibles : {{15 -
                                     allCollaboratorsAlreadyInSessions.length}}</label>
                             </div>
                         </div>
                         <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">
                             <div class="panel-body">
-                                <br/><br/>
-                                <div data-simplebar class="collaboratorsList">
+                                <div data-simplebar class="collaboratorsListRight">
                                     <table class="tabCentring">
-                                        <tr v-for="collaborator in validatedCollab">
-                                            <td @click="moveCollabLeft(collaborator)">
-                                                <span class="glyphicon glyphicon-circle-arrow-left blue"
-                                                  style="top:2px"></span>
-                                            </td>
-                                            <td @click="moveCollabLeft(collaborator)">{{collaborator.lastName}}
-                                                {{collaborator.firstName}}
+                                        <tr v-for="collaborators in allCollaboratorsRightPanel">
+                                            <td style="padding-bottom: 1em;" class="ch-grid" v-for="collaborator in collaborators" 
+                                                @click="moveCollabLeft(collaborator)">
+                                                <div class="ch-item">
+                                                <a data-toggle="tooltip" data-placement="bottom" :title="collaborator.lastName + ' ' +collaborator.firstName">
+                                            <img class="image-min" v-if="collaborator.defaultPicture"
+                                                 src="img/profile.jpg">
+                                            <img class="image-min" v-else
+                                                 :src="'img/'+collaborator.id+'.jpg'">
+                                 <img v-if="collaborator.isAlreadyInSession" src="img/validate_icon.png" width="20" height="20" style="position: absolute; bottom:0em; left:2.7em; cursor: default;">
+
+                                                
+
+                                                 <div v-if="collaborator.isValidated" 
+                                                      class="ch-info">
+								                 <h3><span class="glyphicon glyphicon-arrow-left" style="text-align: center;"></span></h3>
+							                     
+							                     </div>
+							                     
+                                                 </a>
+                                                 </div>
                                             </td>
                                         </tr>
-                                        <br>
-                                    <tr v-for="validatedCollaboratorBySession in allCollaboratorsAlreadyInSessions" 
-                                    class="valCollab" :class="{disabled : isDisabled}">
-                                        {{validatedCollaboratorBySession.firstName}}
-                                        {{validatedCollaboratorBySession.lastName}}
-                                    </tr>
-                                    
+                                   
                                     </table>
                                 </div>
                             </div>
@@ -128,6 +150,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                 @click="saveCollabInSessions()"
                                 :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
                         </button>
+                  
+
                     </div>
                     </br>
                     <div class="row">
@@ -149,13 +173,16 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </div>`,
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.getNumberOfWhisesForNotification();
         this.gatherAllSessions();
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'bottom'
+            });
+        });
     },
     methods: {
 
@@ -241,6 +268,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     }
                     this.requestedCollaboratorsMemo = this.requestedCollaborators;
                     this.selectCollaborators();
+                    this.reorganizeCollaborators();
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -269,6 +297,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     this.requestedCollaborators = this.allCollaborators;
                     this.requestedCollaboratorsMemo = this.allCollaborators;
                     this.selectCollaborators();
+                    this.reorganizeCollaborators();
 
                 },
                 function (response) {
@@ -297,12 +326,17 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.validatedCollab.push(nameCollab);
             this.requestedCollaborators.indexOf(nameCollab);
             this.requestedCollaborators.splice(this.requestedCollaborators.indexOf(nameCollab), 1);
+            this.reorganizeCollaborators();
         },
 
-        moveCollabLeft(nameCollab){
-            this.requestedCollaborators.push(nameCollab);
-            this.validatedCollab.indexOf(nameCollab);
-            this.validatedCollab.splice(this.validatedCollab.indexOf(nameCollab), 1);
+        moveCollabLeft(collaborator){
+            let isCollaboratorNotInSession = !collaborator.isAlreadyInSession;
+            if(isCollaboratorNotInSession) {
+                this.requestedCollaborators.push(collaborator);
+                this.validatedCollab.indexOf(collaborator);
+                this.validatedCollab.splice(this.validatedCollab.indexOf(collaborator), 1);
+                this.reorganizeCollaborators();
+            }
         },
 
         saveCollabInSessions(){
@@ -376,6 +410,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
             this.allCollaborators.splice(0, this.allCollaborators.length);
             this.requestedCollaborators.splice(0, this.requestedCollaborators.length);
             this.isRegistrationAvailable = true;
+            this.allCollaboratorsRightPanel.splice(0, this.allCollaboratorsRightPanel.length);
             this.value = '';
         },
 
@@ -392,6 +427,46 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 this.isSearchNameValid = false;
             }
         },
+        reorganizeCollaborators: function(){
+            this.array = []
+            console.log(this.validatedCollab.length);
+            console.log(this.allCollaboratorsAlreadyInSessions.length);
+            for(var index in this.validatedCollab){
+                console.log("test")
+                this.validatedCollab[index].isValidated = true;
+                this.array.push(this.validatedCollab[index]);
+            }
+            for(var index in this.allCollaboratorsAlreadyInSessions){
+
+                console.log("test2")
+                this.allCollaboratorsAlreadyInSessions[index].isAlreadyInSession = true;
+                this.array.push(this.allCollaboratorsAlreadyInSessions[index]);
+            }
+            console.log(this.array);
+            this.reorganizeRightPanelCollaborators(this.array);
+        },
+
+        reorganizeRightPanelCollaborators: function(value){
+            this.allCollaboratorsRightPanel = [];
+            var tmp = [];
+            var longueur = value.length;
+            var compteur = 0;
+            for (var element in value) {
+                longueur--;
+                compteur++;
+                if (compteur >= 1 && compteur < 3) {
+                    tmp.push(value[element]);
+                    if (longueur == 0) {
+                        this.allCollaboratorsRightPanel.push(tmp);
+                    }
+                } else if (compteur == 3) {
+                    tmp.push(value[element]);
+                    this.allCollaboratorsRightPanel.push(tmp);
+                    tmp = [];
+                    compteur = 0;
+                }
+            }
+        }
     },
     watch: {
         value: function (lastName) {
@@ -410,7 +485,6 @@ let assignCollaborator = Vue.component('assign-collaborator', {
 
         checkedNames: function (value) {
             this.allCollaboratorsName.splice(0, this.allCollaboratorsName.length);
-            this.allCollaboratorsAlreadyInSessions.splice(0, this.allCollaboratorsAlreadyInSessions.length);
             this.verifyCheckedNames();
         },
 
