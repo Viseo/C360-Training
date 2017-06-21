@@ -23,7 +23,6 @@ module.exports = function (config) {
             'src/main/webapp/lib/jwt-decode.js',
             'src/test/javaScript/spec/util/test-util.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
-            'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/util/base.js',
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/adminController/registerTrainingTopic.js',
