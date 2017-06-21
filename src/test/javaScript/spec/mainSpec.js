@@ -56,7 +56,7 @@ describe('Header test', function () {
 
     it('should check if the admin is connect and variables initialization from Header component with the token', function () {
 
-        headerComponent.token = adminToken;
+        headerComponent.token = "undefined";
         document.cookie = "token=" + adminToken;
         document.cookie = "stayconnected=true";
         document.cookie = "timeConnected=2";
@@ -76,6 +76,19 @@ describe('Header test', function () {
         document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
         document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
         document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+    });
+
+    it('should check if the collaborator is not connect', function () {
+
+        headerComponent.token = 'undefined';
+        document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        headerComponent.getCookieInfos();
+
+        expect(headerComponent.stayConnected).toBe(true);
+
     });
 
 
