@@ -22,10 +22,6 @@ describe('Header test', function () {
     beforeEach(function () {
 
         headerComponent = newGlobalVueMain.$children[0];
-        /*document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";*/
     });
 
     afterEach(function () {

@@ -38,6 +38,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/adminController/stateRequestTraining.js',
             'src/main/webapp/app/controller/adminController/trainingRankingByOpinions.js',
             'src/test/javaScript/spec/mainSpec.js',
+            'src/test/javaScript/spec/util/baseSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
             'src/test/javaScript/spec/resetPasswordSpec.js',
             'src/test/javaScript/spec/adminSpec/registerTrainingTopicSpec.js',
@@ -66,7 +67,8 @@ module.exports = function (config) {
         preprocessors: {
             'src/main/webapp/app/controller/*.js':['coverage'],
             'src/main/webapp/app/controller/adminController/*.js':['coverage'],
-            'src/main/webapp/app/controller/collabController/*.js':['coverage']
+            'src/main/webapp/app/controller/collabController/*.js':['coverage'],
+            'src/main/webapp/app/controller/util/*.js':['coverage']
         },
 
 
