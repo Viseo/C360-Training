@@ -209,7 +209,7 @@ let trainingRanking = Vue.component('training-ranking', {
 
             orderFeedbacks(){
                 this.feedbackComments.sort(function(a, b) {
-                    return parseFloat(a.date) - parseFloat(b.date);
+                    return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);
                 });
             },
 
