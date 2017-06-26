@@ -246,7 +246,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
         saveTrainingIntoDatabase() {
-            this.trainingToRegister.trainingTitle = this.training.trainingTitle.toUpperCase();  //delete useless spaces between words
+            this.trainingToRegister.trainingTitle = this.correct(this.trainingToRegister.trainingTitle);  //delete useless spaces between words
             this.trainingToRegister.numberHalfDays = parseInt(this.training.numberHalfDays);
             let saveTrainingSuccess = () => {
                 this.isNewTrainingTitle = true;
@@ -269,8 +269,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
         saveTopicIntoDatabase() {
-            this.topicToRegister.name = this.newTopic.replace(" ", "").toUpperCase();
-
+            this.topicToRegister.name = this.newTopic.replace(" ", "");
+            this.topicToRegister.name = this.correct(this.topicToRegister.name);
             let saveTopicSuccess = () => {
                 this.confirmTopic = true;
                 this.gatherTopicsFromDatabase();
@@ -391,6 +391,16 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
 
         showExistInputMessageForTopicForm(){
             return !this.isNewTopic;
+        },
+
+        correct(stringToCorrect) {
+            let correctedString = stringToCorrect.toUpperCase();
+            correctedString = correctedString.replace(/[ÁÀÄÂ]/g, "A");
+            correctedString = correctedString.replace(/[ÉÈËÊ]/g, "E");
+            correctedString = correctedString.replace(/[ÍÌÏÎ]/g, "I");
+            correctedString = correctedString.replace(/[ÓÒÖÔ]/g, "O");
+            correctedString = correctedString.replace(/[ÚÙÜÛ]/g, "U");
+            return correctedString;
         }
     },
 template:`
