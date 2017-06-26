@@ -400,9 +400,9 @@ template:`
                                   <legend>Ajouter une formation</legend>
                              </div>
                         </div>
-                        <form @submit.prevent="verifyTrainingOrTopicBeforeSubmit">
+                        <form id="newFormation" @submit.prevent="verifyTrainingOrTopicBeforeSubmit">
                             <table class="borderRadius">
-                                <tr>
+                                <tr id="testtt">
                                     <input-text 
                                         width="20%"
                                         label="Formation" 
