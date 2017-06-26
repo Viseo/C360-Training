@@ -82,8 +82,8 @@ display:none;
 }
 
 .collaboratorsList {
-    overflow-y:auto;
-    overflow-x: hidden;
+    overflow-y:none;
+    overflow-x: none;
     height:235px;
     padding-left: 10px;
 }
@@ -105,8 +105,8 @@ display:none;
 }
 
 .collaboratorsListRight {
-    overflow-y:auto;
-    overflow-x: hidden;
+    overflow-y:none;
+    overflow-x: none;
     height:280px;
     padding-left: 10px;
 }
