@@ -590,7 +590,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         },
         orderFeedbacks(){
             this.allFeedbacks.sort(function(a, b) {
-                return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);
+                return (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0);
             });
         },
 
