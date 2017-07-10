@@ -110,7 +110,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                                                 <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                                                                                 <p >{{comments.comment}}</p>
                                                                                 </div >
-                                                                                <a class="col-sm-offset-12 col-md-offset-7 col-lg-offset-7" @click="deleteFeedbackComment(comments)"> Supprimer le commentaire </a> 
+                                                                                <a class="col-sm-offset-12 col-md-offset-7 col-lg-offset-7" @click="deleteFeedbackComment(comments)" style="cursor: pointer"> Supprimer le commentaire </a> 
                                                                                  <hr>
                                                                             </div>
                                                                         </div>
