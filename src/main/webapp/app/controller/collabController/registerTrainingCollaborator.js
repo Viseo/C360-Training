@@ -134,7 +134,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                                             </button>
                                             <p style="color:green" v-show="addingRequestSucceeded"> Demande envoyée avec
                                                 succès </p>
-                                            <p style="color:orange" v-show="isNoSession && trainingrequested"> Vous avez
+                                            <p style="color:orange" v-show="isNoSession && trainingrequested && !addingRequestSucceeded"> Vous avez
                                                 déjà effectué une demande pour cette formation </p>
                                         </center>
                                     </div>
