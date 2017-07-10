@@ -498,7 +498,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                 this.isValidOldPassword = true;
                 this.isNotValidOldPassword = false;
             } else {
-                this.errorMessageOldPassword = 'Le mot de passe doit avoir au minimum 6 caractères';
+                this.errorMessageOldPassword = 'Ancien mot de passe incorrect.';
                 this.isOldPasswordValid = false;
                 this.isValidOldPassword = false;
                 this.isNotValidOldPassword = true;
