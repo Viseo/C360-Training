@@ -8,6 +8,7 @@ let NavigationMenu = Vue.component('connect-user', {
             newCollab: false
         }
     },
+
     template: `
         <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
             <div style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
@@ -31,6 +32,7 @@ let NavigationMenu = Vue.component('connect-user', {
             </div>
            </div>
         `,
+
     beforeCreate: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
 
@@ -52,11 +54,13 @@ let NavigationMenu = Vue.component('connect-user', {
     },
 
     methods: {
+
         showInscriptionForm() {
             this.tabinscription = 'tab active';
             this.tabconnexion = 'tab';
             this.newCollab = true;
         },
+
         showConnexionForm() {
             this.tabinscription = 'tab';
             this.tabconnexion = 'tab active';
@@ -64,11 +68,6 @@ let NavigationMenu = Vue.component('connect-user', {
         }
     }
 });
-
-
-
-
-
 
 let Formulaire = Vue.component('inscription-form', {
     template: `
@@ -172,6 +171,7 @@ let Formulaire = Vue.component('inscription-form', {
                 </div>
             </form>          
             `,
+
     data: function () {
         return {
             collaborator: {
@@ -220,75 +220,99 @@ let Formulaire = Vue.component('inscription-form', {
             isConfirmPasswordValid: true
         }
     },
+
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
+
     watch: {
+
         personnalIdNumber: function (value) {
             this.verifyLogin(value);
         },
+
         lastName: function (value) {
             this.verifyLastName(value);
         },
+
         firstName: function (value) {
             this.verifyFirstName(value);
         },
+
         email: function (value) {
             this.verifyEmail(value);
         },
+
         password: function (value) {
             this.verifyPassword(value);
             if (this.confirmPassword != '')
                 this.verifyConfirmPassword(value);
         },
+
         confirmPassword: function (value) {
             this.verifyConfirmPassword(value);
         }
     },
+
     methods: {
+
         isErrorLogin() {
             return !this.isLoginValid && !this.loginEmpty;
         },
+
         isErrorLastName() {
             return !this.isLastNameValid && !this.lastNameEmpty;
         },
+
         isErrorFirstName() {
             return !this.isFirstNameValid && !this.firstNameEmpty;
         },
+
         isErrorEmail() {
             return !this.isEmailValid && !this.emailEmpty;
         },
+
         isErrorPassword() {
             return !this.isPasswordValid && !this.passwordEmpty;
         },
+
         isErrorConfirmPassword() {
             return !this.isConfirmPasswordValid && !this.confirmPasswordEmpty;
         },
+
         toggleShowPassword() {
             this.showPass = !this.showPass;
         },
+
         toggleShowPasswordConfirmation() {
             this.showPassConf = !this.showPassConf;
         },
+
         setLoginEmptyToFalse() {
             this.loginEmpty = false;
         },
+
         setLastNameEmptyToFalse() {
             this.lastNameEmpty = false;
         },
+
         setFirstNameEmptyToFalse() {
             this.firstNameEmpty = false;
         },
+
         setEmailAlreadyExistToFalse() {
             this.emailAlreadyExist = false;
             this.emailEmpty = false
         },
+
         setPasswordEmptyToFalse() {
             this.passwordEmpty = false
         },
+
         setConfirmPasswordEmptyToFalse() {
             this.confirmPasswordEmpty = false
         },
+
         verifyLogin(personnalIdNumber) {
             this.personalIdNumberAlreadyExist = false;
             this.loginEmpty = false;
@@ -422,7 +446,6 @@ let Formulaire = Vue.component('inscription-form', {
                     this.emailAlreadyExist = true;
                 }
             };
-
             this.post("api/collaborateurs", this.collaboratorToRegister, sendUserToRegisterSuccess, sendUserToRegisterError)
         },
 
@@ -471,7 +494,6 @@ let Formulaire = Vue.component('inscription-form', {
     }
 });
 
-
 let ConnexionForm = Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
@@ -480,35 +502,73 @@ let ConnexionForm = Vue.component('connexionForm', {
                 <div class="form-group" :class="{'has-error':emailEmpty || !isNotNewEmail}">
                     <label for="email">Email</label>
                     <div class="inner-addon left-addon" :class="{ 'control': true }">
-                    <tr><td style="width: 500px;">
-                        <i class="glyphicon glyphicon-envelope"></i>
-                        <input ref="inputMail" type="email"  name="email" id="email" tabindex="2"  class="form-control"  placeholder="eric.dupont@viseo.com"
-                               v-model="email" @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  @blur="isEmailEmpty" onfocus="this.placeholder = ''"
-                               onblur="this.placeholder = 'eric.dupont@viseo.com'">
-                    </td></tr>
-                    <tr><td style="height: 20px;">
-                        <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
-                        <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Cet email n'est associé à aucun compte</span>
-                    </td></tr>
+                        <tr>
+                            <td style="width: 500px;">
+                                <i class="glyphicon glyphicon-envelope"></i>
+                                <input ref="inputMail" 
+                                       type="email"  
+                                       name="email" 
+                                       id="email" 
+                                       tabindex="2"  
+                                       class="form-control"  
+                                       placeholder="eric.dupont@viseo.com"
+                                       v-model="email" 
+                                       @focus="emailEmpty = false; isNotNewEmail = true; showPopup = false;"  
+                                       @blur="isEmailEmpty" onfocus="this.placeholder = ''"
+                                       onblur="this.placeholder = 'eric.dupont@viseo.com'">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 20px;">
+                                <span v-show="emailEmpty" class="color-red ">Email est obligatoire.</span>
+                                <span v-show="!isNotNewEmail && !emailEmpty" class="color-red ">Cet email n'est associé à aucun compte</span>
+                            </td>
+                        </tr>
                     </div>
                 </div>
                 <!-- MOT DE PASSE -->
                 <div class="form-group" :class="{'has-error':passwordEmpty }">
                     <label for="mdp">Mot de passe</label>
                     <div class="password" :class="{ 'control': true }">
-                    <tr><td style="width: 500px;">
-                        <i class="glyphicon glyphicon-lock"></i>
-                        <span @click="showPass = !showPass" v-show="!showPass && password" class="glyphicon glyphicon-eye-open"> </span>
-                        <span @click="showPass = false" v-show="showPass && password" class="glyphicon glyphicon-eye-close"> </span>
-                        <input ref="inputPassword" type="password" v-model="password" v-show="!showPass" name="mdp" id="mdp" tabindex="2" class="form-control"
-                               placeholder="••••••" onfocus="this.placeholder = ''" onblur="this.placeholder = '••••••'" @focus="passwordEmpty = false; showPopup = false;"
-                               @blur="isPasswordEmpty">
-                        <input ref="inputPasswordVisible" type="text" v-model="password" v-show="showPass"  name="mdp" id="mdp2" tabindex="2" class="form-control"
-                               @focus="passwordEmpty = false" @blur="isPasswordEmpty">
-                    </td></tr>
-                    <tr><td style="height: 20px;">
-                        <span v-show="passwordEmpty"  class="color-red ">Mot de passe est obligatoire.</span>
-                    </td></tr>
+                        <tr>
+                            <td style="width: 500px;">
+                                <i class="glyphicon glyphicon-lock"></i>
+                                <span @click="showPass = !showPass" 
+                                      v-show="!showPass && password" 
+                                      class="glyphicon glyphicon-eye-open"> </span>
+                                <span @click="showPass = false" 
+                                      v-show="showPass && password" 
+                                      class="glyphicon glyphicon-eye-close"> </span>
+                                <input ref="inputPassword" 
+                                       type="password" 
+                                       v-model="password" 
+                                       v-show="!showPass" 
+                                       name="mdp" id="mdp" 
+                                       tabindex="2" 
+                                       class="form-control"
+                                       placeholder="••••••" 
+                                       onfocus="this.placeholder = ''" 
+                                       onblur="this.placeholder = '••••••'" 
+                                       @focus="passwordEmpty = false; showPopup = false;"
+                                       @blur="isPasswordEmpty">
+                                <input ref="inputPasswordVisible" 
+                                       type="text" 
+                                       v-model="password" 
+                                       v-show="showPass"  
+                                       name="mdp" 
+                                       id="mdp2" 
+                                       tabindex="2" 
+                                       class="form-control"
+                                       @focus="passwordEmpty = false" 
+                                       @blur="isPasswordEmpty">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 20px;">
+                                <span v-show="passwordEmpty"  
+                                      class="color-red ">Mot de passe est obligatoire.</span>
+                            </td>
+                        </tr>
                     </div>
                 </div>
                 <div class="checkbox">                 
@@ -537,6 +597,7 @@ let ConnexionForm = Vue.component('connexionForm', {
             </table>
             </form>          
             `,
+
     data: function () {
         return {
             user: {
@@ -562,9 +623,11 @@ let ConnexionForm = Vue.component('connexionForm', {
             firstNameToSend: ''
         }
     },
+
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
     },
+
     methods: {
 
         handleCookie(token) {
@@ -698,8 +761,6 @@ let ConnexionForm = Vue.component('connexionForm', {
     }
 });
 
-
-
 let CustomInput = Vue.component('customInput', {
     props: ['value', 'label', 'labelText', 'icon', 'type', 'tab', 'placeholder', "maxlength",
         "minlength", 'emptyField', "existField", "existMessage", "errorField", "errorMessage", "disabled"],
@@ -751,6 +812,7 @@ let CustomInput = Vue.component('customInput', {
             show: false
         }
     },
+
     methods: {
         updateValue(value){
             this.textValue = value;
