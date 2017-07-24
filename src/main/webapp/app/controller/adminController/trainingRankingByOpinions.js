@@ -59,7 +59,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                        style="height:100%;">
                                                     <div class="row">
                                                         <p  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0">Aucune formation n'a été notée</p>
-                                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for=" training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
+                                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for="training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
                                                          <panel :is-open="openPanel"
                                                                     type="default">
                                                                     <p slot="header" 
@@ -155,6 +155,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     function (response) {
                         console.log("success to get all training score");
                         this.allTrainingScore = response.data;
+                        this.orderRatings();
                         for (let index in this.allTrainingScore){
                             this.allTrainingScore[index][1]= Math.floor(this.allTrainingScore[index][1])
                         }
@@ -205,6 +206,12 @@ let trainingRanking = Vue.component('training-ranking', {
                 if((dateToConvert.getMonth()+1)<10) addZero="0";
                 formattedDate = dateToConvert.getDate()+"/"+addZero+(dateToConvert.getMonth()+1)+ "/" + dateToConvert.getFullYear()+ " à " + dateToConvert.getHours()+ "h"+ dateToConvert.getMinutes();
                 return formattedDate;
+            },
+
+            orderRatings(){
+                this.allTrainingScore.sort(function(a,b) {
+                    return (a[1] < b[1]) ? 1 : ((b[1] < a[1]) ? -1 : 0);
+                })
             },
 
             orderFeedbacks(){
