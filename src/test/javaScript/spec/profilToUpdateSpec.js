@@ -139,7 +139,7 @@ describe('profil to update test', function () {
     it('it should verify if the character number of old password is not valid when collaborator is filling a 4 character password', function () {
         var password = '1234';
         vmProfilToUpdate.verifyOldPassword(password);
-        expect(vmProfilToUpdate.errorMessageOldPassword).toBe('Le mot de passe doit avoir au minimum 6 caractères');
+        expect(vmProfilToUpdate.errorMessageOldPassword).toBe('Ancien mot de passe incorrect.');
         expect(vmProfilToUpdate.isOldPasswordValid).toBe(false);
         expect(vmProfilToUpdate.isValidOldPassword).toBe(false);
         expect(vmProfilToUpdate.isNotValidOldPassword).toBe(true);

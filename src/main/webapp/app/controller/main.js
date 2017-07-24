@@ -111,7 +111,8 @@ let Header = Vue.component('header-component', {
     },
     methods: {
         redirectPageHearder(){
-            let isAdmin = () => jwt_decode(this.token).roles;
+            var isAdmin = jwt_decode(this.token).roles;
+
             if(isAdmin){
                 this.goTo('addTrainingTopic');
             }
