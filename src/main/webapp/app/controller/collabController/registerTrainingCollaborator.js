@@ -50,7 +50,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             collaboratorLike: false,
             allFeedbacks: [],
             showComment: false,
-            showChevrons: false
+            showChevronsUp: false,
+            showChevronsBottom: false
         }
     },
 
@@ -91,8 +92,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
-                        <img v-show="showChevrons" src="img/chevrons/up.png" id="scroll-up-2" width="60" height="20"
-                             style="position: absolute; left:50%; z-index:1;">
+                        <img v-show="showChevronsUp" src="img/chevrons/up.png" id="scroll-up-2" width="60" height="20"
+                             style="position: absolute; left:50%; z-index:1; cursor: pointer;">
                     </div>
                 </div>
                 <div id="scrollTrainingCollaborator" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
@@ -178,8 +179,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>
                 <div class="row">
                     <div class="col-lg-12" style="margin-top:10px">
-                        <img v-show="showChevrons" src="img/chevrons/down.png" id="scroll-down-2" width="60" height="20"
-                             style="position: relative; left:50%; z-index:1;">
+                        <img v-show="showChevronsBottom" src="img/chevrons/down.png" id="scroll-down-2" width="60" height="20"
+                             style="position: relative; left:50%; z-index:1; cursor: pointer;">
                     </div>
                 </div>
                 <center>
@@ -200,6 +201,19 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
         this.activeScrollDown('#scroll-down-2','#scrollTrainingCollaborator');
         this.activateScrollWheel('#scrollTrainingCollaborator');
         this.getAllFeedbacks();
+        let self = this;
+        $('#scrollTrainingCollaborator').on('scroll', function() {
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                self.showChevronsBottom = false;
+            }
+            else if($(this).scrollTop() ==0) {
+                self.showChevronsUp = false;
+            }
+            else {
+                self.showChevronsBottom = true;
+                self.showChevronsUp = true;
+            }
+        })
     },
 
     watch: {
@@ -267,7 +281,10 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
 
         reinitialize(training){
             this.trainingSelected = training;
-            this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
+            let chevronsNeeded = this.checkForChevrons('scrollTrainingCollaborator');
+            console.log("heyyyy "+ chevronsNeeded);
+            this.showChevronsUp = chevronsNeeded;
+            this.showChevronsBottom = chevronsNeeded;
             if (this.showComment == false) {
                 this.trainingSelected = training;
                 this.showComment = false;
@@ -444,7 +461,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     this.openPanel = false;
                 this.value = null;
             }).then(function() {
-                this.showChevrons = this.checkForChevrons('scrollTrainingCollaborator');
+                this.showChevronsUp = this.checkForChevrons('scrollTrainingCollaborator');
+                this.showChevronsBottom = this.checkForChevrons('scrollTrainingCollaborator');
             });
         },
 
