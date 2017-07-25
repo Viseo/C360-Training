@@ -138,6 +138,12 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                                                  </a>
                                                  </div>
                                             </td>
+                                            <td v-if="collaborators.length==2" style="padding-bottom: 1em;" class="ch-grid" >
+                                                         <div class="ch-item" style="box-shadow: none;">
+                                            <img>
+                                                 </a>
+                                                 </div>
+                                            </td>
                                         </tr>
                                    
                                     </table>
