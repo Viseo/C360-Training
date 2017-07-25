@@ -13,10 +13,9 @@ let Header = Vue.component('header-component', {
     <div class="navbar navbar-default navbar-fixed-top" :class="headerColor"> 
         <div class="container-fluid" id="header-component"> 
             <div class="row"> 
-                <div id="custom-navbar" 
+                <div id="custom-navbar" @click="redirectPageHearder();" style="cursor:default;"
                     class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header"> 
-                    <p id="navbar-title" 
-                        href="#">Collaborateur 360</p> 
+                    <p id="navbar-title">Collaborateur 360</p> 
                     <p id="navbar-subtitle">{{ title }}</p> 
                 </div> 
                 <div id="navbar-right-part" 
@@ -111,6 +110,16 @@ let Header = Vue.component('header-component', {
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
     },
     methods: {
+        redirectPageHearder(){
+            var isAdmin = jwt_decode(this.token).roles;
+
+            if(isAdmin){
+                this.goTo('addTrainingTopic');
+            }
+            else {
+                this.goTo('registerTrainingCollaborator');
+            }
+        },
 
         checkIfTokenExist(){
             let isTokenValid = (response) => {

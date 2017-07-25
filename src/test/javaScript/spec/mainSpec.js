@@ -22,10 +22,6 @@ describe('Header test', function () {
     beforeEach(function () {
 
         headerComponent = newGlobalVueMain.$children[0];
-        /*document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";*/
     });
 
     afterEach(function () {
@@ -34,52 +30,72 @@ describe('Header test', function () {
 
     });
 
-    it('should check if the collaborator is connect and variables initialization from Header component with the token', function () {
+    it('should check if the collaborator is connect and variables initialization from Header component with the token', function (done) {
 
         document.cookie = "token=" + collaboratorToken;
         document.cookie = "stayconnected=true";
         document.cookie = "timeConnected=2";
         headerComponent.getCookieInfos();
 
-        expect(headerComponent.lastName).toBe('LHOTE');
-        expect(headerComponent.firstName).toBe('Caroline');
-        expect(headerComponent.token).toBe(collaboratorToken);
-        expect(headerComponent.disconnect).toBe(false);
-        expect(headerComponent.idleSecondsCounter).toBe(0);
-        expect(headerComponent.myInterval).toBe('');
-        expect(headerComponent.stayConnected).toBe(true);
-        expect(headerComponent.dialog).toBe(false);
-        expect(headerComponent.timeConnected).toBe(2);
+        setTimeout(function () {
+            expect(headerComponent.lastName).toBe('LHOTE');
+            expect(headerComponent.firstName).toBe('Caroline');
+            expect(headerComponent.token).toBe(collaboratorToken);
+            expect(headerComponent.disconnect).toBe(false);
+            expect(headerComponent.idleSecondsCounter).toBe(0);
+            expect(headerComponent.myInterval).toBe('');
+            expect(headerComponent.stayConnected).toBe(true);
+            expect(headerComponent.dialog).toBe(false);
+            expect(headerComponent.timeConnected).toBe(2);
 
-        document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
-        document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            done();
+        },0);
 
     });
 
-    it('should check if the admin is connect and variables initialization from Header component with the token', function () {
+    it('should check if the admin is connect and variables initialization from Header component with the token', function (done) {
 
-        headerComponent.token = adminToken;
+        headerComponent.token = "undefined";
         document.cookie = "token=" + adminToken;
         document.cookie = "stayconnected=true";
         document.cookie = "timeConnected=2";
         headerComponent.getCookieInfos();
 
-        expect(headerComponent.lastName).toBe('DUPONT');
-        expect(headerComponent.firstName).toBe('Eric');
-        expect(headerComponent.token).toBe(adminToken);
-        expect(headerComponent.disconnect).toBe(false);
-        expect(headerComponent.idleSecondsCounter).toBe(0);
-        expect(headerComponent.myInterval).toBe('');
-        expect(headerComponent.stayConnected).toBe(true);
-        expect(headerComponent.dialog).toBe(false);
-        expect(headerComponent.timeConnected).toBe(2);
+        setTimeout(function () {
+            expect(headerComponent.lastName).toBe('DUPONT');
+            expect(headerComponent.firstName).toBe('Eric');
+            expect(headerComponent.token).toBe(adminToken);
+            expect(headerComponent.disconnect).toBe(false);
+            expect(headerComponent.idleSecondsCounter).toBe(0);
+            expect(headerComponent.myInterval).toBe('');
+            expect(headerComponent.stayConnected).toBe(true);
+            expect(headerComponent.dialog).toBe(false);
+            expect(headerComponent.timeConnected).toBe(2);
 
-        document.cookie = "token=" + adminToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "token=" + adminToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+            done();
+        },0);
+
+    });
+
+    it('should check if the collaborator is not connect', function () {
+
+        headerComponent.token = 'undefined';
+        document.cookie = "token=" + collaboratorToken + "; expires=Thu, 18 Dec 2013 12:00:00 UTC";
         document.cookie = "stayconnected=true" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
         document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
         document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
+        headerComponent.getCookieInfos();
+
+        expect(headerComponent.stayConnected).toBe(true);
+
     });
 
 
@@ -105,7 +121,7 @@ describe('Header test', function () {
             document.cookie = "timeConnected=2" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             document.cookie = "defaultPicture=" +"; expires=Thu, 18 Dec 2013 12:00:00 UTC";
             done();
-        }, 0)
+        }, 0);
 
     });
 
@@ -226,14 +242,16 @@ describe('Header test', function () {
         expect(headerComponent.app.leave).toBe(false);
     });
 
-    it('should check if we are in application "Gestion des compétences"', function () {
-        headerComponent.title = "Gestion des compétences";
-        headerComponent.setTitle();
+    it('should check after the click of collaborator on the title "Gestion des formations" he is  redirect in the welcome page', function () {
+        headerComponent.token = collaboratorToken;
+        headerComponent.redirectPageHearder();
+        expect(headerComponent.$route.path).toBe("/registerTrainingCollaborator");
 
-        expect(headerComponent.app.training).toBe(false);
-        expect(headerComponent.app.skills).toBe(true);
-        expect(headerComponent.app.mission).toBe(false);
-        expect(headerComponent.app.leave).toBe(false);
     });
 
+    it('should check after the click of admin on the title "Gestion des formations" he is  redirect in the welcome page', function () {
+        headerComponent.token = adminToken;
+        headerComponent.redirectPageHearder();
+        expect(headerComponent.$route.path).toBe("/addTrainingTopic");
+    });
 });

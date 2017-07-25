@@ -4,32 +4,42 @@
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var newGlobalVueProfilToUpdate = new Vue({
-    template: '<div><profil-to-update></profil-to-update></div>',
-    router: router,
-    components: {
-        'profilToUpdate': profilToUpdate
-    }
-}).$mount();
-
+/*var newGlobalVueProfilToUpdate = new Vue({
+ template: '<div><profil-to-update></profil-to-update></div>',
+ router: router,
+ components: {
+ 'profilToUpdate': profilToUpdate
+ }
+ }).$mount();*/
+var newGlobalVueProfilToUpdate;
 var vmProfilToUpdate;
 
 describe('profil to update test', function () {
 
     beforeEach(function () {
-        let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
-        document = {
-            value_: '',
 
-            get cookie() {
-                return this.value_;
-            },
-
-            set cookie(value) {
-                this.value_ += value + ';';
+        newGlobalVueProfilToUpdate = new Vue({
+            template: '<div><profil-to-update></profil-to-update></div>',
+            router: router,
+            components: {
+                'profilToUpdate': profilToUpdate
             }
-        };
+        }).$mount();
+
+        let collaboratorToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDYXJvbGluZSIsImxhc3ROYW1lIjoiTGhvdGUiLCJyb2xlcyI6ZmFsc2UsImlkIjoxfQ.b6V6cYkhMD4QCXBF_3-kO4S19fwnhDkDQR4ggNqktiyYP6CrbfUCb9Ov2B-2PX1EawUeuPy9WKAobT8FMFoDtg";
+        /*document = {
+         value_: '',
+
+         get cookie() {
+         return this.value_;
+         },
+
+         set cookie(value) {
+         this.value_ += value + ';';
+         }
+         };*/
         document.cookie = "token=" + collaboratorToken;
+
         vmProfilToUpdate = newGlobalVueProfilToUpdate.$children[0];
     });
 
@@ -87,13 +97,16 @@ describe('profil to update test', function () {
     });
 
     it('it should verify if the last name is valid when collaborator is filling the last name field', function () {
+
         vmProfilToUpdate.verifyLastName('DUPONT');
         expect(vmProfilToUpdate.isLastNameValid).toBe(true);
         expect(vmProfilToUpdate.errorMessageLastName).toBe('');
 
+
     });
     it('it should verify if the last name is not valid when collaborator is filling a wrong name in the last name field', function () {
         vmProfilToUpdate.verifyLastName('DUPONT96');
+
         expect(vmProfilToUpdate.isLastNameValid).toBe(false);
         expect(vmProfilToUpdate.errorMessageLastName).toBe('Veuillez entrer un nom valide');
 
@@ -126,7 +139,7 @@ describe('profil to update test', function () {
     it('it should verify if the character number of old password is not valid when collaborator is filling a 4 character password', function () {
         var password = '1234';
         vmProfilToUpdate.verifyOldPassword(password);
-        expect(vmProfilToUpdate.errorMessageOldPassword).toBe('Le mot de passe doit avoir au minimum 6 caractères');
+        expect(vmProfilToUpdate.errorMessageOldPassword).toBe('Ancien mot de passe incorrect.');
         expect(vmProfilToUpdate.isOldPasswordValid).toBe(false);
         expect(vmProfilToUpdate.isValidOldPassword).toBe(false);
         expect(vmProfilToUpdate.isNotValidOldPassword).toBe(true);
@@ -226,7 +239,7 @@ describe('profil to update test', function () {
         prepareRequest('PUT', 'api/updatecollaborator', 200, collaboratorInformation);
         vmProfilToUpdate.updateCollaboratorInfo();
         vmProfilToUpdate.updateCollaboratorImage();
-        console.log("vmProfilToUpdate.infoCollab.password : " +vmProfilToUpdate.infoCollab.password);
+        console.log("vmProfilToUpdate.infoCollab.password : " + vmProfilToUpdate.infoCollab.password);
         setTimeout(function () {
             expect(vmProfilToUpdate.isRightOldPassword).toBe(true);
             expect(vmProfilToUpdate.oldPasswordEmpty).toBe(false);
@@ -240,18 +253,18 @@ describe('profil to update test', function () {
     });
 
     it('it should check if old and new password are different', function (done) {
-            vmProfilToUpdate.infoCollab.password = '123456';
-            vmProfilToUpdate.newPassword = '123456';
-            vmProfilToUpdate.confirmPassword = '123456';
-            vmProfilToUpdate.password = '123456';
-            vmProfilToUpdate.updateCollaboratorInfo();
+        vmProfilToUpdate.infoCollab.password = '123456';
+        vmProfilToUpdate.newPassword = '123456';
+        vmProfilToUpdate.confirmPassword = '123456';
+        vmProfilToUpdate.password = '123456';
+        vmProfilToUpdate.updateCollaboratorInfo();
 
-            setTimeout(function () {
-                expect(vmProfilToUpdate.isRightOldPassword).toBe(false);
+        setTimeout(function () {
+            expect(vmProfilToUpdate.isRightOldPassword).toBe(false);
 
-                done();
-            }, 0);
-        });
+            done();
+        }, 0);
+    });
 
     it('it should not update collaborator password when collaborator' +
         ' write a wrong old password', function (done) {
@@ -329,7 +342,7 @@ describe('profil to update test', function () {
     });
 
     it('it should save update collaborator ', function (done) {
-        var response =  [];
+        var response = [];
         prepareRequest('PUT', 'api/updatecollaborator', 200, response);
         vmProfilToUpdate.CollabToUpdate = [{
             email: "eric.dupont@viseo.com",
@@ -349,5 +362,13 @@ describe('profil to update test', function () {
             expect(vmProfilToUpdate.imageHasBeenChanged).toBe(false);
             done();
         })
+    });
+
+    it('should check if modify the lastName the watch start and verify syntax lastName', function (done) {
+        vmProfilToUpdate.lastName = "DUPONT";
+        setTimeout(function () {
+            expect(vmProfilToUpdate.isLastNameValid).toBe(true);
+            done();
+        }, 0);
     });
 });

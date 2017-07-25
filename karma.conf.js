@@ -23,7 +23,6 @@ module.exports = function (config) {
             'src/main/webapp/lib/jwt-decode.js',
             'src/test/javaScript/spec/util/test-util.js',
             'src/main/webapp/app/controller/registerCollaborator.js',
-            'src/main/webapp/app/Util/vue-mock.js',
             'src/main/webapp/app/controller/util/base.js',
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/adminController/registerTrainingTopic.js',
@@ -34,10 +33,13 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/collabController/wishToVote.js',
             'src/main/webapp/app/controller/adminController/collectWishes.js',
             'src/main/webapp/app/controller/profilToUpdate.js',
+            'src/main/webapp/app/controller/resetPassword.js',
             'src/main/webapp/app/controller/adminController/stateRequestTraining.js',
             'src/main/webapp/app/controller/adminController/trainingRankingByOpinions.js',
             'src/test/javaScript/spec/mainSpec.js',
+            'src/test/javaScript/spec/util/baseSpec.js',
             'src/test/javaScript/spec/registerCollaboratorSpec.js',
+            'src/test/javaScript/spec/resetPasswordSpec.js',
             'src/test/javaScript/spec/adminSpec/registerTrainingTopicSpec.js',
             'src/test/javaScript/spec/collabSpec/registerTrainingCollaboratorSpec.js',
             'src/test/javaScript/spec/adminSpec/assignCollaboratorSpec.js',
@@ -64,7 +66,8 @@ module.exports = function (config) {
         preprocessors: {
             'src/main/webapp/app/controller/*.js':['coverage'],
             'src/main/webapp/app/controller/adminController/*.js':['coverage'],
-            'src/main/webapp/app/controller/collabController/*.js':['coverage']
+            'src/main/webapp/app/controller/collabController/*.js':['coverage'],
+            'src/main/webapp/app/controller/util/*.js':['coverage']
         },
 
 

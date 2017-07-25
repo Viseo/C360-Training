@@ -9,35 +9,37 @@ Date.prototype.getMonthName = function() {
 };
 
 let stateRequest = Vue.component('state-request', {
-        props: [],
-        data: function() {
-            return {
-                noSessionForCollaborator: true,
-                collaboratorIdentity: {
-                    id: '',
-                    lastName: '',
-                    firstName: '',
-                    alreadyShownPopUp:false,
-                },
-                requestedTrainingByCollaborator:[],
-                requestedTraining:[{
-                    requestTrainingList: [],
-                    trainingSessions: [],
-                    title:''
-                }],
-                score:'',
-                comment:'',
-                feedback:{
-                    score:'',
-                    comment:'',
-                    training:''
-                },
-                allTrainingsToGiveFeedbacks:[],
-                showRatingTrainingsPopup:false,
-                openPanel: false,
-            }
-        },
-        template: `
+    props: [],
+    data: function () {
+        return {
+            showChevronsBottom: false,
+            showChevronsUp: false,
+            noSessionForCollaborator: true,
+            collaboratorIdentity: {
+                id: '',
+                lastName: '',
+                firstName: '',
+                alreadyShownPopUp: false,
+            },
+            requestedTrainingByCollaborator: [],
+            requestedTraining: [{
+                requestTrainingList: [],
+                trainingSessions: [],
+                title: ''
+            }],
+            score: '',
+            comment: '',
+            feedback: {
+                score: '',
+                comment: '',
+                training: ''
+            },
+            allTrainingsToGiveFeedbacks: [],
+            showRatingTrainingsPopup: false,
+            openPanel: false,
+        }
+    },
+    template: `
         <div id ="innerdiv" class="container-fluid" @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
              <div class="row">
                     <div style="padding:0" class="col-lg-12 col-md-12 col-sm-12 text-center">
@@ -56,13 +58,14 @@ let stateRequest = Vue.component('state-request', {
                                        <div v-show="!noSessionForCollaborator" 
                                             class="col-lg-12" 
                                             style="margin-bottom:30px">
-                                             <img v-show="showChevrons" src="img/chevrons/up.png" 
+                                             <img v-show="showChevronsUp" src="img/chevrons/up.png" 
                                                   id="scroll-up-3" 
                                                   width="60" 
                                                   height="20" 
                                                   style="position: absolute; 
                                                          left:50%; 
-                                                         z-index:1;">
+                                                         z-index:1;
+                                                         cursor: pointer;">
                                        </div>
                                 </div>
                                 <div id="scrollMyTrainings">
@@ -94,14 +97,15 @@ let stateRequest = Vue.component('state-request', {
                                 <div v-show="!noSessionForCollaborator" 
                                      class="col-lg-12" 
                                      style="margin-top:10px">
-                                       <img v-show="showChevrons" src="img/chevrons/down.png" 
+                                       <img v-show="showChevronsBottom" src="img/chevrons/down.png" 
                                             id="scroll-down-3" 
                                             width="60" 
                                             height="20" 
                                             style="position: relative; 
                                                    bottom:10px; 
                                                    left:50%; 
-                                                   z-index:1;">
+                                                   z-index:1;
+                                                   cursor: pointer">
                                 </div>
                          </div>
                    </div>
@@ -217,141 +221,165 @@ let stateRequest = Vue.component('state-request', {
                  </alert>
              </div>
         </div>
-
 `,
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.activateScrollUp('#scroll-up-3','#scrollMyTrainings');
-        this.activeScrollDown('#scroll-down-3','#scrollMyTrainings');
+        this.activateScrollUp('#scroll-up-3', '#scrollMyTrainings');
+        this.activeScrollDown('#scroll-down-3', '#scrollMyTrainings');
         this.activateScrollWheel('#scrollMyTrainings');
         this.popUpDivClose();
         this.initializeInformationsFromCookie();
         this.fetchTrainingsSessions();
         this.collectAllTrainingsToGiveFeedbacks();
-
-    },
-    computed: {
-      showChevrons: function() {
-          return this.requestedTrainingByCollaborator.length > 1;
-      }
-    },
-        methods: {
-            popUpDivClose(){
-                $('#outerdiv').on('click', function (e) {
-                    e.stopPropagation();
-                })
-            },
-                setScore(value){
-                    this.score = value;
-                },
-
-                getDate(date){
-                    dateToConvert = new Date(date);
-                    formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
-                    return formattedDate;
-                },
-
-                initializeInformationsFromCookie(){
-                    let isPopUpAlreadyShownDuringFirstConnection = this.getCookie("alreadyShownPopUp");
-                    this.alreadyShownPopUp= isPopUpAlreadyShownDuringFirstConnection;
-                    let collaboratorInfo = this.getCollaboratorInfoFromCookie();
-                    let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
-                    if(isCollaboratorInfoNotEmpty){
-                        this.collaboratorIdentity.id = collaboratorInfo.id;
-                        this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
-                        this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
-                    }
-                },
-
-                orderSessions(){
-                    this.requestedTrainingByCollaborator.sort(function(a, b) {
-                        if(a.sessionsValidated[0] && b.sessionsValidated[0]){
-                            return parseFloat(a.sessionsValidated[0].beginning) - parseFloat(b.sessionsValidated[0].beginning);
-                        }
-                        else if(a.sessionsPending[0] && b.sessionsPending[0]){
-                            return parseFloat(a.sessionsPending[0].beginning) - parseFloat(b.sessionsPending[0].beginning);
-                        }
-                    });
-                },
-
-                fetchTrainingsSessions(){
-                    this.requestedTrainingByCollaborator.splice(0, this.requestedTrainingByCollaborator.length);
-                    let fetchTrainingSessionsSuccess = (response) => {
-                        if (response) {
-                            this.requestedTraining = response.data;
-                            for (let i = 0; i < Object.keys(this.requestedTraining).length; i++) {
-                                if (Object.values(this.requestedTraining)[i].requestTrainingList.length != 0 || Object.values(this.requestedTraining)[i].trainingSessions.length != 0) {
-                                    this.requestedTrainingByCollaborator.push({
-                                        title: Object.keys(this.requestedTraining)[i],
-                                        sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
-                                        sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
-                                    });
-                                    this.noSessionForCollaborator = false;
-                                }
-                            }
-                            console.log(this.requestedTrainingByCollaborator);
-                            this.orderSessions();
-                        }
-                    };
-
-                    let fetchTrainingSessionsError = (response) => {
-                        if (response) {
-                            console.log("Error: ", response);
-                            console.error(response);
-                        }
-                    };
-
-                    this.get("api/sessions/" + this.collaboratorIdentity.id + "/requestedSessions", fetchTrainingSessionsSuccess, fetchTrainingSessionsError);
-                },
-
-                addFeedback(training){
-                    let isCollaboratorHasAddedAScore = this.score != '';
-                    if (isCollaboratorHasAddedAScore) {
-                        this.feedback.training = training;
-                        this.feedback.score = this.score;
-                        this.feedback.comment = this.comment;
-                        let addFeedbackSuccess = (response) => {
-                            if (response) {
-                                console.log("success to add a feedback");
-                                this.collectAllTrainingsToGiveFeedbacks();
-                            }
-                        };
-                        this.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback, addFeedbackSuccess);
-                        this.comment = '';
-                        this.score = '';
-                    }
-                },
-
-                createShowPopUpOnceCookie(){
-                    document.cookie = "alreadyShownPopUp=true;"
-                },
-
-                collectAllTrainingsToGiveFeedbacks(){
-                    let collectAllTrainingsToGiveFeedbacksSuccess = (response) => {
-                        if (response) {
-                            console.log("success to get all trainings to give feedbacks");
-                            this.allTrainingsToGiveFeedbacks = response.data;
-                            this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
-                                return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
-                            });
-                            let isThereTrainingsToGiveFeedbacks = this.allTrainingsToGiveFeedbacks.length != 0;
-                            if (isThereTrainingsToGiveFeedbacks && !this.alreadyShownPopUp) {
-                                this.showRatingTrainingsPopup = true;
-                            } else {
-                                this.showRatingTrainingsPopup = false;
-                            }
-                        }
-                    };
-
-                    let collectAllTrainingsToGiveFeedbacksError = (response) => {
-                        if (response) {
-                            console.log("Error: ", response);
-                            console.error(response);
-                        }
-                    };
-                    this.get("api/trainingstogivefeedbacks/" + this.collaboratorIdentity.id, collectAllTrainingsToGiveFeedbacksSuccess, collectAllTrainingsToGiveFeedbacksError);
-                },
+        let self=this;
+        $('#scrollMyTrainings').on('scroll', function() {
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                self.showChevronsBottom = false;
             }
+            else if($(this).scrollTop() ==0) {
+                self.showChevronsUp = false;
+            }
+            else {
+                self.showChevronsBottom = true;
+                self.showChevronsUp = true;
+            }
+        })
+    },
+    methods: {
+        popUpDivClose(){
+            $('#outerdiv').on('click', function (e) {
+                e.stopPropagation();
+            })
+        },
+        setScore(value){
+            this.score = value;
+        },
+
+        getDate(date){
+            dateToConvert = new Date(date);
+            formattedDate = dateToConvert.getDate() + " " + (dateToConvert.getMonthName()) + " " + dateToConvert.getFullYear();
+            return formattedDate;
+        },
+
+        initializeInformationsFromCookie(){
+            let isPopUpAlreadyShownDuringFirstConnection = this.getCookie("alreadyShownPopUp");
+            this.alreadyShownPopUp = isPopUpAlreadyShownDuringFirstConnection;
+            let collaboratorInfo = this.getCollaboratorInfoFromCookie();
+            let isCollaboratorInfoNotEmpty = collaboratorInfo != "";
+            if (isCollaboratorInfoNotEmpty) {
+                this.collaboratorIdentity.id = collaboratorInfo.id;
+                this.collaboratorIdentity.lastName = collaboratorInfo.lastName;
+                this.collaboratorIdentity.firstName = collaboratorInfo.firstName;
+            }
+        },
+
+        orderSessions(){
+            this.requestedTrainingByCollaborator.sort(function (a, b) {
+                if (a.sessionsValidated[0] && b.sessionsValidated[0]) {
+                    return parseFloat(a.sessionsValidated[0].beginning) - parseFloat(b.sessionsValidated[0].beginning);
+                }
+                else if (a.sessionsPending[0] && b.sessionsPending[0]) {
+                    return parseFloat(a.sessionsPending[0].beginning) - parseFloat(b.sessionsPending[0].beginning);
+                }
+            });
+        },
+
+        fetchTrainingsSessions(){
+            this.requestedTrainingByCollaborator.splice(0, this.requestedTrainingByCollaborator.length);
+            let fetchTrainingSessionsSuccess = (response) => {
+                if (response) {
+                    this.requestedTraining = response.data;
+                    for (let i = 0; i < Object.keys(this.requestedTraining).length; i++) {
+                        if (Object.values(this.requestedTraining)[i].requestTrainingList.length != 0 || Object.values(this.requestedTraining)[i].trainingSessions.length != 0) {
+                            this.requestedTrainingByCollaborator.push({
+                                title: Object.keys(this.requestedTraining)[i],
+                                sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
+                                sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
+                            });
+                            this.noSessionForCollaborator = false;
+                        }
+                    }
+                    console.log(this.requestedTrainingByCollaborator);
+                    this.orderSessions();
+                    let self = this;
+                    setTimeout(function(){
+                        let chevronsNeeded = self.checkForChevrons("scrollMyTrainings");
+                        self.showChevronsUp = chevronsNeeded;
+                        self.showChevronsBottom = chevronsNeeded;
+                    },0)
+                }
+            };
+
+            let fetchTrainingSessionsError = (response) => {
+                if (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            };
+
+            this.get("api/sessions/" + this.collaboratorIdentity.id + "/requestedSessions", fetchTrainingSessionsSuccess, fetchTrainingSessionsError);
+        },
+
+        addFeedback(training){
+            let isCollaboratorHasAddedAScore = this.score != '';
+            if (isCollaboratorHasAddedAScore) {
+                this.feedback.training = training;
+                this.feedback.score = this.score;
+                this.feedback.comment = this.comment;
+                let addFeedbackSuccess = (response) => {
+                    if (response) {
+                        console.log("success to add a feedback");
+                        this.collectAllTrainingsToGiveFeedbacks();
+                    }
+                };
+                this.post("api/feedback/" + this.collaboratorIdentity.id, this.feedback, addFeedbackSuccess);
+                this.comment = '';
+                this.score = '';
+            }
+        },
+
+        createShowPopUpOnceCookie(){
+            document.cookie = "alreadyShownPopUp=true;"
+        },
+
+        checkForChevrons(idContainer, message) {
+            var element = document.getElementById(idContainer);
+            if (element.clientHeight < element.scrollHeight) {
+                console.log("hey true");
+                return true;
+            } else {
+                console.log("hey false");
+                return false;
+            }
+        },
+
+        collectAllTrainingsToGiveFeedbacks(){
+            let collectAllTrainingsToGiveFeedbacksSuccess = (response) => {
+                if (response) {
+                    console.log("success to get all trainings to give feedbacks");
+                    this.allTrainingsToGiveFeedbacks = response.data;
+                    this.allTrainingsToGiveFeedbacks.sort(function (a, b) {
+                        return (a.trainingTitle > b.trainingTitle) ? 1 : ((b.trainingTitle > a.trainingTitle) ? -1 : 0);
+                    });
+                    let isThereTrainingsToGiveFeedbacks = this.allTrainingsToGiveFeedbacks.length != 0;
+                    if (isThereTrainingsToGiveFeedbacks && !this.alreadyShownPopUp) {
+                        this.showRatingTrainingsPopup = true;
+                    } else {
+                        this.showRatingTrainingsPopup = false;
+                    }
+                }
+            };
+
+            let collectAllTrainingsToGiveFeedbacksError = (response) => {
+                if (response) {
+                    console.log("Error: ", response);
+                    console.error(response);
+                }
+            };
+            this.get("api/trainingstogivefeedbacks/" + this.collaboratorIdentity.id, collectAllTrainingsToGiveFeedbacksSuccess, collectAllTrainingsToGiveFeedbacksError);
+        },
+
+    },
 
     }
 );

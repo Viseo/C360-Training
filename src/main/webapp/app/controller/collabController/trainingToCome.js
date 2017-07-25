@@ -72,8 +72,8 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                             :value = "wish"
                             style ="width:300px;position:absolute; left:300px; top:535px;"
                             @input = "updateV1"
-                            placeholder = "Ex: javascript (50 caractères maximum)"
-                            maxlength = "50"
+                            placeholder = "Ex: javascript(15 caractères maximum)"
+                            maxlength = "15"
                             icon = "glyphicon glyphicon-floppy-disk"
                             type = 'input'
                             @click="sendWish">
@@ -143,11 +143,11 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     function (response) {
                         this.wishAlreadyExisted = false;
                         this.wishSuccess = true;
+                        this.showWish = !this.showWish;
+                        this.wish = "";
                         setTimeout(function () {
                             this.wishSuccess = false;
-                            this.showWish = !this.showWish;
-                            this.wish = "";
-                        }.bind(this), 2000);
+                        }.bind(this), 1500);
                     },
                     function (response) {
                         console.log(response.data);

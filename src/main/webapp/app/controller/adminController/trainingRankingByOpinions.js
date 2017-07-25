@@ -59,7 +59,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                        style="height:100%;">
                                                     <div class="row">
                                                         <p  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0">Aucune formation n'a été notée</p>
-                                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for=" training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
+                                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for="training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
                                                          <panel :is-open="openPanel"
                                                                     type="default">
                                                                     <p slot="header" 
@@ -110,7 +110,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                                                 <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                                                                                 <p >{{comments.comment}}</p>
                                                                                 </div >
-                                                                                <a class="col-sm-offset-12 col-md-offset-7 col-lg-offset-7" @click="deleteFeedbackComment(comments)"> Supprimer le commentaire </a> 
+                                                                                <a class="col-sm-offset-12 col-md-offset-7 col-lg-offset-7" @click="deleteFeedbackComment(comments)" style="cursor: pointer"> Supprimer le commentaire </a> 
                                                                                  <hr>
                                                                             </div>
                                                                         </div>
@@ -155,6 +155,7 @@ let trainingRanking = Vue.component('training-ranking', {
                     function (response) {
                         console.log("success to get all training score");
                         this.allTrainingScore = response.data;
+                        this.orderRatings();
                         for (let index in this.allTrainingScore){
                             this.allTrainingScore[index][1]= Math.floor(this.allTrainingScore[index][1])
                         }
@@ -207,9 +208,15 @@ let trainingRanking = Vue.component('training-ranking', {
                 return formattedDate;
             },
 
+            orderRatings(){
+                this.allTrainingScore.sort(function(a,b) {
+                    return (a[1] < b[1]) ? 1 : ((b[1] < a[1]) ? -1 : 0);
+                })
+            },
+
             orderFeedbacks(){
                 this.feedbackComments.sort(function(a, b) {
-                    return parseFloat(a.date) - parseFloat(b.date);
+                    return (a.date < b.date) ? 1 : ((b.date < a.date) ? -1 : 0);
                 });
             },
 
