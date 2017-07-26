@@ -29,7 +29,11 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
+	<servlet>
+		<servlet-name>CrunchifyTutorials</servlet-name>
+		<servlet-class>com.viseo.c360.formation.CrunchifyServletExample</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<url-pattern>/api/*</url-pattern>
