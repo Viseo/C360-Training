@@ -1,8 +1,5 @@
 package com.viseo.c360.formation.services;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +8,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.persistence.PersistenceException;
 
-import com.viseo.c360.formation.amqp.RequestConsumerConfig;
+import com.viseo.c360.formation.amqp.RequestProducerConfig;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
 import com.viseo.c360.formation.converters.wish.DescriptionToWish;
@@ -51,12 +47,12 @@ import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -90,14 +86,21 @@ public class CollaboratorWS {
             putUserInCache(compactJws, user);
             currentUserMap.put("userConnected", compactJws);
 
-            ApplicationContext ctx = new AnnotationConfigApplicationContext(RequestConsumerConfig.class);
-            RabbitTemplate rabbitTemplate = ctx.getBean(RabbitTemplate.class);
+
+            ApplicationContext context = new AnnotationConfigApplicationContext(
+                    RequestProducerConfig.class);
+            RabbitTemplate rabbitTemplate = context.getBean(RabbitTemplate.class);
 
             AtomicInteger counter = new AtomicInteger();
 //            for (int i = 0; i < 5; i++){
 //                System.out.println("sending new custom message..");
                 //rabbitTemplate.convertAndSend(new CustomMessage(counter.incrementAndGet(), "RabbitMQ Spring JSON Example"));
-                rabbitTemplate.convertSendAndReceive("Coucou de C360_formation");
+
+            System.out.println("VOILA REPONSE : " + rabbitTemplate
+                    .convertSendAndReceive("Coucou de C360_formation"));
+
+
+
 //            }
 
             return currentUserMap;

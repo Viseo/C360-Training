@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RequestConsumerConfig {
+public class RequestProducerConfig {
 
     private static final String SIMPLE_MESSAGE_QUEUE = "simple.queue.name";
     protected final String replyQueueName = "reply.queue.formation";
@@ -44,7 +44,7 @@ public class RequestConsumerConfig {
         template.setRoutingKey(SIMPLE_MESSAGE_QUEUE);
         template.setMessageConverter(jsonMessageConverter());
         template.setReplyQueue(replyQueue());
-        template.setReplyTimeout(1000);
+        template.setReplyTimeout(5000);
         return template;
     }
 
