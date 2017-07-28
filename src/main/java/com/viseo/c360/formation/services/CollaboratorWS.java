@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.persistence.PersistenceException;
 
+import com.viseo.c360.formation.amqp.RequestConsumerConfig;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
 import com.viseo.c360.formation.converters.wish.DescriptionToWish;
@@ -48,6 +49,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,6 +89,17 @@ public class CollaboratorWS {
             Map currentUserMap = new HashMap<>();
             putUserInCache(compactJws, user);
             currentUserMap.put("userConnected", compactJws);
+
+            ApplicationContext ctx = new AnnotationConfigApplicationContext(RequestConsumerConfig.class);
+            RabbitTemplate rabbitTemplate = ctx.getBean(RabbitTemplate.class);
+
+            AtomicInteger counter = new AtomicInteger();
+//            for (int i = 0; i < 5; i++){
+//                System.out.println("sending new custom message..");
+                //rabbitTemplate.convertAndSend(new CustomMessage(counter.incrementAndGet(), "RabbitMQ Spring JSON Example"));
+                rabbitTemplate.convertSendAndReceive("Coucou de C360_formation");
+//            }
+
             return currentUserMap;
         } catch (ConversionException e) {
             e.printStackTrace();

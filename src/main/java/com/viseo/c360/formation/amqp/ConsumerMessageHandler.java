@@ -16,7 +16,7 @@ public class ConsumerMessageHandler {
 
         List<String> list = new ArrayList<String>();
         list.add("Hello.....");
-        list.add("This is my response....");
+        list.add("This is my response de C360_formation...");
         list.add(request);
 
         return list;
