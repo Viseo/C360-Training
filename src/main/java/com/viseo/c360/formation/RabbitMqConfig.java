@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -28,31 +29,11 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Queue simpleQueue() {
-        return new Queue(SIMPLE_MESSAGE_QUEUE);
-    }
-
-    @Bean
-    public MessageConverter jsonMessageConverter(){
-        return new JsonMessageConverter();
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        template.setRoutingKey(SIMPLE_MESSAGE_QUEUE);
-        template.setMessageConverter(jsonMessageConverter());
-        return template;
-    }
-
-    @Bean
     public SimpleMessageListenerContainer listenerContainer() {
         SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory());
-        listenerContainer.setQueues(simpleQueue());
-        listenerContainer.setMessageConverter(jsonMessageConverter());
-        listenerContainer.setMessageListener(new Consumer());
-        listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        listenerContainer.setQueueNames(this.SIMPLE_MESSAGE_QUEUE);
+        listenerContainer.setMessageListener(new MessageListenerAdapter(new Consumer(), new JsonMessageConverter()));
         return listenerContainer;
     }
 
