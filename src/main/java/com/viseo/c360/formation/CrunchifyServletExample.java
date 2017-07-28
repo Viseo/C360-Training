@@ -1,27 +1,10 @@
 package com.viseo.c360.formation;
 
-import javax.inject.Inject;
-import javax.servlet.*;
-import javax.servlet.http.HttpServlet;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.AMQP.BasicProperties;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
-import com.viseo.c360.formation.domain.collaborator.Collaborator;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServlet;
 
 /**
  * Created by BBA3616 on 26/07/2017.
@@ -32,7 +15,7 @@ public class CrunchifyServletExample extends HttpServlet {
     @Inject
     CollaboratorDAO collaboratorDAO;
 
-    public void init() throws ServletException
+    /*public void init() throws ServletException
     {
         System.out.println("----------");
         System.out.println("---------- CrunchifyServletExample Initialized successfully ----------");
@@ -70,6 +53,6 @@ public class CrunchifyServletExample extends HttpServlet {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
 }

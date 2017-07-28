@@ -20,14 +20,14 @@
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
-				<ref bean="jsonMessageConverter" />
+				<ref bean="jsonMessageConverter1" />
 			</list>
 		</property>
 	</bean>
 
 	<!-- Configure bean to convert JSON to POJO and vice versa -->
 		<!-- <bean id="jacksonObjectMapper" class="com.viseo.c360.json.JSONMapper" />-->
-    <bean id="jsonMessageConverter"
+    <bean id="jsonMessageConverter1"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 	    <!-- <property name="objectMapper" ref="jacksonObjectMapper" /> -->
 	</bean>
