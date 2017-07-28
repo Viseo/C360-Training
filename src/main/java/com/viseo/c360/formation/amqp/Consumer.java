@@ -1,4 +1,4 @@
-package com.viseo.c360.formation;
+package com.viseo.c360.formation.amqp;
 
 /**
  * Created by SJO3662 on 28/07/2017.
@@ -17,6 +17,7 @@ public class Consumer {
         List<String> list = new ArrayList<String>();
         list.add("Hello.....");
         list.add("This is my response....");
+        list.add(request);
 
         return list;
 
