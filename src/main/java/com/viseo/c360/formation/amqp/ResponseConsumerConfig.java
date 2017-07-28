@@ -3,7 +3,6 @@ package com.viseo.c360.formation.amqp;
 /**
  * Created by SJO3662 on 27/07/2017.
  */
-import com.viseo.c360.formation.amqp.Consumer;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMqConfig {
+public class ResponseConsumerConfig {
 
     private static final String SIMPLE_MESSAGE_QUEUE = "simple.queue.name";
 
@@ -30,7 +29,7 @@ public class RabbitMqConfig {
         SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory());
         listenerContainer.setQueueNames(this.SIMPLE_MESSAGE_QUEUE);
-        listenerContainer.setMessageListener(new MessageListenerAdapter(new Consumer(), new JsonMessageConverter()));
+        listenerContainer.setMessageListener(new MessageListenerAdapter(new ConsumerMessageHandler(), new JsonMessageConverter()));
         return listenerContainer;
     }
 

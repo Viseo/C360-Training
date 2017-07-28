@@ -9,7 +9,7 @@ import org.springframework.amqp.core.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consumer {
+public class ConsumerMessageHandler {
 
     public List<String> handleMessage(String request) {
         System.out.println("Message Received at consumer end  : " + request);
