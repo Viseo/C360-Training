@@ -30,7 +30,7 @@ public class RequestProducerConfig {
 
     @Bean
     public Queue simpleQueue() {
-        return new Queue(SIMPLE_MESSAGE_QUEUE);
+        return new Queue(this.SIMPLE_MESSAGE_QUEUE);
     }
 
     @Bean
@@ -41,10 +41,10 @@ public class RequestProducerConfig {
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        template.setRoutingKey(SIMPLE_MESSAGE_QUEUE);
-        template.setMessageConverter(jsonMessageConverter());
+        template.setRoutingKey(this.SIMPLE_MESSAGE_QUEUE);
+        template.setMessageConverter(new JsonMessageConverter());
         template.setReplyQueue(replyQueue());
-        template.setReplyTimeout(5000);
+        template.setReplyTimeout(1000);
         return template;
     }
 
@@ -58,9 +58,9 @@ public class RequestProducerConfig {
         SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory());
         listenerContainer.setQueues(replyQueue());
-        listenerContainer.setMessageConverter(jsonMessageConverter());
+        //listenerContainer.setMessageConverter(jsonMessageConverter());
         listenerContainer.setMessageListener(rabbitTemplate());
-        listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+       // listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
         return listenerContainer;
     }
 
