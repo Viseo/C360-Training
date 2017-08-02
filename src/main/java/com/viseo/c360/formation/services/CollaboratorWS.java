@@ -70,14 +70,58 @@ public class CollaboratorWS {
     @Inject
     ExceptionUtil exceptionUtil;
 
+    public CollaboratorDescription handleReceivedCollaborator (CollaboratorDescription myCollaboratorDescription, CollaboratorDescription receivedCollab){
+        Collaborator storedCollaborator = collaboratorDAO.getCollaboratorByLoginPassword(myCollaboratorDescription.getEmail(), myCollaboratorDescription.getPassword());
+        boolean collaboratorDoesNotExist = storedCollaborator.getEmail() == null;
+        CollaboratorDescription addedCollaborator;
+
+        if(collaboratorDoesNotExist) {
+            receivedCollab.setId(0);
+            addedCollaborator = addCollaborator(receivedCollab);
+            System.out.println("ADDEDCOLLAB"+addedCollaborator.getFirstName());
+            return addedCollaborator;
+        }
+        else{
+            // A COMPLETEE
+            return null;
+        }
+    }
+
+    public CollaboratorDescription checkIfCollaboratorExistElsewhere (CollaboratorDescription myCollaboratorDescription) {
+        ObjectMapper mapperObj = new ObjectMapper();
+        ApplicationContext context = new AnnotationConfigApplicationContext(RequestProducerConfig.class);
+        RabbitTemplate rabbitTemplate = context.getBean(RabbitTemplate.class);
+        CollaboratorDescription receivedCollab;
+
+        try {
+            Object consumerResponse = rabbitTemplate.convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
+            if(consumerResponse != null) {
+                try {
+                    receivedCollab = new ObjectMapper().readValue(consumerResponse.toString(), CollaboratorDescription.class);
+                    System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
+                    receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
+                    return receivedCollab;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                return null;
+            }
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, CollaboratorDescription> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
         try {
+
             InitializeMap();
-            Collaborator c = collaboratorDAO.getCollaboratorByLoginPassword(myCollaboratorDescription.getEmail(), myCollaboratorDescription.getPassword());
-            CollaboratorDescription user = new CollaboratorToDescription().convert(c);
+            CollaboratorDescription user = checkIfCollaboratorExistElsewhere(myCollaboratorDescription);
             Key key = MacProvider.generateKey();
             String compactJws = Jwts.builder()
                     .setSubject(user.getFirstName())
@@ -87,38 +131,9 @@ public class CollaboratorWS {
                     .signWith(SignatureAlgorithm.HS512, key)
                     .compact();
             Map currentUserMap = new HashMap<>();
-            ObjectMapper mapperObj = new ObjectMapper();
 
             putUserInCache(compactJws, user);
             currentUserMap.put("userConnected", compactJws);
-
-
-            ApplicationContext context = new AnnotationConfigApplicationContext(
-                    RequestProducerConfig.class);
-            RabbitTemplate rabbitTemplate = context.getBean(RabbitTemplate.class);
-            CollaboratorDescription receivedCollab = new CollaboratorDescription();
-            AtomicInteger counter = new AtomicInteger();
-//            for (int i = 0; i < 5; i++){
-//                System.out.println("sending new custom message..");
-                //rabbitTemplate.convertAndSend(new CustomMessage(counter.incrementAndGet(), "RabbitMQ Spring JSON Example"));
-
-            try {
-                Object response = rabbitTemplate
-                        .convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
-                if(response != null)
-                    try {
-                        receivedCollab = new ObjectMapper().readValue(response.toString(), CollaboratorDescription.class);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                System.out.println("COLLAB : " + receivedCollab.getPersonnalIdNumber());
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-
-
-//            }
-
             return currentUserMap;
         } catch (ConversionException e) {
             e.printStackTrace();

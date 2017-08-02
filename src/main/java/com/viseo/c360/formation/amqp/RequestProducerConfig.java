@@ -44,7 +44,7 @@ public class RequestProducerConfig {
         template.setRoutingKey(this.SIMPLE_MESSAGE_QUEUE);
         template.setMessageConverter(new JsonMessageConverter());
         template.setReplyQueue(replyQueue());
-        template.setReplyTimeout(5000);
+        template.setReplyTimeout(60000);
         return template;
     }
 
@@ -60,7 +60,7 @@ public class RequestProducerConfig {
         listenerContainer.setQueues(replyQueue());
         //listenerContainer.setMessageConverter(jsonMessageConverter());
         listenerContainer.setMessageListener(rabbitTemplate());
-       // listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        listenerContainer.setAcknowledgeMode(AcknowledgeMode.NONE);
         return listenerContainer;
     }
 
