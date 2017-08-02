@@ -118,7 +118,7 @@ public class CollaboratorDAO {
         daoFacade.flush();
         return collaborator;
     }
-
+    @Transactional
     public Collaborator getCollaboratorByLoginPassword(String personnalEmail,String personnalPassword){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         Collaborator registredUser =
@@ -127,7 +127,7 @@ public class CollaboratorDAO {
                         param("personnalEmail",personnalEmail), param("personnalPassword",personnalPassword));
         return registredUser;
     }
-
+    @Transactional
     public Collaborator getCollaboratorByLogin(String personnalEmail){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         Collaborator registredUser;
