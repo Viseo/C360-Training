@@ -1,5 +1,6 @@
 package com.viseo.c360.formation.services;
 
+import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viseo.c360.formation.amqp.RequestProducerConfig;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -52,6 +55,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.convert.ConversionException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -83,6 +87,8 @@ public class CollaboratorWS {
                     .signWith(SignatureAlgorithm.HS512, key)
                     .compact();
             Map currentUserMap = new HashMap<>();
+            ObjectMapper mapperObj = new ObjectMapper();
+
             putUserInCache(compactJws, user);
             currentUserMap.put("userConnected", compactJws);
 
@@ -90,15 +96,25 @@ public class CollaboratorWS {
             ApplicationContext context = new AnnotationConfigApplicationContext(
                     RequestProducerConfig.class);
             RabbitTemplate rabbitTemplate = context.getBean(RabbitTemplate.class);
-
+            CollaboratorDescription receivedCollab = new CollaboratorDescription();
             AtomicInteger counter = new AtomicInteger();
 //            for (int i = 0; i < 5; i++){
 //                System.out.println("sending new custom message..");
                 //rabbitTemplate.convertAndSend(new CustomMessage(counter.incrementAndGet(), "RabbitMQ Spring JSON Example"));
 
-            System.out.println("VOILA REPONSE : " + rabbitTemplate
-                    .convertSendAndReceive("Coucou de C360_formation"));
-
+            try {
+                Object response = rabbitTemplate
+                        .convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
+                if(response != null)
+                    try {
+                        receivedCollab = new ObjectMapper().readValue(response.toString(), CollaboratorDescription.class);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                System.out.println("COLLAB : " + receivedCollab.getPersonnalIdNumber());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
 
 
 //            }

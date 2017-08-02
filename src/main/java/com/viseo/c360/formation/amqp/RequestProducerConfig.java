@@ -44,7 +44,7 @@ public class RequestProducerConfig {
         template.setRoutingKey(this.SIMPLE_MESSAGE_QUEUE);
         template.setMessageConverter(new JsonMessageConverter());
         template.setReplyQueue(replyQueue());
-        template.setReplyTimeout(1000);
+        template.setReplyTimeout(5000);
         return template;
     }
 
