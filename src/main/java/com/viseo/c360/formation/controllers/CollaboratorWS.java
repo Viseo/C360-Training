@@ -1,7 +1,5 @@
-package com.viseo.c360.formation.services;
+package com.viseo.c360.formation.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -10,8 +8,6 @@ import com.viseo.c360.formation.converters.requestTraining.RequestTrainingToDesc
 import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDescription;
 import com.viseo.c360.formation.converters.wish.DescriptionToWish;
 import com.viseo.c360.formation.converters.wish.WishToDescription;
-import com.viseo.c360.formation.dao.CollaboratorDAO;
-import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.collaborator.Wish;
@@ -27,11 +23,11 @@ import com.viseo.c360.formation.email.sendMessage;
 import com.viseo.c360.formation.exceptions.C360Exception;
 import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException;
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
-import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
+import com.viseo.c360.formation.services.CollaboratorServicesImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
-import java.io.IOException;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,31 +44,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static io.jsonwebtoken.impl.crypto.MacProvider.generateKey;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-
 
 @RestController
 public class CollaboratorWS {
 
     @Inject
-    private CollaboratorDAO collaboratorDAO;
-
-    @Inject
-    private TrainingDAO trainingDAO;
-
-    @Inject
-    private ExceptionUtil exceptionUtil;
+    private CollaboratorServicesImpl collaboratorServices;
 
     @Inject
     private RabbitTemplate rabbitTemplate;
 
     private static final ConcurrentHashMap<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
+    private void putUserInCache(String token, CollaboratorDescription user) {
+        this.mapUserCache.put(token, user);
+    }
+
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
 
-        CollaboratorDescription user = checkIfCollaboratorExistElsewhere(myCollaboratorDescription);
+        CollaboratorDescription user = collaboratorServices.checkIfCollaboratorExistElsewhere(myCollaboratorDescription)
 
         String compactJws = Jwts.builder()
                 .setSubject(user.getFirstName())
@@ -90,48 +82,6 @@ public class CollaboratorWS {
         return currentUserMap;
     }
 
-    public CollaboratorDescription handleReceivedCollaborator(CollaboratorDescription myCollaboratorDescription, CollaboratorDescription receivedCollab) {
-        Collaborator storedCollaborator = collaboratorDAO.getCollaboratorByLoginPassword(myCollaboratorDescription.getEmail(), myCollaboratorDescription.getPassword());
-
-        CollaboratorDescription addedCollaborator;
-
-        if (isEmpty(storedCollaborator.getEmail())) {
-            receivedCollab.setId(0);
-            addedCollaborator = addCollaborator(receivedCollab);
-            System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
-            return addedCollaborator;
-        } else {
-            // A COMPLETEE
-            return null;
-        }
-    }
-
-    public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription myCollaboratorDescription) {
-        ObjectMapper mapperObj = new ObjectMapper();
-
-        CollaboratorDescription receivedCollab;
-
-        try {
-            String consumerResponse = (String) this.rabbitTemplate.convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
-
-            if (consumerResponse != null) {
-                receivedCollab = new ObjectMapper().readValue(consumerResponse, CollaboratorDescription.class);
-                System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
-                receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
-
-                return receivedCollab;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-
-    private void putUserInCache(String token, CollaboratorDescription user) {
-        this.mapUserCache.put(token, user);
-    }
 
     @RequestMapping(value = "${endpoint.getuserrole}", method = RequestMethod.POST)
     @ResponseBody
@@ -175,18 +125,9 @@ public class CollaboratorWS {
     @RequestMapping(value = "${endpoint.addwish}", method = RequestMethod.POST)
     @ResponseBody
     public WishDescription addWish(@RequestBody WishDescription wishDescription, @PathVariable Long collaborator_id) {
-        try {
-            Collaborator collaborator = collaboratorDAO.getCollaborator(collaborator_id);
-            wishDescription.setCollaborator(new CollaboratorToDescription().convert(collaborator));
-            wishDescription.setVote_ok(new ArrayList<>());
-            wishDescription.setVote_ko(new ArrayList<>());
-            Wish wish = collaboratorDAO.addWish(new DescriptionToWish().convert(wishDescription));
-            return new WishToDescription().convert(wish);
-        } catch (PersistenceException pe) {
-            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
-            if (uniqueFieldErrors == null) throw new C360Exception(pe);
-            else throw new UniqueFieldException(uniqueFieldErrors.getField());
-        }
+
+        // TODO : Changer pour un label coté Front
+        return collaboratorServices.addWish(wishDescription.getLabel(), collaborator_id);
     }
 
     @RequestMapping(value = "${endpoint.isnotcheckedwishes}", method = RequestMethod.GET)
@@ -483,27 +424,5 @@ public class CollaboratorWS {
             throw new C360Exception(e);
         }
     }
-
-//    //Save collaborator image
-//    @RequestMapping(value = "${endpoint.updatecollaboratorpicture}", method = RequestMethod.POST)
-//    @ResponseBody
-//    public void FileUploadService(@PathVariable FilecollaboratorImage) {
-//        String name ="blabla";
-//        if(!collaboratorImage){
-//            try{
-//                byte[] bytes = collaboratorImage.getBytes();
-//                BufferedOutputStream stream =
-//                        new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
-//                stream.write(bytes);
-//                stream.close();
-//
-//            } catch (Exception e) {
-//            }
-//        } else {
-//
-//        }
-//
-//        }
-
 
 }

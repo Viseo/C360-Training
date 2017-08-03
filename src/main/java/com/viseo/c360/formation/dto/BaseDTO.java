@@ -1,14 +1,12 @@
 package com.viseo.c360.formation.dto;
 
-
 import java.lang.reflect.Field;
-import java.util.Objects;
 
 public abstract class BaseDTO {
 
-    long id;
+    private long id;
 
-    long version;
+    private long version;
 
     public BaseDTO() {
     }
@@ -34,16 +32,15 @@ public abstract class BaseDTO {
         if (this == obj1) return true;
         if (obj1 == null || getClass() != obj1.getClass()) return false;
         BaseDTO that = this.getClass().cast(obj1);
-        for (Field field : this.getClass().getDeclaredFields()){
+        for (Field field : this.getClass().getDeclaredFields()) {
             try {
-                if(!field.isAccessible()) {
+                if (!field.isAccessible()) {
                     field.setAccessible(true);
                     if (!(field.get(that).equals(field.get(this)))) {
                         field.setAccessible(false);
                         return false;
                     }
-                }
-                else{
+                } else {
                     if (!(field.get(that).equals(field.get(this)))) {
                         return false;
                     }
