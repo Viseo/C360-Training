@@ -36,7 +36,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
             <div class="panel-body">
                 <div class="col-lg-10 col-sm-12 col-xs-12 col-md-10 col-lg-offset-1 col-md-offset-1"> 
                     <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6"> 
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"> 
 
                             <!-- PRENOM -->
                             <customInput
@@ -54,7 +54,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :errorMessage="errorMessageFirstName">
                             </customInput>
                         </div>
-                        <div class="col-lg-6 col-md-6"> 
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"> 
 
                             <!-- FONCTION -->
                             <customInput
@@ -64,7 +64,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     type="text"
                                     tab="2"
                                     v-model="fonction"
-                                    maxlength="50">
+                                    maxlength="50"
+                                    :errorField="!isFunctionValid"
+                                    :errorMessage="errorMessageFunction">
                             </customInput>
                         </div>
                     </div>
@@ -87,7 +89,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :errorMessage="errorMessageLastName">
                             </customInput>
                         </div>
-                        <div class="col-lg-6 col-md-6 "> 
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 "> 
                             <!-- BUSINESS UNIT -->
                             <table style="border-spacing: 0px">
                                 <div class="form-group has-feedback">
@@ -141,7 +143,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                                     :isNotValid="isNotValidOldPassword">
                             </customPasswordInput>
                         </div>
-                        <div class="col-lg-6 col-lg-offset-1 col-md-12"> 
+                        <div class="col-lg-6 col-lg-offset-1 col-md-12 col-sm-6 col-xs-6"> 
                             <!-- EMAIL-->
                             <customInput
                                     label="email"
@@ -179,7 +181,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
                             </customPasswordInput>
 
                         </div>
-                        <div class="col-lg-6 col-lg-offset-1 col-md-offset-1">
+                        <div class="col-lg-6 col-lg-offset-1 col-md-offset-1 col-sm-6 col-xs-6">
                             <span><b>Remarque:</b></span><br>
                             <p>Votre nouveau mot de passe doit contenir au minimum 6 caractères.</p>
                         </div>
@@ -260,6 +262,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
             isFirstNameValid: true,
             errorMessageFirstName: '',
 
+            isFunctionValid: true,
+            errorMessageFunction: '',
+
             emailEmpty: false,
             isEmailValid: true,
             errorMessageEmail: '',
@@ -304,6 +309,9 @@ let profilToUpdate = Vue.component('profil-to-update', {
         },
         firstName: function (value) {
             this.verifyFirstName(value);
+        },
+        fonction: function (value) {
+            this.verifyFunction(value);
         },
         email: function (value) {
             this.verifyEmail(value);
@@ -415,6 +423,17 @@ let profilToUpdate = Vue.component('profil-to-update', {
 
         isErrorFirstName() {
             return !this.isFirstNameValid && !this.firstNameEmpty;
+        },
+
+        verifyFunction(collabFunction) {
+            console.log("hey");
+            if (/^(([a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]+[\s]{0,1})+[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ.'-]*){2,125}$/.test(collabFunction)) {
+                this.errorMessageFunction = '';
+                this.isFunctionValid = true;
+            } else {
+                this.errorMessageFunction = 'Veuillez entrer une fonction valide';
+                this.isFunctionValid = false;
+            }
         },
 
         verifyEmail(email){
