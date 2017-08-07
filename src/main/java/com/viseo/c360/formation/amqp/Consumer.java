@@ -1,7 +1,7 @@
-package com.viseo.c360.formation;
+package com.viseo.c360.formation.amqp;
 
 /**
- * Created by SJO3662 on 28/07/2017.
+ * Created by BBA3616 on 28/07/2017.
  */
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;

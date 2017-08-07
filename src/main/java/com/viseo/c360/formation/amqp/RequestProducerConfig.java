@@ -1,7 +1,7 @@
-package com.viseo.c360.formation;
+package com.viseo.c360.formation.amqp;
 
 /**
- * Created by SJO3662 on 27/07/2017.
+ * Created by BBA3616 on 28/07/2017.
  */
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Queue;
@@ -15,9 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMqConfig {
+public class RequestProducerConfig {
 
     private static final String SIMPLE_MESSAGE_QUEUE = "simple.queue.name";
+    protected final String replyQueueName = "reply.queue.formation";
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -29,7 +30,7 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue simpleQueue() {
-        return new Queue(SIMPLE_MESSAGE_QUEUE);
+        return new Queue(this.SIMPLE_MESSAGE_QUEUE);
     }
 
     @Bean
@@ -40,19 +41,26 @@ public class RabbitMqConfig {
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        template.setRoutingKey(SIMPLE_MESSAGE_QUEUE);
-        template.setMessageConverter(jsonMessageConverter());
+        template.setRoutingKey(this.SIMPLE_MESSAGE_QUEUE);
+        template.setMessageConverter(new JsonMessageConverter());
+        template.setReplyQueue(replyQueue());
+        template.setReplyTimeout(2000);
         return template;
+    }
+
+    @Bean
+    public Queue replyQueue() {
+        return new Queue(this.replyQueueName);
     }
 
     @Bean
     public SimpleMessageListenerContainer listenerContainer() {
         SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
         listenerContainer.setConnectionFactory(connectionFactory());
-        listenerContainer.setQueues(simpleQueue());
-        listenerContainer.setMessageConverter(jsonMessageConverter());
-        listenerContainer.setMessageListener(new Consumer());
-        listenerContainer.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        listenerContainer.setQueues(replyQueue());
+        //listenerContainer.setMessageConverter(jsonMessageConverter());
+        listenerContainer.setMessageListener(rabbitTemplate());
+        listenerContainer.setAcknowledgeMode(AcknowledgeMode.NONE);
         return listenerContainer;
     }
 
