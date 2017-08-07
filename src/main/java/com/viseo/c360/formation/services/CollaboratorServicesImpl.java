@@ -320,14 +320,14 @@ public class CollaboratorServicesImpl {
             return addedCollaborator;
         } else {
             // A COMPLETEE
-            return null;
+            return new CollaboratorToDescription().convert(storedCollaborator);
         }
     }
 
     public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription myCollaboratorDescription) {
         ObjectMapper mapperObj = new ObjectMapper();
 
-        CollaboratorDescription receivedCollab;
+        CollaboratorDescription receivedCollab = null;
 
         try {
             String consumerResponse = (String) this.rabbitTemplate.convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
@@ -335,10 +335,11 @@ public class CollaboratorServicesImpl {
             if (consumerResponse != null) {
                 receivedCollab = new ObjectMapper().readValue(consumerResponse, CollaboratorDescription.class);
                 System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
+            }
                 receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
 
                 return receivedCollab;
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
