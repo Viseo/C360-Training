@@ -1,27 +1,34 @@
 package com.viseo.c360.formation.dto.collaborator;
-import com.viseo.c360.formation.dto.BaseDTO;
+
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.dto.BaseDTO;
+import org.apache.commons.collections.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.StringJoiner;
 
-public class WishDescription extends BaseDTO{
+public class WishDescription extends BaseDTO {
 
-    public static class Regex{
+    public static class Regex {
         public static final String LABEL = "[a-zA-Z0-9+#'-. áàâäãåçéèêëíìîïñóòôöõúùûüýÿæ\u0153ÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝ\u0178Æ\u0152]";
     }
 
-    String label;
+    private String label;
 
-    CollaboratorDescription collaborator;
+    private CollaboratorDescription collaborator;
 
-    Boolean isChecked;
+    private Boolean isChecked;
 
-    List<Collaborator> vote_ok;
+    private List<Collaborator> vote_ok;
 
-    List<Collaborator> vote_ko;
+    private List<Collaborator> vote_ko;
 
-    public WishDescription() {
+    public WishDescription(WishDescriptionBuilder wishDescriptionBuilder) {
+        this.label = wishDescriptionBuilder.label;
+        this.collaborator = wishDescriptionBuilder.collaborator;
+        this.isChecked = wishDescriptionBuilder.isChecked;
+        this.vote_ok = wishDescriptionBuilder.vote_ok;
+        this.vote_ko = wishDescriptionBuilder.vote_ko;
     }
 
     public String getLabel() {
@@ -63,5 +70,45 @@ public class WishDescription extends BaseDTO{
 
     public void setVote_ko(List<Collaborator> vote_ko) {
         this.vote_ko = vote_ko;
+    }
+
+
+    public static class WishDescriptionBuilder {
+
+        private String label;
+        private CollaboratorDescription collaborator;
+        private Boolean isChecked;
+        private List<Collaborator> vote_ok;
+        private List<Collaborator> vote_ko;
+
+        public WishDescriptionBuilder(String label, CollaboratorDescription collaborator) {
+            this.label = label;
+            this.collaborator = collaborator;
+        }
+
+        public WishDescriptionBuilder voteOk(List<Collaborator> vote_ok) {
+            this.vote_ok = vote_ok;
+            return this;
+        }
+
+        public WishDescriptionBuilder voteKO(List<Collaborator> vote_ko) {
+            this.vote_ko = vote_ko;
+            return this;
+        }
+
+        public WishDescription build() {
+
+            if (CollectionUtils.isEmpty(this.vote_ok)) {
+                this.vote_ok = Collections.emptyList();
+            }
+
+            if (CollectionUtils.isEmpty(this.vote_ko)) {
+                this.vote_ko = Collections.emptyList();
+            }
+
+            this.isChecked = false;
+
+            return new WishDescription(this);
+        }
     }
 }

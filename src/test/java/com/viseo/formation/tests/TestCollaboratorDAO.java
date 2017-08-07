@@ -1,14 +1,13 @@
 package com.viseo.formation.tests;
 
 import com.viseo.TestUtil;
-import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
-import com.viseo.c360.formation.services.CollaboratorWS;
+import com.viseo.c360.formation.services.CollaboratorServicesImpl;
 
 import com.viseo.fake.db.FakeDAOFacade;
 
@@ -22,7 +21,7 @@ import java.util.List;
 public class TestCollaboratorDAO {
     FakeDAOFacade fakeDaoFacade = null;
     CollaboratorDAO collaboratorDAO = null;
-    CollaboratorWS collaboratorWS = null;
+    CollaboratorServicesImpl collaboratorWS = null;
     CollaboratorDescription collaboratorDescriptionThomas = null;
     CollaboratorDescription collaboratorDescriptionBayrek = null;
 
@@ -44,7 +43,7 @@ public class TestCollaboratorDAO {
     @Before
     public void setUp() {
         prepareDto();
-        collaboratorWS = new CollaboratorWS();
+        collaboratorWS = new CollaboratorServicesImpl();
         collaboratorDAO = new CollaboratorDAO();
         TestUtil.inject(collaboratorWS, "collaboratorDAO", collaboratorDAO);
         fakeDaoFacade = new FakeDAOFacade();

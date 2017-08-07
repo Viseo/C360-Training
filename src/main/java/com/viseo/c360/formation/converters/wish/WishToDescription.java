@@ -13,12 +13,10 @@ public class WishToDescription {
     }
 
     public WishDescription convert(Wish source) {
-        WishDescription dto = new WishDescription();
+        WishDescription dto = new WishDescription(new WishDescription.WishDescriptionBuilder(source.getLabel(),new CollaboratorToDescription().convert(source.getCollaborator())));
         dto.setId(source.getId());
         dto.setVersion(source.getVersion());
-        dto.setLabel(source.getLabel());
         dto.setChecked(source.getChecked());
-        dto.setCollaborator(new CollaboratorToDescription().convert(source.getCollaborator()));
         dto.setVote_ok(source.getVote_ok());
         dto.setVote_ko(source.getVote_ko());
         return dto;
