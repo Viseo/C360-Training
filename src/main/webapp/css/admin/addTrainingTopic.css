@@ -1,3 +1,8 @@
+.allPageAdmin {
+    background: url(/img/background/adminPage.jpeg);
+    background-size: cover;
+    padding-bottom:22px;
+}
 
 .form-group{
     margin-bottom: 0px;
@@ -6,6 +11,20 @@
 .form-control-feedback{
     pointer-events: auto;
 
+}
+
+#addNewFormation select:required:invalid {
+    color: #9a9a9a;
+}
+#addNewFormation option[value=""][disabled] {
+    display: none;
+}
+#addNewFormation option {
+    color: black;
+}
+
+#newFormation span.glyphicon-plus {
+    top: 20px !important;
 }
 
 #newFormation input.form-control {
@@ -24,13 +43,15 @@
 table.borderRadius{
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
     border-radius: 3px 3px 0 0;
-
+    padding-top: 20px;
 }
 table.borderRadius td {
-    padding-top:20px;
     padding-left:10px;
     padding-right:10px;
-    padding-bottom: 0px;
+}
+
+table.borderRadius td.text-center.td-right {
+    width:100rem !important;
 }
 
 .td-right{
@@ -77,6 +98,14 @@ table.errorMessageAddSession td{
 a.changecolor{
     text-decoration:none;
     color: black;
+}
+
+#addFormation, #addNewFormation {
+    background: #eeefee;
+}
+
+#addNewFormation {
+    margin-top: 40px;
 }
 
 #addFormation button {

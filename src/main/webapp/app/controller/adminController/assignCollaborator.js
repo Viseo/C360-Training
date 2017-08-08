@@ -107,7 +107,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                             <h4 class="col-sm-12 col-md-12 col-lg-12" style="font-size: 1.8rem;
     color: rgb(158, 158, 158);">Collaborateurs ajoutés:
                                 {{validatedCollab.length}}</h4>
-                            <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
+                            <div class="rightSide checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
                                 <label style = "padding-left:0px; cursor: default; ">Nombre de places disponibles : {{15 -
                                     allCollaboratorsAlreadyInSessions.length}}</label>
                             </div>

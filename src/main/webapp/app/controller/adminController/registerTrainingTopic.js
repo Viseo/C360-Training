@@ -404,7 +404,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         }
     },
 template:`
-                  <div>
+                  <div id="addNewFormation">
                         <div class="row">
                              <div class="col-lg-12 col-md-12 text-center">
                                   <legend>Ajouter une formation</legend>
@@ -415,7 +415,6 @@ template:`
                                 <tr id="testtt">
                                     <input-text 
                                         width="20%"
-                                        label="Formation" 
                                         :value="trainingTitle" 
                                         @input="updateV1"
                                         placeholder="Formation"
@@ -426,27 +425,27 @@ template:`
                                     </input-text>
                                     <td width="15%">
                                         <div class="form-group has-feedback ">
-                                            <label class="label-control">1/2 journées</label>
                                             <br/>
                                             <select class="form-control" v-model="numberHalfDays"  
-                                                    @focus="resetVariablesByInputNumberHalfDays()">
+                                                    @focus="resetVariablesByInputNumberHalfDays()" required>
+                                                <option value="" disabled selected hidden>1/2 journées</option>
                                                 <option v-for="n in 200">{{n}}</option>
                                             </select>
                                         </div>
                                     </td>
                                     <td width="20%">
                                         <div class="form-group has-feedback ">
-                                            <label class="label-control">Thèmes</label>
                                             <br/>
                                             <select class="form-control" v-model="topicDescription"
-                                                @focus="resetVariablesByInputTopic()">
+                                                @focus="resetVariablesByInputTopic()" required>
+                                                <option value="" disabled selected>Thèmes</option>
                                                 <option v-for="option in state.selectOptionsOfTopic">{{ option.name }}</option>
                                             </select>
                                         </div>
                                     </td>
                                     <td class="text-center" width="20%">
                                         <div class="form-group">
-                                             <label>&nbsp</label><br/>
+                                             <br/>
                                              <input type="button"  
                                                    @click="verifyTrainingFormBeforeSubmit"
                                                    class="btn btn-primary" 
@@ -456,10 +455,9 @@ template:`
                                         </div>
                                     </td>
                                     <input-text width="30%" 
-                                                    label="Nouveau thème" 
                                                     :value="newTopic"
                                                     @input="updateV4"
-                                                    placeholder="Thème"
+                                                    placeholder="Nouveau thème"
                                                     maxlength="50"
                                                     @focus="resetVariablesByInputNameTopic()"
                                                     :isValid="isNewTopicValid"
@@ -471,7 +469,7 @@ template:`
                                 </tr>
                                 <tr>
                                     <error-messages :colspan="4"
-                                                    :height="80"
+                                                    :height="45"
                                                     identicalErrorMessage="Une formation identique existe déjà." 
                                                     fillFieldErrorMessage="Veuillez remplir tous les champs." 
                                                     successMessage="La formation a été créée avec succès." 
@@ -482,7 +480,7 @@ template:`
                                                     :emptyRegexError="showInvalidateInputMessageForTrainingForm()">
                                     </error-messages>
                                     <error-messages class="td-right"
-                                                    :height="80"
+                                                    :height="45"
                                                     :width="250"
                                                     identicalErrorMessage="Un thème identique existe déjà." 
                                                     fillFieldErrorMessage="Veuillez remplir le champ." 
@@ -631,7 +629,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend>Formation ajoutées</legend>
                                 </div>
                             </div>
-                            <div style="width: 100%; height: 28.5em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
+                            <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
                                   <img v-show="state.showChevrons" src="img/chevrons/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1; margin-top:1%;">
                                         <table class="fix tabnonborder" >
                                             <tbody>

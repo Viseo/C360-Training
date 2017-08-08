@@ -9,13 +9,29 @@
 }
 
 legend{
-    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);*/
     border-radius: 3px 3px 0 0;
     margin-bottom: -1%;
     border-bottom: none;
     background-color: #428bca;
     color: white;
+    line-height: 34px;
+    width: 100.2%;
+    position: relative;
+    right: 1px;
+    height: 34px;
+    font-size: 18px;
 }
+
+#addNewFormation legend {
+    background-color: #003693;
+}
+
+#addSessionsContainer {
+    padding-left:0px;
+    margin-top: 20px;
+}
+
 #trainingErrorMessage {
     margin: 6px 0px 5px 3px;
 }

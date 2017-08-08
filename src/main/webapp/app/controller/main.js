@@ -329,14 +329,16 @@ const router = new VueRouter({
             name: 'addTrainingTopic',
             component: {
                 template: `
-                <div id="newVue" v-cloak>
+                <div id="newVue" class="allPageAdmin" v-cloak>
                     <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                     <div class="container-fluid">
-                        <div class="col-sm-12 col-md-7 col-lg-7">
+                        <div class="col-sm-12 col-md-8 col-lg-10 col-lg-offset-1 col-md-offset-2">
                             <add-formation-panel></add-formation-panel>
+                        </div>
+                        <div id="addSessionsContainer" class="col-sm-12 col-md-6 col-lg-6">
                             <router-view name="showFormationPanel"></router-view>
                         </div>
-                        <div class="col-sm-12 col-md-5 col-lg-5">
+                        <div id="assignCollaboratorContainer" class="col-sm-12 col-md-6 col-lg-6">
                             <router-view></router-view>
                         </div>
                     </div>
