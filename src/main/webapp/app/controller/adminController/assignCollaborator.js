@@ -43,7 +43,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                 </div>
             </div>
             <div class="row">
-                <div id="assignCollaborator">
+                <div id="assignCollaborator" class="trainingBlock">
                     <select class="form-control"
                             v-model="sessionIdChosen">
                         <option :value="session.id" v-for="session in state.allSessions">
@@ -164,7 +164,8 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     
                         <center id="goToWish" class="row col-sm-6 col-md-6 col-lg-6 ">
                         <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a>
-                            <span class="glyphicon glyphicon-gift" style="font-size:150%;"></span><span> Souhaits de formations</span>
+                            <img src="/img/other_icon/iconGift.png" style="position: relative; width: 25px;right: 2px; bottom: 5px;">
+                            <span> Souhaits de formations</span> 
                         </router-link>
                         </center>
                         

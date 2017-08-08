@@ -404,7 +404,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         }
     },
 template:`
-                  <div id="addNewFormation">
+                  <div id="addNewFormation" class="trainingBlock">
                         <div class="row">
                              <div class="col-lg-12 col-md-12 text-center">
                                   <legend>Ajouter une formation</legend>
@@ -450,7 +450,7 @@ template:`
                                                    @click="verifyTrainingFormBeforeSubmit"
                                                    class="btn btn-primary" 
                                                    value="Valider" 
-                                                   style="width:80%"/>
+                                                   style="width:80%; background-color: #3498db; border: none; border-radius:0;"/>
                                              <input v-show="false" type="submit">
                                         </div>
                                     </td>
@@ -461,11 +461,11 @@ template:`
                                                     maxlength="50"
                                                     @focus="resetVariablesByInputNameTopic()"
                                                     :isValid="isNewTopicValid"
-                                                    icon="glyphicon-plus btn btn-primary"
                                                     type='input'
                                                     class="td-right"
                                                     @click="verifyTopicFormBeforeSubmit">
                                     </input-text>
+                                     <img id="plusImage" src="/img/other_icon/iconPlus.png" @click="verifyTopicFormBeforeSubmit">
                                 </tr>
                                 <tr>
                                     <error-messages :colspan="4"
@@ -623,10 +623,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
     },
     template: `
-                        <div id="addFormation"  style="margin-top: 10px;">
+                        <div id="addFormation" class="trainingBlock">
                             <div class="row">
                                 <div style="z-index:10;" class="col-lg-12 col-md-12 text-center">
-                                     <legend>Formation ajoutées</legend>
+                                     <legend>Formations ajoutées</legend>
                                 </div>
                             </div>
                             <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
@@ -650,7 +650,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                         <tr v-for="trainings in topicTraining" >
                                                                             <td  v-for="training in trainings" width="25%" style="position: relative">
                                                                                <a  @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
-                                                                               <router-link :to="{name: 'addSession'}"><button  @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button></router-link>
+                                                                               <router-link :to="{name: 'addSession'}"><button @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btnTraining btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button></router-link>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>

@@ -523,22 +523,20 @@ let AddSessionPanel = Vue.component('add-session-panel', {
     },
 
     template: `
-                 <div id="addSession ">
-                    <div class="row" style="margin-top: 10px;">
+                 <div id="addSession" class="trainingBlock">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 text-center">
-                            <legend>Gérer une session</legend>
+                            <legend><img @click="returnToPageTraining()" src="img/other_icon/left-arrow.png"
+                                                 width="30"
+                                                 height="30"
+                                                 style="cursor: pointer;    
+                                                        right: 15em;
+                                                        position: relative;">Gérer une session</legend>
                         </div>
                     </div>
-                    <div style = "width: 100%; height: 28.5em; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
-                        <img @click="returnToPageTraining()" src="img/left-arrow.png"
-                                                 width="40"
-                                                 height="40"
-                                                 style="cursor: pointer;    
-                                                        top: 2em;
-                                                        left: 2em;
-                                                        position: relative;">
-                        <div class = "row" style="margin-bottom: 10px; margin-top: 10px;">
-                            <div id="glyphiconpencil" class = "col-xs-3 col-xs-offset-4 col-sm-3 col-sm-offset-4 col-md-3 col-md-offset-4 col-lg-3 col-lg-offset-4"> 
+                    <div style = "width: 100%; height: 31em; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
+                        <div class = "row" style="margin-bottom: 30px;">
+                            <div id="glyphiconpencil" class = "col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="modifyTrainingTopic()">
                                         <span class = "glyphicon glyphicon-pencil icon"  @click = "activeFieldTrainingTitle()"></span>                                                                                                                               
                                         <input-text 
@@ -554,27 +552,27 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                         </input-text>
                                   </form>                                      
                             </div>
-                            <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4" style = "margin-top: 25px;">
-                                <p><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
+                            <div class = "row">
+                                <p class="col-lg-12" style="text-align: center; margin-top:20px;"><span class="glyphicon glyphicon-info-sign"></span> Cette formation dure {{state.trainingChosen.numberHalfDays}} demies journées</p>
                             </div>
                         </div>
-                        <hr>
+                        <hr style="margin:0px;">
                         <div class = "row">
-                            <div class = "col-xs-4 col-sm-4  col-md-4 col-lg-4">
-                                <nav>
-                                    <ul>
-                                        <li id="dropdown"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
-                                            <ul class="scrollbar" id="style-5">
-                                                <li v-show="state.isNoSession"><a>Aucune session</a></li>
-                                                <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
+                            <form id="registr-form" @submit.prevent="verifyFormBeforeSaveSession()" class="col-lg-12">
+                                <div class="row">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">
+                                        <nav>
+                                            <ul style="width:100%">
+                                                <li id="dropdown" style="width:100%"><a id="sessionavailable" href="#">Sessions disponibles<div id="down-triangle"></div></a>
+                                                    <ul class="scrollbar" id="style-5">
+                                                        <li v-show="state.isNoSession"><a>Aucune session</a></li>
+                                                        <li v-show="!state.isNoSession" v-for="session in state.listTrainingSession"><a @click="showSession(session)">{{session.beginning}} - {{session.ending}} - {{session.location}}<div :id="'circle'+session.id" class="circle"></div></a></li>
+                                                    </ul>
+                                                </li>
                                             </ul>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>     
-                            <form id="registr-form" @submit.prevent="verifyFormBeforeSaveSession()" class = "col-xs-8 col-sm-8 col-md-8 col-lg-8">                               
-                                <div class = "row" style="margin-bottom: 20px;">
-                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4">    
+                                        </nav>
+                                    </div>                                   
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-2">    
                                         <datepicker  
                                             v-model = "beginningDate"
                                             :isValid = "isBeginningDateValid" 
@@ -585,39 +583,40 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                             :min = "toDay">                                                                                       
                                         </datepicker>
                                     </div>
-                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                
+                                </div>
+                                <div class="row">
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-1">                                
                                         <td width="15%">
                                             <div class="form-group has-feedback ">
-                                                <label class="label-control">Salles</label><br/>
+                                                <br/>
                                                 <select class="form-control" 
                                                     maxlength = "10" 
                                                     :disabled = "canNotRegisterForm" 
                                                     placeholder = "Salle" 
                                                     v-model="location"  
-                                                    @focus="resetVariablesBySalle()">
+                                                    @focus="resetVariablesBySalle()"
+                                                    required>
+                                                        <option value="" disabled selected hidden>Salles</option>
                                                         <option v-for="n in AllSalles">{{n}}</option>
                                                 </select>
                                             </div>
                                         </td>
                                     </div>
-                                </div> 
-                                <div class = "row" style="margin-bottom: 30px;">
-                                    <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 ">                                
-                                        <input-text 
-                                            label = "Date de fin" 
-                                            :value = "endingDate" 
-                                            @input = "updateV4"
-                                            placeholder = "--/--/----"
-                                            maxlength = "10"
-                                            :isValid = "true"
-                                            icon = "glyphicon glyphicon-calendar"
-                                            :disabled = "true" 
-                                            type = 'input'>
-                                        </input-text>
+                                    <div  style="margin-bottom: 30px;">
+                                        <div class = "col-xs-4 col-sm-4 col-md-4 col-lg-4 col-lg-offset-2">    
+                                            <input-text 
+                                                :value = "endingDate" 
+                                                @input = "updateV4"
+                                                placeholder = "Date de fin"
+                                                maxlength = "10"
+                                                :isValid = "true"
+                                                icon = "glyphicon glyphicon-calendar"
+                                                :disabled = "true" 
+                                                type = 'input'>
+                                            </input-text>
+                                        </div>
                                     </div>
-                                    <div class = "col-xs-4 col-xs-offset-2 col-sm-4 col-sm-offset-2 col-md-4 col-md-offset-2 col-lg-4 col-lg-offset-2">                                                                        
-                                        <table class = "errorMessageAddSession">
-                                            <tr>
+                                    <div class = "col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">                               
                                                 <error-messages  
                                                         fillFieldErrorMessage =" Veuillez remplir tous les champs." 
                                                         successMessage =" La session a été créée avec succès."
@@ -634,19 +633,17 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                         :emptyfailureModification = "showFailToModifySessionMessage()"
                                                         :emptyFillError = "showEmptyInputMessage()">                                                                       
                                                 <error-messages>
-                                            </tr>
-                                        </table> 
                                     </div> 
                                 </div> 
-                                <div class = "row " style = "margin-bottom: 30px;">
-                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                <div class = "row " style = "margin-bottom: 30px; margin-top:70px;">
+                                    <div class = "col-xs-3 col-sm-3 col-md-3 col-lg-3 col-lg-offset-3">                                
                                         <input type = "submit" 
                                                    class = "btn btn-primary" 
                                                    :value = "valueButtonSaveModify" 
                                                    :disabled = "canNotRegisterForm" 
-                                                   style = "width:100%"/>                                                                         
+                                                   style = "width:100%; background:#009bdc; border:none;"/>                                                                         
                                     </div>
-                                    <div class = "col-xs-4 col-xs-pull-1 col-sm-4 col-sm-pull-1 col-md-4 col-md-pull-1 col-lg-4 col-lg-pull-1">                                
+                                    <div class = "col-xs-3 col-sm-3 col-md-3 col-lg-3">                                
                                         <input type = "button" 
                                                    class = "btn btn-danger" 
                                                    value = "Supprimer" 
@@ -657,7 +654,11 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                 </div>                                                     
                             </form>
                         </div>
-                    </div>`,
+                    </div>
+    </div>
+</div>
+`
+                     ,
 });
 
 let DatePicker = Vue.component('datepicker', {
@@ -665,9 +666,8 @@ let DatePicker = Vue.component('datepicker', {
          <div class="date-picker">
             <div class = "form-group has-feedback" @click="togglePanel"
                  :class="{'has-error':  !isValid && typeof isValid != 'undefined' } ">
-                <label class = "label-control">Date de début</label>
                 <input class="form-control"
-                       placeholder="--/--/----"
+                       placeholder="Date de début"
                        :value="range ? value[0] + ' -- ' + value[1] : value" 
                        @mouseenter="showCancel = true" 
                        @mouseleave="showCancel = false"

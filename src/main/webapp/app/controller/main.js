@@ -449,7 +449,7 @@ const router = new VueRouter({
                 template: `<div id="newVue" v-cloak>
                                 <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                 <div class="container-fluid">
-                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top:37px;">
                                         <profil-to-update></profil-to-update>
                                     </div>
                                 </div>

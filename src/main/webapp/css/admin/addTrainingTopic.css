@@ -1,7 +1,12 @@
 .allPageAdmin {
     background: url(/img/background/adminPage.jpeg);
     background-size: cover;
-    padding-bottom:22px;
+    padding-bottom:27px;
+}
+
+.allPageAdmin .form-control{
+    border-radius: 0;
+    border: none;
 }
 
 .form-group{
@@ -11,6 +16,17 @@
 .form-control-feedback{
     pointer-events: auto;
 
+}
+
+#addNewFormation #plusImage {
+    position: relative;
+    width: 33.5px;
+    top: 21px;
+    right: 43px;
+}
+
+#addSession .form-control[disabled] {
+    background-color: #dedede;
 }
 
 #addNewFormation select:required:invalid {
@@ -42,7 +58,6 @@
 
 table.borderRadius{
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-    border-radius: 3px 3px 0 0;
     padding-top: 20px;
 }
 table.borderRadius td {
@@ -100,10 +115,6 @@ a.changecolor{
     color: black;
 }
 
-#addFormation, #addNewFormation {
-    background: #eeefee;
-}
-
 #addNewFormation {
     margin-top: 40px;
 }
@@ -149,6 +160,10 @@ option {
     color: black;
 }
 
+#glyphiconpencil {
+    margin-top: 30px;
+}
+
 #glyphiconpencil .glyphicon-pencil{
     position: absolute;
     right: 97%;
@@ -173,6 +188,7 @@ nav {
     text-align: center;
 }
 #sessionavailable {
+    background: white;
     font-size: 1.2em;
 }
 nav ul {
@@ -198,7 +214,7 @@ ul {
 nav ul li {
     float: left;
     text-align: left;
-    border-bottom: 2px solid #428bca;
+    border-bottom: 2px solid #009bdc;
 }
 
 nav ul li:hover {
@@ -208,7 +224,7 @@ nav ul li:hover {
 
 nav ul li a {
     display: block;
-    padding: 15px 10px;
+    padding: 7px;
     color: #2a2a2a;
 }
 
@@ -246,9 +262,9 @@ nav ul ul li a:hover {
     height: 0;
     margin-top: 6px;
     margin-left: 10px;
-    border-top: 10px solid #428bca;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-top: 6px solid #8d8d8d;
+    border-left: 3.5px solid transparent;
+    border-right: 3px solid transparent;
 }
 
 .circle {
@@ -276,11 +292,12 @@ nav ul ul li a:hover {
 .scrollbar
 {
     float: left;
-    width: 170px;
+    width: 100%;
     height: 160px;
-    background: #F5F5F5;
+    background: white;
     overflow-y: scroll;
     margin-bottom: 25px;
+    z-index:5;
 }
 
 .force-overflow

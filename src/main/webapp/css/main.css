@@ -3,9 +3,15 @@ body {
     background: transparent;
 }
 
+.trainingBlock {
+    background: #eeefee;
+}
+
 #wrap {
  margin-bottom:60px;
 }
+
+
 #custom-navbar{
     padding:10px 30px 10px 10px;
 }

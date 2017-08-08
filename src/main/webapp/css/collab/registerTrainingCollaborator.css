@@ -10,7 +10,6 @@
 
 legend{
     /*box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);*/
-    border-radius: 3px 3px 0 0;
     margin-bottom: -1%;
     border-bottom: none;
     background-color: #428bca;
@@ -18,7 +17,7 @@ legend{
     line-height: 34px;
     width: 100.2%;
     position: relative;
-    right: 1px;
+    right: 1.5px;
     height: 34px;
     font-size: 18px;
 }
@@ -29,12 +28,25 @@ legend{
 
 #addSessionsContainer {
     padding-left:0px;
-    margin-top: 20px;
+}
+
+#addSessionsContainer legend{
+    background-color: #009bdc;
+}
+
+#adminTrainingContainer th {
+    color: #808080;
 }
 
 #trainingErrorMessage {
     margin: 6px 0px 5px 3px;
 }
+
+.btnTraining {
+    background-color: white;
+    color: #009bdc;
+}
+
 .color-red {color: #B22222;}
 .searchField .glyphicon-search {
     right: 25px;

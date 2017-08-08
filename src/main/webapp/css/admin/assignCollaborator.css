@@ -1,4 +1,4 @@
-#assignCollaboratorContainer {
+#assignCollaboratorContainer, #addSessionsContainer {
     margin-top:30px;
 }
 
@@ -8,11 +8,15 @@
     height:30.9em;
     width: 100%;
     padding:20px;
-    background: #eeefee;
 }
 
 #assignCollaborator label {
     font-size:13px;
+}
+
+#assignCollaboratorContainer legend {
+    right:1px;
+    background-color: #ff9200;
 }
 
 .searchCollab .panel-body {
@@ -71,7 +75,7 @@ display:none;
 }
 
 #goToWish #box{
-    position:absolute;
+    position:relative;
     margin-left:10px;
     margin-top:-10px;
     cursor:pointer;
@@ -79,7 +83,9 @@ display:none;
     border-radius: 50%;
     height:20px;
     width: 20px;
-    background: #4b9bdf ;
+    left:36px;
+    bottom:12px;
+    background: #18aa8d;
     font-weight: bold;
     display: inline-block;
     line-height: 0px;
@@ -92,7 +98,7 @@ display:none;
 .collaboratorsList {
     overflow-y:none;
     overflow-x: none;
-    height:235px;
+    height:10rem;
     padding-left: 10px;
 }
 
@@ -115,7 +121,7 @@ display:none;
 .collaboratorsListRight {
     overflow-y:none;
     overflow-x: none;
-    height:280px;
+    height:10em;
     padding-left: 10px;
 }
 .imageon{
