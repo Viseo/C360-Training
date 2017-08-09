@@ -526,7 +526,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                  <div id="addSession" class="trainingBlock">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 text-center">
-                            <legend><img @click="returnToPageTraining()" src="img/other_icon/left-arrow.png"
+                            <legend><img @click="returnToPageTraining()" src="img/other_icon/blue-left-arrow.png"
                                                  width="30"
                                                  height="30"
                                                  style="cursor: pointer;    

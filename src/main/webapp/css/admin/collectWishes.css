@@ -1,9 +1,16 @@
 #collectWishes {
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
     border-radius: 3px 3px 0 0;
-    height:42em;
+    height:30.9em;
     width: 100%;
     padding:20px;
+}
+
+#scroll {
+    width: 100%;
+    height: 25em;
+    overflow-y:hidden;
+    overflow-x:hidden;
 }
 
 .rectangle-list a{
