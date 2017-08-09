@@ -230,6 +230,10 @@ background-colo: rgb(255, 255, 255);
     height: 100%;
 }
 
+.collabPage {
+    margin-top: 100px;
+}
+
 #navbar-subtitle {
     color :#428bca !important;
 }

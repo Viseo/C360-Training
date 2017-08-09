@@ -100,7 +100,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                     this.isBeginningDateValid = true;
                     this.calculateEndingDate();
                 }else{
-                    this[errorMessage] = "La date est déjà passée!";
+                    this[errorMessage] = "La date est déjà passée !";
                     this.isBeginningDateValid = false;
                 }
             } else {
@@ -526,7 +526,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                  <div id="addSession" class="trainingBlock">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 text-center">
-                            <legend><img @click="returnToPageTraining()" src="img/other_icon/left-arrow.png"
+                            <legend><img @click="returnToPageTraining()" src="img/other_icon/blue-left-arrow.png"
                                                  width="30"
                                                  height="30"
                                                  style="cursor: pointer;    
@@ -610,13 +610,14 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 placeholder = "Date de fin"
                                                 maxlength = "10"
                                                 :isValid = "true"
-                                                icon = "glyphicon glyphicon-calendar"
                                                 :disabled = "true" 
                                                 type = 'input'>
                                             </input-text>
+                                            <img src="img/other_icon/red-calendar.png" style="position: relative;
+                                            width: 30px; left: 13.4em; bottom: 3.3rem;">
                                         </div>
                                     </div>
-                                    <div class = "col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">                               
+                                    <div class = "col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3" style="position: absolute; top: 9em;">                               
                                                 <error-messages  
                                                         fillFieldErrorMessage =" Veuillez remplir tous les champs." 
                                                         successMessage =" La session a été créée avec succès."
@@ -635,7 +636,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 <error-messages>
                                     </div> 
                                 </div> 
-                                <div class = "row " style = "margin-bottom: 30px; margin-top:70px;">
+                                <div class = "row " style = "margin-bottom: 30px; margin-top:90px;">
                                     <div class = "col-xs-3 col-sm-3 col-md-3 col-lg-3 col-lg-offset-3">                                
                                         <input type = "submit" 
                                                    class = "btn btn-primary" 
@@ -674,10 +675,11 @@ let DatePicker = Vue.component('datepicker', {
                        @input="updateValue($event.target.value)"
                        @focus="handleFocus"
                        @blur="handleBlur"/>                     
-                <span class ="glyphicon form-control-feedback glyphicon-calendar"></span>
+                <img src="img/other_icon/green-calendar.png" style="position: relative;
+                                            width: 30px; left: 13.4em; bottom: 3.3rem;">
             </div>            
             <transition name="toggle">
-                <div class="date-panel" v-show="panelState" :style="coordinates">
+                <div class="date-panel" v-show="panelState" :style="coordinates" style="top:35px;">
                     <div class="panel-header" v-show="panelType !== 'year'">
                         <div class="arrow-left" @click="prevMonthPreview()">&lt;</div>
                         <div class="year-month-box">

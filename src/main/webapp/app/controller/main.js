@@ -384,7 +384,7 @@ const router = new VueRouter({
             component: {
                 template: `<div id="newVue"  v-cloak>
                                 <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
-                                    <div class="container-fluid">
+                                    <div class="container-fluid collabPage">
                                         <div class="col-sm-12 col-md-7 col-lg-7">
                                             <collaborator-formation ref="myComponent" ></collaborator-formation>
                                         </div>

@@ -22,20 +22,18 @@ let trainingRanking = Vue.component('training-ranking', {
                 <div class="col-sm-12 col-md-10 col-lg-12">
                         <div class="row" >
                             <div id="trainingRanking" class="col-lg-12 col-md-12 text-center">
-                                <legend>Classement formations</legend>
+                                <legend> <router-link :to="{path: '/addTrainingTopic'}">
+                                                <img src="img/other_icon/left-arrow.png"
+                                                width="30"
+                                                height="30"
+                                                style="cursor: pointer; position: relative; right: 13em;">
+                                        </router-link>Classement des formations</legend>
                             </div>
                         </div>
                     <div class="row">
-                         <div id="rankingTraining">
+                         <div id="rankingTraining" class="trainingBlock">
                               <div class="row">
-                                    <div class="col-sm-12 col-md-2 col-lg-2">
-                                        <router-link :to="{path: '/addTrainingTopic'}">
-                                                <img src="img/left-arrow.png"
-                                                width="40"
-                                                height="40"
-                                                style="cursor: pointer;">
-                                        </router-link>
-                                    </div>
+                                    
                                     <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>
                                             <img 
@@ -58,7 +56,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                        type="info" 
                                                        style="height:100%;">
                                                     <div class="row">
-                                                        <p  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0">Aucune formation n'a été notée</p>
+                                                        <p  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0" style="text-align: center;">Aucune formation n'a été notée.</p>
                                                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for="training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
                                                          <panel :is-open="openPanel"
                                                                     type="default">

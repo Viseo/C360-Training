@@ -20,20 +20,19 @@ let collectWishes = Vue.component('collect-wishes', {
                             <div class="row">
                                 <div style="padding-left: 0;
                                    padding-right: 0;" class="col-lg-12 col-md-12 text-center">
-                                    <legend>Souhaits reçus</legend>
+                                    <legend>
+                                            <router-link :to="{path: '/addTrainingTopic'}">
+                                            <img src="img/other_icon/left-arrow.png"
+                                                 width="30"
+                                                 height="30"
+                                                 style="cursor: pointer; position: relative; right: 16em;">
+                                            </router-link>
+                                        Souhaits reçus</legend>
                                 </div>
                             </div>
                             <div class="row">
-                                <div id="collectWishes">
+                                <div id="collectWishes" class="trainingBlock">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-2 col-lg-2">
-                                            <router-link :to="{path: '/addTrainingTopic'}">
-                                            <img src="img/left-arrow.png"
-                                                 width="40"
-                                                 height="40"
-                                                 style="cursor: pointer;">
-                                            </router-link>
-                                        </div>
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>
                                             <img v-show="showChevrons"
@@ -46,11 +45,7 @@ let collectWishes = Vue.component('collect-wishes', {
                                                  z-index:1;">
                                         </div>
                                     </div>
-                                    <div id="scroll"
-                                         style="width: 100%; 
-                                                height: 470px; 
-                                                overflow-y:hidden; 
-                                                overflow-x:hidden;">
+                                    <div id="scroll">
                                         <div class="row">
                                             <ol style="list-style-type:none" class="rectangle-list">
                                                 <li v-for="wish in allWishes">
