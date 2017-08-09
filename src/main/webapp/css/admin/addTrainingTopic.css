@@ -13,6 +13,10 @@
     margin-bottom: 0px;
 }
 
+#addSession #registr-form .errorMessageComponent {
+    text-align: center;
+}
+
 .form-control-feedback{
     pointer-events: auto;
 

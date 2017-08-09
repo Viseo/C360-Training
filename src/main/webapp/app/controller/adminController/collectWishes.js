@@ -22,10 +22,10 @@ let collectWishes = Vue.component('collect-wishes', {
                                    padding-right: 0;" class="col-lg-12 col-md-12 text-center">
                                     <legend>
                                             <router-link :to="{path: '/addTrainingTopic'}">
-                                            <img src="img/other_icon/orangeLeftArrow.png"
+                                            <img src="img/other_icon/left-arrow.png"
                                                  width="30"
                                                  height="30"
-                                                 style="cursor: pointer;">
+                                                 style="cursor: pointer; position: relative; right: 16em;">
                                             </router-link>
                                         Souhaits reçus</legend>
                                 </div>

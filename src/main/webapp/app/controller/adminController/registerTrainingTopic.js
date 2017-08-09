@@ -12,8 +12,8 @@ Vue.component('error-messages',{
             },
         }
     },
-    template: `            <td class="text-center" :style="styleTd" :colspan="colspan" :width="width">
-                                <div>
+    template: `            <td class="text-center col-lg-12" :style="styleTd" :colspan="colspan" :width="width">
+                                <div class="errorMessageComponent">
                                     <span v-show="emptyIdenticalError" 
                                           class="text-center color-red">{{ identicalErrorMessage }}
                                     </span>
@@ -631,10 +631,11 @@ let ShowFormation = Vue.component('show-formation-panel', {
                             </div>
                             <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
                                   <img v-show="state.showChevrons" src="img/chevrons/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1; margin-top:1%;">
+                                        <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
                                         <table class="fix tabnonborder" >
                                             <tbody>
                                                   <tr>
-                                                      <td v-show="noFormation" >Aucune formation n'a été créé.</td>
+                                                      
                                                       <td>
                                                            <template v-for="topicTraining in state.allTopicTraining">
                                                                 <table class="table table-borderless tabnonborder fix">                               

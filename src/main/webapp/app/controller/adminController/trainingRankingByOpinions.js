@@ -56,7 +56,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                                        type="info" 
                                                        style="height:100%;">
                                                     <div class="row">
-                                                        <p  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0">Aucune formation n'a été notée</p>
+                                                        <p  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " v-show="allTrainingScore.length===0" style="text-align: center;">Aucune formation n'a été notée.</p>
                                                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  v-for="training in allTrainingScore" @click="getFeedbackCommentByTraining(training[0].id)">
                                                          <panel :is-open="openPanel"
                                                                     type="default">

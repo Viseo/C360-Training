@@ -170,7 +170,10 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                         </center>
                         
                         <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 ">
-                            <router-link :to="{name: 'trainingRanking'}"><span class="glyphicon glyphicon-star" style="font-size:150%; cursor: pointer;"></span><span style="cursor: pointer;"> Classement des formations</span></router-link>
+                            <router-link :to="{name: 'trainingRanking'}"><img src="/img/other_icon/starfish.png" 
+                            style="width: 25px; position: relative; bottom: 3px;">
+                            <span style="cursor: pointer;"> Classement des formations</span>
+                            </router-link>
                         </center>
                        </div>
                     <div class="row ">
