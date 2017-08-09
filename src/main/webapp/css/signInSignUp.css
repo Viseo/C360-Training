@@ -98,7 +98,7 @@
 }
 .tab-group .active a {
     background: #428bca;
-    /*color: #ffffff;*/
+    color: #ffffff;
 }
 
 .tab-content > div:last-child {
