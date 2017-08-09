@@ -82,14 +82,10 @@ i.glyphicon {
     color: black;
 }
 
-.red-header{
-    background-color: rgb(224,53,89) !important;
-}
 .blue-header{
     /*background-color :#428bca;*/
 background-colo: rgb(255, 255, 255);
 }
-
 
 .dialog {
     width: 100%;
@@ -232,4 +228,12 @@ background-colo: rgb(255, 255, 255);
     /*padding:0;*/
     width: 100%;
     height: 100%;
+}
+
+#navbar-subtitle {
+    color :#428bca !important;
+}
+
+.text-left {
+    color :#428bca !important;
 }
