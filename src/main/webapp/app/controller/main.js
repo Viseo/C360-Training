@@ -382,7 +382,7 @@ const router = new VueRouter({
             path: "/registerTrainingCollaborator",
             name: 'registerTrainingCollaborator',
             component: {
-                template: `<div id="newVue" v-cloak>
+                template: `<div id="newVue"  v-cloak>
                                 <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                     <div class="container-fluid">
                                         <div class="col-sm-12 col-md-7 col-lg-7">
@@ -410,7 +410,7 @@ const router = new VueRouter({
             path: "/login",
             name: 'login',
             component: {
-                template: `<div id="newVue" v-cloak>
+                template: `<div id="newVue"  class="pictureLogin" v-cloak>
                                <header-component headerColor="blue-header"></header-component>
                                <connect-user></connect-user>
                            </div>`

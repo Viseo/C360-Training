@@ -12,7 +12,8 @@ let NavigationMenu = Vue.component('connect-user', {
     template: `
         <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3" style="margin-top:60px;">
             <div style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-                 border-radius: 3px 3px 0 0;">
+                 border-radius: 3px 3px 0 0;"
+                 class="panelForLoginPage">
                 <ul class="tab-group">
                     <li :class="tabinscription">
                         <a ref='inscriptionButton' @click="showInscriptionForm()">Inscription</a> 

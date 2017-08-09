@@ -83,7 +83,7 @@
     text-decoration: none;
     padding: 15px;
     background: rgba(160, 179, 176, 0.25);
-    color: #a0b3b0;
+    color: #428bca;
     font-size: 20px;
     float: left;
     width: 50%;
@@ -98,7 +98,7 @@
 }
 .tab-group .active a {
     background: #428bca;
-    color: #ffffff;
+    /*color: #ffffff;*/
 }
 
 .tab-content > div:last-child {
@@ -161,4 +161,10 @@
     top: 9px;
     border-color: #a00 transparent transparent transparent;
     border-width: 11px;
+}
+
+.panelForLoginPage{
+    background-color: #f3f3f3 !important;
+    z-index: 0;
+    opacity: 0.9;
 }
