@@ -51,18 +51,22 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
             allFeedbacks: [],
             showComment: false,
             showChevronsUp: false,
-            showChevronsBottom: false
+            showChevronsBottom: false,
+            noFound: true,
+            showMessageResult: false,
+            showTraining: true
         }
     },
 
     template: `<div>
-    <div class="row">
+        <div class="row">
             <div style="padding:0;" class="col-lg-12 col-md-12 text-center">
                 <legend>Demande de formation</legend>
             </div>
         </div>
-        <div class="row">
+        <div class="row"> 
             <div id="trainingContainer">
+                
                 <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <select required class="form-control" v-model="selectedTraining">
@@ -81,8 +85,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         <typeahead v-model="value" v-bind:data="allTrainingTitles"
                                    placeholder="Entrer une formation"></typeahead>
                         <div v-show="!isSearchValid" class="errorMessage col-sm-12">{{ searchNotValidErrorMessage }}</div>
-                        <div class="col-sm-12" v-show="noTrainingFound" style="margin-top:10px;"> Aucun résultat
-                            trouvé
+                        <div class="col-sm-12" v-show="showMessageResult" style="margin-top:10px;"> 
+                            Aucun résultat trouvé
                         </div>
                     </div>
                 </div>
@@ -90,12 +94,20 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     <p id="trainingErrorMessage" class="color-red col-lg-4 col-md-4 col-sm-12" v-show="emptyTraining">
                         {{emptyTrainingErrorMessage}}</p>
                 </div>
+                
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
                         <img v-show="showChevronsUp" src="img/chevrons/up.png" id="scroll-up-2" width="60" height="20"
                              style="position: absolute; left:50%; z-index:1; cursor: pointer;">
                     </div>
                 </div>
+                
+                <div v-show="showTraining">
+                    <p style="text-align: center; margin:50px;">
+                        Aucune formation n'est disponible.
+                    </p>
+                </div>
+                                                  
                 <div id="scrollTrainingCollaborator" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
                     <accordion id="accordionId" :one-at-atime="true" type="info">
                         <div v-for="(training, index) in trainingsFound">
@@ -189,6 +201,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         Toutes les formations démarrent à 9h00
                     </p>
                 </center>
+                
             </div>
         </div>
 </div>`,
@@ -390,6 +403,12 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     this.selectTrainingTitles();
                     storeTraining("");
                     this.test = false;
+                    if(this.allTrainings.length === 0){
+                        this.showTraining = true;
+                    }else {
+                        this.showTraining = false;
+                    }
+
                 },
                 function (response) {
                     console.log("Error: ", response);
@@ -456,7 +475,15 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                         this.trainingsFound.push(this.allTrainings[index]);
                     }
                 }
-                this.noTrainingFound = (this.trainingsFound.length == 0) ? true : false;
+                this.noTrainingFound = (this.trainingsFound.length === 0) ? true : false;
+
+                if( this.noTrainingFound && true  && (this.allTrainings.length != 0)){
+                    this.showMessageResult = true;
+                }
+                else {
+                    this.showMessageResult = false;
+                }
+
                 if (this.trainingsFound.length != 1)
                     this.openPanel = false;
                 this.value = null;
