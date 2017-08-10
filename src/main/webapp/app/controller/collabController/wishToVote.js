@@ -3,11 +3,13 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
  <div id="innerdiv" class="container-fluid">
      <div class="row">
         <div  style="padding:0;" class="col-lg-12 col-md-12 col-sm-12 text-center">
-            <legend>Voter</legend>
+            <legend class="darkBlueLegend">Voter</legend>
         </div>
      </div>
      <div class="row">
-                 <div style="height:362px;     
+                 <div 
+                 class="trainingBlock"
+                 style="height:362px;     
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">

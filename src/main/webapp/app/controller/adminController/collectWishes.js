@@ -20,7 +20,7 @@ let collectWishes = Vue.component('collect-wishes', {
                             <div class="row">
                                 <div style="padding-left: 0;
                                    padding-right: 0;" class="col-lg-12 col-md-12 text-center">
-                                    <legend>
+                                    <legend class="orangeLegend">
                                             <router-link :to="{path: '/addTrainingTopic'}">
                                             <img src="img/other_icon/left-arrow.png"
                                                  width="30"

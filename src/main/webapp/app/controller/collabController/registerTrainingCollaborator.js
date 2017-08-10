@@ -58,11 +58,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     template: `<div>
     <div class="row">
             <div style="padding:0;" class="col-lg-12 col-md-12 text-center">
-                <legend>Demande de formation</legend>
+                <legend class="blueLegend" style="z-index:1">Demande de formation</legend>
             </div>
         </div>
         <div class="row">
-            <div id="trainingContainer">
+            <div id="trainingContainer" class="trainingBlock" style="opacity:0.9">
                 <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <select required class="form-control" v-model="selectedTraining">
@@ -72,7 +72,7 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12">
                         <input ref="btnValidateSearch" @click="displayTrainingsFn(selectedTraining)" type="submit"
-                               class="btn btn-primary" value="Valider"/>
+                               class="btn btn-primary buttonForm" value="Valider"/>
                     </div>
                     <div @keyup.enter="storeTrainingsFound(capitalizeSearch)"
                          class="col-lg-4 col-lg-offset-2 col-md-offset-2 col-md-4 col-sm-12 searchField">

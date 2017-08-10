@@ -407,7 +407,7 @@ template:`
                   <div id="addNewFormation" class="trainingBlock">
                         <div class="row">
                              <div class="col-lg-12 col-md-12 text-center">
-                                  <legend>Ajouter une formation</legend>
+                                  <legend class="darkBlueLegend">Ajouter une formation</legend>
                              </div>
                         </div>
                         <form id="newFormation" @submit.prevent="verifyTrainingOrTopicBeforeSubmit">
@@ -448,9 +448,9 @@ template:`
                                              <br/>
                                              <input type="button"  
                                                    @click="verifyTrainingFormBeforeSubmit"
-                                                   class="btn btn-primary" 
+                                                   class="btn btn-primary buttonForm" 
                                                    value="Valider" 
-                                                   style="width:80%; background-color: #3498db; border: none; border-radius:0;"/>
+                                                   />
                                              <input v-show="false" type="submit">
                                         </div>
                                     </td>
@@ -626,7 +626,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                         <div id="addFormation" class="trainingBlock">
                             <div class="row">
                                 <div style="z-index:10;" class="col-lg-12 col-md-12 text-center">
-                                     <legend>Formations ajoutées</legend>
+                                     <legend class="blueLegend">Formations ajoutées</legend>
                                 </div>
                             </div>
                             <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">

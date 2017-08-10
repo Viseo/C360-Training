@@ -22,7 +22,7 @@ let trainingRanking = Vue.component('training-ranking', {
                 <div class="col-sm-12 col-md-10 col-lg-12">
                         <div class="row" >
                             <div id="trainingRanking" class="col-lg-12 col-md-12 text-center">
-                                <legend> <router-link :to="{path: '/addTrainingTopic'}">
+                                <legend class="orangeLegend"> <router-link :to="{path: '/addTrainingTopic'}">
                                                 <img src="img/other_icon/left-arrow.png"
                                                 width="30"
                                                 height="30"

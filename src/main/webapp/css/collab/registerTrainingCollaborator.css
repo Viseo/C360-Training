@@ -22,7 +22,7 @@ legend{
     font-size: 18px;
 }
 
-#addNewFormation legend {
+.darkBlueLegend{
     background-color: #003693;
 }
 
@@ -30,7 +30,7 @@ legend{
     padding-left:0px;
 }
 
-#addSessionsContainer legend{
+.blueLegend{
     background-color: #009bdc;
 }
 
@@ -64,10 +64,6 @@ button + p {
     left: 0%;
     top: 100%;
     z-index:6;
-}
-
-#trainingContainer input {
-    padding-right: 30px;
 }
 
 @media screen and (min-width: 992px){
@@ -115,10 +111,13 @@ button + p {
     z-index: 5;
 }
 
-.alignIcon {
+.status_icon {
     vertical-align: middle;
     float:right;
-    font-size:18px;
+    width: 25px;
+    position: relative;
+    right: 40px;
+    top: 10px;
 }
 div.stars {
     width: 270px;
@@ -203,4 +202,12 @@ div.panel-heading.accordion-toggle{
     margin: 0 15px 10px 5px;
     border-radius: 5px;
     padding: 10px 0;
+}
+
+.registerTrainingCollabPicture {
+    background: url("/img/background/collaboratorPage.png") no-repeat center center fixed ;
+    background-size: cover;
+    padding-bottom:27px;
+
+
 }

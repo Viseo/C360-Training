@@ -14,7 +14,7 @@
     font-size:13px;
 }
 
-#assignCollaboratorContainer legend {
+.orangeLegend {
     right:1px;
     background-color: #ff9200;
 }

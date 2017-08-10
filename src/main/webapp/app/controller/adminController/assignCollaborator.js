@@ -39,7 +39,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
     <div class="row">
                 <div style="padding-left: 0;
                                    padding-right: 0;" class="col-lg-12 col-md-12 text-center">
-                    <legend>Affecter un collaborateur</legend>
+                    <legend class="orangeLegend">Affecter un collaborateur</legend>
                 </div>
             </div>
             <div class="row">

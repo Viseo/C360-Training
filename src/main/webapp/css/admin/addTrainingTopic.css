@@ -1072,4 +1072,12 @@ a.boxclose{
     content: "×";
 }
 
+.buttonForm {
+    width:80%;
+    background-color: #3498db;
+    border: none;
+    border-radius:0;
+    text-align: center;
+}
+
 

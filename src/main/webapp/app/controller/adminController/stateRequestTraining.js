@@ -42,12 +42,13 @@ let stateRequest = Vue.component('state-request', {
     template: `
         <div id ="innerdiv" class="container-fluid" @click="showRatingTrainingsPopup = false;createShowPopUpOnceCookie();">
              <div class="row">
-                    <div style="padding:0" class="col-lg-12 col-md-12 col-sm-12 text-center">
-                            <legend> Mes formations </legend>
+                    <div  style="padding:0" class="col-lg-12 col-md-12 col-sm-12 text-center">
+                            <legend class="orangeLegend"> Mes formations </legend>
                     </div>
              </div>
              <div class="row">
                    <div 
+                        class="trainingBlock"
                         style="margin-bottom:10px; ">
                          <div  
                               style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
@@ -78,20 +79,27 @@ let stateRequest = Vue.component('state-request', {
                                                              Vous n'êtes inscrit à aucune session.
                                                    </p>
                                               </div>
-                                              <div v-for="training in requestedTrainingByCollaborator" >
-                                                    <strong> {{training.title}}</strong>
-                                                         <div v-for="session in training.sessionsValidated">
+                                              
+                                                   <span class="row" v-for="training in requestedTrainingByCollaborator">
+                                                   <span class="col-sm-2 col-md-2 col-lg-2"> <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 50px;"></span>
+                                                         <span class="col-sm-10 col-md-10 col-lg-10 whiteBlock" v-for="session in training.sessionsValidated">
+                                                             <strong> {{training.title}}</strong>
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                                              <span class="glyphicon glyphicon-ok-circle alignIcon" 
-                                                                      style="color: green"></span>
-                                                         </div>
-                                                         <div v-for="session in training.sessionsPending">
+                                                                 <img src="/img/status_icon/OK_icon.png" class="status_icon">
+                                                         </span>
+                                                   </span>
+                                                       
+                                                    <span class="row" v-for="training in requestedTrainingByCollaborator" >
+                                                       <span class="col-sm-2 col-md-2 col-lg-2"> <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 50px;"></span>
+                                                         <span class="col-sm-10 col-md-10 col-lg-10 whiteBlock" v-for="session in training.sessionsPending">
+                                                            <strong> {{training.title}}</strong>
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
-                                                                <span class="glyphicon glyphicon-time alignIcon">
-                                                                </span>
-                                                         </div>
-                                                         <hr style="margin:4.5px"/>
-                                              </div>
+                                                               <img src="/img/status_icon/in_Progress_icon.png" class="status_icon">
+                                                         </span>
+                                                            <hr style="margin:4.5px"/>
+                                                    </span>
+                                                    
+
                                        </div>
                                 </div>
                                 <div v-show="!noSessionForCollaborator" 

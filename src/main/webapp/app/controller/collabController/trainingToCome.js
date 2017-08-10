@@ -6,11 +6,13 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
 <div id="innerdiv" class="container-fluid">
     <div class="row">
         <div style="padding:0;" class="col-lg-12 col-md-12 col-sm-12 text-center">
-            <legend>Formation à venir</legend>
+            <legend class="darkBlueLegend">Formation à venir</legend>
         </div>
     </div>
     <div class="row">
-            <div style="height:362px;     
+            <div 
+            class="trainingBlock"
+            style="height:362px;     
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">
