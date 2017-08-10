@@ -24,6 +24,7 @@ legend{
 
 .darkBlueLegend{
     background-color: #003693;
+    z-index: 1;
 }
 
 #addSessionsContainer {
@@ -32,6 +33,7 @@ legend{
 
 .blueLegend{
     background-color: #009bdc;
+    z-index: 1;
 }
 
 #adminTrainingContainer th {

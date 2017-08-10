@@ -17,6 +17,7 @@
 .orangeLegend {
     right:1px;
     background-color: #ff9200;
+    z-index: 1;
 }
 
 .searchCollab .panel-body {

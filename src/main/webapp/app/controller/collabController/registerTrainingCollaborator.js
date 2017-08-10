@@ -58,11 +58,11 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
     template: `<div>
     <div class="row">
             <div style="padding:0;" class="col-lg-12 col-md-12 text-center">
-                <legend class="blueLegend" style="z-index:1">Demande de formation</legend>
+                <legend class="blueLegend">Demande de formation</legend>
             </div>
         </div>
         <div class="row">
-            <div id="trainingContainer" class="trainingBlock" style="opacity:0.9">
+            <div id="trainingContainer" class="trainingBlock">
                 <div class="row" id="upperContainer" style="margin-bottom: 15px; ">
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <select required class="form-control" v-model="selectedTraining">
