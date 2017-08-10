@@ -9,9 +9,9 @@ body {
 }
 
 .whiteBlock {
+    padding-left:75px;
     background: #ffffff;
-    margin-bottom:20px;
-    padding: 20px 176px 20px 0;
+    margin-bottom: 15px;
 }
 
 #wrap {

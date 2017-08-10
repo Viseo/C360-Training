@@ -118,8 +118,7 @@ button + p {
     float:right;
     width: 25px;
     position: relative;
-    right: 40px;
-    top: 10px;
+    bottom: 13px;
 }
 div.stars {
     width: 270px;

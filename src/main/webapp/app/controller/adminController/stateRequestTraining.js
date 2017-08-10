@@ -80,23 +80,29 @@ let stateRequest = Vue.component('state-request', {
                                                    </p>
                                               </div>
                                               
-                                                   <span class="row" v-for="training in requestedTrainingByCollaborator">
-                                                   <span class="col-sm-2 col-md-2 col-lg-2"> <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 50px;"></span>
-                                                         <span class="col-sm-10 col-md-10 col-lg-10 whiteBlock" v-for="session in training.sessionsValidated">
-                                                             <strong> {{training.title}}</strong>
-                                                              {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
+                                                   <span v-for="training in requestedTrainingByCollaborator">
+                                                         <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsValidated">
+                                                             <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
+                                                                <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
+                                                                <span>
+                                                                <strong> {{training.title}}</strong>
+                                                                </br>
+                                                                {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
                                                                  <img src="/img/status_icon/OK_icon.png" class="status_icon">
+                                                                </span>
+                                                             </span>
                                                          </span>
                                                    </span>
                                                        
-                                                    <span class="row" v-for="training in requestedTrainingByCollaborator" >
-                                                       <span class="col-sm-2 col-md-2 col-lg-2"> <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 50px;"></span>
-                                                         <span class="col-sm-10 col-md-10 col-lg-10 whiteBlock" v-for="session in training.sessionsPending">
+                                                    <span v-for="training in requestedTrainingByCollaborator" >
+                                                        <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending">
+                                                            <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
+                                                            <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                             <strong> {{training.title}}</strong>
+                                                            </br>
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
                                                                <img src="/img/status_icon/in_Progress_icon.png" class="status_icon">
                                                          </span>
-                                                            <hr style="margin:4.5px"/>
                                                     </span>
                                                     
 
