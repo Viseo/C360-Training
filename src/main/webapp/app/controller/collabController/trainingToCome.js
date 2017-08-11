@@ -18,43 +18,44 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         padding:5px; width:100%;">
                 <div class="row">
                     <div class="col-lg-12" style="margin-bottom:20px">
-                        <img v-show="showChevrons" src="img/chevrons/up.png" id="scroll-up-training-to-come" width="60" height="20"
-                             style="position: absolute; left:50%; z-index:1;">
+                        <img v-show="showChevrons" src="img/other_icon/scroll_up.png" id="scroll-up-training-to-come" width="70" height="50" 
+                        style="position: absolute; left:45%; z-index:1;">
                     </div>
                 </div>
-                <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden;"
+                <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden; margin-top:35px;"
                      class="col-lg-12 col-md-12 col-sm-12">
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
-                        <tr>
-                            <td>
-                                <div style="text-align: left"><b>{{n[0].trainingDescription.trainingTitle}} </b></div>
-                            </td>
-                        </tr>
                         <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"
                             v-for="m in n">
+                            <div class="whiteBlock" style="padding:0 0px 11px 75px;
+">
+                      <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:15px;">
+                   
+                             <div style="text-align: left; padding-top: 5px;"><b>{{n[0].trainingDescription.trainingTitle}} </b></div>
                             <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()"
                                 style="text-align: left;">
                                 {{m.beginning}} - {{m.location}}
                             </td>
                             <td @mouseover="showInformationsMessage(m)" @mouseleave="hideInformationsMessage()"
-                                style="text-align: right"
+                                style=" right: 20px;
+                                        float: right;
+                                        position: relative;
+                                        bottom: 25px;"
                                 :class="{ 'text-danger' : displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length), 'text-success' : !displayRedTextWhenOnly3SeatsAvailable(15 - m.collaborators.length)}">
                                 {{ 15 - m.collaborators.length }} places disponibles
                             </td>
                             <div v-show="verifyShowMessageOrNot(m)" class="sc-notification sc-info">
                                 <p><span class="glyphicon glyphicon-info-sign">&nbsp</span>{{ MouseOverMessage }}</p>
                             </div>
+                                                  </div>
+
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <hr>
-                            </td>
-                        </tr>
+
                     </table>
                 </div>
 <div class="row">
     <div class="col-lg-12" style="margin-top:10px">
-        <img v-show="showChevrons" src="img/chevrons/down.png" id="scroll-down-training-to-come" width="60" height="20" style="position: relative; left:50%; z-index:1;">
+        <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; left:45%; z-index:1;">
     </div>
 </div>
 <br>

@@ -407,7 +407,7 @@ template:`
                   <div id="addNewFormation" class="trainingBlock">
                         <div class="row">
                              <div class="col-lg-12 col-md-12 text-center">
-                                  <legend class="darkBlueLegend">Ajouter une formation</legend>
+                                  <legend class="dark">Ajouter une formation</legend>
                              </div>
                         </div>
                         <form id="newFormation" @submit.prevent="verifyTrainingOrTopicBeforeSubmit">
@@ -629,8 +629,9 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend class="blueLegend">Formations ajoutées</legend>
                                 </div>
                             </div>
-                            <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" class="roundedCorner">
-                                  <img v-show="state.showChevrons" src="img/chevrons/up.png" id="scroll-up" width="60" height="20" style="position: absolute; left:50%; z-index:1; margin-top:1%;">
+                            <div style="margin-top:54px; width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
+                                  <img v-show="state.showChevrons" id="scroll-up" src="img/other_icon/scroll_up.png" width="70" height="50" 
+                        style="position: absolute; left:46%; z-index:1; top: 33px; cursor: pointer;">
                                         <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
                                         <table class="fix tabnonborder" >
                                             <tbody>
@@ -661,7 +662,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                   </tr>
                                             </tbody>
                                         </table>
-                                  <img v-show="state.showChevrons" src="img/chevrons/down.png" id="scroll-down" width="60" height="20" style="position: absolute; left:50%; top:95%; z-index:1;">
+                                  <img v-show="state.showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down" width="70" height="50" style="position: absolute; left:50%; top:95%; z-index:1; margin-top: -15px;">
                          </div>`
 });
 

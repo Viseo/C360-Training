@@ -4,8 +4,7 @@ body {
 }
 
 .trainingBlock {
-    background: #eeefee;
-    opacity:0.9;
+    background: rgba(248,248,248,0.8);
 }
 
 .whiteBlock {

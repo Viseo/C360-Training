@@ -54,7 +54,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
                             <h4 style="font-size: 1.8rem;
-    color: rgb(158, 158, 158);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
+    color: hsl(12, 7%, 39%);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                             <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
                                 <label><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher
                                     les demandes</label>
@@ -105,7 +105,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
                             <h4 class="col-sm-12 col-md-12 col-lg-12" style="font-size: 1.8rem;
-    color: rgb(158, 158, 158);">Collaborateurs ajoutés:
+    color: hsl(12, 7%, 39%);">Collaborateurs ajoutés:
                                 {{validatedCollab.length}}</h4>
                             <div class="rightSide checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
                                 <label style = "padding-left:0px; cursor: default; ">Nombre de places disponibles : {{15 -

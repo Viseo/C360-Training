@@ -59,14 +59,8 @@ let stateRequest = Vue.component('state-request', {
                                        <div v-show="!noSessionForCollaborator" 
                                             class="col-lg-12" 
                                             style="margin-bottom:30px">
-                                             <img v-show="showChevronsUp" src="img/chevrons/up.png" 
-                                                  id="scroll-up-3" 
-                                                  width="60" 
-                                                  height="20" 
-                                                  style="position: absolute; 
-                                                         left:50%; 
-                                                         z-index:1;
-                                                         cursor: pointer;">
+                                             <img v-show="showChevronsUp" src="img/other_icon/scroll_up.png" id="scroll-up-3" width="70" height="50" 
+                        style="position: absolute; left:42%; z-index:1; top: -14px; cursor: pointer;">
                                        </div>
                                 </div>
                                 <div id="scrollMyTrainings">
@@ -81,7 +75,9 @@ let stateRequest = Vue.component('state-request', {
                                               </div>
                                               
                                                    <span v-for="training in requestedTrainingByCollaborator">
-                                                         <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsValidated">
+                                                         <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsValidated"
+                                                         style="padding-left: 0;
+                                                                padding-right: 0;">
                                                              <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
                                                                 <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                                 <span>
@@ -111,15 +107,8 @@ let stateRequest = Vue.component('state-request', {
                                 <div v-show="!noSessionForCollaborator" 
                                      class="col-lg-12" 
                                      style="margin-top:10px">
-                                       <img v-show="showChevronsBottom" src="img/chevrons/down.png" 
-                                            id="scroll-down-3" 
-                                            width="60" 
-                                            height="20" 
-                                            style="position: relative; 
-                                                   bottom:10px; 
-                                                   left:50%; 
-                                                   z-index:1;
-                                                   cursor: pointer">
+                                       <img v-show="showChevronsBottom" src="img/other_icon/scroll_down.png" id="scroll-down-3" width="70" height="50" style="position: relative; left:40%; z-index:1;
+                                                   bottom: 20px; cursor: pointer">
                                 </div>
                          </div>
                    </div>

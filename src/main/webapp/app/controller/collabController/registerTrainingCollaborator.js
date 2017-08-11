@@ -92,8 +92,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>
                 <div class="row">
                     <div class="col-lg-12 col-sm-12 sol-md-12" style="margin-bottom:30px">
-                        <img v-show="showChevronsUp" src="img/chevrons/up.png" id="scroll-up-2" width="60" height="20"
-                             style="position: absolute; left:50%; z-index:1; cursor: pointer;">
+                        <img v-show="showChevronsUp" src="img/other_icon/scroll_up.png" id="scroll-up-2" width="70" height="50" 
+                        style="position: absolute; left:46%; z-index:1; top: -23px; cursor: pointer;">
                     </div>
                 </div>
                 <div id="scrollTrainingCollaborator" class="col-lg-12 col-md-12 col-sm-12" v-show="displayTrainings">
@@ -179,8 +179,8 @@ let CollaboratorFormation = Vue.component('collaborator-formation', {
                 </div>
                 <div class="row">
                     <div class="col-lg-12" style="margin-top:10px">
-                        <img v-show="showChevronsBottom" src="img/chevrons/down.png" id="scroll-down-2" width="60" height="20"
-                             style="position: relative; left:50%; z-index:1; cursor: pointer;">
+                        <img v-show="showChevronsBottom" src="img/other_icon/scroll_down.png" id="scroll-down-2" width="70" height="50" style="position: relative; left:46%; z-index:1;
+                                                   bottom: 6px; cursor: pointer">
                     </div>
                 </div>
                 <center>

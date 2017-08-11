@@ -3,8 +3,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
 <form id="register-form"
       @submit.prevent="updateCollaboratorInfo()"
       enctype="multipart/form-data">
-    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-        <div class="panel panel-default">
+    <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3 ">
+        <div class="panel panel-default trainingBlock">
             <div class="panel-header">
                 <span>
                     <span class="glyphicon glyphicon-user"></span>
@@ -116,8 +116,8 @@ let profilToUpdate = Vue.component('profil-to-update', {
         </div>
     </div>
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-        <div class="panel panel-default">
-            <div class="panel-header">
+        <div class="panel panel-default trainingBlock">
+            <div class="panel-header ">
                 <span>
                     <span class="glyphicon glyphicon-user"></span>
                     2. Mes identifiants
