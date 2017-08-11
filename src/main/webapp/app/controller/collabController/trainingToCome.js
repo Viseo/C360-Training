@@ -55,7 +55,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                 </div>
 <div class="row">
     <div class="col-lg-12" style="margin-top:10px">
-        <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; left:45%; z-index:1;">
+        <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; bottom:11px; left:45%; z-index:1;">
     </div>
 </div>
 <br>
@@ -64,7 +64,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         <tr>
             <td>
                 <p>
-                   <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 560px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
+                   <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 598px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
                 </p>
             </td>
                 <form @submit.prevent="sendWish">
@@ -73,21 +73,21 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                   <input-text
                             v-show="!showWish"
                             :value = "wish"
-                            style ="width:300px;position:absolute; left:300px; top:535px;"
+                            style ="width:224px;position:absolute; left:363px; top:574px; text-align: center;"
                             @input = "updateV1"
-                            placeholder = "Ex: javascript(15 caractères maximum)"
+                            placeholder = "Ex: Java"
                             maxlength = "15"
                             icon = "glyphicon glyphicon-floppy-disk"
                             type = 'input'
                             @click="sendWish">
                     </input-text>
-                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:565px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
+                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:600px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
                 </p>
             </td>
         </form>
         </tr>
         <tr>
-            <td colspan="2">
+            <td style="position: relative; bottom:60px">
                 <br>
                 <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
                 <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
