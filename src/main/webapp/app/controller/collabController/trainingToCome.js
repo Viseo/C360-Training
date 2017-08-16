@@ -12,7 +12,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
     <div class="row">
             <div 
             class="trainingBlock"
-            style="height:362px;     
+            style="height:384px;     
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">

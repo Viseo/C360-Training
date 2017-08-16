@@ -411,7 +411,7 @@ const router = new VueRouter({
             name: 'login',
             component: {
                 template: `<div id="newVue"  class="pictureLogin" v-cloak>
-                               <header-component headerColor="blue-header"></header-component>
+                               <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                <connect-user></connect-user>
                            </div>`
             }
@@ -422,7 +422,7 @@ const router = new VueRouter({
                 template: `
                 <div class="container-fluid" id="newVue" v-cloak>
                    <div class="row">
-                        <header-component headerColor="blue-header"></header-component>
+                        <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                         <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3">
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -446,7 +446,7 @@ const router = new VueRouter({
             path: "/profiltoupdate",
             name: 'profiltoupdate',
             component: {
-                template: `<div id="newVue" class="registerTrainingCollabPicture"" v-cloak>
+                template: `<div id="newVue"  v-cloak>
                                 <header-component title="Gestion des formations" headerColor="blue-header"></header-component>
                                 <div class="container-fluid">
                                     <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top:37px;">

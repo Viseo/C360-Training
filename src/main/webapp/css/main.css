@@ -71,7 +71,7 @@ body {
 }
 #navbar-app {
     color :#428bca !important;
-    font-size:200%;
+    font-size:250%;
 }
 i.glyphicon {
     top:2.5px;
@@ -234,8 +234,7 @@ background-colo: rgb(255, 255, 255);
     background: url("/img/background/loginPage.png") no-repeat center center fixed;
     background-size: cover;
     padding-bottom:1000px;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
 }
 
 .collabPage {
