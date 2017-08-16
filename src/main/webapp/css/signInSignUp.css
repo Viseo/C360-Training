@@ -82,7 +82,7 @@
     display: block;
     text-decoration: none;
     padding: 15px;
-    background: rgba(160, 179, 176, 0.25);
+    background: #ffffff;
     color: #428bca;
     font-size: 20px;
     float: left;
@@ -164,7 +164,6 @@
 }
 
 .panelForLoginPage{
-    background-color: #f3f3f3 !important;
+    background-color: rgba(243, 243, 243, 0.8) !important;
     z-index: 0;
-    opacity: 0.9;
 }

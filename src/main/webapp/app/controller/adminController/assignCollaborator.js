@@ -162,14 +162,14 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </br>
                     <div class="row">
                     
-                        <center id="goToWish" class="row col-sm-6 col-md-6 col-lg-6 ">
+                        <center id="goToWish" class="row col-sm-6 col-md-6 col-lg-6 " style="top:47px">
                         <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a>
                             <img src="/img/other_icon/iconGift.png" style="position: relative; width: 25px;right: 2px; bottom: 5px;">
                             <span> Souhaits de formations</span> 
                         </router-link>
                         </center>
                         
-                        <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 ">
+                        <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 " style="top:47px">
                             <router-link :to="{name: 'trainingRanking'}"><img src="/img/other_icon/starfish.png" 
                             style="width: 25px; position: relative; bottom: 3px;">
                             <span style="cursor: pointer;"> Classement des formations</span>

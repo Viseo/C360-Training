@@ -860,7 +860,7 @@ let customPasswordInput = Vue.component('customPasswordInput', {
                                 @input="updateValue($event.target.value)">
                         </td>
                         <td>
-                             <span v-show="isValid" class="glyphicon glyphicon-ok-circ></span>
+                             <span v-show="isValid" class="glyphicon glyphicon-ok-circle color-green"></span>
                              <span v-show="isNotValid" class="glyphicon glyphicon-remove-circle color-red"></span>
                         </td>
                     </tr>
