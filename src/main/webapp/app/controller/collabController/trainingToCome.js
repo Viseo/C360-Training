@@ -64,7 +64,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         <tr>
             <td>
                 <p>
-                   <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 598px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
+                   <router-link :to="{name: 'wishToVote'}"> <span style="position:absolute; top: 581px; left:7%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-eye-open"></span> Voir la liste des souhaits </span></router-link>
                 </p>
             </td>
                 <form @submit.prevent="sendWish">
@@ -73,7 +73,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                   <input-text
                             v-show="!showWish"
                             :value = "wish"
-                            style ="width:224px;position:absolute; left:363px; top:574px; text-align: center;"
+                            style ="width:224px;position:absolute; left:363px; top:554px; text-align: center; z-index:12;"
                             @input = "updateV1"
                             placeholder = "Ex: Java"
                             maxlength = "15"
@@ -81,7 +81,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                             type = 'input'
                             @click="sendWish">
                     </input-text>
-                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:600px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
+                    <span v-show="showWish" @click="showWish = !showWish" style="position:absolute; top:581px; left:65%; color: #0f0f0f;cursor: pointer"><span class="glyphicon glyphicon-pencil"></span> Suggérer une formation</span>
                 </p>
             </td>
         </form>
@@ -90,7 +90,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             <td style="position: relative; bottom:60px">
                 <br>
                 <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
-                <center><span v-show="wishAlreadyExisted" class="text-center color-red">Le souhait a déjà été émis.</span></center>
+                <center><span v-show="wishAlreadyExisted" class="text-center color-red" style="position: absolute;right: -80px; top: 37px;">Le souhait a déjà été émis.</span></center>
                 <center><span v-show="emptyWish" class="text-center color-red">Veuillez remplir le champ sélectionné.</span></center>
             </td>
         </tr>
