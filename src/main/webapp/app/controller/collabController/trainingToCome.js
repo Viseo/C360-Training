@@ -9,6 +9,11 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             <legend class="darkBlueLegend">Formation à venir</legend>
         </div>
     </div>
+            <div v-show="noTrainingToCome">
+                <p style="text-align: center; margin:50px;">
+                    Aucune formation à venir.
+                </p>
+            </div>
     <div class="row">
             <div 
             class="trainingBlock"
@@ -24,6 +29,8 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                 </div>
                 <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden; margin-top:35px;"
                      class="col-lg-12 col-md-12 col-sm-12">
+                     
+                     
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"
                             v-for="m in n">
@@ -59,6 +66,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
     </div>
 </div>
 <br>
+    
 <div style="margin-top:20px; margin-left: 25px;">
     <table style="width: 530px;">
         <tr>
@@ -95,7 +103,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             </td>
         </tr>
     </table>
-
 </div>
         </div>
             `,
@@ -121,7 +128,9 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             MouseOverMessage: "Désolé! Vous avez déja effectuer une demande",
             trainingSessionIdMouseOver: '',
             changePageToVote:false,
-            showChevrons: false
+            showChevrons: false,
+            noTrainingToCome:true
+
         }
     },
     mounted:function () {
@@ -131,7 +140,8 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         this.activateScrollUp('#scroll-up-training-to-come','#sessionsPanel');
         this.activeScrollDown('#scroll-down-training-to-come','#sessionsPanel');
         this.activateScrollWheel('#sessionsPanel');
-    },
+    }
+    ,
     methods: {
         updateV1 (v) {
             this.wish = v;
@@ -241,6 +251,13 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                         }
                         tmp3 = this.reorganizeTrainingSessionsByTraining(tmp3);
                         this.allTrainingsAndSessions.push(tmp3);
+
+                        if(this.allTrainingsAndSessions.length === 0){
+                            this.noTrainingToCome =  true;
+                        }
+                        else {
+                            this.noTrainingToCome =  false;
+                        }
                     }
                 },
                 function (response) {
@@ -248,7 +265,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     console.error(response);
                 }
             ).then(function() {
-                this.showChevrons =  this.checkForChevrons('sessionsPanel')
+                this.showChevrons =  this.checkForChevrons('sessionsPanel');
             });
         },
 
