@@ -12,7 +12,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
     <div class="row">
             <div 
             class="trainingBlock"
-            style="height:384px;     
+            style="height:360px;     
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">
@@ -90,7 +90,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             <td style="position: relative; bottom:60px">
                 <br>
                 <center><span v-show="wishSuccess" class="text-center color-green">Le souhait a bien été transmis</span></center>
-                <center><span v-show="wishAlreadyExisted" class="text-center color-red" style="position: absolute;right: -80px; top: 37px;">Le souhait a déjà été émis.</span></center>
+                <center><span v-show="wishAlreadyExisted" class="text-center color-red" style="position: absolute;right: -80px; top: 15px;">Le souhait a déjà été émis.</span></center>
                 <center><span v-show="emptyWish" class="text-center color-red">Veuillez remplir le champ sélectionné.</span></center>
             </td>
         </tr>
