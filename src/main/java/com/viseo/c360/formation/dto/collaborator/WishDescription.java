@@ -19,6 +19,9 @@ public class WishDescription extends BaseDTO {
 
     private Boolean isChecked;
 
+    public WishDescription() {
+    }
+
     private List<Collaborator> vote_ok;
 
     private List<Collaborator> vote_ko;
@@ -106,7 +109,7 @@ public class WishDescription extends BaseDTO {
                 this.vote_ko = Collections.emptyList();
             }
 
-            this.isChecked = false;
+            this.isChecked = null;
 
             return new WishDescription(this);
         }

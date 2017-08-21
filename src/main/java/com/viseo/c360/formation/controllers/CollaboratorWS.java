@@ -1,42 +1,19 @@
 package com.viseo.c360.formation.controllers;
 
-import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
-import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
-import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
-import com.viseo.c360.formation.converters.requestTraining.DescriptionToRequestTraining;
-import com.viseo.c360.formation.converters.requestTraining.RequestTrainingToDescription;
-import com.viseo.c360.formation.converters.trainingsession.TrainingSessionToDescription;
-import com.viseo.c360.formation.converters.wish.DescriptionToWish;
-import com.viseo.c360.formation.converters.wish.WishToDescription;
-import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
-import com.viseo.c360.formation.domain.collaborator.Wish;
-import com.viseo.c360.formation.domain.training.Topic;
-import com.viseo.c360.formation.domain.training.Training;
-import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import com.viseo.c360.formation.dto.collaborator.RequestTrainingDescription;
 import com.viseo.c360.formation.dto.collaborator.WishDescription;
 import com.viseo.c360.formation.dto.training.TrainingSessionDescription;
-import com.viseo.c360.formation.email.sendMessage;
 import com.viseo.c360.formation.exceptions.C360Exception;
-import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException;
-import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
-import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
 import com.viseo.c360.formation.services.CollaboratorServicesImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.core.convert.ConversionException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.mail.MessagingException;
-import javax.persistence.PersistenceException;
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +116,8 @@ public class CollaboratorWS {
     @RequestMapping(value = "${endpoint.allwishes}", method = RequestMethod.GET)
     @ResponseBody
     public List<WishDescription> getAllWishes() {
-        return collaboratorServices.getAllWishes();
+        List<WishDescription> list = this.collaboratorServices.getAllWishes();
+        return this.collaboratorServices.getAllWishes();
     }
 
     @RequestMapping(value = "${endpoint.allvalidatedwishes}", method = RequestMethod.GET)
