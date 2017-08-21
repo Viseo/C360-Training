@@ -119,7 +119,12 @@ button + p {
     float:right;
     width: 25px;
     position: relative;
-    bottom: 13px;
+    bottom: 23px;
+}
+.text_status {
+    position: absolute;
+    right: 3px;
+    font-style: italic;
 }
 div.stars {
     width: 270px;

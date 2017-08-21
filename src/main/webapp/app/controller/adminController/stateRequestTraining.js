@@ -85,19 +85,23 @@ let stateRequest = Vue.component('state-request', {
                                                                 </br>
                                                                 {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
                                                                  <img src="/img/status_icon/OK_icon.png" class="status_icon">
+                                                                 <span class="text_status">Validée</span>
                                                                 </span>
                                                              </span>
                                                          </span>
                                                    </span>
                                                        
                                                     <span v-for="training in requestedTrainingByCollaborator" >
-                                                        <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending">
+                                                        <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending"
+                                                        style=" padding-right: 0;
+                                                                padding-left: 0;">
                                                             <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
                                                             <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                             <strong> {{training.title}}</strong>
                                                             </br>
                                                               {{getDate(session.beginning)}} - {{getDate(session.ending)}} - {{session.location}}
                                                                <img src="/img/status_icon/in_Progress_icon.png" class="status_icon">
+                                                               <span class="text_status">En attente</span>
                                                          </span>
                                                     </span>
                                                     
