@@ -153,7 +153,7 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="row">
                         <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary"
-                                @click="saveCollabInSessions()"
+                                @click="saveCollabInSessions()" style="top:30px"
                                 :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
                         </button>
                   

@@ -34,8 +34,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"
                             v-for="m in n">
-                            <div class="whiteBlock" style="padding:0 0px 11px 75px;
-">
+                            <div class="whiteBlock" style="padding:0 0px 11px 75px;">
                       <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:15px;">
                    
                              <div style="text-align: left; padding-top: 5px;"><b>{{n[0].trainingDescription.trainingTitle}} </b></div>
