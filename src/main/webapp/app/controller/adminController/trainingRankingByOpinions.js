@@ -38,13 +38,9 @@ let trainingRanking = Vue.component('training-ranking', {
                                             <br/>
                                             <img 
                                             v-show="showChevrons"
-                                             src="img/chevrons/up.png"
                                              id="scroll-up-4"
-                                             width="60"
-                                             height="20"
-                                             style="position: absolute; 
-                                             left:50%; 
-                                             z-index:1;">
+                                             src="img/other_icon/scroll_up.png" width="70" height="50" 
+                                             style="position: absolute; left:199px; z-index:1; top: -14px; cursor: pointer;">
                                     </div>
                               </div>
                               <div id="scrollRanking"
@@ -123,12 +119,10 @@ let trainingRanking = Vue.component('training-ranking', {
                              <div class="row">
                                   <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
                                        <img v-show="showChevrons"
-                                       src="img/chevrons/down.png"
                                        id="scroll-down-4"
-                                       width="60" height="20"
-                                       style="position: absolute; 
-                                       left:50%; top:95%; 
-                                       z-index:1;">
+                                      src="img/other_icon/scroll_down.png" 
+                                       width="70" height="50" 
+                                       style="position: absolute; left:76px; z-index:1; margin-top:32px;">
                                   </div>
                              </div>
                          </div>
