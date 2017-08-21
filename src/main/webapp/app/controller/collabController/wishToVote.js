@@ -13,12 +13,12 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">
-                    <div class="row">
+                    <div class="row" style="margin-top: -8px;">
                         <div class="col-lg-12" style="margin-bottom:30px">
                              <router-link :to="{name: 'registerTrainingCollaborator'}"><span class="glyphicon glyphicon-remove-sign" style="cursor: pointer; color:darkred; position:absolute; margin-top:10px; left:95%;"></span></router-link>
                         </div>
                            <div class="col-lg-12" style="margin-bottom:30px">
-                                 <img v-show="showChevrons" src="img/chevrons/up.png" id="scroll-up-4" width="60" height="20" style="position: absolute; left:45%; z-index:1; margin-top:5px;">
+                                 <img v-show="showChevrons" src="img/other_icon/scroll_up.png" id="scroll-up-4" width="70" height="50" style="position: absolute; left:41%; z-index:1; margin-top:-36px;">
                            </div>
                     </div>
                     <div id="test1" style=" height: 260px; overflow-y:hidden; overflow-x:hidden;" class="col-lg-12 col-md-12 col-sm-12" >
@@ -27,20 +27,20 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                                 <td>
                                     <div> 
                                         <b style="text-align: left">{{wish.label}}</b> 
-                                        <span @mouseover="userAlreadyVotedOk(wish)" @mouseleave="hideMessage()" @click="addVoteOk(wish)" style="cursor: pointer;"><img src="img/status_icon/thumbs_up.png" width="40" height="40" style="position: absolute; left:70%; z-index:1;"></span>
-                                        <span @mouseover="userAlreadyVotedKo(wish)" @mouseleave="hideMessage()" @click="addVoteKo(wish)" style="cursor: pointer;"><img src="img/status_icon/thumbs_down.png" width="40" height="40" style="position: absolute; left:80%; z-index:1;"></span>
+                                        <span @mouseover="userAlreadyVotedOk(wish)" @mouseleave="hideMessage()" @click="addVoteOk(wish)" style="cursor: pointer;"><img src="img/other_icon/hand_like.png" width="40" height="40" style="position: absolute; left:70%; z-index:1;"></span>
+                                        <span @mouseover="userAlreadyVotedKo(wish)" @mouseleave="hideMessage()" @click="addVoteKo(wish)" style="cursor: pointer;"><img src="img/other_icon/hand_unlike.png" width="40" height="40" style="position: absolute; left:80%; z-index:1;"></span>
                                         <br><br>
                                         <b><span @click="addVoteOk(wish)" style="position: absolute; left:73%; text-align: center;" class="color-green">{{wish.vote_ok.length}}</span><span @click="addVoteKo(wish)" style="position: absolute; left:83%;" class="color-red">{{wish.vote_ko.length}}</span> </b>
                                         <span style="position: absolute; left:65%;" class = "sc-notification sc-info" v-show="collaboratorAlreadyVotedTheSameVote && wish_id == wish.id">Vous avez déjà voté.</span>
                                     </div>
                                 </td>
                             </tr>
-                            <tr><td colspan="2"><hr></td></tr>
+                            <tr><td colspan="2"><hr class="hr_style"></td></tr>
                         </table>
                     </div>
                     <div class="row">
                         <div class="col-lg-12" style="margin-top:10px">
-                            <img v-show="showChevrons" src="img/chevrons/down.png" id="scroll-down-4" width="60" height="20" style="position: absolute; left:45%; margin-bottom: 10px; z-index:1;">
+                            <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-4" width="70" height="50" style="position: absolute; left:41%; margin-top: -11px; z-index:1;">
                         </div>
                     </div>
                 </div>
