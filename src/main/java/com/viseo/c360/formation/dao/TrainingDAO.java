@@ -291,7 +291,7 @@ public class TrainingDAO {
         CollaboratorRequestTraining collaboratorRequestTraining = new CollaboratorRequestTraining();
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         collaboratorRequestTraining.setTrainingSessions(daoFacade.getList("select ts from TrainingSession ts join ts.collaborators c" +
-                        " where c.id =:collaborator_id and ts.training.id =:training_id ",
+                        " where c.id =:collaborator_id and ts.training.id =:training_id and ts.ending > current_date",
                 param("collaborator_id", collaborator_id),
                 param("training_id", training_id)) );
         collaboratorRequestTraining.setRequestTrainingList(daoFacade.getList("SELECT rt.sessions FROM RequestTraining rt WHERE" +
