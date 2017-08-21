@@ -58,7 +58,7 @@ let stateRequest = Vue.component('state-request', {
                                 <div class="row">
                                        <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-bottom:30px">
                                              <img v-show="showChevronsUp" src="img/other_icon/scroll_up.png" id="scroll-up-3" width="70" height="50" 
-                                                    style="position: absolute; left:42%; z-index:1; top: -14px; cursor: pointer;">
+                                                    style="position: absolute; left:40%; z-index:1; top: -14px; cursor: pointer;">
                                        </div>
                                 </div>
                                 <div id="scrollMyTrainings">
@@ -110,7 +110,7 @@ let stateRequest = Vue.component('state-request', {
                                 <div class="row">
                                     <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-top:10px">
                                            <img v-show="showChevronsBottom" src="img/other_icon/scroll_down.png" id="scroll-down-3" width="70" height="50" style="position: absolute; left:40%; z-index:1;
-                                                        cursor: pointer">
+                                                          top: -10px; cursor: pointer">
                                     </div>
                                 </div>
                          </div>
