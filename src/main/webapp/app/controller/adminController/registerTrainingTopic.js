@@ -631,7 +631,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                             </div>
                             <div style="margin-top:54px; width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
                                   <img v-show="state.showChevrons" id="scroll-up" src="img/other_icon/scroll_up.png" width="70" height="50" 
-                        style="position: absolute; left:46%; z-index:1; top: 33px; cursor: pointer;">
+                        style="position: absolute; left:41%; z-index:1; top: 33px; cursor: pointer;">
                                         <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
                                         <table class="fix tabnonborder" >
                                             <tbody>
@@ -662,7 +662,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                   </tr>
                                             </tbody>
                                         </table>
-                                  <img v-show="state.showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down" width="70" height="50" style="position: absolute; left:50%; top:95%; z-index:1; margin-top: -15px;">
+                                  <img v-show="state.showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down" width="70" height="50" style="position: absolute; left:41%; top:95%; z-index:1; margin-top: -15px;">
                          </div>`
 });
 
