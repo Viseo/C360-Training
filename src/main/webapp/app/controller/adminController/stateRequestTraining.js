@@ -12,6 +12,7 @@ let stateRequest = Vue.component('state-request', {
     props: [],
     data: function () {
         return {
+            today:{},
             showChevronsBottom: false,
             showChevronsUp: false,
             noSessionForCollaborator: true,
@@ -50,23 +51,22 @@ let stateRequest = Vue.component('state-request', {
                    <div 
                         class="trainingBlock"
                         style="margin-bottom:10px; ">
-                         <div  
-                              style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+                         <div style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
                                     border-radius: 3px 3px 0 0;
                                     padding:5px; 
-                                     height:202px">
+                                    height:226px; width:100%;">
+                                    
                                 <div class="row">
-                                       <div v-show="!noSessionForCollaborator" 
-                                            class="col-lg-12" 
-                                            style="margin-bottom:30px">
+                                       <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-bottom:30px">
                                              <img v-show="showChevronsUp" src="img/other_icon/scroll_up.png" id="scroll-up-3" width="70" height="50" 
-                        style="position: absolute; left:42%; z-index:1; top: -14px; cursor: pointer;">
+                                                    style="position: absolute; left:40%; z-index:1; top: -14px; cursor: pointer;">
                                        </div>
                                 </div>
                                 <div id="scrollMyTrainings">
                                        <div class="col-sm-12 col-md-12 col-lg-12" 
                                             style="line-height:2em; 
-                                                   font-size:1em">
+                                                   font-size:1em;
+                                                   height: 226px;">
                                               <div v-show="noSessionForCollaborator">
                                                    <p style="text-align: center; 
                                                              margin:50px;">
@@ -78,7 +78,7 @@ let stateRequest = Vue.component('state-request', {
                                                          <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsValidated"
                                                          style="padding-left: 0;
                                                                 padding-right: 0;">
-                                                             <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
+                                                             <span v-if="session.ending > today" class="whiteBlock col-sm-12 col-md-12 col-lg-12">
                                                                 <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                                 <span>
                                                                 <strong> {{training.title}}</strong>
@@ -92,6 +92,7 @@ let stateRequest = Vue.component('state-request', {
                                                    </span>
                                                        
                                                     <span v-for="training in requestedTrainingByCollaborator" >
+                                                        <span v-if="session.ending > today" class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending">
                                                         <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending"
                                                         style=" padding-right: 0;
                                                                 padding-left: 0;">
@@ -108,11 +109,11 @@ let stateRequest = Vue.component('state-request', {
 
                                        </div>
                                 </div>
-                                <div v-show="!noSessionForCollaborator" 
-                                     class="col-lg-12" 
-                                     style="margin-top:10px">
-                                       <img v-show="showChevronsBottom" src="img/other_icon/scroll_down.png" id="scroll-down-3" width="70" height="50" style="position: relative; left:40%; z-index:1;
-                                                   bottom: 20px; cursor: pointer">
+                                <div class="row">
+                                    <div v-show="!noSessionForCollaborator" class="col-lg-12" style="margin-top:10px">
+                                           <img v-show="showChevronsBottom" src="img/other_icon/scroll_down.png" id="scroll-down-3" width="70" height="50" style="position: absolute; left:40%; z-index:1;
+                                                          top: -10px; cursor: pointer">
+                                    </div>
                                 </div>
                          </div>
                    </div>
@@ -230,6 +231,7 @@ let stateRequest = Vue.component('state-request', {
         </div>
 `,
     mounted: function () {
+        this.today= new Date();
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.activateScrollUp('#scroll-up-3', '#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3', '#scrollMyTrainings');

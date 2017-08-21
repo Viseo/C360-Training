@@ -179,7 +179,7 @@ public class TrainingDAO {
 
     public List<TrainingSession> getSessionCollaborators() {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select s from TrainingSession s");
+        return daoFacade.getList("select s from TrainingSession s where s.ending > current_date");
     }
 
     public List<TrainingSession> getRequestedSessionByTraining(long myTrainingId, long byCollabId) {
