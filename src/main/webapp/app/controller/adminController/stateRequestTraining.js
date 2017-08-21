@@ -54,7 +54,7 @@ let stateRequest = Vue.component('state-request', {
                               style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
                                     border-radius: 3px 3px 0 0;
                                     padding:5px; 
-                                     height:202px">
+                                     height:226px; width:100%;">
                                 <div class="row">
                                        <div v-show="!noSessionForCollaborator" 
                                             class="col-lg-12" 
