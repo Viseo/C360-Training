@@ -28,7 +28,7 @@ let wishToVoteComponent = Vue.component('wish-to-vote', {
                                     <div> 
                                         <b style="text-align: left">{{wish.label}}</b> 
                                         <span @mouseover="userAlreadyVotedOk(wish)" @mouseleave="hideMessage()" @click="addVoteOk(wish)" style="cursor: pointer;"><img src="img/other_icon/hand_like.png" width="40" height="40" style="position: absolute; left:70%; z-index:1;"></span>
-                                        <span @mouseover="userAlreadyVotedKo(wish)" @mouseleave="hideMessage()" @click="addVoteKo(wish)" style="cursor: pointer;"><img src="img/other_icon/hand_unlike.png" width="40" height="40" style="position: absolute; left:80%; z-index:1;"></span>
+                                        <span @mouseover="userAlreadyVotedKo(wish)" @mouseleave="hideMessage()" @click="addVoteKo(wish)" style="cursor: pointer;"><img src="img/other_icon/hand_unlike2.png" width="40" height="40" style="position: absolute; left:80%; z-index:1;"></span>
                                         <br><br>
                                         <b><span @click="addVoteOk(wish)" style="position: absolute; left:73%; text-align: center;" class="color-green">{{wish.vote_ok.length}}</span><span @click="addVoteKo(wish)" style="position: absolute; left:83%;" class="color-red">{{wish.vote_ko.length}}</span> </b>
                                         <span style="position: absolute; left:65%;" class = "sc-notification sc-info" v-show="collaboratorAlreadyVotedTheSameVote && wish_id == wish.id">Vous avez déjà voté.</span>
