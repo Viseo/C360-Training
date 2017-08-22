@@ -12,6 +12,7 @@ let stateRequest = Vue.component('state-request', {
     props: [],
     data: function () {
         return {
+            today:{},
             showChevronsBottom: false,
             showChevronsUp: false,
             noSessionForCollaborator: true,
@@ -77,7 +78,7 @@ let stateRequest = Vue.component('state-request', {
                                                          <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsValidated"
                                                          style="padding-left: 0;
                                                                 padding-right: 0;">
-                                                             <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
+                                                             <span  v-if="hidePassedSessions(session)" class="whiteBlock col-sm-12 col-md-12 col-lg-12">
                                                                 <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                                 <span>
                                                                 <strong> {{training.title}}</strong>
@@ -94,7 +95,7 @@ let stateRequest = Vue.component('state-request', {
                                                         <span class="col-sm-12 col-md-12 col-lg-12" v-for="session in training.sessionsPending"
                                                         style=" padding-right: 0;
                                                                 padding-left: 0;">
-                                                            <span class="whiteBlock col-sm-12 col-md-12 col-lg-12">
+                                                            <span v-if="hidePassedSessions(session)" class="whiteBlock col-sm-12 col-md-12 col-lg-12">
                                                             <img src ="/img/status_icon/viseo_logo.jpeg" style="width: 56px; position: absolute; left:0px;">
                                                             <strong> {{training.title}}</strong>
                                                             </br>
@@ -229,6 +230,7 @@ let stateRequest = Vue.component('state-request', {
         </div>
 `,
     mounted: function () {
+        this.today= new Date();
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.activateScrollUp('#scroll-up-3', '#scrollMyTrainings');
         this.activeScrollDown('#scroll-down-3', '#scrollMyTrainings');
@@ -302,7 +304,6 @@ let stateRequest = Vue.component('state-request', {
                                 sessionsPending: Object.values(this.requestedTraining)[i].requestTrainingList,
                                 sessionsValidated: Object.values(this.requestedTraining)[i].trainingSessions
                             });
-                            this.noSessionForCollaborator = false;
                         }
                     }
                     console.log(this.requestedTrainingByCollaborator);
@@ -357,6 +358,14 @@ let stateRequest = Vue.component('state-request', {
                 console.log("hey false");
                 return false;
             }
+        },
+        hidePassedSessions(session){
+            if(session.ending > this.today){
+                this.noSessionForCollaborator = false;
+
+                return true
+            }
+
         },
 
         collectAllTrainingsToGiveFeedbacks(){

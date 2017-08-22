@@ -27,3 +27,10 @@
     font-size: 20px;
     padding-right: 10px
 }
+
+.hr_style {
+    width:100% ;
+    height:0px ;
+    border: solid 1px #003693;
+    line-height:0;
+}
