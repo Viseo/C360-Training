@@ -13,10 +13,10 @@ let Header = Vue.component('header-component', {
     <div class="navbar navbar-default navbar-fixed-top" :class="headerColor"> 
         <div class="container-fluid" id="header-component"> 
             <div class="row"> 
-                <div id="custom-navbar" @click="redirectPageHearder();" style="cursor:default;"
+                <div id="custom-navbar"
                     class="col-lg-4 col-md-6 col-sm-6 col-xs-6 navbar-header"> 
-                    <p id="navbar-title">Collaborateur 360</p> 
-                    <p id="navbar-subtitle" >{{ title }}</p> 
+                    <p id="navbar-title" @click="redirectPageHearder();" style="cursor:pointer; width:160px;">Collaborateur 360</p> 
+                    <p id="navbar-subtitle" @click="redirectPageHearder();" style="cursor:pointer;width:160px;">{{ title }}</p> 
                 </div> 
                 <div id="navbar-right-part" 
                     class="col-lg-4 col-lg-offset-4 col-md-5 col-sm-5 col-xs-5" 
