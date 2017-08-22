@@ -5,12 +5,13 @@ let NavigationMenu = Vue.component('connect-user', {
             color_connexion: 'color-blue',
             tabconnexion: "tab active",
             tabinscription: "tab",
+            positionBox:"top:20%;",
             newCollab: false
         }
     },
 
     template: `
-        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3" style="margin-top:60px;">
+        <div class="col-lg-8 col-sm-12 col-xs-12 col-md-6 col-lg-6 col-lg-offset-3  col-md-offset-3" :style="positionBox">
             <div style="box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
                  border-radius: 3px 3px 0 0;"
                  class="panelForLoginPage">
@@ -60,12 +61,14 @@ let NavigationMenu = Vue.component('connect-user', {
             this.tabinscription = 'tab active';
             this.tabconnexion = 'tab';
             this.newCollab = true;
+            this.positionBox = 'top:5%';
         },
 
         showConnexionForm() {
             this.tabinscription = 'tab';
             this.tabconnexion = 'tab active';
             this.newCollab = false;
+            this.positionBox = 'top:20%';
         }
     }
 });

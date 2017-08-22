@@ -231,15 +231,13 @@ background-colo: rgb(255, 255, 255);
 }
 
 .pictureLogin{
-    background: url("/img/background/loginPage.png") no-repeat center center fixed;
+    background: url("/img/background/loginPage.png") no-repeat center;
     background-size: cover;
-    padding-bottom:1000px;
-    height: 100vh;
+    height: 92vh;
 }
 
 .collabPage {
-    padding-top: 28px;
-    padding-bottom: 29px;
+    padding-top: 18px;
 }
 
 #navbar-subtitle {

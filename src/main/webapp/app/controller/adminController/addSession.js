@@ -534,7 +534,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                         position: relative;">Gérer une session</legend>
                         </div>
                     </div>
-                    <div style = "width: 100%; height: 31em; overflow-y:visible; overflow-x:visible;" id="test" class="roundedCorner">        
+                    <div style = "width: 100%; height: 30.9em;" id="test" class="roundedCorner">        
                         <div class = "row" style="margin-bottom: 30px;">
                             <div id="glyphiconpencil" class = "col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4"> 
                                   <form id = "registr-form" @submit.prevent="modifyTrainingTopic()">
@@ -636,7 +636,7 @@ let AddSessionPanel = Vue.component('add-session-panel', {
                                                 <error-messages>
                                     </div> 
                                 </div> 
-                                <div class = "row " style = "margin-bottom: 30px; margin-top:90px;">
+                                <div class = "row " style = "margin-top:80px;">
                                     <div class = "col-xs-3 col-sm-3 col-md-3 col-lg-3 col-lg-offset-3">                                
                                         <input type = "submit" 
                                                    class = "btn btn-primary" 

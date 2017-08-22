@@ -153,20 +153,20 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </div>
                     <div class="row">
                         <button class="col-sm-offset-4 col-dm-offset-4 col-lg-offset-4 col-sm-4 col-md-4 col-lg-4 btn btn-primary"
-                                @click="saveCollabInSessions()" style="top:30px"
-                                :class="{disabled : isDisabled || validatedCollab.length == 0}">Enregistrer
+                                @click="saveCollabInSessions()"
+                                :class="{disabled : isDisabled || validatedCollab.length == 0}"
+                                style="top: 15px;">Enregistrer
                         </button>
                   
 
                     </div>
-                    </br>
                     <div class="row">
                     
                         <center id="goToWish" class="row col-sm-6 col-md-6 col-lg-6 " style="top:47px">
-                        <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a>
-                            <img src="/img/other_icon/iconGift.png" style="position: relative; width: 25px;right: 2px; bottom: 5px;">
-                            <span> Souhaits de formations</span> 
-                        </router-link>
+                            <router-link :to="{name: 'collectWishes'}"><a id="box">{{numberOfWishesNotChecked}}</a>
+                                <img src="/img/other_icon/iconGift.png" style="position: relative; width: 25px;right: 2px; bottom: 5px;">
+                                <span> Souhaits de formations</span> 
+                            </router-link>
                         </center>
                         
                         <center id="goToRanking" class="row col-sm-6 col-md-6 col-lg-6 " style="top:47px">
@@ -175,11 +175,11 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                             <span style="cursor: pointer;"> Classement des formations</span>
                             </router-link>
                         </center>
-                       </div>
-                    <div class="row ">
-                        <span v-show="!isRegistrationAvailable" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vous avez dépassé le nombre de places disponibles</span>
-                        <span v-show="!isSearchNameValid" class="text-center color-red" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">{{lastNameRegexErrorMessage}}</span>
-                        <span v-show="confirmCollaboratorAddedSession" class="text-center color-green" style="margin-left:153px;margin-top:10px;" height="80px" width="250px">Vos modifications ont bien été enregistrées</span>
+                    </div>
+                    <div class="row " style="text-align:center;">
+                        <span v-show="!isRegistrationAvailable" class="text-center color-red" style="height=80px; width=250px;">Vous avez dépassé le nombre de places disponibles</span>
+                        <span v-show="!isSearchNameValid" class="text-center color-red" style="height=80px; width=250px;">{{lastNameRegexErrorMessage}}</span>
+                        <span v-show="confirmCollaboratorAddedSession" class="text-center color-green" style="height=80px; width=250px">Vos modifications ont bien été enregistrées</span>
                     </div>
                 </div>
             </div>
