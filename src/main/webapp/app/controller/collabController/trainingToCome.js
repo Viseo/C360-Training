@@ -24,7 +24,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                 <div class="row" style="margin-bottom: -19px;">
                     <div class="col-lg-12" style="margin-bottom:20px">
                         <img v-show="showChevrons" src="img/other_icon/scroll_up.png" id="scroll-up-training-to-come" width="70" height="50" 
-                        style="position: absolute; left:41%; z-index:1; cursor: pointer; top: -11px">
+                        style="position: absolute; left:45%; z-index:1; cursor: pointer; top: -11px">
                     </div>
                 </div>
                 <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden; margin-top:35px;"
@@ -61,7 +61,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
                 </div>
 <div class="row">
     <div class="col-lg-12" style="margin-top:10px">
-        <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; bottom:16px; left:39%; z-index:1;">
+        <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; bottom:16px; left:44%; z-index:1;">
     </div>
 </div>
 <br>

@@ -1,7 +1,7 @@
 .allPageAdmin {
     background: url(/img/background/adminPage.jpeg);
     background-size: cover;
-    padding-bottom:27px;
+    padding-bottom: 32px;
 }
 
 .allPageAdmin .form-control{

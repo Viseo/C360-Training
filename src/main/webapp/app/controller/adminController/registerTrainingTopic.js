@@ -629,7 +629,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                      <legend class="blueLegend">Formations ajoutées</legend>
                                 </div>
                             </div>
-                            <div style="margin-top:54px; width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
+                            <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
                                   <img v-show="state.showChevrons" id="scroll-up" src="img/other_icon/scroll_up.png" width="70" height="50" 
                         style="position: absolute; left:41%; z-index:1; top: 33px; cursor: pointer;">
                                         <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
