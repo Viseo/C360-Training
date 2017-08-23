@@ -73,7 +73,7 @@ public class RequestProducerConfig {
     @Bean
     public SimpleMessageListenerContainer listenerContainer() {
         SimpleMessageListenerContainer listenerContainer = new SimpleMessageListenerContainer();
-        listenerContainer.setQueueNames(fanoutQueue1().getName(),responseQueue().getName());
+        listenerContainer.setQueueNames(fanoutQueue1().getName());
         listenerContainer.setConnectionFactory(connectionFactory());
         listenerContainer.setMessageListener(new MessageListenerAdapter(new ConsumerMessageHandler()));
         listenerContainer.setAcknowledgeMode(AcknowledgeMode.NONE);
