@@ -28,6 +28,9 @@ import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,12 @@ public class CollaboratorServicesImpl {
 
     @Inject
     private CollaboratorDAO collaboratorDAO;
+
+    @Inject
+    private FanoutExchange fanout;
+
+    @Inject
+    Queue responseQueue;
 
     @Inject
     private TrainingDAO trainingDAO;
@@ -330,10 +339,10 @@ public class CollaboratorServicesImpl {
         CollaboratorDescription receivedCollab = null;
 
         try {
-            String consumerResponse = (String) this.rabbitTemplate.convertSendAndReceive(mapperObj.writeValueAsString(myCollaboratorDescription));
-
+            this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(myCollaboratorDescription));
+            Message consumerResponse = this.rabbitTemplate.receive(responseQueue.getName());
             if (consumerResponse != null) {
-                receivedCollab = new ObjectMapper().readValue(consumerResponse, CollaboratorDescription.class);
+                receivedCollab = new ObjectMapper().readValue(consumerResponse.getBody(), CollaboratorDescription.class);
                 System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
             }
                 receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
