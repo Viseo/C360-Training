@@ -327,8 +327,18 @@ public class CollaboratorServicesImpl {
             System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
             return addedCollaborator;
         } else {
-            // A COMPLETEE
-            return new CollaboratorToDescription().convert(storedCollaborator);
+            //  COMPLET
+            CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
+
+            if(storedcollaboratorDescription.getPassword() == receivedCollab.getPassword() || storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate())){
+                System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
+                return storedcollaboratorDescription;
+            }
+            else{
+                System.out.println("MOT DE PASSE MOINS RECENT");
+                return null;
+            }
+
         }
     }
 

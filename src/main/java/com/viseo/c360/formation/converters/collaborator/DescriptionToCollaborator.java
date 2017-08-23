@@ -24,6 +24,7 @@ public class DescriptionToCollaborator {
         domain.setFunction(dto.getFunction());
         domain.setBusinessUnit(dto.getBusinessUnit());
         domain.setDefaultPicture(dto.getDefaultPicture());
+        domain.setLastUpdateDate(dto.getLastUpdateDate());
         return domain;
     }
 

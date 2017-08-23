@@ -2,6 +2,8 @@ package com.viseo.c360.formation.dto.collaborator;
 
 import com.viseo.c360.formation.dto.BaseDTO;
 
+import java.util.Date;
+
 public class CollaboratorDescription extends BaseDTO {
 
     public static class Regex{
@@ -20,6 +22,7 @@ public class CollaboratorDescription extends BaseDTO {
     String function;
     String businessUnit;
     Boolean defaultPicture;
+    Date lastUpdateDate;
 
     public CollaboratorDescription() {
         this.isAdmin = false;
@@ -101,5 +104,13 @@ public class CollaboratorDescription extends BaseDTO {
 
     public void setDefaultPicture(Boolean defaultPicture) {
         this.defaultPicture = defaultPicture;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 }

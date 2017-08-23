@@ -2,7 +2,6 @@ package com.viseo.c360.formation.domain.collaborator;
 
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
-import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Column;
@@ -10,6 +9,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 public class Collaborator extends BaseEntity {
@@ -48,8 +48,12 @@ public class Collaborator extends BaseEntity {
 	@NotNull
 	Boolean defaultPicture;
 
+	@NotNull
+	Date lastUpdateDate;
+
 	public Collaborator() {
 		super();
+		this.lastUpdateDate = new Date();
 	}
 
 	public String getPersonnalIdNumber() {
@@ -80,6 +84,14 @@ public class Collaborator extends BaseEntity {
 	}
 	public Boolean getIsAdmin() {return isAdmin;}
 	public void setIsAdmin(Boolean admin) {this.isAdmin = admin;}
+
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
 
 	public Boolean getAdmin() {
 		return isAdmin;

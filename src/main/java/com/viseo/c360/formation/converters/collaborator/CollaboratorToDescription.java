@@ -26,6 +26,7 @@ public class CollaboratorToDescription {
         dto.setFunction(source.getFunction());
         dto.setBusinessUnit(source.getBusinessUnit());
         dto.setDefaultPicture(source.getDefaultPicture());
+        dto.setLastUpdateDate(source.getLastUpdateDate());
         return dto;
     }
 

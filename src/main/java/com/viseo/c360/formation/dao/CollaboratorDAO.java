@@ -1,23 +1,23 @@
 package com.viseo.c360.formation.dao;
 
-import java.util.*;
-
-
 import com.viseo.c360.formation.dao.db.DAOFacade;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.collaborator.Wish;
 import com.viseo.c360.formation.domain.training.TrainingSession;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import static com.viseo.c360.formation.dao.db.DAOFacade.Parameter.param;
-
-import com.viseo.c360.formation.domain.collaborator.Collaborator;
 
 import javax.inject.Inject;
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static com.viseo.c360.formation.dao.db.DAOFacade.Parameter.param;
 
 @Repository
 public class CollaboratorDAO {
@@ -107,6 +107,7 @@ public class CollaboratorDAO {
     //collaborateur
     @Transactional
     public Collaborator addCollaborator(Collaborator collaborator) throws PersistenceException {
+        collaborator.setLastUpdateDate(new Date());
         daoFacade.persist(collaborator);
         daoFacade.flush();
         return collaborator;
@@ -114,6 +115,7 @@ public class CollaboratorDAO {
 
     @Transactional
     public Collaborator updateCollaborator(Collaborator collaborator) throws PersistenceException {
+        collaborator.setLastUpdateDate(new Date());
         collaborator = daoFacade.merge(collaborator);
         daoFacade.flush();
         return collaborator;
