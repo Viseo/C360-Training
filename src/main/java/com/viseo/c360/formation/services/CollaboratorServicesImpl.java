@@ -340,6 +340,12 @@ public class CollaboratorServicesImpl {
 
         try {
             this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(myCollaboratorDescription));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             Message consumerResponse = this.rabbitTemplate.receive(responseQueue.getName());
             if (consumerResponse != null) {
                 receivedCollab = new ObjectMapper().readValue(consumerResponse.getBody(), CollaboratorDescription.class);
