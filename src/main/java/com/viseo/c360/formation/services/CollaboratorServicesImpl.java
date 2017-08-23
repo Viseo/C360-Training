@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
@@ -347,7 +346,7 @@ public class CollaboratorServicesImpl {
             }
                 receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
 
-                return receivedCollab;
+                return receivedCollab ;
 
         } catch (IOException e) {
             e.printStackTrace();
