@@ -136,11 +136,12 @@ public class CollaboratorDAO {
     @Transactional
     public Collaborator getCollaboratorByLogin(String personnalEmail){
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        Collaborator registredUser;
+        Collaborator registredUser = new Collaborator();
         List<Collaborator> list = daoFacade.getList(
                         "select c from Collaborator c where c.email = :personnalEmail",
                         param("personnalEmail",personnalEmail));
-        registredUser = list.get(0);
+        if(list.size() !=0)
+            registredUser = list.get(0);
         return registredUser;
     }
 

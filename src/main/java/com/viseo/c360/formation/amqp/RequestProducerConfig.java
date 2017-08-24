@@ -43,8 +43,13 @@ public class RequestProducerConfig {
     }
 
     @Bean
-    public Queue responseQueue() {
-        return new Queue("response-queue", false);
+    public Queue responseCompetence() {
+        return new Queue("response-competence", false);
+    }
+
+    @Bean
+    public Queue responseFormation() {
+        return new Queue("response-formation", false);
     }
 
     @Bean

@@ -55,7 +55,10 @@ public class CollaboratorServicesImpl {
     private FanoutExchange fanout;
 
     @Inject
-    Queue responseQueue;
+    Queue responseFormation;
+
+    @Inject
+    Queue responseCompetence;
 
     @Inject
     private TrainingDAO trainingDAO;
@@ -322,19 +325,27 @@ public class CollaboratorServicesImpl {
         CollaboratorDescription addedCollaborator;
 
         if (isEmpty(storedCollaborator.getEmail())) {
+            if(receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())){
             receivedCollab.setId(0);
             addedCollaborator = addCollaborator(receivedCollab);
             System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
             return addedCollaborator;
+            }
+            else
+                return null;
         } else {
             //  COMPLET
             CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
 
-            if(storedcollaboratorDescription.getPassword() == receivedCollab.getPassword() || storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate())){
+            if(receivedCollab == null || receivedCollab.getFirstName() == null || storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) || storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate())){
                 System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
                 return storedcollaboratorDescription;
             }
-            else{
+            else if(myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())){
+                storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(),String.valueOf(storedcollaboratorDescription.getId()));
+                return storedcollaboratorDescription;
+            }
+            else {
                 System.out.println("MOT DE PASSE MOINS RECENT");
 
                 return null;
@@ -356,7 +367,7 @@ public class CollaboratorServicesImpl {
                 e.printStackTrace();
             }
 
-            Message consumerResponse = this.rabbitTemplate.receive(responseQueue.getName());
+            Message consumerResponse = this.rabbitTemplate.receive(responseFormation.getName());
             if (consumerResponse != null) {
                 receivedCollab = new ObjectMapper().readValue(consumerResponse.getBody(), CollaboratorDescription.class);
                 System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
