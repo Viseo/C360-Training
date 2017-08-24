@@ -9,11 +9,7 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
             <legend class="darkBlueLegend">Formation à venir</legend>
         </div>
     </div>
-            <div v-show="noTrainingToCome">
-                <p style="text-align: center; margin:50px;">
-                    Aucune formation à venir.
-                </p>
-            </div>
+            
     <div class="row">
             <div 
             class="trainingBlock"
@@ -21,6 +17,11 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
         padding:5px; width:100%;">
+            <div v-show="noTrainingToCome">
+                <p style="text-align: center; margin:50px;">
+                    Aucune formation à venir.
+                </p>
+            </div>
                 <div class="row" style="margin-bottom: -19px;">
                     <div class="col-lg-12" style="margin-bottom:20px">
                         <img v-show="showChevrons" src="img/other_icon/scroll_up.png" id="scroll-up-training-to-come" width="70" height="50" 

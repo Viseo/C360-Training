@@ -317,7 +317,7 @@ public class CollaboratorServicesImpl {
     }
 
     public CollaboratorDescription handleReceivedCollaborator(CollaboratorDescription myCollaboratorDescription, CollaboratorDescription receivedCollab) {
-        Collaborator storedCollaborator = collaboratorDAO.getCollaboratorByLoginPassword(myCollaboratorDescription.getEmail(), myCollaboratorDescription.getPassword());
+        Collaborator storedCollaborator = collaboratorDAO.getCollaboratorByLogin(myCollaboratorDescription.getEmail());
 
         CollaboratorDescription addedCollaborator;
 
@@ -336,6 +336,7 @@ public class CollaboratorServicesImpl {
             }
             else{
                 System.out.println("MOT DE PASSE MOINS RECENT");
+
                 return null;
             }
 
