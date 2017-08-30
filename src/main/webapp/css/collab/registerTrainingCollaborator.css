@@ -212,9 +212,8 @@ div.panel-heading.accordion-toggle{
 }
 
 .registerTrainingCollabPicture {
-    background: url("/img/background/collaboratorPage.png") no-repeat center center fixed ;
+    background: url(/img/background/collaboratorPage.png) fixed;
     background-size: cover;
-    padding-bottom:27px;
-
-
+    background-repeat: round;
+    height: 91.8vh;
 }

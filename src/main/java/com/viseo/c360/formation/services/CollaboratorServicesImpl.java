@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viseo.c360.formation.amqp.RabbitMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -337,11 +338,11 @@ public class CollaboratorServicesImpl {
             //  COMPLET
             CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
 
-            if(receivedCollab == null || receivedCollab.getFirstName() == null || storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) || storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate())){
+            if(receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))){
                 System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
                 return storedcollaboratorDescription;
             }
-            else if(myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())){
+            else if( (myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))){
                 storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(),String.valueOf(storedcollaboratorDescription.getId()));
                 return storedcollaboratorDescription;
             }
@@ -359,8 +360,11 @@ public class CollaboratorServicesImpl {
 
         CollaboratorDescription receivedCollab = null;
 
+        RabbitMessage rabbitMessage = new RabbitMessage();
+        rabbitMessage.setCollaboratorDescription(myCollaboratorDescription);
+        rabbitMessage.setNameFileResponse(responseFormation.getName());
         try {
-            this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(myCollaboratorDescription));
+            this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(rabbitMessage));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -369,7 +373,9 @@ public class CollaboratorServicesImpl {
 
             Message consumerResponse = this.rabbitTemplate.receive(responseFormation.getName());
             if (consumerResponse != null) {
-                receivedCollab = new ObjectMapper().readValue(consumerResponse.getBody(), CollaboratorDescription.class);
+                RabbitMessage rabbitMessageResponse = new RabbitMessage();
+                rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
+                receivedCollab = rabbitMessageResponse.getCollaboratorDescription();
                 System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
             }
                 receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);

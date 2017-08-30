@@ -11,26 +11,29 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
     </div>
             
     <div class="row">
-            <div 
+        <div 
             class="trainingBlock"
             style="height:360px;     
-        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-        border-radius: 3px 3px 0 0;
-        padding:5px; width:100%;">
-            <div v-show="noTrainingToCome">
-                <p style="text-align: center; margin:50px;">
-                    Aucune formation à venir.
-                </p>
-            </div>
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+            border-radius: 3px 3px 0 0;
+            padding:5px; width:100%;">
+            
                 <div class="row" style="margin-bottom: -19px;">
                     <div class="col-lg-12" style="margin-bottom:20px">
                         <img v-show="showChevrons" src="img/other_icon/scroll_up.png" id="scroll-up-training-to-come" width="70" height="50" 
                         style="position: absolute; left:45%; z-index:1; cursor: pointer; top: -11px">
                     </div>
                 </div>
+                
+                                              
                 <div id="sessionsPanel" style=" height: 205px; overflow-y:hidden; overflow-x:hidden; margin-top:35px;"
                      class="col-lg-12 col-md-12 col-sm-12">
                      
+                     <div v-show="noTrainingToCome" >
+                        <p style="text-align: center; margin:50px;">
+                            Aucune formation à venir.
+                        </p>
+                    </div>
                      
                     <table v-for="n in allTrainingsAndSessions" style=" width: 100%;">
                         <tr style="cursor:pointer;" @click="showTrainingAndSessionsSelected(n[0].trainingDescription)"
@@ -65,7 +68,6 @@ let TrainingToComeComponent = Vue.component('training-to-come', {
         <img v-show="showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down-training-to-come" width="70" height="50" style="position: relative; bottom:16px; left:44%; z-index:1;">
     </div>
 </div>
-<br>
     
 <div style="margin-top:20px; margin-left: 25px;">
     <table style="width: 530px;">
