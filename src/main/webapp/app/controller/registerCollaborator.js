@@ -501,7 +501,7 @@ let Formulaire = Vue.component('inscription-form', {
 let ConnexionForm = Vue.component('connexionForm', {
     template: `
              <form id="registr-form" @submit.prevent="VerifyForm">
-             <table style="border-spacing: 0px">
+             <table style="border-spacing: 0px; margin-bottom:13px">
                 <!-- EMAIL-->
                 <div class="form-group" :class="{'has-error':emailEmpty || !isNotNewEmail}">
                     <label for="email">Email</label>
