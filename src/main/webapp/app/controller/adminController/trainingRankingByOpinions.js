@@ -122,7 +122,7 @@ let trainingRanking = Vue.component('training-ranking', {
                                        id="scroll-down-4"
                                       src="img/other_icon/scroll_down.png" 
                                        width="70" height="50" 
-                                       style="position: absolute; left:76px; z-index:1; margin-top:32px;">
+                                       style="position: absolute; left:65px; top:-29px; z-index:1; margin-top:32px;">
                                   </div>
                              </div>
                          </div>
