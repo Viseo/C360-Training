@@ -7,7 +7,7 @@ import javax.inject.Inject;
 /**
  * Created by SJO3662 on 24/08/2017.
  */
-public class RabbitMessage {
+public class ConnectionMessage {
 
     @Inject
     private CollaboratorDescription collaboratorDescription;
@@ -18,15 +18,17 @@ public class RabbitMessage {
         return collaboratorDescription;
     }
 
-    public void setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
+    public ConnectionMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
         this.collaboratorDescription = collaboratorDescription;
+        return this;
     }
 
     public String getNameFileResponse() {
         return nameFileResponse;
     }
 
-    public void setNameFileResponse(String nameFileResponse) {
+    public ConnectionMessage setNameFileResponse(String nameFileResponse) {
         this.nameFileResponse = nameFileResponse;
+        return this;
     }
 }

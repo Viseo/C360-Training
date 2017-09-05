@@ -36,18 +36,18 @@ public class ConsumerMessageHandler {
         com.fasterxml.jackson.databind.ObjectMapper mapperObj = new com.fasterxml.jackson.databind.ObjectMapper();
 
         try {
-            RabbitMessage rabbitMessageResponse = new RabbitMessage();
-            rabbitMessageResponse = new ObjectMapper().readValue(request, RabbitMessage.class);
+            ConnectionMessage connectionMessageResponse = new ConnectionMessage();
+            connectionMessageResponse = new ObjectMapper().readValue(request, ConnectionMessage.class);
 
-            CollaboratorDescription collaborator = rabbitMessageResponse.getCollaboratorDescription();
+            CollaboratorDescription collaborator = connectionMessageResponse.getCollaboratorDescription();
             System.out.println("Halelujah j'ai reçu ça   : " + request);
             if(collaborator.getFirstName() == null){
                 Collaborator c = ws.getCollaboratorByLogin(collaborator.getEmail());
                 System.out.println("Le voila = " + c.getFirstName());
-                rabbitMessageResponse.setCollaboratorDescription(new CollaboratorToDescription().convert(c));
+                connectionMessageResponse.setCollaboratorDescription(new CollaboratorToDescription().convert(c));
                 if(c.getFirstName() != null)
-                    if(!rabbitMessageResponse.getNameFileResponse().equals(responseFormation.getName()))
-                        rabbitTemplate.convertAndSend(rabbitMessageResponse.getNameFileResponse(),mapperObj.writeValueAsString(rabbitMessageResponse));
+                    if(!connectionMessageResponse.getNameFileResponse().equals(responseFormation.getName()))
+                        rabbitTemplate.convertAndSend(connectionMessageResponse.getNameFileResponse(),mapperObj.writeValueAsString(connectionMessageResponse));
                 else
                     System.out.println("Rien trouvé");
             }

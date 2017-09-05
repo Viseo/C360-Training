@@ -37,25 +37,25 @@ public class CollaboratorWS {
         this.mapUserCache.put(token, user);
     }
 
-    @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
-
-        CollaboratorDescription user = collaboratorServices.checkIfCollaboratorExistElsewhere(myCollaboratorDescription);
-
-        String compactJws = Jwts.builder()
+    private String createSecurityToken(CollaboratorDescription user){
+        return Jwts.builder()
                 .setSubject(user.getFirstName())
                 .claim("lastName", user.getLastName())
                 .claim("roles", user.getIsAdmin())
                 .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS512, generateKey())
                 .compact();
+    }
 
+    @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
+        CollaboratorDescription externalDescription = collaboratorServices.checkIfCollaboratorExistElsewhere(myCollaboratorDescription);
+        CollaboratorDescription user = collaboratorServices.handleReceivedCollaborator(myCollaboratorDescription,externalDescription);
+        String compactJws = createSecurityToken(user);
         this.putUserInCache(compactJws, user);
-
         Map<String, String> currentUserMap = new HashMap<>();
         currentUserMap.put("userConnected", compactJws);
-
         return currentUserMap;
     }
 

@@ -1,7 +1,7 @@
 package com.viseo.c360.formation.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viseo.c360.formation.amqp.RabbitMessage;
+import com.viseo.c360.formation.amqp.ConnectionMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -233,7 +233,7 @@ public class CollaboratorServicesImpl {
         return new RequestTrainingToDescription().convert(requestTraining);
     }
 
-    public List<RequestTraining> addRequestTrainingAssign(Long session_id,List<Long> id_collaborators) {
+    public List<RequestTraining> addRequestTrainingAssign(Long session_id, List<Long> id_collaborators) {
         try {
             List<RequestTraining> requestTrainings = new ArrayList<>();
             List<Collaborator> collaborators = new ArrayList<>();
@@ -258,7 +258,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public List<RequestTrainingDescription> getRequestTrainings(Long training_id,Long collab_id) {
+    public List<RequestTrainingDescription> getRequestTrainings(Long training_id, Long collab_id) {
         return new RequestTrainingToDescription().convert(collaboratorDAO.getRequestTrainings(training_id, collab_id));
     }
 
@@ -272,7 +272,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public CollaboratorDescription updateCollaboratorPassword(String collaboratorPassword,String collabId) {
+    public CollaboratorDescription updateCollaboratorPassword(String collaboratorPassword, String collabId) {
         try {
             Collaborator collaborator = collaboratorDAO.getCollaborator(Long.parseLong(collabId));
             if (collaborator == null) throw new PersistentObjectNotFoundException(15, Collaborator.class);
@@ -298,7 +298,8 @@ public class CollaboratorServicesImpl {
             throw new C360Exception(e);
         }
     }
-        public TrainingSessionDescription updateCollaboratorsTrainingSession(Long idTrainingSession,List<CollaboratorIdentity> collaboratorIdentities) {
+
+    public TrainingSessionDescription updateCollaboratorsTrainingSession(Long idTrainingSession, List<CollaboratorIdentity> collaboratorIdentities) {
         try {
             TrainingSession trainingSession = trainingDAO.getSessionTraining(idTrainingSession);
             if (trainingSession == null)
@@ -311,7 +312,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-        public List<WishDescription> getIsNotCheckedWishes() {
+    public List<WishDescription> getIsNotCheckedWishes() {
         try {
             return new WishToDescription().convert(collaboratorDAO.getIsNotCheckedWishes());
         } catch (ConversionException e) {
@@ -326,27 +327,27 @@ public class CollaboratorServicesImpl {
         CollaboratorDescription addedCollaborator;
 
         if (isEmpty(storedCollaborator.getEmail())) {
-            if(receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())){
-            receivedCollab.setId(0);
-            addedCollaborator = addCollaborator(receivedCollab);
-            System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
-            return addedCollaborator;
-            }
-            else
+            if (receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())) {
+                receivedCollab.setId(0);
+                addedCollaborator = addCollaborator(receivedCollab);
+                System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
+                return addedCollaborator;
+            } else
                 return null;
         } else {
             //  COMPLET
             CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
 
-            if(receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))){
+            if (receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) {
                 System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
+                if (!receivedCollab.getFunction().equals(storedcollaboratorDescription.getFunction())) {
+                    storedcollaboratorDescription.setFunction(receivedCollab.getFunction());
+                }
                 return storedcollaboratorDescription;
-            }
-            else if( (myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))){
-                storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(),String.valueOf(storedcollaboratorDescription.getId()));
+            } else if ((myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))) {
+                storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(), String.valueOf(storedcollaboratorDescription.getId()));
                 return storedcollaboratorDescription;
-            }
-            else {
+            } else {
                 System.out.println("MOT DE PASSE MOINS RECENT");
 
                 return null;
@@ -355,38 +356,48 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription myCollaboratorDescription) {
-        ObjectMapper mapperObj = new ObjectMapper();
+    private boolean shouldNotUpdateCollaboratorData(CollaboratorDescription storedcollaboratorDescription, CollaboratorDescription receivedCollab, CollaboratorDescription myCollaboratorDescription) {
+        return receivedCollab != null &&
+                receivedCollab.getFirstName() != null &&
+                (!storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()) &&
+                        (!storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) ||
+                                (!storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))));
 
-        CollaboratorDescription receivedCollab = null;
 
-        RabbitMessage rabbitMessage = new RabbitMessage();
-        rabbitMessage.setCollaboratorDescription(myCollaboratorDescription);
-        rabbitMessage.setNameFileResponse(responseFormation.getName());
+    }
+
+    void sleep() {
         try {
-            this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(rabbitMessage));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Message consumerResponse = this.rabbitTemplate.receive(responseFormation.getName());
-            if (consumerResponse != null) {
-                RabbitMessage rabbitMessageResponse = new RabbitMessage();
-                rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
-                receivedCollab = rabbitMessageResponse.getCollaboratorDescription();
-                System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
-            }
-                receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
-
-                return receivedCollab ;
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
         }
+    }
 
-        return null;
+    public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription inputCollaboratorData) {
+        ObjectMapper mapperObj = new ObjectMapper();
+        ConnectionMessage connectionMessage = new ConnectionMessage()
+                .setCollaboratorDescription(inputCollaboratorData)
+                .setNameFileResponse(responseFormation.getName());
+        try {
+            this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(connectionMessage));
+            sleep();
+            Message consumerResponse = null;
+            ConnectionMessage mostRecentConsumerResponse = null;
+            do {
+                consumerResponse = this.rabbitTemplate.receive(responseFormation.getName());
+                if (consumerResponse != null) {
+                    ConnectionMessage connectionMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                    if (mostRecentConsumerResponse == null ||
+                            connectionMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                    .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                        mostRecentConsumerResponse = connectionMessageResponse;
+                    }
+                }
+            } while (consumerResponse != null);
+            return mostRecentConsumerResponse.getCollaboratorDescription();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public WishDescription addWish(String label, Long collaborator_id) {
