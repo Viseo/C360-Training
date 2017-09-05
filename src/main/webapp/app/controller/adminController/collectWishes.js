@@ -36,12 +36,11 @@ let collectWishes = Vue.component('collect-wishes', {
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
                                             <br/>
                                             <img v-show="showChevrons"
-                                                 src="img/chevrons/up.png"
+                                                 src="img/other_icon/scroll_up.png" width="70" height="50" 
                                                  id="scroll-up-3"
-                                                 width="60"
-                                                 height="20"
                                                  style="position: absolute; 
-                                                 left:50%; 
+                                                 right:-58%;
+                                                  bottom: -6px;
                                                  z-index:1;">
                                         </div>
                                     </div>
@@ -93,9 +92,9 @@ let collectWishes = Vue.component('collect-wishes', {
                                     <div clas="row">
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
                                             <img v-show="showChevrons"
-                                                 src="img/chevrons/down.png"
+                                                 src="img/other_icon/scroll_down.png" width="70" height="50"
                                                  id="scroll-down-3"
-                                                 width="60" height="20"
+                                                
                                                  style="position: absolute; 
                                                         left:50%; top:95%; 
                                                         z-index:1;">

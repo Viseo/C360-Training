@@ -3,7 +3,7 @@ package com.viseo.c360.formation.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.RabbitMessage;
+import com.viseo.c360.formation.amqp.ConnectionMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -32,6 +32,7 @@ import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -42,8 +43,11 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -355,54 +359,74 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription myCollaboratorDescription) {
-        ObjectMapper mapperObj = new ObjectMapper();
-        CollaboratorDescription receivedCollab = null;
-        RabbitMessage rabbitMessage = new RabbitMessage();
-        rabbitMessage.setCollaboratorDescription(myCollaboratorDescription);
-        rabbitMessage.setNameFileResponse(responseFormation.getName());
-        try {
-            this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(rabbitMessage));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private boolean shouldNotUpdateCollaboratorData(CollaboratorDescription storedcollaboratorDescription, CollaboratorDescription receivedCollab, CollaboratorDescription myCollaboratorDescription) {
+        return receivedCollab != null &&
+                receivedCollab.getFirstName() != null &&
+                (!storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()) &&
+                        (!storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) ||
+                                (!storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))));
 
-            byte[] consumerResponse = this.rabbitTemplate.execute(new ChannelCallback<byte[]>() {
+
+    }
+
+    void sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription inputCollaboratorData) {
+        ObjectMapper mapperObj = new ObjectMapper();
+        UUID personalMessageSequence = UUID.randomUUID();
+        ConnectionMessage connectionMessage = new ConnectionMessage()
+                .setCollaboratorDescription(inputCollaboratorData)
+                .setNameFileResponse(responseFormation.getName())
+                .setSequence(personalMessageSequence);
+        try {
+            this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(connectionMessage));
+            sleep();
+            ConnectionMessage mostRecentRemoteCollaborator = null;
+            mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
 
                 @Override
-                public byte[] doInRabbit(final Channel channel) throws Exception {
+                public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                    long startTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
+                    ConnectionMessage mostRecentConsumerResponse = null;
+                    GetResponse consumerResponse;
                     long deliveryTag;
-                    GetResponse result = channel.basicGet(responseFormation.getName(), false);
-                    System.out.println(new String(result.getBody()));
-                    deliveryTag = result.getEnvelope().getDeliveryTag();
-                    RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(result.getBody(), RabbitMessage.class);
+                    do {
+                        elapsedTime = (new Date()).getTime() - startTime;
+                        if(elapsedTime > 3000)
+                            break;
+                        consumerResponse = channel.basicGet(responseFormation.getName(), false);
+                        if(consumerResponse != null){
+                        deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
+                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
 
 
-                    if (rabbitMessageResponse.getCollaboratorDescription().getFirstName().equals("Hamza")) {
-                        channel.basicAck(deliveryTag, true);
-                    } else {
-                        channel.basicReject(deliveryTag, true);
-                    }
-                    return result.getBody();
+                        if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                            channel.basicAck(deliveryTag, true);
+                            if (mostRecentConsumerResponse == null ||
+                                    rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                            .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                mostRecentConsumerResponse = rabbitMessageResponse;
+                            }
+                        } else {
+                            channel.basicReject(deliveryTag, true);
+
+                        }}
+                    } while (consumerResponse != null);
+                    return mostRecentConsumerResponse;
                 }
             });
-            if (consumerResponse != null) {
-                RabbitMessage rabbitMessageResponse = new RabbitMessage();
-                rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse, RabbitMessage.class);
-                receivedCollab = rabbitMessageResponse.getCollaboratorDescription();
-                System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
-            }
-            receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
-
-            return receivedCollab;
-
+            if(mostRecentRemoteCollaborator != null)
+            return mostRecentRemoteCollaborator.getCollaboratorDescription();
+            return null;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     public WishDescription addWish(String label, Long collaborator_id) {
