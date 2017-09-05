@@ -1,6 +1,8 @@
 package com.viseo.c360.formation.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.GetResponse;
 import com.viseo.c360.formation.amqp.RabbitMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
@@ -30,8 +32,8 @@ import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
 import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.convert.ConversionException;
 import org.springframework.stereotype.Service;
@@ -233,7 +235,7 @@ public class CollaboratorServicesImpl {
         return new RequestTrainingToDescription().convert(requestTraining);
     }
 
-    public List<RequestTraining> addRequestTrainingAssign(Long session_id,List<Long> id_collaborators) {
+    public List<RequestTraining> addRequestTrainingAssign(Long session_id, List<Long> id_collaborators) {
         try {
             List<RequestTraining> requestTrainings = new ArrayList<>();
             List<Collaborator> collaborators = new ArrayList<>();
@@ -258,7 +260,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public List<RequestTrainingDescription> getRequestTrainings(Long training_id,Long collab_id) {
+    public List<RequestTrainingDescription> getRequestTrainings(Long training_id, Long collab_id) {
         return new RequestTrainingToDescription().convert(collaboratorDAO.getRequestTrainings(training_id, collab_id));
     }
 
@@ -272,7 +274,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-    public CollaboratorDescription updateCollaboratorPassword(String collaboratorPassword,String collabId) {
+    public CollaboratorDescription updateCollaboratorPassword(String collaboratorPassword, String collabId) {
         try {
             Collaborator collaborator = collaboratorDAO.getCollaborator(Long.parseLong(collabId));
             if (collaborator == null) throw new PersistentObjectNotFoundException(15, Collaborator.class);
@@ -298,7 +300,8 @@ public class CollaboratorServicesImpl {
             throw new C360Exception(e);
         }
     }
-        public TrainingSessionDescription updateCollaboratorsTrainingSession(Long idTrainingSession,List<CollaboratorIdentity> collaboratorIdentities) {
+
+    public TrainingSessionDescription updateCollaboratorsTrainingSession(Long idTrainingSession, List<CollaboratorIdentity> collaboratorIdentities) {
         try {
             TrainingSession trainingSession = trainingDAO.getSessionTraining(idTrainingSession);
             if (trainingSession == null)
@@ -311,7 +314,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
-        public List<WishDescription> getIsNotCheckedWishes() {
+    public List<WishDescription> getIsNotCheckedWishes() {
         try {
             return new WishToDescription().convert(collaboratorDAO.getIsNotCheckedWishes());
         } catch (ConversionException e) {
@@ -326,27 +329,24 @@ public class CollaboratorServicesImpl {
         CollaboratorDescription addedCollaborator;
 
         if (isEmpty(storedCollaborator.getEmail())) {
-            if(receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())){
-            receivedCollab.setId(0);
-            addedCollaborator = addCollaborator(receivedCollab);
-            System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
-            return addedCollaborator;
-            }
-            else
+            if (receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())) {
+                receivedCollab.setId(0);
+                addedCollaborator = addCollaborator(receivedCollab);
+                System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
+                return addedCollaborator;
+            } else
                 return null;
         } else {
             //  COMPLET
             CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
 
-            if(receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))){
+            if (receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) {
                 System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
                 return storedcollaboratorDescription;
-            }
-            else if( (myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))){
-                storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(),String.valueOf(storedcollaboratorDescription.getId()));
+            } else if ((myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))) {
+                storedcollaboratorDescription = updateCollaboratorPassword(receivedCollab.getPassword(), String.valueOf(storedcollaboratorDescription.getId()));
                 return storedcollaboratorDescription;
-            }
-            else {
+            } else {
                 System.out.println("MOT DE PASSE MOINS RECENT");
 
                 return null;
@@ -357,30 +357,46 @@ public class CollaboratorServicesImpl {
 
     public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription myCollaboratorDescription) {
         ObjectMapper mapperObj = new ObjectMapper();
-
         CollaboratorDescription receivedCollab = null;
-
         RabbitMessage rabbitMessage = new RabbitMessage();
         rabbitMessage.setCollaboratorDescription(myCollaboratorDescription);
         rabbitMessage.setNameFileResponse(responseFormation.getName());
         try {
-            this.rabbitTemplate.convertAndSend(fanout.getName(),"",mapperObj.writeValueAsString(rabbitMessage));
+            this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(rabbitMessage));
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            Message consumerResponse = this.rabbitTemplate.receive(responseFormation.getName());
+            byte[] consumerResponse = this.rabbitTemplate.execute(new ChannelCallback<byte[]>() {
+
+                @Override
+                public byte[] doInRabbit(final Channel channel) throws Exception {
+                    long deliveryTag;
+                    GetResponse result = channel.basicGet(responseFormation.getName(), false);
+                    System.out.println(new String(result.getBody()));
+                    deliveryTag = result.getEnvelope().getDeliveryTag();
+                    RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(result.getBody(), RabbitMessage.class);
+
+
+                    if (rabbitMessageResponse.getCollaboratorDescription().getFirstName().equals("Hamza")) {
+                        channel.basicAck(deliveryTag, true);
+                    } else {
+                        channel.basicReject(deliveryTag, true);
+                    }
+                    return result.getBody();
+                }
+            });
             if (consumerResponse != null) {
                 RabbitMessage rabbitMessageResponse = new RabbitMessage();
-                rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
+                rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse, RabbitMessage.class);
                 receivedCollab = rabbitMessageResponse.getCollaboratorDescription();
                 System.out.println("Received Collaborator : " + receivedCollab.getFirstName() + receivedCollab.getLastName());
             }
-                receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
+            receivedCollab = handleReceivedCollaborator(myCollaboratorDescription, receivedCollab);
 
-                return receivedCollab ;
+            return receivedCollab;
 
         } catch (IOException e) {
             e.printStackTrace();
