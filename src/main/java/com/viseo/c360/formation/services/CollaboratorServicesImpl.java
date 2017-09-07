@@ -31,6 +31,7 @@ import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
@@ -385,7 +386,6 @@ public class CollaboratorServicesImpl {
                 .setSequence(personalMessageSequence);
         try {
             this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(connectionMessage));
-            sleep();
             ConnectionMessage mostRecentRemoteCollaborator = null;
             mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
 
@@ -396,33 +396,34 @@ public class CollaboratorServicesImpl {
                     ConnectionMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
+                    sleep();
                     do {
                         elapsedTime = (new Date()).getTime() - startTime;
-                        if(elapsedTime > 3000)
+                        if (elapsedTime > 2000)
                             break;
                         consumerResponse = channel.basicGet(responseFormation.getName(), false);
-                        if(consumerResponse != null){
-                        deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
-
-
-                        if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                        if (consumerResponse != null) {
+                            deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
+                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
                             channel.basicAck(deliveryTag, true);
-                            if (mostRecentConsumerResponse == null ||
-                                    rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
-                                            .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
-                                mostRecentConsumerResponse = rabbitMessageResponse;
+                            if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                                if (mostRecentConsumerResponse == null ||
+                                        rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                                .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                    mostRecentConsumerResponse = rabbitMessageResponse;
+                                }
+                            } else {
+                                channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
                             }
-                        } else {
-                            channel.basicReject(deliveryTag, true);
-
-                        }}
+                        }
                     } while (consumerResponse != null);
+
+
                     return mostRecentConsumerResponse;
                 }
             });
-            if(mostRecentRemoteCollaborator != null)
-            return mostRecentRemoteCollaborator.getCollaboratorDescription();
+            if (mostRecentRemoteCollaborator != null)
+                return mostRecentRemoteCollaborator.getCollaboratorDescription();
             return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
