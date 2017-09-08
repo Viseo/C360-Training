@@ -47,6 +47,7 @@ public class CollaboratorWS {
                 .compact();
     }
 
+
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {

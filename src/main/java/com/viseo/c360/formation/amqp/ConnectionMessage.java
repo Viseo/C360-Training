@@ -4,6 +4,7 @@ import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -17,6 +18,8 @@ public class ConnectionMessage implements Serializable {
     private UUID Sequence;
 
     private String nameFileResponse;
+
+    private Date messageDate;
 
     public UUID getSequence() {
         return Sequence;
@@ -33,6 +36,15 @@ public class ConnectionMessage implements Serializable {
 
     public ConnectionMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
         this.collaboratorDescription = collaboratorDescription;
+        return this;
+    }
+
+    public Date getMessageDate() {
+        return messageDate;
+    }
+
+    public ConnectionMessage setMessageDate(Date messageDate) {
+        this.messageDate = messageDate;
         return this;
     }
 
