@@ -30,8 +30,8 @@ public class CollaboratorWS {
 
     @Inject
     private RabbitTemplate rabbitTemplate;
-
-    private static final ConcurrentHashMap<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
+    private String compactJws;
+    private static final Map<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
     private void putUserInCache(String token, CollaboratorDescription user) {
         this.mapUserCache.put(token, user);
@@ -47,13 +47,13 @@ public class CollaboratorWS {
                 .compact();
     }
 
-
+    @CrossOrigin
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
         CollaboratorDescription externalDescription = collaboratorServices.checkIfCollaboratorExistElsewhere(myCollaboratorDescription);
         CollaboratorDescription user = collaboratorServices.handleReceivedCollaborator(myCollaboratorDescription,externalDescription);
-        String compactJws = createSecurityToken(user);
+        compactJws = createSecurityToken(user);
         this.putUserInCache(compactJws, user);
         Map<String, String> currentUserMap = new HashMap<>();
         currentUserMap.put("userConnected", compactJws);
@@ -66,6 +66,20 @@ public class CollaboratorWS {
     public boolean checkIsAdminAlreadyConnected(@RequestBody String thisToken) {
         try {
             return mapUserCache.get(thisToken).getIsAdmin();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.gethashmap}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, String> connectUserFromElsewhere() {
+        try {
+            Map<String, String> currentUserMap = new HashMap<>();
+            if(compactJws!=null)
+                currentUserMap.put("userConnected", compactJws);
+            return currentUserMap;
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);
@@ -93,7 +107,8 @@ public class CollaboratorWS {
             }
 
             mapUserCache.remove(token);
-            return mapUserCache.contains(token);
+            compactJws = null;
+            return mapUserCache.containsKey(token);
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);

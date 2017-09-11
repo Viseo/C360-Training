@@ -77,7 +77,6 @@ public class CollaboratorServicesImpl {
     @Inject
     private RabbitTemplate rabbitTemplate;
 
-    private static final ConcurrentHashMap<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
     public List<WishDescription> getAllWishes() {
         try {
@@ -405,7 +404,7 @@ public class CollaboratorServicesImpl {
                             deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
                             ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
                             channel.basicAck(deliveryTag, true);
-                            if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 5000) {
+                            if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 50000) {
                                 if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
                                     if (mostRecentConsumerResponse == null ||
                                             rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()

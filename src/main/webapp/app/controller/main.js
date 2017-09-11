@@ -44,7 +44,7 @@ let Header = Vue.component('header-component', {
                                 <ul id="dropdown-app" class="dropdown-menu"> 
                                     <li> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
-                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCon</p></span> 
+                                        <span @click="goToTrainingMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCom</p></span> 
                                         <span @click="goTo('registerTrainingCollaborator')" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></span> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/microservices_icon/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
                                     </li> 
@@ -94,7 +94,7 @@ let Header = Vue.component('header-component', {
     },
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getCookieInfos();
+        this.verifyUserToConnectByDatabase();
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
@@ -110,6 +110,21 @@ let Header = Vue.component('header-component', {
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
     },
     methods: {
+        goToTrainingMicroservice(){
+            this.$http.get("api/getcollaborator/"+this.collaboratorId).then(response => {
+                var collabToSend = response.data;
+                collabToSend.firstName = null;
+                this.$http.post("http://localhost:8083/api/user",collabToSend).then(response=> {
+                    window.location.replace("http://localhost:8081/");
+                }, response=>{
+                        window.location.replace("http://localhost:8081/");
+                    }
+                )
+
+            }, response => {
+                window.location.replace("http://localhost:8081/");
+            })
+        },
         redirectPageHearder(){
             var isAdmin = jwt_decode(this.token).roles;
 
@@ -289,6 +304,23 @@ let Header = Vue.component('header-component', {
             else {
                 redirectToLoginPage();
             }
+        },
+
+        verifyUserToConnectByDatabase(){
+            let connectUser = (userPersistedToken) => {
+                console.log(userPersistedToken);
+                if(typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                    this.handleCookie(userPersistedToken.data['userConnected']);
+                }
+                this.getCookieInfos();
+            };
+                console.log("Connexion en cours");
+                this.get("api/gethashmap", connectUser);
+        },
+        handleCookie(token) {
+            console.log("Creation cookie");
+            document.cookie = "token=" + token;
+            document.cookie = "stayconnected=true";
         },
 
         disconnectUser(){
