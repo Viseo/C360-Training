@@ -5,7 +5,7 @@ let NavigationMenu = Vue.component('connect-user', {
             color_connexion: 'color-blue',
             tabconnexion: "tab active",
             tabinscription: "tab",
-            positionBox:"top:20%;",
+            positionBox: "top:20%;",
             newCollab: false
         }
     },
@@ -630,6 +630,7 @@ let ConnexionForm = Vue.component('connexionForm', {
 
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+        this.getTokenFromURL();
     },
 
     methods: {
@@ -673,6 +674,27 @@ let ConnexionForm = Vue.component('connexionForm', {
                 this.user.password = this.password;
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
                 this.verifyUserByDatabase();
+            }
+        },
+
+        getTokenFromURL(){
+            var d = window.location.href.indexOf("?user=");
+            if (d != -1) {
+                var token = window.location.href.slice(d + 6, window.location.href.length);
+                if (token != null && token != 'undefined') {
+                    let connectUserSuccess = (userPersistedToken) => {
+                        this.handleCookie(userPersistedToken.data['userConnected']);
+                        if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                            if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
+                                this.goTo('addTrainingTopic');
+                            }
+                            else
+                                this.goTo('registerTrainingCollaborator');
+                        }
+                    };
+                    console.log("Connexion en cours");
+                    this.post("api/getuserifalreadyconnectedelsewhere", token, connectUserSuccess);
+                }
             }
         },
 

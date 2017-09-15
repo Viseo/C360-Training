@@ -21,12 +21,23 @@ public class ConnectionMessage implements Serializable {
 
     private Date messageDate;
 
+    private String token;
+
     public UUID getSequence() {
         return Sequence;
     }
 
     public ConnectionMessage setSequence(UUID sequence) {
         this.Sequence = sequence;
+        return this;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public ConnectionMessage setToken(String token) {
+        this.token = token;
         return this;
     }
 

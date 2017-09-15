@@ -152,6 +152,7 @@ public class CollaboratorServicesImpl {
         }
     }
 
+
     public List<WishDescription> updateIsChecked(List<WishDescription> Wishes) {
         List<WishDescription> updatedWishes = new ArrayList<>();
         try {
@@ -369,7 +370,7 @@ public class CollaboratorServicesImpl {
 
     }
 
-    void sleep() {
+    public void sleep() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

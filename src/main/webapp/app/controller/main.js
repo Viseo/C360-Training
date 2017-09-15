@@ -89,12 +89,12 @@ let Header = Vue.component('header-component', {
             imagePath: 'img/profile.jpg',
             collaboratorId: '',
             validateToken: '',
-            defaultPicture:''
+            defaultPicture: ''
         }
     },
     mounted: function () {
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.verifyUserToConnectByDatabase();
+        this.getCookieInfos();
         if (this.stayConnected === false) {
             this.checkIfUserInactive();
         }
@@ -105,30 +105,18 @@ let Header = Vue.component('header-component', {
         });
 
         this.setTitle();
-        if(this.token && this.token!='')
-        this.checkIfTokenExist();
+        if (this.token && this.token != '')
+            this.checkIfTokenExist();
         this.imagePath = "img/" + this.collaboratorId + ".jpg";
     },
     methods: {
         goToTrainingMicroservice(){
-            this.$http.get("api/getcollaborator/"+this.collaboratorId).then(response => {
-                var collabToSend = response.data;
-                collabToSend.firstName = null;
-                this.$http.post("http://localhost:8083/api/user",collabToSend).then(response=> {
-                    window.location.replace("http://localhost:8081/");
-                }, response=>{
-                        window.location.replace("http://localhost:8081/");
-                    }
-                )
-
-            }, response => {
-                window.location.replace("http://localhost:8081/");
-            })
+            window.location.replace("http://localhost:8081/#/login?user="+this.token);
         },
         redirectPageHearder(){
             var isAdmin = jwt_decode(this.token).roles;
 
-            if(isAdmin){
+            if (isAdmin) {
                 this.goTo('addTrainingTopic');
             }
             else {
@@ -149,9 +137,9 @@ let Header = Vue.component('header-component', {
         setTitle(){
             if (this.title == "Gestion des formations") {
                 this.app.training = true;
-                this.app.skills=false;
+                this.app.skills = false;
                 this.app.mission = false;
-                this.app.leave= false;
+                this.app.leave = false;
 
             }
         },
@@ -169,7 +157,7 @@ let Header = Vue.component('header-component', {
             return this.disconnect && !this.dialog;
         },
         showPicture(){
-            return (this.$route.name != 'login') && (this.$route.name !='resetPassword') ;
+            return (this.$route.name != 'login') && (this.$route.name != 'resetPassword');
         },
 
         setIdleSecondsCounter(value){
@@ -212,7 +200,7 @@ let Header = Vue.component('header-component', {
         createDefautPictureCookie(){
             let cookie = this.getCookie("defaultPicture");
             console.log(cookie);
-            if (cookie == ""){
+            if (cookie == "") {
                 this.$http.get("api/getcollaborator/" + this.collaboratorId).then(
                     function (response) {
                         this.defaultPicture = response.data.defaultPicture;
@@ -223,10 +211,10 @@ let Header = Vue.component('header-component', {
                         console.error(response);
                     }
                 )
-            }else{
-                if(cookie == "false"){
+            } else {
+                if (cookie == "false") {
                     this.defaultPicture = false;
-                }else if(cookie == "true"){
+                } else if (cookie == "true") {
                     this.defaultPicture = true;
                 }
             }
@@ -306,22 +294,6 @@ let Header = Vue.component('header-component', {
             }
         },
 
-        verifyUserToConnectByDatabase(){
-            let connectUser = (userPersistedToken) => {
-                console.log(userPersistedToken);
-                if(typeof userPersistedToken.data['userConnected'] != 'undefined') {
-                    this.handleCookie(userPersistedToken.data['userConnected']);
-                }
-                this.getCookieInfos();
-            };
-                console.log("Connexion en cours");
-                this.get("api/gethashmap", connectUser);
-        },
-        handleCookie(token) {
-            console.log("Creation cookie");
-            document.cookie = "token=" + token;
-            document.cookie = "stayconnected=true";
-        },
 
         disconnectUser(){
             let disconnect = (response) => {

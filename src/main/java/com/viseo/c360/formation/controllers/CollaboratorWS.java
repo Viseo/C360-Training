@@ -1,5 +1,9 @@
 package com.viseo.c360.formation.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.GetResponse;
+import com.viseo.c360.formation.amqp.ConnectionMessage;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
@@ -10,13 +14,14 @@ import com.viseo.c360.formation.exceptions.C360Exception;
 import com.viseo.c360.formation.services.CollaboratorServicesImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.jsonwebtoken.impl.crypto.MacProvider.generateKey;
@@ -30,6 +35,16 @@ public class CollaboratorWS {
 
     @Inject
     private RabbitTemplate rabbitTemplate;
+
+    @Inject
+    FanoutExchange fanout;
+
+    @Inject
+    org.springframework.amqp.core.Queue responseFormation;
+
+    @Inject
+    org.springframework.amqp.core.Queue responseCompetence;
+
     private String compactJws;
     private static final Map<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
@@ -72,14 +87,75 @@ public class CollaboratorWS {
         }
     }
 
-    @RequestMapping(value = "${endpoint.gethashmap}", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, String> connectUserFromElsewhere() {
+
+    public CollaboratorDescription checkIfAlreadyConnected(ConnectionMessage message) {
         try {
-            Map<String, String> currentUserMap = new HashMap<>();
-            if(compactJws!=null)
-                currentUserMap.put("userConnected", compactJws);
-            return currentUserMap;
+            System.out.println(Arrays.asList(mapUserCache));
+            CollaboratorDescription user = mapUserCache.get(message.getToken());
+            if(user != null){
+                ConnectionMessage response = new ConnectionMessage().setNameFileResponse(message.getNameFileResponse())
+                    .setCollaboratorDescription(user)
+                    .setMessageDate(new Date())
+                    .setSequence(message.getSequence());
+            ObjectMapper mapper = new ObjectMapper();
+            rabbitTemplate.convertAndSend(message.getNameFileResponse(),mapper.writeValueAsString(response));
+            }
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+    @RequestMapping(value = "${endpoint.getuserifalreadyconnectedelsewhere}", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> getUserIfAlreadyConnectedElseWhere(@RequestBody String theToken){
+        try {
+            ConnectionMessage request = new ConnectionMessage();
+            UUID personalMessageSequence = UUID.randomUUID();
+            request.setSequence(personalMessageSequence)
+                    .setToken(theToken)
+                    .setMessageDate(new Date())
+                    .setNameFileResponse(responseFormation.getName());
+            ;
+            ObjectMapper mapper = new ObjectMapper();
+            rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(request));
+            ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+
+                @Override
+                public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                    long startTime = System.currentTimeMillis();
+                    long elapsedTime = 0;
+                    ConnectionMessage mostRecentConsumerResponse = null;
+                    GetResponse consumerResponse;
+                    long deliveryTag;
+                    collaboratorServices.sleep();
+                    do {
+                        elapsedTime = (new Date()).getTime() - startTime;
+                        consumerResponse = channel.basicGet(responseFormation.getName(), false);
+                        if (consumerResponse != null) {
+                            deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
+                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                            channel.basicAck(deliveryTag, true);
+                                if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                                    if (mostRecentConsumerResponse == null ||
+                                            rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                                    .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                        mostRecentConsumerResponse = rabbitMessageResponse;
+                                    }
+                                } else {
+                                    channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
+                                }
+
+                        }
+                    } while (consumerResponse != null && elapsedTime < 2000);
+
+
+                    return mostRecentConsumerResponse;
+                }
+            });
+            return this.getUserByLoginPassword(connectedUser.getCollaboratorDescription());
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);

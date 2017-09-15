@@ -1,6 +1,7 @@
 package com.viseo.c360.formation.amqp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viseo.c360.formation.controllers.CollaboratorWS;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
@@ -18,7 +19,10 @@ import java.io.IOException;
 
 public class ConsumerMessageHandler {
     @Inject
-    CollaboratorDAO ws;
+    CollaboratorDAO dao;
+
+    @Inject
+    CollaboratorWS ws;
 
 
     @Inject
@@ -41,8 +45,10 @@ public class ConsumerMessageHandler {
 
             CollaboratorDescription collaborator = connectionMessageResponse.getCollaboratorDescription();
             System.out.println("Halelujah j'ai reçu ça   : " + request);
-            if (collaborator.getFirstName() == null) {
-                Collaborator c = ws.getCollaboratorByLogin(collaborator.getEmail());
+            if (connectionMessageResponse.getToken() != null) {
+                ws.checkIfAlreadyConnected(connectionMessageResponse);
+            } else  {
+                Collaborator c = dao.getCollaboratorByLogin(collaborator.getEmail());
                 System.out.println("Le voila = " + c.getFirstName());
                 connectionMessageResponse.setCollaboratorDescription(new CollaboratorToDescription().convert(c));
                 if (c.getFirstName() != null) {
@@ -51,10 +57,7 @@ public class ConsumerMessageHandler {
                         System.out.println("Collaborateur envoyé !");
                     }
 
-                } else
-                    System.out.println("Rien trouvé");
-            } else {
-                System.out.println("REPONSE : " + collaborator.getFirstName() + " " + collaborator.getLastName());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
