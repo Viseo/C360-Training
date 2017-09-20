@@ -395,7 +395,7 @@ public class CollaboratorServicesImpl {
         if (isEmpty(storedCollaborator.getEmail())) {
             if (receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())) {
                 receivedCollab.setId(0);
-                addedCollaborator = addCollaborator(receivedCollab);
+                addedCollaborator = addCollaboratorDirectly(receivedCollab);
                 System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
                 return addedCollaborator;
             } else
@@ -416,6 +416,19 @@ public class CollaboratorServicesImpl {
                 return null;
             }
 
+        }
+    }
+
+    private CollaboratorDescription addCollaboratorDirectly(CollaboratorDescription collaboratorDescription){
+        try {
+            System.out.println("ADDING COLLABORAOR DIRECTLY");
+            collaboratorDescription.setDefaultPicture(true);
+            Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
+            return new CollaboratorToDescription().convert(collaborator);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if (uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
     }
 
