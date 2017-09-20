@@ -77,6 +77,8 @@ public class CollaboratorServicesImpl {
     @Inject
     private RabbitTemplate rabbitTemplate;
 
+    private boolean compteExisteInOtherApp = false;
+
 
     public List<WishDescription> getAllWishes() {
         try {
@@ -170,6 +172,62 @@ public class CollaboratorServicesImpl {
     }
 
     public CollaboratorDescription addCollaborator(CollaboratorDescription collaboratorDescription) {
+
+        ConnectionMessage checkIfUserExist = new ConnectionMessage();
+        UUID personalMessageSequence = UUID.randomUUID();
+        checkIfUserExist.setCollaboratorDescription(collaboratorDescription).
+                setMessageDate(new Date()).
+                setNameFileResponse(responseFormation.getName()).
+                setSequence(personalMessageSequence);
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(checkIfUserExist));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+
+            @Override
+            public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                long startTime = System.currentTimeMillis();
+                long elapsedTime = 0;
+                ConnectionMessage mostRecentConsumerResponse = null;
+                GetResponse consumerResponse;
+                long deliveryTag;
+                sleep();
+                do {
+                    elapsedTime = (new Date()).getTime() - startTime;
+                    consumerResponse = channel.basicGet(responseFormation.getName(), false);
+                    if (consumerResponse != null) {
+                        deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
+                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                        channel.basicAck(deliveryTag, true);
+                        if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                            if (mostRecentConsumerResponse == null ||
+                                    rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                            .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                mostRecentConsumerResponse = rabbitMessageResponse;
+                            }
+                        } else {
+                            channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
+                        }
+                        System.out.println("compte existe!");
+                        compteExisteInOtherApp = true;
+                        return null;
+                    }
+                    else{
+                        System.out.println("compte existe pas!");
+                        compteExisteInOtherApp = false;
+                    }
+                } while (consumerResponse != null && elapsedTime < 2000);
+                return mostRecentConsumerResponse;
+            }
+        });
+        if (compteExisteInOtherApp){
+            //if the email is already exist in other microservice
+            throw new UniqueFieldException("email");
+        }
         try {
             collaboratorDescription.setDefaultPicture(true);
             Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
@@ -179,6 +237,7 @@ public class CollaboratorServicesImpl {
             if (uniqueFieldErrors == null) throw new C360Exception(pe);
             else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
+
     }
 
     public CollaboratorDescription updateCollaborator(CollaboratorDescription collaborator) {

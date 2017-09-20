@@ -434,7 +434,7 @@ let Formulaire = Vue.component('inscription-form', {
             };
 
             let sendUserToRegisterError = (response) => {
-                console.log("Error: ", response);
+                console.log("Error: ", response.data.message);
                 if (response.data.message == "personnalIdNumber") {
                     console.log("PID already exist");
                     this.personalIdNumberAlreadyExist = true;
@@ -444,7 +444,14 @@ let Formulaire = Vue.component('inscription-form', {
                     console.log("email already exist");
                     this.emailAlreadyExist = true;
                     this.personalIdNumberAlreadyExist = false;
-                } else {
+
+                }
+                /*else if (response.data == "") {
+                    console.log("email already exist in anther microservice");
+                    this.emailAlreadyExist = true;
+                    this.personalIdNumberAlreadyExist = false;
+
+                } */else {
                     console.error(response);
                     this.personalIdNumberAlreadyExist = true;
                     this.emailAlreadyExist = true;
