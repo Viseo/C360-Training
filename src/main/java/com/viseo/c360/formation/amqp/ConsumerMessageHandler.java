@@ -40,20 +40,18 @@ public class ConsumerMessageHandler {
         com.fasterxml.jackson.databind.ObjectMapper mapperObj = new com.fasterxml.jackson.databind.ObjectMapper();
 
         try {
-            ConnectionMessage connectionMessageResponse = new ConnectionMessage();
-            connectionMessageResponse = new ObjectMapper().readValue(request, ConnectionMessage.class);
-
-            CollaboratorDescription collaborator = connectionMessageResponse.getCollaboratorDescription();
+            RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(request, RabbitMessage.class);
+            CollaboratorDescription collaborator = rabbitMessageResponse.getCollaboratorDescription();
             System.out.println("Halelujah j'ai reçu ça   : " + request);
-            if (connectionMessageResponse.getToken() != null) {
-                ws.checkIfAlreadyConnected(connectionMessageResponse);
+            if (rabbitMessageResponse.getToken() != null) {
+                ws.checkIfAlreadyConnected(rabbitMessageResponse);
             } else  {
                 Collaborator c = dao.getCollaboratorByLogin(collaborator.getEmail());
                 System.out.println("Le voila = " + c.getFirstName());
-                connectionMessageResponse.setCollaboratorDescription(new CollaboratorToDescription().convert(c));
+                rabbitMessageResponse.setCollaboratorDescription(new CollaboratorToDescription().convert(c));
                 if (c.getFirstName() != null) {
-                    if (!connectionMessageResponse.getNameFileResponse().equals(responseFormation.getName())) {
-                        rabbitTemplate.convertAndSend(connectionMessageResponse.getNameFileResponse(), mapperObj.writeValueAsString(connectionMessageResponse));
+                    if (!rabbitMessageResponse.getNameFileResponse().equals(responseFormation.getName())) {
+                        rabbitTemplate.convertAndSend(rabbitMessageResponse.getNameFileResponse(), mapperObj.writeValueAsString(rabbitMessageResponse));
                         System.out.println("Collaborateur envoyé !");
                     }
 

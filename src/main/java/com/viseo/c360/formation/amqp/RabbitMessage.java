@@ -3,14 +3,13 @@ package com.viseo.c360.formation.amqp;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * Created by SJO3662 on 24/08/2017.
  */
-public class ConnectionMessage implements Serializable {
+public class RabbitMessage {
 
     @Inject
     private CollaboratorDescription collaboratorDescription;
@@ -23,11 +22,13 @@ public class ConnectionMessage implements Serializable {
 
     private String token;
 
+    private MessageType type = MessageType.CONNECTION;
+
     public UUID getSequence() {
         return Sequence;
     }
 
-    public ConnectionMessage setSequence(UUID sequence) {
+    public RabbitMessage setSequence(UUID sequence) {
         this.Sequence = sequence;
         return this;
     }
@@ -36,7 +37,7 @@ public class ConnectionMessage implements Serializable {
         return token;
     }
 
-    public ConnectionMessage setToken(String token) {
+    public RabbitMessage setToken(String token) {
         this.token = token;
         return this;
     }
@@ -45,7 +46,7 @@ public class ConnectionMessage implements Serializable {
         return collaboratorDescription;
     }
 
-    public ConnectionMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
+    public RabbitMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
         this.collaboratorDescription = collaboratorDescription;
         return this;
     }
@@ -54,7 +55,7 @@ public class ConnectionMessage implements Serializable {
         return messageDate;
     }
 
-    public ConnectionMessage setMessageDate(Date messageDate) {
+    public RabbitMessage setMessageDate(Date messageDate) {
         this.messageDate = messageDate;
         return this;
     }
@@ -63,8 +64,16 @@ public class ConnectionMessage implements Serializable {
         return nameFileResponse;
     }
 
-    public ConnectionMessage setNameFileResponse(String nameFileResponse) {
+    public RabbitMessage setNameFileResponse(String nameFileResponse) {
         this.nameFileResponse = nameFileResponse;
         return this;
+    }
+
+    public MessageType getType() {
+        return type;
+    }
+
+    public void setType(MessageType type) {
+        this.type = type;
     }
 }

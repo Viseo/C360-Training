@@ -3,7 +3,8 @@ package com.viseo.c360.formation.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.ConnectionMessage;
+import com.viseo.c360.formation.amqp.MessageType;
+import com.viseo.c360.formation.amqp.RabbitMessage;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
@@ -21,11 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.*;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static io.jsonwebtoken.impl.crypto.MacProvider.generateKey;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @RestController
 public class CollaboratorWS {
@@ -62,6 +61,13 @@ public class CollaboratorWS {
                 .compact();
     }
 
+    private void sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
+    }
+
     @CrossOrigin
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
@@ -88,17 +94,23 @@ public class CollaboratorWS {
     }
 
 
-    public CollaboratorDescription checkIfAlreadyConnected(ConnectionMessage message) {
+    public CollaboratorDescription checkIfAlreadyConnected(RabbitMessage message) {
         try {
-            System.out.println(Arrays.asList(mapUserCache));
-            CollaboratorDescription user = mapUserCache.get(message.getToken());
-            if(user != null){
-                ConnectionMessage response = new ConnectionMessage().setNameFileResponse(message.getNameFileResponse())
-                    .setCollaboratorDescription(user)
-                    .setMessageDate(new Date())
-                    .setSequence(message.getSequence());
-            ObjectMapper mapper = new ObjectMapper();
-            rabbitTemplate.convertAndSend(message.getNameFileResponse(),mapper.writeValueAsString(response));
+            CollaboratorDescription user = null;
+            if (message.getType() == MessageType.CONNECTION) {
+                user = mapUserCache.get(message.getToken());
+                if (user != null) {
+                    RabbitMessage response = new RabbitMessage().setNameFileResponse(message.getNameFileResponse())
+                            .setCollaboratorDescription(user)
+                            .setMessageDate(new Date())
+                            .setSequence(message.getSequence());
+                    ObjectMapper mapper = new ObjectMapper();
+                    rabbitTemplate.convertAndSend(message.getNameFileResponse(), mapper.writeValueAsString(response));
+                }
+            } else if (message.getType() == MessageType.DECONNECTION) {
+                mapUserCache.remove(message.getToken());
+                compactJws = null;
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             }
             return user;
         } catch (Exception e) {
@@ -111,7 +123,7 @@ public class CollaboratorWS {
     @ResponseBody
     public Map<String, String> getUserIfAlreadyConnectedElseWhere(@RequestBody String theToken){
         try {
-            ConnectionMessage request = new ConnectionMessage();
+            RabbitMessage request = new RabbitMessage();
             UUID personalMessageSequence = UUID.randomUUID();
             request.setSequence(personalMessageSequence)
                     .setToken(theToken)
@@ -120,13 +132,13 @@ public class CollaboratorWS {
             ;
             ObjectMapper mapper = new ObjectMapper();
             rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(request));
-            ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+            RabbitMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<RabbitMessage>() {
 
                 @Override
-                public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                public RabbitMessage doInRabbit(final Channel channel) throws Exception {
                     long startTime = System.currentTimeMillis();
                     long elapsedTime = 0;
-                    ConnectionMessage mostRecentConsumerResponse = null;
+                    RabbitMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
                     collaboratorServices.sleep();
@@ -135,7 +147,7 @@ public class CollaboratorWS {
                         consumerResponse = channel.basicGet(responseFormation.getName(), false);
                         if (consumerResponse != null) {
                             deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                            RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
                             channel.basicAck(deliveryTag, true);
                                 if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
                                     if (mostRecentConsumerResponse == null ||
@@ -177,14 +189,20 @@ public class CollaboratorWS {
     @ResponseBody
     public Boolean deleteDisconnectedUserFromCache(@RequestBody String token) {
         try {
-
-            if (isEmpty(token)) {
-                return false;
-            }
-
+            /* log out for this microservice */
             mapUserCache.remove(token);
             compactJws = null;
-            return mapUserCache.containsKey(token);
+            /* send deconnection request for other microservices */
+            RabbitMessage msg = new RabbitMessage();
+            UUID personalMessageSequence = UUID.randomUUID();
+            msg.setToken(token).setSequence(personalMessageSequence).setType(MessageType.DECONNECTION);
+            ObjectMapper mapper = new ObjectMapper();
+            try{
+                rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(msg));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return (mapUserCache.get(token) == null);
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);

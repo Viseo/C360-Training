@@ -3,7 +3,7 @@ package com.viseo.c360.formation.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.ConnectionMessage;
+import com.viseo.c360.formation.amqp.RabbitMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -31,9 +31,7 @@ import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
-import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -44,12 +42,10 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -173,7 +169,7 @@ public class CollaboratorServicesImpl {
 
     public CollaboratorDescription addCollaborator(CollaboratorDescription collaboratorDescription) {
 
-        ConnectionMessage checkIfUserExist = new ConnectionMessage();
+        RabbitMessage checkIfUserExist = new RabbitMessage();
         UUID personalMessageSequence = UUID.randomUUID();
         checkIfUserExist.setCollaboratorDescription(collaboratorDescription).
                 setMessageDate(new Date()).
@@ -186,13 +182,13 @@ public class CollaboratorServicesImpl {
             e.printStackTrace();
         }
 
-        ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+        RabbitMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<RabbitMessage>() {
 
             @Override
-            public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+            public RabbitMessage doInRabbit(final Channel channel) throws Exception {
                 long startTime = System.currentTimeMillis();
                 long elapsedTime = 0;
-                ConnectionMessage mostRecentConsumerResponse = null;
+                RabbitMessage mostRecentConsumerResponse = null;
                 GetResponse consumerResponse;
                 long deliveryTag;
                 sleep();
@@ -201,7 +197,7 @@ public class CollaboratorServicesImpl {
                     consumerResponse = channel.basicGet(responseFormation.getName(), false);
                     if (consumerResponse != null) {
                         deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                        RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
                         channel.basicAck(deliveryTag, true);
                         if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
                             if (mostRecentConsumerResponse == null ||
@@ -452,21 +448,21 @@ public class CollaboratorServicesImpl {
     public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription inputCollaboratorData) {
         ObjectMapper mapperObj = new ObjectMapper();
         UUID personalMessageSequence = UUID.randomUUID();
-        ConnectionMessage connectionMessage = new ConnectionMessage()
+        RabbitMessage connectionMessage = new RabbitMessage()
                 .setCollaboratorDescription(inputCollaboratorData)
                 .setNameFileResponse(responseFormation.getName())
                 .setSequence(personalMessageSequence)
                 .setMessageDate(new Date());
         try {
             this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(connectionMessage));
-            ConnectionMessage mostRecentRemoteCollaborator = null;
-            mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+            RabbitMessage mostRecentRemoteCollaborator = null;
+            mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<RabbitMessage>() {
 
                 @Override
-                public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                public RabbitMessage doInRabbit(final Channel channel) throws Exception {
                     long startTime = System.currentTimeMillis();
                     long elapsedTime = 0;
-                    ConnectionMessage mostRecentConsumerResponse = null;
+                    RabbitMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
                     sleep();
@@ -475,7 +471,7 @@ public class CollaboratorServicesImpl {
                         consumerResponse = channel.basicGet(responseFormation.getName(), false);
                         if (consumerResponse != null) {
                             deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                            RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
                             channel.basicAck(deliveryTag, true);
                             if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 50000) {
                                 if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
