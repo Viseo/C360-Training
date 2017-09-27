@@ -65,10 +65,19 @@ public class ConsumerMessageHandler {
             }
         });
         factory.put(MessageType.DISCONNECTION.toString(), json->{
+            ObjectMapper objectMapper = new ObjectMapper();
             DisconnectionMessage disconnectionMessage = new DisconnectionMessage();
-            disconnectionMessage.setToken((String)json.get("token"))
-                    .setType(MessageType.DISCONNECTION);
-            return disconnectionMessage;
+            try{
+                disconnectionMessage.setToken((String)json.get("token"))
+                        .setNameFileResponse((String)json.get("nameFileResponse"))
+                        .setType(MessageType.DISCONNECTION);
+                if(json.get("collaboratorDescription") != null){
+                    disconnectionMessage.setCollaboratorDescription(objectMapper.readValue(json.get("collaboratorDescription").toString(), CollaboratorDescription.class));
+                }
+                return disconnectionMessage;
+            }catch (IOException ioe){
+                throw new RuntimeException(ioe);
+            }
         });
         //deserialiser json et repondre
         try {
@@ -78,7 +87,6 @@ public class ConsumerMessageHandler {
                 ConnectionMessage connectionMessageResponse = (ConnectionMessage) rabbitMsgResponse;
                 CollaboratorDescription collaborator = connectionMessageResponse.getCollaboratorDescription();
                 System.out.println("Halelujah j'ai reçu ça   : " + request);
-                System.out.println("fuck : " + collaborator );
                 if (connectionMessageResponse.getToken() != null) {
                     ws.checkIfAlreadyConnected(connectionMessageResponse);
                 } else  {

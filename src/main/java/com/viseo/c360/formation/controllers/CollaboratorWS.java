@@ -7,6 +7,7 @@ import com.viseo.c360.formation.amqp.DisconnectionMessage;
 import com.viseo.c360.formation.amqp.MessageType;
 import com.viseo.c360.formation.amqp.ConnectionMessage;
 import com.viseo.c360.formation.amqp.RabbitMsg;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorIdentity;
@@ -23,6 +24,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -111,10 +115,21 @@ public class CollaboratorWS {
                     rabbitTemplate.convertAndSend(message.getNameFileResponse(), mapper.writeValueAsString(response));
                 }
             } else if (msg.getType() == MessageType.DISCONNECTION) {
+                String token = null;
                 DisconnectionMessage message = (DisconnectionMessage) msg;
-                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                mapUserCache.remove(message.getToken());
-                compactJws = null;
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA : " + message.getCollaboratorDescription());
+                if(!message.getNameFileResponse().equals(this.responseFormation.getName())){
+                    CollaboratorDescription collaborator = message.getCollaboratorDescription();
+                    for (String t : mapUserCache.keySet()){
+                        if (mapUserCache.get(t).getEmail().equals(collaborator.getEmail())){
+                            token = t;
+                            System.out.println("Reomving token : " + token);
+                            mapUserCache.remove(token);
+                            compactJws = null;
+                            break;
+                        }
+                    }
+                }
             }
             return user;
         } catch (Exception e) {
@@ -192,27 +207,29 @@ public class CollaboratorWS {
     @RequestMapping(value = "${endpoint.userdisconnect}", method = RequestMethod.POST)
     @ResponseBody
     public Boolean deleteDisconnectedUserFromCache(@RequestBody String token) {
-        try {
+        CollaboratorDescription collaborator = mapUserCache.get(token);
+        if(collaborator != null){
+            try {
             /* log out for this microservice */
-            mapUserCache.remove(token);
-            compactJws = null;
+                if (collaborator != null){
+                    mapUserCache.remove(token);
+                }
+                compactJws = null;
             /* send disconnection request for other microservices */
-            DisconnectionMessage msg = new DisconnectionMessage();
-            UUID personalMessageSequence = UUID.randomUUID();
-            msg.setToken(token)
-                    .setSequence(personalMessageSequence)
-                    .setNameFileResponse(responseFormation.getName());
-            ObjectMapper mapper = new ObjectMapper();
-            try{
+                DisconnectionMessage msg = new DisconnectionMessage();
+                msg.setToken(token)
+                        .setNameFileResponse(responseFormation.getName())
+                        .setCollaboratorDescription(collaborator);
+                ObjectMapper mapper = new ObjectMapper();
                 rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(msg));
-            }catch (Exception e){
+                return (mapUserCache.get(token) == null);
+            } catch (Exception e) {
                 e.printStackTrace();
+                throw new C360Exception(e);
             }
-            return (mapUserCache.get(token) == null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new C360Exception(e);
         }
+        else
+            return true;
     }
 
     @RequestMapping(value = "${endpoint.addwish}", method = RequestMethod.POST)

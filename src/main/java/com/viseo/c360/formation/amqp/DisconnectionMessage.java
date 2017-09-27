@@ -1,14 +1,18 @@
 package com.viseo.c360.formation.amqp;
 
+import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
+
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.UUID;
 
 public class DisconnectionMessage extends RabbitMsg {
 
     private String token;
-    private UUID sequence;
     private String nameFileResponse;
     private Date messageDate;
+    @Inject
+    private CollaboratorDescription collaboratorDescription;
 
     public DisconnectionMessage(){
         super(MessageType.DISCONNECTION);
@@ -20,15 +24,6 @@ public class DisconnectionMessage extends RabbitMsg {
 
     public DisconnectionMessage setToken(String token) {
         this.token = token;
-        return this;
-    }
-
-    public UUID getSequence() {
-        return sequence;
-    }
-
-    public DisconnectionMessage setSequence(UUID sequence) {
-        this.sequence = sequence;
         return this;
     }
 
@@ -47,6 +42,15 @@ public class DisconnectionMessage extends RabbitMsg {
 
     public DisconnectionMessage setNameFileResponse(String nameFileResponse) {
         this.nameFileResponse = nameFileResponse;
+        return this;
+    }
+
+    public CollaboratorDescription getCollaboratorDescription() {
+        return collaboratorDescription;
+    }
+
+    public DisconnectionMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
+        this.collaboratorDescription = collaboratorDescription;
         return this;
     }
 }
