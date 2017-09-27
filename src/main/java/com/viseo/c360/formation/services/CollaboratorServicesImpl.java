@@ -3,7 +3,7 @@ package com.viseo.c360.formation.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.RabbitMessage;
+import com.viseo.c360.formation.amqp.ConnectionMessage;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -169,7 +169,7 @@ public class CollaboratorServicesImpl {
 
     public CollaboratorDescription addCollaborator(CollaboratorDescription collaboratorDescription) {
 
-        RabbitMessage checkIfUserExist = new RabbitMessage();
+        ConnectionMessage checkIfUserExist = new ConnectionMessage();
         UUID personalMessageSequence = UUID.randomUUID();
         checkIfUserExist.setCollaboratorDescription(collaboratorDescription).
                 setMessageDate(new Date()).
@@ -182,13 +182,13 @@ public class CollaboratorServicesImpl {
             e.printStackTrace();
         }
 
-        RabbitMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<RabbitMessage>() {
+        ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
 
             @Override
-            public RabbitMessage doInRabbit(final Channel channel) throws Exception {
+            public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
                 long startTime = System.currentTimeMillis();
                 long elapsedTime = 0;
-                RabbitMessage mostRecentConsumerResponse = null;
+                ConnectionMessage mostRecentConsumerResponse = null;
                 GetResponse consumerResponse;
                 long deliveryTag;
                 sleep();
@@ -197,7 +197,7 @@ public class CollaboratorServicesImpl {
                     consumerResponse = channel.basicGet(responseFormation.getName(), false);
                     if (consumerResponse != null) {
                         deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                        RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
+                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
                         channel.basicAck(deliveryTag, true);
                         if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
                             if (mostRecentConsumerResponse == null ||
@@ -448,21 +448,21 @@ public class CollaboratorServicesImpl {
     public CollaboratorDescription checkIfCollaboratorExistElsewhere(CollaboratorDescription inputCollaboratorData) {
         ObjectMapper mapperObj = new ObjectMapper();
         UUID personalMessageSequence = UUID.randomUUID();
-        RabbitMessage connectionMessage = new RabbitMessage()
+        ConnectionMessage connectionMessage = new ConnectionMessage()
                 .setCollaboratorDescription(inputCollaboratorData)
                 .setNameFileResponse(responseFormation.getName())
                 .setSequence(personalMessageSequence)
                 .setMessageDate(new Date());
         try {
             this.rabbitTemplate.convertAndSend(fanout.getName(), "", mapperObj.writeValueAsString(connectionMessage));
-            RabbitMessage mostRecentRemoteCollaborator = null;
-            mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<RabbitMessage>() {
+            ConnectionMessage mostRecentRemoteCollaborator = null;
+            mostRecentRemoteCollaborator = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
 
                 @Override
-                public RabbitMessage doInRabbit(final Channel channel) throws Exception {
+                public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
                     long startTime = System.currentTimeMillis();
                     long elapsedTime = 0;
-                    RabbitMessage mostRecentConsumerResponse = null;
+                    ConnectionMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
                     sleep();
@@ -471,7 +471,7 @@ public class CollaboratorServicesImpl {
                         consumerResponse = channel.basicGet(responseFormation.getName(), false);
                         if (consumerResponse != null) {
                             deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                            RabbitMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), RabbitMessage.class);
+                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
                             channel.basicAck(deliveryTag, true);
                             if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 50000) {
                                 if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {

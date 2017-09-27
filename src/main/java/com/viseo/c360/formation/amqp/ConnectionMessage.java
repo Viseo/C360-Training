@@ -9,12 +9,12 @@ import java.util.UUID;
 /**
  * Created by SJO3662 on 24/08/2017.
  */
-public class RabbitMessage {
+public class ConnectionMessage extends RabbitMsg{
 
     @Inject
     private CollaboratorDescription collaboratorDescription;
 
-    private UUID Sequence;
+    private UUID sequence;
 
     private String nameFileResponse;
 
@@ -22,14 +22,16 @@ public class RabbitMessage {
 
     private String token;
 
-    private MessageType type = MessageType.CONNECTION;
-
-    public UUID getSequence() {
-        return Sequence;
+    public ConnectionMessage(){
+        super(MessageType.CONNECTION);
     }
 
-    public RabbitMessage setSequence(UUID sequence) {
-        this.Sequence = sequence;
+    public UUID getSequence() {
+        return sequence;
+    }
+
+    public ConnectionMessage setSequence(UUID sequence) {
+        this.sequence = sequence;
         return this;
     }
 
@@ -37,7 +39,7 @@ public class RabbitMessage {
         return token;
     }
 
-    public RabbitMessage setToken(String token) {
+    public ConnectionMessage setToken(String token) {
         this.token = token;
         return this;
     }
@@ -46,7 +48,7 @@ public class RabbitMessage {
         return collaboratorDescription;
     }
 
-    public RabbitMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
+    public ConnectionMessage setCollaboratorDescription(CollaboratorDescription collaboratorDescription) {
         this.collaboratorDescription = collaboratorDescription;
         return this;
     }
@@ -55,7 +57,7 @@ public class RabbitMessage {
         return messageDate;
     }
 
-    public RabbitMessage setMessageDate(Date messageDate) {
+    public ConnectionMessage setMessageDate(Date messageDate) {
         this.messageDate = messageDate;
         return this;
     }
@@ -64,16 +66,8 @@ public class RabbitMessage {
         return nameFileResponse;
     }
 
-    public RabbitMessage setNameFileResponse(String nameFileResponse) {
+    public ConnectionMessage setNameFileResponse(String nameFileResponse) {
         this.nameFileResponse = nameFileResponse;
         return this;
-    }
-
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
     }
 }
