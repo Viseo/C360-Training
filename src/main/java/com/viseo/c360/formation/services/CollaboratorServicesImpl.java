@@ -31,9 +31,7 @@ import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
-import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -44,12 +42,10 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -76,6 +72,8 @@ public class CollaboratorServicesImpl {
 
     @Inject
     private RabbitTemplate rabbitTemplate;
+
+    private boolean compteExisteInOtherApp = false;
 
 
     public List<WishDescription> getAllWishes() {
@@ -170,6 +168,62 @@ public class CollaboratorServicesImpl {
     }
 
     public CollaboratorDescription addCollaborator(CollaboratorDescription collaboratorDescription) {
+
+        ConnectionMessage checkIfUserExist = new ConnectionMessage();
+        UUID personalMessageSequence = UUID.randomUUID();
+        checkIfUserExist.setCollaboratorDescription(collaboratorDescription).
+                setMessageDate(new Date()).
+                setNameFileResponse(responseFormation.getName()).
+                setSequence(personalMessageSequence);
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(checkIfUserExist));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {
+
+            @Override
+            public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
+                long startTime = System.currentTimeMillis();
+                long elapsedTime = 0;
+                ConnectionMessage mostRecentConsumerResponse = null;
+                GetResponse consumerResponse;
+                long deliveryTag;
+                sleep();
+                do {
+                    elapsedTime = (new Date()).getTime() - startTime;
+                    consumerResponse = channel.basicGet(responseFormation.getName(), false);
+                    if (consumerResponse != null) {
+                        deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
+                        ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                        channel.basicAck(deliveryTag, true);
+                        if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                            if (mostRecentConsumerResponse == null ||
+                                    rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                            .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                mostRecentConsumerResponse = rabbitMessageResponse;
+                            }
+                        } else {
+                            channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
+                        }
+                        System.out.println("compte existe!");
+                        compteExisteInOtherApp = true;
+                        return null;
+                    }
+                    else{
+                        System.out.println("compte existe pas!");
+                        compteExisteInOtherApp = false;
+                    }
+                } while (consumerResponse != null && elapsedTime < 2000);
+                return mostRecentConsumerResponse;
+            }
+        });
+        if (compteExisteInOtherApp){
+            //if the email is already exist in other microservice
+            throw new UniqueFieldException("email");
+        }
         try {
             collaboratorDescription.setDefaultPicture(true);
             Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
@@ -179,6 +233,7 @@ public class CollaboratorServicesImpl {
             if (uniqueFieldErrors == null) throw new C360Exception(pe);
             else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
+
     }
 
     public CollaboratorDescription updateCollaborator(CollaboratorDescription collaborator) {
@@ -336,7 +391,7 @@ public class CollaboratorServicesImpl {
         if (isEmpty(storedCollaborator.getEmail())) {
             if (receivedCollab.getPassword().equals(myCollaboratorDescription.getPassword())) {
                 receivedCollab.setId(0);
-                addedCollaborator = addCollaborator(receivedCollab);
+                addedCollaborator = addCollaboratorDirectly(receivedCollab);
                 System.out.println("ADDEDCOLLAB" + addedCollaborator.getFirstName());
                 return addedCollaborator;
             } else
@@ -357,6 +412,19 @@ public class CollaboratorServicesImpl {
                 return null;
             }
 
+        }
+    }
+
+    private CollaboratorDescription addCollaboratorDirectly(CollaboratorDescription collaboratorDescription){
+        try {
+            System.out.println("ADDING COLLABORAOR DIRECTLY");
+            collaboratorDescription.setDefaultPicture(true);
+            Collaborator collaborator = collaboratorDAO.addCollaborator(new DescriptionToCollaborator().convert(collaboratorDescription));
+            return new CollaboratorToDescription().convert(collaborator);
+        } catch (PersistenceException pe) {
+            UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+            if (uniqueFieldErrors == null) throw new C360Exception(pe);
+            else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
     }
 

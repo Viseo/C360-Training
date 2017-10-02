@@ -3,19 +3,18 @@ package com.viseo.c360.formation.amqp;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * Created by SJO3662 on 24/08/2017.
  */
-public class ConnectionMessage implements Serializable {
+public class ConnectionMessage extends RabbitMsg{
 
     @Inject
     private CollaboratorDescription collaboratorDescription;
 
-    private UUID Sequence;
+    private UUID sequence;
 
     private String nameFileResponse;
 
@@ -23,12 +22,16 @@ public class ConnectionMessage implements Serializable {
 
     private String token;
 
+    public ConnectionMessage(){
+        super(MessageType.CONNECTION);
+    }
+
     public UUID getSequence() {
-        return Sequence;
+        return sequence;
     }
 
     public ConnectionMessage setSequence(UUID sequence) {
-        this.Sequence = sequence;
+        this.sequence = sequence;
         return this;
     }
 
