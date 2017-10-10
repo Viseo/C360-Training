@@ -649,7 +649,30 @@ let ShowFormation = Vue.component('show-formation-panel', {
                         you can use custom content here to overwrite
                         default content
                         -->
-                        <h3 slot="header">custom header</h3>
+                        <h3 slot="header">Lier la formation avec des compétences</h3>
+                        <div slot="body">
+                            <div>
+                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                    <h4>
+                                        Compétences
+                                    </h4>
+                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                </div>  
+                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                    <h4>
+                                        Compétence Liées
+                                    </h4>
+                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                </div>  
+                            </div>
+                        </div>
+                        <div slot="body2" class="col-sm-12 col-md-12 col-lg-12">
+                            <input size="35" type="text" placeholder="Ajouter nouvelle compétence">   <span class="glyphicon glyphicon-plus" ></span>
+                        </div>   
+                        
                     </saveModal>
                     <div id="addFormation" class="trainingBlock">
     

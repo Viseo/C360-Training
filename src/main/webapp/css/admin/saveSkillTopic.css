@@ -16,7 +16,7 @@
 }
 
 .modal-container {
-    width: 300px;
+    width: 800px;
     margin: 0px auto;
     padding: 20px 30px;
     background-color: #fff;
@@ -31,9 +31,11 @@
     color: #42b983;
 }
 
+/*
 .modal-body {
     margin: 20px 0;
 }
+*/
 
 .modal-default-button {
     float: right;
