@@ -26,6 +26,7 @@ module.exports = function (config) {
             'src/main/webapp/app/controller/util/base.js',
             'src/main/webapp/app/controller/main.js',
             'src/main/webapp/app/controller/adminController/registerTrainingTopic.js',
+            'src/main/webapp/app/controller/adminController/saveSkillModal.js',
             'src/main/webapp/app/controller/collabController/registerTrainingCollaborator.js',
             'src/main/webapp/app/controller/adminController/assignCollaborator.js',
             'src/main/webapp/app/controller/adminController/addSession.js',

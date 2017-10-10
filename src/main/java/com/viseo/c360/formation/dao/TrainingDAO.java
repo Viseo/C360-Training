@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.persistence.*;
 
 
+import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
@@ -29,6 +30,9 @@ public class TrainingDAO {
     @Inject
     DAOFacade daoFacade;
 
+    @Inject
+    CollaboratorDAO collaboratorDAO;
+
     /***
      * Training
      ***/
@@ -43,6 +47,7 @@ public class TrainingDAO {
         return training;
     }
 
+    @Transactional
     public List<Training> getAllTrainings() {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         return daoFacade.getList("select a from Training a");
@@ -303,4 +308,13 @@ public class TrainingDAO {
         return collaboratorRequestTraining;
     }
 
+    /***
+     *Skill
+     ***/
+    @Transactional
+    public Skill addSkill(Skill skill) throws PersistenceException {
+        daoFacade.persist(skill);
+        daoFacade.flush();
+        return skill;
+    }
 }

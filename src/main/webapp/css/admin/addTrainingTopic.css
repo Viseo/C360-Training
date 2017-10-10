@@ -152,10 +152,11 @@ table.fix td {
     border-radius: 3px 3px 0 0;
 }
 [v-cloak] { display:none; }
-
+/*
 select:required:invalid {
     color: gray;
 }
+*/
 option[value=""][disabled] {
     color: gray;
     display: none;
@@ -1079,5 +1080,8 @@ a.boxclose{
     border-radius:0;
     text-align: center;
 }
+
+
+
 
 
