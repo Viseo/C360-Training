@@ -189,7 +189,8 @@ public class TrainingDAO {
 
     public List<TrainingSession> getRequestedSessionByTraining(long myTrainingId, long byCollabId) {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select s from RequestTraining t join t.sessions s where t.training.id=:myTrainingId and t.collaborator.id=:byCollabId",
+        return daoFacade.getList("select s from RequestTraining t join t.sessions s where t.training.id=:myTrainingId" +
+                        " and t.collaborator.id=:byCollabId",
                 param("myTrainingId", myTrainingId),
                 param("byCollabId", byCollabId));
     }
@@ -308,6 +309,7 @@ public class TrainingDAO {
         return collaboratorRequestTraining;
     }
 
+
     /***
      *Skill
      ***/
@@ -317,4 +319,50 @@ public class TrainingDAO {
         daoFacade.flush();
         return skill;
     }
+
+    @Transactional
+    public Skill getSkillById(long id) throws PersistenceException{
+        Skill skill = daoFacade.find(Skill.class,id);
+        return skill;
+    }
+
+    @Transactional
+    public Skill updateSkill(Skill skill) throws PersistenceException {
+        skill = daoFacade.merge(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
+    @Transactional
+    public Skill removeSkill(Skill skill) throws PersistenceException{
+        daoFacade.executeRequest("Delete from Link l where l.skill1.id =:skill or l.skill2.id =:skill",param("skill",skill.getId()));
+        daoFacade.flush();
+        daoFacade.remove(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
+    @Transactional
+    public List<Skill> getAllSkills() {
+        return daoFacade.getList("select s from Skill s");
+    }
+
+    @Transactional
+    public boolean getSkillByLabel(String label) {
+        List<Skill> skill = daoFacade.getList("select s from Skill s where s.label = :label",
+                param("label", label));
+        if(skill.size() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Transactional
+    public List<Skill> getSkillByTraining(long trainingId){
+        return daoFacade.getList("select s from Training t join t.skills s where t.id = :trainingId",
+                param("trainingId", trainingId));
+    }
+
+
 }

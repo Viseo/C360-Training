@@ -312,7 +312,15 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         },
 
         gatherSkillsFromDatabase(){
-            this.state.selectOptionsOfSkill = [{id:0, version:0, label: "C1"},{id:1, version:0, label: "C2"}];
+            this.$http.get("api/skills").then(
+                function (response) {
+                    console.log("received skills : " + response);
+                },
+                function (response) {
+                    console.error(resposne);
+                }
+            )
+            this.state.skills = [{id:0, version:0, label: "C1"},{id:1, version:0, label: "C2"}];
         },
 
         gatherTrainingsFromDatabase(){
@@ -452,13 +460,13 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                             </select>
                                         </div>
                                     </td>
-                                    <td width="15%">
+                                    <td width="15%" v-if="state.skills.length > 0">
                                         <div class="form-group has-feedback ">
                                             <br/>
                                             <select class="form-control" v-model="topicSkill"
                                                     @focus="resetVariablesByInputTopic()" required>
                                                 <option value="" disabled selected hidden>Compétence</option>
-                                                <option v-for="option in state.selectOptionsOfSkill">{{ option.label }}</option>
+                                                <option v-for="option in state.skills">{{ option.label }}</option>
                                             </select>
                                         </div>
                                     </td>
@@ -744,7 +752,7 @@ class trainingStore {
             prenomUser:'',
             allSessions: [],
             selectOptionsOfTopic: [],
-            selectOptionsOfSkill: []
+            skills: []
         }
     }
     collectInformationOfTrainingChosen(){
