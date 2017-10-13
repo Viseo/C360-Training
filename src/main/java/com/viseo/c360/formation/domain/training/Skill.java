@@ -22,7 +22,6 @@ public class Skill extends BaseEntity {
     @Size(max = 20)
     String label;
 
-    @NotNull
     @Valid
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany

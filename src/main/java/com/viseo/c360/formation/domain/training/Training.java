@@ -1,12 +1,10 @@
 package com.viseo.c360.formation.domain.training;
 
 import com.viseo.c360.formation.domain.BaseEntity;
-import com.viseo.c360.formation.dto.training.TopicDescription;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -33,7 +31,6 @@ public class Training extends BaseEntity {
 	@ManyToOne()
 	Topic topic;
 
-	@NotNull
 	@Valid
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(mappedBy = "trainings")

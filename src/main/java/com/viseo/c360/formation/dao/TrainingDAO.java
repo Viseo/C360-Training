@@ -315,6 +315,7 @@ public class TrainingDAO {
      ***/
     @Transactional
     public Skill addSkill(Skill skill) throws PersistenceException {
+        skill.setId(0);
         daoFacade.persist(skill);
         daoFacade.flush();
         return skill;
@@ -333,14 +334,16 @@ public class TrainingDAO {
         return skill;
     }
 
+    /*
     @Transactional
-    public Skill removeSkill(Skill skill) throws PersistenceException{
+    public Skill removeAllSkill(Skill skill) throws PersistenceException{
         daoFacade.executeRequest("Delete from Link l where l.skill1.id =:skill or l.skill2.id =:skill",param("skill",skill.getId()));
         daoFacade.flush();
         daoFacade.remove(skill);
         daoFacade.flush();
         return skill;
     }
+    */
 
     @Transactional
     public List<Skill> getAllSkills() {

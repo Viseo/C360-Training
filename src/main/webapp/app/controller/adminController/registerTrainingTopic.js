@@ -649,7 +649,12 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     console.error(response);
                 });
         },
+
+        addNewSkill(){
+            alert("Hello");
+        }
     },
+    // language=HTML
     template: `
                 <div>
                     <saveModal v-if="state.showSkillSetting" @close="state.showSkillSetting = false">
@@ -672,13 +677,14 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétence Liées
                                     </h4>
-                                    <button type="button" class="btn btn-info">Test Compétence5</button>
-                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                    <button type="button" class="btn btn-success">Test Compétence5</button>
+                                    <button type="button" class="btn btn-success">Test Compétence5</button>
                                 </div>  
                             </div>
                         </div>
-                        <div slot="body2" class="col-sm-12 col-md-12 col-lg-12">
-                            <input size="35" type="text" placeholder="Ajouter nouvelle compétence">   <span class="glyphicon glyphicon-plus" ></span>
+                        <div slot="body2" class="col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+                            <input size="35" type="text" placeholder="Ajouter une nouvelle compétence">
+                            <span class="glyphicon glyphicon-plus" @click="addNewSkill()" style="cursor: pointer;"></span>
                         </div>   
                         
                     </saveModal>

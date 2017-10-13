@@ -1,12 +1,17 @@
 package com.viseo.c360.formation.amqp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viseo.c360.formation.controllers.CollaboratorWS;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
+import com.viseo.c360.formation.converters.skill.SkillToDescription;
 import com.viseo.c360.formation.dao.CollaboratorDAO;
+import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
+import com.viseo.c360.formation.dto.training.SkillDescription;
+import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
 import org.apache.commons.collections.map.HashedMap;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,9 +22,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -33,6 +36,8 @@ public class ConsumerMessageHandler {
     @Inject
     CollaboratorWS ws;
 
+    @Inject
+    TrainingDAO TrainingDAO;
 
     @Inject
     RabbitTemplate rabbitTemplate;
@@ -42,6 +47,8 @@ public class ConsumerMessageHandler {
 
     @Inject
     Queue responseCompetence;
+
+
 
     private Map<String, Function<JSONObject, RabbitMsg>> factory = new HashedMap();
 
@@ -55,8 +62,7 @@ public class ConsumerMessageHandler {
                 connectionMessage.setToken((String)json.get("token"))
                         .setSequence(UUID.fromString((String)json.get("sequence")))
                         .setNameFileResponse((String)json.get("nameFileResponse"))
-                        .setMessageDate(new Date((long)json.get("messageDate")))
-                        .setType(MessageType.CONNECTION);
+                        .setMessageDate(new Date((long)json.get("messageDate")));
                 if(json.get("collaboratorDescription") != null){
                     connectionMessage.setCollaboratorDescription(objectMapper.readValue(json.get("collaboratorDescription").toString(), CollaboratorDescription.class));
                 }
@@ -70,8 +76,7 @@ public class ConsumerMessageHandler {
             DisconnectionMessage disconnectionMessage = new DisconnectionMessage();
             try{
                 disconnectionMessage.setToken((String)json.get("token"))
-                        .setNameFileResponse((String)json.get("nameFileResponse"))
-                        .setType(MessageType.DISCONNECTION);
+                        .setNameFileResponse((String)json.get("nameFileResponse"));
                 if(json.get("collaboratorDescription") != null){
                     disconnectionMessage.setCollaboratorDescription(objectMapper.readValue(json.get("collaboratorDescription").toString(), CollaboratorDescription.class));
                 }
@@ -79,6 +84,24 @@ public class ConsumerMessageHandler {
             }catch (IOException ioe){
                 throw new RuntimeException(ioe);
             }
+        });
+        factory.put(MessageType.INFORMATION.toString(),json->{
+           //ObjectMapper objectMapper = new ObjectMapper();
+           InformationMessage informationMessage = new InformationMessage();
+           try{
+                informationMessage.setNameFileResponse((String)json.get("nameFileResponse"))
+                        .setSequence(UUID.fromString((String)json.get("sequence")))
+                        .setMessageDate(new Date((long)json.get("messageDate")));
+                /*
+               if(json.get("skillsDescription") != null){
+                   informationMessage.setSkillsDescription(objectMapper.readValue(json.get("skillsDescription").toString()
+                           , new TypeReference<List<SkillDescription>>(){}));
+               }
+               */
+               return informationMessage;
+           }catch (Exception e){
+               throw new RuntimeException(e);
+           }
         });
         //deserialiser json et repondre
         try {
@@ -113,7 +136,19 @@ public class ConsumerMessageHandler {
                 DisconnectionMessage disconnectionMessage = (DisconnectionMessage) rabbitMsgResponse;
                 ws.checkIfAlreadyConnected(disconnectionMessage);
             }
-
+            else if (rabbitMsgResponse instanceof InformationMessage){
+                InformationMessage informationMessageResponse = (InformationMessage) rabbitMsgResponse;
+                informationMessageResponse.setSkillsDescription(new SkillToDescription().convert(TrainingDAO.getAllSkills()));
+                if (!informationMessageResponse.getNameFileResponse().equals(responseFormation.getName())) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    try{
+                        rabbitTemplate.convertAndSend(informationMessageResponse.getNameFileResponse(), mapper.writeValueAsString(informationMessageResponse));
+                        System.out.println("Skill list sent successfully !");
+                    }catch (JsonProcessingException e){
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         } catch (ParseException pe) {
             pe.printStackTrace();
         }

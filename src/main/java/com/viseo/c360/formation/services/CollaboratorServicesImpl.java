@@ -62,9 +62,6 @@ public class CollaboratorServicesImpl {
     Queue responseFormation;
 
     @Inject
-    Queue responseCompetence;
-
-    @Inject
     private TrainingDAO trainingDAO;
 
     @Inject
@@ -461,7 +458,7 @@ public class CollaboratorServicesImpl {
                 @Override
                 public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
                     long startTime = System.currentTimeMillis();
-                    long elapsedTime = 0;
+                    long elapsedTime;
                     ConnectionMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
