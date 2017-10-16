@@ -1,6 +1,11 @@
 /**
  * Created by BBA3616 on 24/02/2017.
  */
+
+
+//Vue.component('multiselect', VueMultiselect);
+
+
 Vue.component('error-messages',{
     props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
            'emptyIdenticalError','emptyFillError','emptySuccess','emptyfailureModification','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
@@ -314,13 +319,15 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
         gatherSkillsFromDatabase(){
             this.$http.get("api/skills").then(
                 function (response) {
-                    console.log("received skills : " + response);
+                    console.log("received skills : " + response.data);
+                    console.log("received skills : " + response.data);
+                    this.state.skills = response.data;
                 },
                 function (response) {
-                    console.error(resposne);
+                    this.state.skills = null;
+                    console.error("receive skills error");
                 }
             )
-            this.state.skills = [{id:0, version:0, label: "C1"},{id:1, version:0, label: "C2"}];
         },
 
         gatherTrainingsFromDatabase(){
@@ -460,16 +467,33 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                             </select>
                                         </div>
                                     </td>
+                                    <!--
                                     <td width="15%" v-if="state.skills.length > 0">
                                         <div class="form-group has-feedback ">
                                             <br/>
+                                            <!--
                                             <select class="form-control" v-model="topicSkill"
                                                     @focus="resetVariablesByInputTopic()" required>
                                                 <option value="" disabled selected hidden>Compétence</option>
                                                 <option v-for="option in state.skills">{{ option.label }}</option>
                                             </select>
+                                            -->
+                                            <!--
+                                            <multiselect v-model="topicSkill" :options="state.skills" 
+                                                         :multiple="true" :close-on-select="false" :clear-on-select="false" 
+                                                         :hide-selected="true" :preserve-search="true" placeholder="Compétence" 
+                                                         label="name" track-by="name">
+                                                <template slot="tag" scope="props">
+                                                    <span class="custom__tag">
+                                                        <span>{{ option.label }}</span>
+                                                        <span class="custom__remove" @click="topicSkill.remove(topicSkill.option)">❌</span>
+                                                    </span>
+                                                </template>
+                                            </multiselect>
+                                           
                                         </div>
                                     </td>
+                                    -->
                                     
                                     <td class="text-center" width="20%">
                                         <div class="form-group">
@@ -533,6 +557,10 @@ let ShowFormation = Vue.component('show-formation-panel', {
             upHere: false,
             trainingIdSelected:'',
             allTrainings: [],
+            newTopicSkill:"",
+            addingSkillFailed:false,
+            successClass:"glyphicon glyphicon-ok",
+            failClass:"glyphicon glyphicon-remove"
         }
     },
     mounted: function() {
@@ -651,10 +679,22 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
 
         addNewSkill(){
-            alert("Hello");
+            var s = {label : this.newTopicSkill};
+            var skillToRegister = JSON.parse(JSON.stringify(s));
+            this.$http.post("api/addskill", skillToRegister).then(
+                function(response) {
+                    console.log("Add skill successfully!");
+                    this.addingSkillFailed = false;
+                    this.state.skills = response.data;
+                },
+                function (response){
+                    console.log("Adding skill failed!");
+                    this.addingSkillFailed = true;
+                }
+            );
+            this.newTopicSkill = "";
         }
     },
-    // language=HTML
     template: `
                 <div>
                     <saveModal v-if="state.showSkillSetting" @close="state.showSkillSetting = false">
@@ -669,9 +709,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétences
                                     </h4>
-                                    <button type="button" class="btn btn-info">Test Compétence5</button>
-                                    <button type="button" class="btn btn-info">Test Compétence5</button>
-                                    <button type="button" class="btn btn-info">Test Compétence5</button>
+                                    <button type="button" class="btn btn-info" v-for="s in state.skills">{{s.label}}</button>
                                 </div>  
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <h4>
@@ -683,9 +721,13 @@ let ShowFormation = Vue.component('show-formation-panel', {
                             </div>
                         </div>
                         <div slot="body2" class="col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
-                            <input size="35" type="text" placeholder="Ajouter une nouvelle compétence">
-                            <span class="glyphicon glyphicon-plus" @click="addNewSkill()" style="cursor: pointer;"></span>
-                        </div>   
+                            <input size="35" type="text" placeholder="Ajouter une nouvelle compétence" v-model="newTopicSkill" />
+                            <span class="glyphicon glyphicon-plus" @click="addNewSkill" style="cursor: pointer;"></span>
+
+                            <div class="alert alert-danger" v-show="addingSkillFailed">
+                              <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+                            </div>
+                          
                         
                     </saveModal>
                     <div id="addFormation" class="trainingBlock">

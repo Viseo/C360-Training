@@ -50,21 +50,21 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 10*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 180*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 
     @CrossOrigin
     @RequestMapping(value = "${endpoint.addskill}", method = RequestMethod.POST)
     @ResponseBody
-    public Boolean addSkill(@RequestBody SkillDescription skillDescription){
+    public List<SkillDescription>  addSkill(@RequestBody SkillDescription skillDescription){
         try{
             if(!skillDAO.getSkillByLabel(skillDescription.getLabel())){
                 skillDAO.addSkill(new DescriptionToSkill().convert(skillDescription));
-                return true;
+                return getAllSkills();
             }
             else{
-                return false;
+                return null;
             }
         }
         catch (PersistenceException pe){
