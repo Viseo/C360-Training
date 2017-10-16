@@ -50,7 +50,7 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 180*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 10*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 
@@ -156,9 +156,11 @@ public class SkillWS {
     }
 
     private List<SkillDescription> handleReceivedCollaborator (List<SkillDescription> listReceived){
-        for (SkillDescription s : listReceived){
-            if (!skillDAO.getSkillByLabel(s.getLabel())){
-                skillDAO.addSkill(new DescriptionToSkill().convert(s));
+        if(listReceived != null){
+            for (SkillDescription s : listReceived){
+                if (!skillDAO.getSkillByLabel(s.getLabel())){
+                    skillDAO.addSkill(new DescriptionToSkill().convert(s));
+                }
             }
         }
         return new SkillToDescription().convert(skillDAO.getAllSkills());
