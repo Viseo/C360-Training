@@ -367,5 +367,14 @@ public class TrainingDAO {
                 param("trainingId", trainingId));
     }
 
+    @Transactional
+    public Skill removeSkill(Skill skill) throws PersistenceException{
+        daoFacade.executeRequest("DELETE FROM Skill s where s.label = :skillLabel",param("skillLabel",skill.getLabel()));
+        daoFacade.flush();
+        daoFacade.remove(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
 
 }

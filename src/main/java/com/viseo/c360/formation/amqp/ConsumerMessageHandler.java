@@ -11,6 +11,7 @@ import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.training.SkillDescription;
+import com.viseo.c360.formation.services.SkillWS;
 import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
 import org.apache.commons.collections.map.HashedMap;
 import org.json.simple.JSONObject;
@@ -35,6 +36,9 @@ public class ConsumerMessageHandler {
 
     @Inject
     CollaboratorWS ws;
+
+    @Inject
+    SkillWS SkillWs;
 
     @Inject
     TrainingDAO TrainingDAO;
@@ -103,6 +107,20 @@ public class ConsumerMessageHandler {
                throw new RuntimeException(e);
            }
         });
+        factory.put(MessageType.DELETESKILL.toString(),json->{
+            ObjectMapper objectMapper = new ObjectMapper();
+            DeleteSkillMessage deleteSkillMessage = new DeleteSkillMessage();
+            try{
+               if(json.get("skillDescription") != null){
+                   deleteSkillMessage.setSkillDescription(objectMapper.readValue(json.get("skillDescription").toString()
+                           , SkillDescription.class));
+               }
+                return deleteSkillMessage;
+            }catch (Exception e){
+                throw new RuntimeException(e);
+            }
+        });
+
         //deserialiser json et repondre
         try {
             JSONObject jo = (JSONObject) new JSONParser().parse(request);
@@ -148,6 +166,10 @@ public class ConsumerMessageHandler {
                         throw new RuntimeException(e);
                     }
                 }
+            }
+            else if (rabbitMsgResponse instanceof DeleteSkillMessage){
+                DeleteSkillMessage deleteSkillMessage = (DeleteSkillMessage) rabbitMsgResponse;
+                SkillWs.removeSkill(deleteSkillMessage.getSkillDescription());
             }
         } catch (ParseException pe) {
             pe.printStackTrace();

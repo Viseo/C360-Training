@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
+import com.viseo.c360.formation.amqp.DeleteSkillMessage;
 import com.viseo.c360.formation.amqp.InformationMessage;
 import com.viseo.c360.formation.converters.skill.DescriptionToSkill;
 import com.viseo.c360.formation.converters.skill.SkillToDescription;
@@ -175,6 +176,25 @@ public class SkillWS {
             System.out.println("Skill data is synchronized");
         }
     }
+
+    public Boolean removeSkill(SkillDescription skillDescription){
+        if (skillDAO.getSkillByLabel(skillDescription.getLabel())){
+            try {
+                // à modifier après
+                skillDAO.removeSkill(new DescriptionToSkill().convert(skillDescription));
+                return true;
+            } catch (PersistenceException pe) {
+                UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
+                if (uniqueFieldErrors == null) throw new C360Exception(pe);
+                else throw new UniqueFieldException(uniqueFieldErrors.getField());
+            }
+        }
+        else
+            return false;
+    }
+
+
+
 
 
 }
