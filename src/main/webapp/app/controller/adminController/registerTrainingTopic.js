@@ -3,8 +3,6 @@
  */
 
 
-//Vue.component('multiselect', VueMultiselect);
-
 
 Vue.component('error-messages',{
     props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
@@ -320,7 +318,6 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.$http.get("api/skills").then(
                 function (response) {
                     console.log("received skills : " + response.data);
-                    console.log("received skills : " + response.data);
                     this.state.skills = response.data;
                 },
                 function (response) {
@@ -556,11 +553,11 @@ let ShowFormation = Vue.component('show-formation-panel', {
             trainingStore: training_store,
             upHere: false,
             trainingIdSelected:'',
+            topicSelected:'',
             allTrainings: [],
             newTopicSkill:"",
             addingSkillFailed:false,
-            successClass:"glyphicon glyphicon-ok",
-            failClass:"glyphicon glyphicon-remove"
+            connectedSkills:[]
         }
     },
     mounted: function() {
@@ -572,6 +569,36 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+
+        editTrainingSkill(topicTraining){
+            this.topicSelected = topicTraining;
+            this.state.showSkillSetting = true;
+            this.$http.get("api/skillid/" + topicTraining.id).then(
+                function (response) {
+                    console.log(response.data);
+                    this.connectedSkills = response.data;
+                },
+                function (response) {
+                    console.log("EditTrainingSkill Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        connectSkillToTraining(skill){
+            console.log("Selected skill is " + skill.id + ". Selected topic is " + this.topicSelected.id);
+            this.$http.post("api/skillid/" + skill.id + "/formationid/" + this.topicSelected.id).then(
+                function (response) {
+                    console.log("sava successfully the training-skill relationship")
+                    this.connectedSkills = response.data;
+                },
+                function (error){
+                    console.log("ConnectSkillToTraining Error: ", error);
+                    console.error(error);
+                }
+            )
+        },
+
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
@@ -709,14 +736,13 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétences
                                     </h4>
-                                    <button type="button" class="btn btn-info" v-for="s in state.skills">{{s.label}}</button>
+                                    <button type="button" class="btn btn-info" v-for="s in state.skills" @click="connectSkillToTraining(s)">{{s.label}}</button>
                                 </div>  
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <h4>
                                         Compétence Liées
                                     </h4>
-                                    <button type="button" class="btn btn-success">Test Compétence5</button>
-                                    <button type="button" class="btn btn-success">Test Compétence5</button>
+                                    <button type="button" class="btn btn-success" v-for="connectedSkill in connectedSkills">{{connectedSkill.label}}</button>
                                 </div>  
                             </div>
                         </div>
@@ -753,7 +779,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                                                         <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
                                                                         <th width="25%"></th>
                                                                         <th width="15%"></th>
-                                                                        <th class="deletetopic" width="20%"><a style="cursor: pointer;" class="changecolor" @click="state.showSkillSetting = true"><span class="glyphicon glyphicon-plus"></span> Compétences</a></th>
+                                                                        <th class="deletetopic" width="20%"><a style="cursor: pointer;" class="changecolor" @click="editTrainingSkill(topicTraining[0][0])"><span class="glyphicon glyphicon-plus"></span> Compétences</a></th>
                                                                         <th class="deletetopic" width="15%"><a style="cursor: pointer;" @click="removeTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="removeTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer</a></th>
                                                                     </tr>
                                                                 </thead>
@@ -800,7 +826,8 @@ class trainingStore {
             prenomUser:'',
             allSessions: [],
             selectOptionsOfTopic: [],
-            skills: []
+            skills: [],
+            trainingSkills: []
         }
     }
     collectInformationOfTrainingChosen(){

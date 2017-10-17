@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.DeleteSkillMessage;
 import com.viseo.c360.formation.amqp.InformationMessage;
 import com.viseo.c360.formation.converters.skill.DescriptionToSkill;
 import com.viseo.c360.formation.converters.skill.SkillToDescription;
@@ -51,7 +50,7 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 10*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 180*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 
@@ -87,6 +86,34 @@ public class SkillWS {
             throw new C360Exception(e);
         }
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "${endpoint.skillbytraining}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<SkillDescription> getSkillsByTraining(@PathVariable("skillId") Long id) {
+        try{
+            return new SkillToDescription().convert(skillDAO.getSkillByTraining(id));
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
+
+    @CrossOrigin
+    @RequestMapping(value = "${endpoint.skilltraining}", method = RequestMethod.POST)
+    @ResponseBody
+    public List<SkillDescription> addSkillTrainingConnection(@PathVariable Long skillId,
+                                                             @PathVariable Long trainingId)
+    {
+        try{
+            return new SkillToDescription().convert(skillDAO.addSkillTrainingConnection(skillId, trainingId));
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            throw new C360Exception(e);
+        }
+    }
+
 
     private List<SkillDescription> getSkillsFromOtherServices(){
         ObjectMapper mapperObj = new ObjectMapper();

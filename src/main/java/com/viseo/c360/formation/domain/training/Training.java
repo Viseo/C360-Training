@@ -68,5 +68,17 @@ public class Training extends BaseEntity {
 	public void setTopic(Topic topic) {
 		this.topic = topic;
 	}
+
+	public void addSkill(Skill s){
+	    this.skills.add(s);
+    }
+
+    public void removeSkill(Skill s){
+	    this.skills.remove(s);
+    }
+
+    public void removeAllSkills(){
+        this.skills.clear();
+    }
 }
 

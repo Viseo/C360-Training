@@ -39,4 +39,16 @@ public class Skill extends BaseEntity {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public void addTraining(Training t){
+        this.trainings.add(t);
+    }
+
+    public void removeTraining(Training t){
+        this.trainings.remove(t);
+    }
+
+    public void removeAllTraining(){
+        this.trainings.clear();
+    }
 }

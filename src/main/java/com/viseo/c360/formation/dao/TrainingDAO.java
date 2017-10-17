@@ -334,17 +334,6 @@ public class TrainingDAO {
         return skill;
     }
 
-    /*
-    @Transactional
-    public Skill removeAllSkill(Skill skill) throws PersistenceException{
-        daoFacade.executeRequest("Delete from Link l where l.skill1.id =:skill or l.skill2.id =:skill",param("skill",skill.getId()));
-        daoFacade.flush();
-        daoFacade.remove(skill);
-        daoFacade.flush();
-        return skill;
-    }
-    */
-
     @Transactional
     public List<Skill> getAllSkills() {
         return daoFacade.getList("select s from Skill s");
@@ -375,6 +364,24 @@ public class TrainingDAO {
         daoFacade.flush();
         return skill;
     }
+
+
+    @Transactional
+    public List<Skill> addSkillTrainingConnection (long skillId, long trainingId){
+        Skill skill = this.getSkillById(skillId);
+        Training training = this.getTraining(trainingId);
+        training.addSkill(skill);
+        skill.addTraining(training);
+        daoFacade.flush();
+        return this.getSkillByTraining(trainingId);
+    }
+
+    /*
+    public void setIsValidated(){
+
+    }
+    */
+
 
 
 }
