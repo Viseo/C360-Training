@@ -51,4 +51,6 @@ public class Skill extends BaseEntity {
     public void removeAllTraining(){
         this.trainings.clear();
     }
+
+    public List<Training> getTrainings(){return this.trainings;}
 }

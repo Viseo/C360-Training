@@ -589,11 +589,22 @@ let ShowFormation = Vue.component('show-formation-panel', {
             console.log("Selected skill is " + skill.id + ". Selected topic is " + this.topicSelected.id);
             this.$http.post("api/skillid/" + skill.id + "/formationid/" + this.topicSelected.id).then(
                 function (response) {
-                    console.log("sava successfully the training-skill relationship")
                     this.connectedSkills = response.data;
                 },
                 function (error){
-                    console.log("ConnectSkillToTraining Error: ", error);
+                    console.error(error);
+                }
+            )
+        },
+
+        removeSkillTopicConnection(skill){
+            console.log("The skill will be removed : " + skill);
+            this.$http.put("api/skillid/" + skill.id + "/formationid/" + this.topicSelected.id, skill).then(
+                function(response){
+                    console.log("remove successfully the training-skill relationship")
+                    this.connectedSkills = response.data;
+                },
+                function (error){
                     console.error(error);
                 }
             )
@@ -743,7 +754,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétence Liées
                                     </h4>
-                                    <button type="button" class="btn btn-success" v-for="connectedSkill in connectedSkills">{{connectedSkill.label}}</button>
+                                    <button type="button" class="btn btn-success" v-for="connectedSkill in connectedSkills" 
+                                        @click="removeSkillTopicConnection(connectedSkill)">{{connectedSkill.label}}</button>
                                 </div>  
                             </div>
                         </div>

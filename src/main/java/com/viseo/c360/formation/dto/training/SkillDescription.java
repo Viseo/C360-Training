@@ -1,6 +1,9 @@
 package com.viseo.c360.formation.dto.training;
 
+import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.dto.BaseDTO;
+
+import java.util.List;
 
 /**
  * Created by YGU3747 on 10/10/2017
@@ -9,6 +12,8 @@ import com.viseo.c360.formation.dto.BaseDTO;
 public class SkillDescription extends BaseDTO {
 
     String label;
+
+//    List<Training> connectedTrainings;
 
     public SkillDescription() {
     }
@@ -20,5 +25,13 @@ public class SkillDescription extends BaseDTO {
     public void setLabel(String label) {
         this.label = label;
     }
+/*
+    public List<Training> getConnectedTrainings() {
+        return connectedTrainings;
+    }
 
+    public void setConnectedTrainings(List<Training> connectedTrainings) {
+        this.connectedTrainings = connectedTrainings;
+    }
+    */
 }

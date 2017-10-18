@@ -358,6 +358,7 @@ public class TrainingDAO {
 
     @Transactional
     public Skill removeSkill(Skill skill) throws PersistenceException{
+        skill.getTrainings().forEach(training->this.removeSkillTrainingConnection(skill.getId(),training.getId()));
         daoFacade.executeRequest("DELETE FROM Skill s where s.label = :skillLabel",param("skillLabel",skill.getLabel()));
         daoFacade.flush();
         daoFacade.remove(skill);
@@ -374,6 +375,16 @@ public class TrainingDAO {
             training.addSkill(skill);
             skill.addTraining(training);
         }
+        daoFacade.flush();
+        return this.getSkillByTraining(trainingId);
+    }
+
+    @Transactional
+    public List<Skill> removeSkillTrainingConnection (long skillId, long trainingId){
+        Skill skill = this.getSkillById(skillId);
+        Training training = this.getTraining(trainingId);
+        skill.removeTraining(training);
+        training.removeSkill(skill);
         daoFacade.flush();
         return this.getSkillByTraining(trainingId);
     }
