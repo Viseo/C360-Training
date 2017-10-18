@@ -370,8 +370,10 @@ public class TrainingDAO {
     public List<Skill> addSkillTrainingConnection (long skillId, long trainingId){
         Skill skill = this.getSkillById(skillId);
         Training training = this.getTraining(trainingId);
-        training.addSkill(skill);
-        skill.addTraining(training);
+        if(!training.checkSkillExist(skill)){
+            training.addSkill(skill);
+            skill.addTraining(training);
+        }
         daoFacade.flush();
         return this.getSkillByTraining(trainingId);
     }

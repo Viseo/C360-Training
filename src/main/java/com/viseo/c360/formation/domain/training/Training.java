@@ -80,5 +80,7 @@ public class Training extends BaseEntity {
     public void removeAllSkills(){
         this.skills.clear();
     }
+
+    public boolean checkSkillExist(Skill s){ return this.skills.contains(s);}
 }
 

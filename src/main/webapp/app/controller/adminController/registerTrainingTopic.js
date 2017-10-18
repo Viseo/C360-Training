@@ -736,7 +736,8 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétences
                                     </h4>
-                                    <button type="button" class="btn btn-info" v-for="s in state.skills" @click="connectSkillToTraining(s)">{{s.label}}</button>
+                                    <button type="button" class="btn btn-info" v-for="s in state.skills" @click="connectSkillToTraining(s)" 
+                                        v-show="!connectedSkills.some(function(el){return el.id === s.id})">{{s.label}}</button>
                                 </div>  
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <h4>
