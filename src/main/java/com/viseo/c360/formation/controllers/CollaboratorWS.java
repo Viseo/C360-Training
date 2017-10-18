@@ -47,9 +47,6 @@ public class CollaboratorWS {
     @Inject
     org.springframework.amqp.core.Queue responseFormation;
 
-    @Inject
-    org.springframework.amqp.core.Queue responseCompetence;
-
     private String compactJws;
     private static final Map<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
 import com.viseo.c360.formation.amqp.ConnectionMessage;
+import com.viseo.c360.formation.amqp.MessageType;
+import com.viseo.c360.formation.amqp.RabbitMsg;
+import com.viseo.c360.formation.amqp.ResolveMsgFactory;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -31,6 +34,8 @@ import com.viseo.c360.formation.exceptions.dao.PersistentObjectNotFoundException
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
 import com.viseo.c360.formation.exceptions.dao.util.ExceptionUtil;
 import com.viseo.c360.formation.exceptions.dao.util.UniqueFieldErrors;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.ChannelCallback;
@@ -42,6 +47,7 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,9 +66,6 @@ public class CollaboratorServicesImpl {
 
     @Inject
     Queue responseFormation;
-
-    @Inject
-    Queue responseCompetence;
 
     @Inject
     private TrainingDAO trainingDAO;
@@ -461,7 +464,7 @@ public class CollaboratorServicesImpl {
                 @Override
                 public ConnectionMessage doInRabbit(final Channel channel) throws Exception {
                     long startTime = System.currentTimeMillis();
-                    long elapsedTime = 0;
+                    long elapsedTime;
                     ConnectionMessage mostRecentConsumerResponse = null;
                     GetResponse consumerResponse;
                     long deliveryTag;
@@ -471,18 +474,26 @@ public class CollaboratorServicesImpl {
                         consumerResponse = channel.basicGet(responseFormation.getName(), false);
                         if (consumerResponse != null) {
                             deliveryTag = consumerResponse.getEnvelope().getDeliveryTag();
-                            ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
                             channel.basicAck(deliveryTag, true);
-                            if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 50000) {
-                                if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
-                                    if (mostRecentConsumerResponse == null ||
-                                            rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
-                                                    .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
-                                        mostRecentConsumerResponse = rabbitMessageResponse;
+                            // check if the right msg type
+                            JSONObject jo = (JSONObject) new JSONParser().parse(new String(consumerResponse.getBody(), StandardCharsets.UTF_8));
+                            RabbitMsg rbtMsg = ResolveMsgFactory.getFactory().get(jo.get("type")).apply(jo);
+                            if(rbtMsg.getType() == MessageType.CONNECTION){
+                                ConnectionMessage rabbitMessageResponse = new ObjectMapper().readValue(consumerResponse.getBody(), ConnectionMessage.class);
+                                if ((new Date().getTime() - rabbitMessageResponse.getMessageDate().getTime()) < 50000) {
+                                    if (rabbitMessageResponse.getSequence().equals(personalMessageSequence)) {
+                                        if (mostRecentConsumerResponse == null ||
+                                                rabbitMessageResponse.getCollaboratorDescription().getLastUpdateDate()
+                                                        .after(mostRecentConsumerResponse.getCollaboratorDescription().getLastUpdateDate())) {
+                                            mostRecentConsumerResponse = rabbitMessageResponse;
+                                        }
+                                    } else {
+                                        channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
                                     }
-                                } else {
-                                    channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
                                 }
+                            }
+                            else {
+                                channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
                             }
                         }
                     } while (consumerResponse != null && elapsedTime < 2000);

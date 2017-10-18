@@ -1,17 +1,18 @@
 package com.viseo.c360.formation.domain.training;
 
 import com.viseo.c360.formation.domain.BaseEntity;
-import com.viseo.c360.formation.dto.training.TopicDescription;
 import com.viseo.c360.formation.dto.training.TrainingDescription;
 import org.hibernate.annotations.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Training extends BaseEntity {
@@ -30,7 +31,14 @@ public class Training extends BaseEntity {
 	@ManyToOne()
 	Topic topic;
 
+	@Valid
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(mappedBy = "trainings")
+	List<Skill> skills;
+
 	public Training() {
+		super();
+		this.skills = new ArrayList<>();
 	}
 
 	public String getTrainingTitle() {
@@ -60,5 +68,19 @@ public class Training extends BaseEntity {
 	public void setTopic(Topic topic) {
 		this.topic = topic;
 	}
+
+	public void addSkill(Skill s){
+	    this.skills.add(s);
+    }
+
+    public void removeSkill(Skill s){
+	    this.skills.remove(s);
+    }
+
+    public void removeAllSkills(){
+        this.skills.clear();
+    }
+
+    public boolean checkSkillExist(Skill s){ return this.skills.contains(s);}
 }
 

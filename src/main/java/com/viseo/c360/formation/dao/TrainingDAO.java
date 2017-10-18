@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.persistence.*;
 
 
+import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.dao.db.DAOFacade;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
@@ -29,6 +30,9 @@ public class TrainingDAO {
     @Inject
     DAOFacade daoFacade;
 
+    @Inject
+    CollaboratorDAO collaboratorDAO;
+
     /***
      * Training
      ***/
@@ -43,6 +47,7 @@ public class TrainingDAO {
         return training;
     }
 
+    @Transactional
     public List<Training> getAllTrainings() {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
         return daoFacade.getList("select a from Training a");
@@ -184,7 +189,8 @@ public class TrainingDAO {
 
     public List<TrainingSession> getRequestedSessionByTraining(long myTrainingId, long byCollabId) {
         daoFacade.setFlushMode(FlushModeType.COMMIT);
-        return daoFacade.getList("select s from RequestTraining t join t.sessions s where t.training.id=:myTrainingId and t.collaborator.id=:byCollabId",
+        return daoFacade.getList("select s from RequestTraining t join t.sessions s where t.training.id=:myTrainingId" +
+                        " and t.collaborator.id=:byCollabId",
                 param("myTrainingId", myTrainingId),
                 param("byCollabId", byCollabId));
     }
@@ -302,5 +308,93 @@ public class TrainingDAO {
                 param("training_id", training_id)));
         return collaboratorRequestTraining;
     }
+
+
+    /***
+     *Skill
+     ***/
+    @Transactional
+    public Skill addSkill(Skill skill) throws PersistenceException {
+        skill.setId(0);
+        daoFacade.persist(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
+    @Transactional
+    public Skill getSkillById(long id) throws PersistenceException{
+        Skill skill = daoFacade.find(Skill.class,id);
+        return skill;
+    }
+
+    @Transactional
+    public Skill updateSkill(Skill skill) throws PersistenceException {
+        skill = daoFacade.merge(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
+    @Transactional
+    public List<Skill> getAllSkills() {
+        return daoFacade.getList("select s from Skill s");
+    }
+
+    @Transactional
+    public boolean getSkillByLabel(String label) {
+        List<Skill> skill = daoFacade.getList("select s from Skill s where s.label = :label",
+                param("label", label));
+        if(skill.size() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Transactional
+    public List<Skill> getSkillByTraining(long trainingId){
+        return daoFacade.getList("select s from Training t join t.skills s where t.id = :trainingId",
+                param("trainingId", trainingId));
+    }
+
+    @Transactional
+    public Skill removeSkill(Skill skill) throws PersistenceException{
+        skill.getTrainings().forEach(training->this.removeSkillTrainingConnection(skill.getId(),training.getId()));
+        daoFacade.executeRequest("DELETE FROM Skill s where s.label = :skillLabel",param("skillLabel",skill.getLabel()));
+        daoFacade.flush();
+        daoFacade.remove(skill);
+        daoFacade.flush();
+        return skill;
+    }
+
+
+    @Transactional
+    public List<Skill> addSkillTrainingConnection (long skillId, long trainingId){
+        Skill skill = this.getSkillById(skillId);
+        Training training = this.getTraining(trainingId);
+        if(!training.checkSkillExist(skill)){
+            training.addSkill(skill);
+            skill.addTraining(training);
+        }
+        daoFacade.flush();
+        return this.getSkillByTraining(trainingId);
+    }
+
+    @Transactional
+    public List<Skill> removeSkillTrainingConnection (long skillId, long trainingId){
+        Skill skill = this.getSkillById(skillId);
+        Training training = this.getTraining(trainingId);
+        skill.removeTraining(training);
+        training.removeSkill(skill);
+        daoFacade.flush();
+        return this.getSkillByTraining(trainingId);
+    }
+
+    /*
+    public void setIsValidated(){
+
+    }
+    */
+
+
 
 }

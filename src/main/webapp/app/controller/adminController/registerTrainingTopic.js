@@ -1,6 +1,9 @@
 /**
  * Created by BBA3616 on 24/02/2017.
  */
+
+
+
 Vue.component('error-messages',{
     props:['height','colspan','identicalErrorMessage','fillFieldErrorMessage','failureModification','successMessage','successSupressionMessage','successModificationMessage','failureMessage','regexErrorMessage',
            'emptyIdenticalError','emptyFillError','emptySuccess','emptyfailureModification','emptySuccessSupression','emptyRegexError','emptyFailure','emptySuccessModification','width'],
@@ -95,11 +98,13 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             training: {
                 trainingTitle: '',
                 numberHalfDays: '',
-                topicDescription: ''
+                topicDescription: '',
+                topicSkill:''
             },
             trainingTitle: '',
-            numberHalfDays: '',
-            topicDescription:'',
+            numberHalfDays: "",
+            topicDescription: "",
+            topicSkill: "",
             trainingToRegister: {},
             topic: {
                 name: ''
@@ -136,6 +141,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
     },
     mounted: function(){
         this.gatherTopicsFromDatabase();
+        this.gatherSkillsFromDatabase();
         this.gatherTrainingsFromDatabase();
         Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
         this.activateScrollUp('#scroll-up','#adminTrainingContainer');
@@ -238,6 +244,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             this.trainingTitle = '';
             this.numberHalfDays = '';
             this.topicDescription = '';
+            this.topicSkill = '';
             this.trainingToRegister = {};
         },
         resetTopicForm() {
@@ -305,6 +312,19 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                     console.error(response);
                 }
             );
+        },
+
+        gatherSkillsFromDatabase(){
+            this.$http.get("api/skills").then(
+                function (response) {
+                    console.log("received skills : " + response.data);
+                    this.state.skills = response.data;
+                },
+                function (response) {
+                    this.state.skills = null;
+                    console.error("receive skills error");
+                }
+            )
         },
 
         gatherTrainingsFromDatabase(){
@@ -403,7 +423,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
             return correctedString;
         }
     },
-template:`
+// language=HTML
+    template:`
                   <div id="addNewFormation" class="trainingBlock">
                         <div class="row">
                              <div class="col-lg-12 col-md-12 text-center">
@@ -414,7 +435,7 @@ template:`
                             <table class="borderRadius">
                                 <tr id="testtt">
                                     <input-text 
-                                        width="20%"
+                                        width="15%"
                                         :value="trainingTitle" 
                                         @input="updateV1"
                                         placeholder="Formation"
@@ -433,16 +454,44 @@ template:`
                                             </select>
                                         </div>
                                     </td>
-                                    <td width="20%">
+                                    <td width="15%">
                                         <div class="form-group has-feedback ">
                                             <br/>
                                             <select class="form-control" v-model="topicDescription"
                                                 @focus="resetVariablesByInputTopic()" required>
-                                                <option value="" disabled selected>Thèmes</option>
+                                                <option value="" disabled selected hidden>Thèmes</option>
                                                 <option v-for="option in state.selectOptionsOfTopic">{{ option.name }}</option>
                                             </select>
                                         </div>
                                     </td>
+                                    <!--
+                                    <td width="15%" v-if="state.skills.length > 0">
+                                        <div class="form-group has-feedback ">
+                                            <br/>
+                                            <!--
+                                            <select class="form-control" v-model="topicSkill"
+                                                    @focus="resetVariablesByInputTopic()" required>
+                                                <option value="" disabled selected hidden>Compétence</option>
+                                                <option v-for="option in state.skills">{{ option.label }}</option>
+                                            </select>
+                                            -->
+                                            <!--
+                                            <multiselect v-model="topicSkill" :options="state.skills" 
+                                                         :multiple="true" :close-on-select="false" :clear-on-select="false" 
+                                                         :hide-selected="true" :preserve-search="true" placeholder="Compétence" 
+                                                         label="name" track-by="name">
+                                                <template slot="tag" scope="props">
+                                                    <span class="custom__tag">
+                                                        <span>{{ option.label }}</span>
+                                                        <span class="custom__remove" @click="topicSkill.remove(topicSkill.option)">❌</span>
+                                                    </span>
+                                                </template>
+                                            </multiselect>
+                                           
+                                        </div>
+                                    </td>
+                                    -->
+                                    
                                     <td class="text-center" width="20%">
                                         <div class="form-group">
                                              <br/>
@@ -504,7 +553,11 @@ let ShowFormation = Vue.component('show-formation-panel', {
             trainingStore: training_store,
             upHere: false,
             trainingIdSelected:'',
+            topicSelected:'',
             allTrainings: [],
+            newTopicSkill:"",
+            addingSkillFailed:false,
+            connectedSkills:[]
         }
     },
     mounted: function() {
@@ -516,6 +569,47 @@ let ShowFormation = Vue.component('show-formation-panel', {
         }
     },
     methods:{
+
+        editTrainingSkill(topicTraining){
+            this.topicSelected = topicTraining;
+            this.state.showSkillSetting = true;
+            this.$http.get("api/skillid/" + topicTraining.id).then(
+                function (response) {
+                    console.log(response.data);
+                    this.connectedSkills = response.data;
+                },
+                function (response) {
+                    console.log("EditTrainingSkill Error: ", response);
+                    console.error(response);
+                }
+            );
+        },
+
+        connectSkillToTraining(skill){
+            console.log("Selected skill is " + skill.id + ". Selected topic is " + this.topicSelected.id);
+            this.$http.post("api/skillid/" + skill.id + "/formationid/" + this.topicSelected.id).then(
+                function (response) {
+                    this.connectedSkills = response.data;
+                },
+                function (error){
+                    console.error(error);
+                }
+            )
+        },
+
+        removeSkillTopicConnection(skill){
+            console.log("The skill will be removed : " + skill);
+            this.$http.put("api/skillid/" + skill.id + "/formationid/" + this.topicSelected.id, skill).then(
+                function(response){
+                    console.log("remove successfully the training-skill relationship")
+                    this.connectedSkills = response.data;
+                },
+                function (error){
+                    console.error(error);
+                }
+            )
+        },
+
         gatherTopicsFromDatabase(){
             this.$http.get("api/themes").then(
                 function (response) {
@@ -621,54 +715,112 @@ let ShowFormation = Vue.component('show-formation-panel', {
                     console.error(response);
                 });
         },
+
+        addNewSkill(){
+            var s = {label : this.newTopicSkill};
+            var skillToRegister = JSON.parse(JSON.stringify(s));
+            this.$http.post("api/addskill", skillToRegister).then(
+                function(response) {
+                    console.log("Add skill successfully!");
+                    this.addingSkillFailed = false;
+                    this.state.skills = response.data;
+                },
+                function (response){
+                    console.log("Adding skill failed!");
+                    this.addingSkillFailed = true;
+                }
+            );
+            this.newTopicSkill = "";
+        }
     },
     template: `
-                        <div id="addFormation" class="trainingBlock">
-                            <div class="row">
-                                <div style="z-index:10;" class="col-lg-12 col-md-12 text-center">
-                                     <legend class="blueLegend">Formations ajoutées</legend>
-                                </div>
+                <div>
+                    <saveModal v-if="state.showSkillSetting" @close="state.showSkillSetting = false">
+                        <!--
+                        you can use custom content here to overwrite
+                        default content
+                        -->
+                        <h3 slot="header">Lier la formation avec des compétences</h3>
+                        <div slot="body">
+                            <div>
+                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                    <h4>
+                                        Compétences
+                                    </h4>
+                                    <button type="button" class="btn btn-info" v-for="s in state.skills" @click="connectSkillToTraining(s)" 
+                                        v-show="!connectedSkills.some(function(el){return el.id === s.id})">{{s.label}}</button>
+                                </div>  
+                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                    <h4>
+                                        Compétence Liées
+                                    </h4>
+                                    <button type="button" class="btn btn-success" v-for="connectedSkill in connectedSkills" 
+                                        @click="removeSkillTopicConnection(connectedSkill)">{{connectedSkill.label}}</button>
+                                </div>  
                             </div>
-                            <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
-                                  <img v-show="state.showChevrons" id="scroll-up" src="img/other_icon/scroll_up.png" width="70" height="50" 
-                        style="position: absolute; left:41%; z-index:1; top: 33px; cursor: pointer;">
-                                        <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
-                                        <table class="fix tabnonborder" >
-                                            <tbody>
-                                                  <tr>
-                                                      
-                                                      <td>
-                                                           <template v-for="topicTraining in state.allTopicTraining">
-                                                                <table class="table table-borderless tabnonborder fix">                               
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
-                                                                            <th width="25%"></th>
-                                                                            <th width="25%"></th>
-                                                                            <th class="deletetopic" width="25%"><a style="cursor: pointer;" @click="removeTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="removeTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer ce thème</a></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr v-for="trainings in topicTraining" >
-                                                                            <td  v-for="training in trainings" width="25%" style="position: relative">
-                                                                               <a  @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
-                                                                               <router-link :to="{name: 'addSession'}"><button @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btnTraining btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button></router-link>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                           </template>
-                                                      </td>
-                                                  </tr>
-                                            </tbody>
-                                        </table>
-                                  <img v-show="state.showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down" width="70" height="50" style="position: absolute; left:41%; top:95%; z-index:1; margin-top: -15px;">
-                         </div>`
+                        </div>
+                        <div slot="body2" class="col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
+                            <input size="35" type="text" placeholder="Ajouter une nouvelle compétence" v-model="newTopicSkill" />
+                            <span class="glyphicon glyphicon-plus" @click="addNewSkill" style="cursor: pointer;"></span>
+
+                            <div class="alert alert-danger" v-show="addingSkillFailed">
+                              <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+                            </div>
+                          
+                        
+                    </saveModal>
+                    <div id="addFormation" class="trainingBlock">
+    
+                        <div class="row">
+                            <div style="z-index:10;" class="col-lg-12 col-md-12 text-center">
+                                 <legend class="blueLegend">Formations ajoutées</legend>
+                            </div>
+                        </div>
+                        <div style="width: 100%; height: 31em; overflow-y:hidden; overflow-x:hidden;" id="adminTrainingContainer" >
+                              <img v-show="state.showChevrons" id="scroll-up" src="img/other_icon/scroll_up.png" width="70" height="50" 
+                    style="position: absolute; left:41%; z-index:1; top: 33px; cursor: pointer;">
+                                    <p v-show="noFormation" style="text-align: center; margin-top:70px;">Aucune formation n'a été créée.</p>
+                                    <table class="fix tabnonborder" >
+                                        <tbody>
+                                              <tr>
+                                                  
+                                                  <td>
+                                                       <template v-for="topicTraining in state.allTopicTraining">
+                                                            <table class="table table-borderless tabnonborder fix">                               
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th width="25%">{{topicTraining[0][0].topicDescription.name}}</th>
+                                                                        <th width="25%"></th>
+                                                                        <th width="15%"></th>
+                                                                        <th class="deletetopic" width="20%"><a style="cursor: pointer;" class="changecolor" @click="editTrainingSkill(topicTraining[0][0])"><span class="glyphicon glyphicon-plus"></span> Compétences</a></th>
+                                                                        <th class="deletetopic" width="15%"><a style="cursor: pointer;" @click="removeTopic(topicTraining[0][0].topicDescription)" class="changecolor"><span @click="removeTopic(topicTraining[0][0].topicDescription)" class="glyphicon glyphicon-trash"></span> Supprimer</a></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr v-for="trainings in topicTraining" >
+                                                                        <td  v-for="training in trainings" width="25%" style="position: relative">
+                                                                           <a  @click="removeTraining(training)"@mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()" class="boxclose" id="boxclose" v-show="verifyShowButtonOrNot(training.id)"></a>
+                                                                           <router-link :to="{name: 'addSession'}"><button @mouseover="showCloseButton(training.id)" @mouseleave="hideCloseButton()"   class="btnTraining btn btn-toolbar btn-group"   @click="createSession(training.id)">{{training.trainingTitle}}</button></router-link>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                       </template>
+                                                  </td>
+                                              </tr>
+                                        </tbody>
+                                    </table>
+                              <img v-show="state.showChevrons" src="img/other_icon/scroll_down.png" id="scroll-down" width="70" height="50" style="position: absolute; left:41%; top:95%; z-index:1; margin-top: -15px;">
+                        </div>
+                     </div>
+                
+                </div>`
 });
 
 class trainingStore {
     constructor () {
         this.state = {
+            showSkillSetting: false,
             showChevrons:false,
             trainingsChosen:[],
             allTopicTraining:[],
@@ -687,6 +839,8 @@ class trainingStore {
             prenomUser:'',
             allSessions: [],
             selectOptionsOfTopic: [],
+            skills: [],
+            trainingSkills: []
         }
     }
     collectInformationOfTrainingChosen(){

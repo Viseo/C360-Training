@@ -5,6 +5,8 @@ Vue.component('accordion', VueStrap.accordion);
 Vue.component('panel', VueStrap.panel);
 Vue.component('alert', VueStrap.alert);
 Vue.component('typeahead', VueStrap.typeahead);
+Vue.component('multiselect', VueMultiselect.Multiselect);
+
 
 let Header = Vue.component('header-component', {
     props: ['title',

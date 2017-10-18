@@ -1,7 +1,10 @@
 package com.viseo.c360.formation.dto.training;
 
 
+import com.viseo.c360.formation.domain.training.Skill;
 import com.viseo.c360.formation.dto.BaseDTO;
+
+import java.util.List;
 
 public class TrainingDescription extends BaseDTO {
 
@@ -11,6 +14,8 @@ public class TrainingDescription extends BaseDTO {
     }
 
     String trainingTitle;
+
+//    List<Skill> connectedSkills;
 
     int numberHalfDays;
 
@@ -42,4 +47,13 @@ public class TrainingDescription extends BaseDTO {
     public void setTopicDescription(TopicDescription topicDescription) {
         this.topicDescription = topicDescription;
     }
+
+    /*
+    public List<Skill> getConnectedSkills() {
+        return connectedSkills;
+    }
+
+    public void setConnectedSkills(List<Skill> connectedSkills) {
+        this.connectedSkills = connectedSkills;
+    } */
 }
