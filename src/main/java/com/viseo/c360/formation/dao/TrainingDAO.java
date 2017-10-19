@@ -340,14 +340,9 @@ public class TrainingDAO {
     }
 
     @Transactional
-    public boolean getSkillByLabel(String label) {
-        List<Skill> skill = daoFacade.getList("select s from Skill s where s.label = :label",
+    public List<Skill> getSkillByLabel(String label) {
+        return daoFacade.getList("select s from Skill s where s.label = :label",
                 param("label", label));
-        if(skill.size() != 0){
-            return true;
-        }else{
-            return false;
-        }
     }
 
     @Transactional
@@ -358,11 +353,19 @@ public class TrainingDAO {
 
     @Transactional
     public Skill removeSkill(Skill skill) throws PersistenceException{
-        skill.getTrainings().forEach(training->this.removeSkillTrainingConnection(skill.getId(),training.getId()));
+        //skill.getTrainings().forEach(training->this.removeSkillTrainingConnection(skill.getId(),training.getId()));
+        /*
+        for (Training t : skill.getTrainings()){
+            this.removeSkillTrainingConnection(skill.getId(), t.getId());
+        }
+        */
+
         daoFacade.executeRequest("DELETE FROM Skill s where s.label = :skillLabel",param("skillLabel",skill.getLabel()));
         daoFacade.flush();
+
         daoFacade.remove(skill);
         daoFacade.flush();
+        System.out.println("delete the skill successfully!");
         return skill;
     }
 
@@ -386,6 +389,7 @@ public class TrainingDAO {
         skill.removeTraining(training);
         training.removeSkill(skill);
         daoFacade.flush();
+        System.out.println("delete the skill relationship successfully!");
         return this.getSkillByTraining(trainingId);
     }
 

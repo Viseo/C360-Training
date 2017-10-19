@@ -83,7 +83,8 @@ public class ResolveMsgFactory {
                 try{
                     if(json.get("skillDescription") != null){
                         deleteSkillMessage.setSkillDescription(objectMapper.readValue(json.get("skillDescription").toString()
-                                , SkillDescription.class));
+                                , SkillDescription.class))
+                        .setSequence(UUID.fromString((String)json.get("sequence")));
                     }
                     return deleteSkillMessage;
                 }catch (Exception e){

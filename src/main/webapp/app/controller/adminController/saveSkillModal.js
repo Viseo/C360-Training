@@ -20,11 +20,14 @@ Vue.component('saveModal', {
                     </slot>
                   </div>
         
-                  <div class="modal-footer">
+                  <div class="modal-footer row">
                     <slot name="footer">
-                        <button class="modal-default-button" @click="$emit('close')">
-                           OK
-                         </button>
+                          <div class="col-md-9 "></div>
+                          <div class="col-md-3 ">
+                                <button class="btn btn-primary buttonForm " @click="$emit('close')">
+                                   Close
+                                </button>
+                           </div>
                     </slot>
                   </div>
                 </div>

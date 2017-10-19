@@ -514,7 +514,8 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                                     class="td-right"
                                                     @click="verifyTopicFormBeforeSubmit">
                                     </input-text>
-                                     <img id="plusImage" src="/img/other_icon/iconPlus.png" @click="verifyTopicFormBeforeSubmit">
+                                     <img id="plusImage" src="/img/other_icon/iconPlus.png" @click="verifyTopicFormBeforeSubmit"
+                                        style="cursor: pointer;" >
                                 </tr>
                                 <tr>
                                     <error-messages :colspan="4"
@@ -566,6 +567,12 @@ let ShowFormation = Vue.component('show-formation-panel', {
     computed: {
         noFormation(){
             return this.state.allTopicTraining.length == 0
+        },
+        orderedSkills: function () {
+            return _.orderBy(this.state.skills, 'label')
+        },
+        orderedConnectedSkills: function () {
+            return _.orderBy(this.connectedSkills, 'label')
         }
     },
     methods:{
@@ -747,27 +754,28 @@ let ShowFormation = Vue.component('show-formation-panel', {
                                     <h4>
                                         Compétences
                                     </h4>
-                                    <button type="button" class="btn btn-info" v-for="s in state.skills" @click="connectSkillToTraining(s)" 
-                                        v-show="!connectedSkills.some(function(el){return el.id === s.id})">{{s.label}}</button>
+                                    <button type="button" class="btn btn-info" v-for="s in orderedSkills" @click="connectSkillToTraining(s)" 
+                                        v-show="!connectedSkills.some(function(el){return el.id === s.id})" style="margin:1px;">{{s.label}}</button>
                                 </div>  
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <h4>
                                         Compétence Liées
                                     </h4>
-                                    <button type="button" class="btn btn-success" v-for="connectedSkill in connectedSkills" 
-                                        @click="removeSkillTopicConnection(connectedSkill)">{{connectedSkill.label}}</button>
+                                    <button type="button" class="btn btn-success" v-for="connectedSkill in orderedConnectedSkills" 
+                                        @click="removeSkillTopicConnection(connectedSkill)" style="margin:1px;">{{connectedSkill.label}}</button>
                                 </div>  
                             </div>
                         </div>
                         <div slot="body2" class="col-sm-12 col-md-12 col-lg-12" style="margin-top:20px;">
                             <input size="35" type="text" placeholder="Ajouter une nouvelle compétence" v-model="newTopicSkill" />
-                            <span class="glyphicon glyphicon-plus" @click="addNewSkill" style="cursor: pointer;"></span>
+                            <button class="glyphicon glyphicon-plus btn-primary" @click="addNewSkill" style="cursor: pointer; height:25px;" ></button>
 
                             <div class="alert alert-danger" v-show="addingSkillFailed">
-                              <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
+                              <strong>ERROR!</strong> Adding skill failed!
                             </div>
-                          
-                        
+                        </div>
+                        <!-- col-md-3 offset-md-9 -->
+                           
                     </saveModal>
                     <div id="addFormation" class="trainingBlock">
     

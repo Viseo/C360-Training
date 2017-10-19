@@ -11,6 +11,8 @@ import com.viseo.c360.formation.amqp.ResolveMsgFactory;
 import com.viseo.c360.formation.converters.skill.DescriptionToSkill;
 import com.viseo.c360.formation.converters.skill.SkillToDescription;
 import com.viseo.c360.formation.dao.TrainingDAO;
+import com.viseo.c360.formation.domain.training.Skill;
+import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.dto.training.SkillDescription;
 import com.viseo.c360.formation.exceptions.C360Exception;
 import com.viseo.c360.formation.exceptions.dao.UniqueFieldException;
@@ -56,7 +58,7 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 10*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 30*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 
@@ -65,7 +67,7 @@ public class SkillWS {
     @ResponseBody
     public List<SkillDescription>  addSkill(@RequestBody SkillDescription skillDescription){
         try{
-            if(!skillDAO.getSkillByLabel(skillDescription.getLabel())){
+            if(skillDAO.getSkillByLabel(skillDescription.getLabel()).size() == 0){
                 skillDAO.addSkill(new DescriptionToSkill().convert(skillDescription));
                 return getAllSkills();
             }
@@ -176,6 +178,9 @@ public class SkillWS {
                                     }
                                 }
                             }
+                            else if (rbtMsg.getType() == MessageType.DELETESKILL){
+                                System.out.println("doInhabbit of getSkill receive a delete request!");
+                            }
                             else{
                                 channel.basicPublish("", responseFormation.getName(), null, consumerResponse.getBody());
                             }
@@ -216,7 +221,7 @@ public class SkillWS {
     private List<SkillDescription> handleReceivedCollaborator (List<SkillDescription> listReceived){
         if(listReceived != null){
             for (SkillDescription s : listReceived){
-                if (!skillDAO.getSkillByLabel(s.getLabel())){
+                if (skillDAO.getSkillByLabel(s.getLabel()).size() == 0){
                     skillDAO.addSkill(new DescriptionToSkill().convert(s));
                 }
             }
@@ -235,10 +240,15 @@ public class SkillWS {
     }
 
     public Boolean removeSkill(SkillDescription skillDescription){
-        if (skillDAO.getSkillByLabel(skillDescription.getLabel())){
+        Skill s = skillDAO.getSkillByLabel(skillDescription.getLabel()).get(0);
+        if (s != null){
             try {
                 // à modifier après
-                skillDAO.removeSkill(new DescriptionToSkill().convert(skillDescription));
+                for (Training t : s.getTrainings()){
+                    skillDAO.removeSkillTrainingConnection(s.getId(), t.getId());
+                }
+
+                skillDAO.removeSkill(s);
                 return true;
             } catch (PersistenceException pe) {
                 UniqueFieldErrors uniqueFieldErrors = exceptionUtil.getUniqueFieldError(pe);
