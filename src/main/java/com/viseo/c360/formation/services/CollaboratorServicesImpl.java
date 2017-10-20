@@ -1,12 +1,10 @@
 package com.viseo.c360.formation.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.GetResponse;
-import com.viseo.c360.formation.amqp.ConnectionMessage;
-import com.viseo.c360.formation.amqp.MessageType;
-import com.viseo.c360.formation.amqp.RabbitMsg;
-import com.viseo.c360.formation.amqp.ResolveMsgFactory;
+import com.viseo.c360.formation.amqp.*;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToIdentity;
 import com.viseo.c360.formation.converters.collaborator.DescriptionToCollaborator;
@@ -20,6 +18,7 @@ import com.viseo.c360.formation.dao.TrainingDAO;
 import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.domain.collaborator.RequestTraining;
 import com.viseo.c360.formation.domain.collaborator.Wish;
+import com.viseo.c360.formation.domain.training.Skill;
 import com.viseo.c360.formation.domain.training.Topic;
 import com.viseo.c360.formation.domain.training.Training;
 import com.viseo.c360.formation.domain.training.TrainingSession;
@@ -66,6 +65,9 @@ public class CollaboratorServicesImpl {
 
     @Inject
     Queue responseFormation;
+
+    @Inject
+    Queue responseCompetence;
 
     @Inject
     private TrainingDAO trainingDAO;
@@ -528,5 +530,13 @@ public class CollaboratorServicesImpl {
             if (uniqueFieldErrors == null) throw new C360Exception(pe);
             else throw new UniqueFieldException(uniqueFieldErrors.getField());
         }
+    }
+
+    public void addCollaboratorSkillLevel(List<Skill> skills, List<Collaborator> collaborators) throws JsonProcessingException {
+        AddSkillLevelMessage request = new AddSkillLevelMessage();
+        request.setCollaborators(collaborators)
+                .setSkills(skills).setNameFileResponse(responseCompetence.getName());
+        ObjectMapper mapper = new ObjectMapper();
+        rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(request));
     }
 }

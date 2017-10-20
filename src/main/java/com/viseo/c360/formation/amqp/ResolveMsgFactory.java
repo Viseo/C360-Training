@@ -1,6 +1,9 @@
 package com.viseo.c360.formation.amqp;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viseo.c360.formation.domain.collaborator.Collaborator;
+import com.viseo.c360.formation.domain.training.Skill;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.training.SkillDescription;
 import org.apache.commons.collections.map.HashedMap;
@@ -8,6 +11,7 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -87,6 +91,25 @@ public class ResolveMsgFactory {
                         .setSequence(UUID.fromString((String)json.get("sequence")));
                     }
                     return deleteSkillMessage;
+                }catch (Exception e){
+                    throw new RuntimeException(e);
+                }
+            });
+            factory.put(MessageType.ADDSKILLLEVEL.toString(),json->{
+                ObjectMapper objectMapper = new ObjectMapper();
+                AddSkillLevelMessage addSkillLevelMessage = new AddSkillLevelMessage();
+                try{
+                    if(json.get("skills") != null){
+                        addSkillLevelMessage.setSkills(objectMapper.readValue(json.get("skills").toString()
+                                ,new TypeReference<List<Skill>>(){}));
+                    }
+                    if(json.get("collaborators") != null){
+                        addSkillLevelMessage.setCollaborators(objectMapper.readValue(json.get("collaborators").toString()
+                                ,new TypeReference<List<Collaborator>>(){}));
+                    }
+                    addSkillLevelMessage.setSequence(UUID.fromString((String)json.get("sequence")))
+                        .setNameFileResponse((String)json.get("nameFileResponse"));
+                    return addSkillLevelMessage;
                 }catch (Exception e){
                     throw new RuntimeException(e);
                 }

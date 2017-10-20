@@ -53,11 +53,12 @@ let assignCollaborator = Vue.component('assign-collaborator', {
                     </select>
                     <div class="col-sm-6 col-md-6 col-lg-6">
                         <div class="row">
-                            <h4 style="font-size: 1.8rem;
-    color: hsl(12, 7%, 39%);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
+                            <h4 style="font-size: 1.8rem; color: hsl(12, 7%, 39%);" class="col-sm-12 col-md-12 col-lg-12">Liste des collaborateurs</h4>
                             <div class="checkbox col-sm-10 col-md-10 col-lg-10 col-sm-offset-1 col-lg-offset-1 col-md-offset-1">
-                                <label><input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">Afficher
-                                    les demandes</label>
+                                <label>
+                                    <input type="checkbox" value="" v-model="checkedNames" :disabled="isDisabled">
+                                    Afficher les demandes
+                                </label>
                             </div>
                         </div>
                         <div class="searchCollab panel panel-default" :class="{disabled : isDisabled}">

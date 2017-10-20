@@ -7,6 +7,9 @@ import java.util.*;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viseo.c360.formation.amqp.AddSkillLevelMessage;
 import com.viseo.c360.formation.converters.Feedback.DescriptionToFeedback;
 import com.viseo.c360.formation.converters.Feedback.FeedbackToDescription;
 import com.viseo.c360.formation.converters.collaborator.CollaboratorToDescription;
@@ -55,6 +58,9 @@ public class TrainingWS {
 
     @Inject
     ExceptionUtil exceptionUtil;
+
+    @Inject
+    private CollaboratorServicesImpl collaboratorServices;
 
     //Feedback
     @RequestMapping(value = "${endpoint.feedback}", method = RequestMethod.POST)
@@ -278,10 +284,16 @@ public class TrainingWS {
                 collaborators.add(collaboratorDAO.getCollaborator(id_collaborators.get(i)));
             }
             TrainingSession trainingSession = trainingDAO.getSessionTraining(id_session);
+            TrainingSessionDescription td = new TrainingSessionToDescription().convert(trainingDAO.addCollaboratorToTrainingSession(trainingSession, collaborators));
 //            trainingDAO.getRequestedSessionByTraining(trainingSession.getTraining().getId(),)
-            return new TrainingSessionToDescription().convert(trainingDAO.addCollaboratorToTrainingSession(trainingSession, collaborators));
+            //Connect to Service Compétence
+            List<Skill> skills = trainingDAO.getSkillByTraining(trainingSession.getTraining().getId());
+            collaboratorServices.addCollaboratorSkillLevel(skills, collaborators);
+            return td;
         } catch (PersistentObjectNotFoundException e) {
             throw new C360Exception(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -338,4 +350,5 @@ public class TrainingWS {
     public List<TrainingSessionDescription> getSessionCollaborators() {
         return new TrainingSessionToDescription().convert(trainingDAO.getSessionCollaborators());
     }
+
 }

@@ -6,5 +6,6 @@ public enum MessageType {
     INFORMATION,
     DELETESKILL,
     FORMATION,
+    ADDSKILLLEVEL,
     UPDATE;
 }

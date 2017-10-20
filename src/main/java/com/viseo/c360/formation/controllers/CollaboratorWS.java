@@ -145,7 +145,6 @@ public class CollaboratorWS {
                     .setToken(theToken)
                     .setMessageDate(new Date())
                     .setNameFileResponse(responseFormation.getName());
-            ;
             ObjectMapper mapper = new ObjectMapper();
             rabbitTemplate.convertAndSend(fanout.getName(),"",mapper.writeValueAsString(request));
             ConnectionMessage connectedUser = this.rabbitTemplate.execute(new ChannelCallback<ConnectionMessage>() {

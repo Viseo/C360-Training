@@ -19,6 +19,7 @@ public class SkillToDescription {
         dto.setId(source.getId());
         dto.setVersion(source.getVersion());
         dto.setLabel(source.getLabel());
+        dto.setConnectedTrainings(source.getTrainings());
         return dto;
     }
 

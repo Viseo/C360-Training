@@ -13,7 +13,7 @@ public class SkillDescription extends BaseDTO {
 
     String label;
 
-//    List<Training> connectedTrainings;
+    List<Training> connectedTrainings;
 
     public SkillDescription() {
     }
@@ -25,7 +25,7 @@ public class SkillDescription extends BaseDTO {
     public void setLabel(String label) {
         this.label = label;
     }
-/*
+
     public List<Training> getConnectedTrainings() {
         return connectedTrainings;
     }
@@ -33,5 +33,5 @@ public class SkillDescription extends BaseDTO {
     public void setConnectedTrainings(List<Training> connectedTrainings) {
         this.connectedTrainings = connectedTrainings;
     }
-    */
+
 }
