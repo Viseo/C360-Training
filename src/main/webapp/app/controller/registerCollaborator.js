@@ -700,7 +700,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                         }
                     };
                     console.log("Connexion en cours");
-                    this.post("api/getuserifalreadyconnectedelsewhere", token, connectUserSuccess);
+                    this.$http.post("api/getuserifalreadyconnectedelsewhere", token).then(connectUserSuccess);
                 }
             }
         },
@@ -723,7 +723,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                 this.isErrorAuthentification = true;
             };
 
-            this.post("api/user", this.userToRegister, connectUserSuccess, connectUserError);
+            this.$http.post("api/user", this.userToRegister).then(connectUserSuccess, connectUserError);
         },
 
         gatherUsersFromDatabaseToVerify(){

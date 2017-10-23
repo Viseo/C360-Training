@@ -255,8 +255,10 @@ let Header = Vue.component('header-component', {
                 let isTokenPresent = document.cookie.match('(^|;)\\s*' + "token" + '\\s*=\\s*([^;]+)');
                 let stayConnectedDefined = document.cookie.match('(^|;)\\s*' + "stayconnected" + '\\s*=\\s*([^;]+)');
 
-                if (!isTokenPresent || isTokenPresent == null)
+                if (!isTokenPresent || isTokenPresent == null){
                     delete this.token;
+                    return false;
+                }
 
                 if (this.token == undefined)
                     isTokenPresent = false;

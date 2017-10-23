@@ -176,7 +176,7 @@ public class CollaboratorWS {
 
                         }
                     } while (consumerResponse != null && elapsedTime < 2000);
-
+                    System.out.println("c : " + consumerResponse + " elapsedTime: " + elapsedTime);
 
                     return mostRecentConsumerResponse;
                 }
