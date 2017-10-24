@@ -29,7 +29,7 @@ let Header = Vue.component('header-component', {
                              <img style="cursor:default;" class="image-min" v-if="defaultPicture"
                                                  src="img/profile.jpg">
                              <img style="cursor:default;" class="image-min" v-else
-                                                 :src="'img/'+collaboratorId+'.jpg'"> 
+                                                 :src="'img/avatar/'+collaboratorId+'.jpg'"> 
                         </div> 
                         <span class="text-left col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" style="margin-top:10px" @mouseover="setDisconnectedToTrue()" v-show="showName()" >{{ firstName }} {{ lastName }}</span> 
                         <dropdown class="col-lg-8 col-lg-offset-2 col-md-5 col-sm-5 col-xs-5" type="default" v-if="showPicture()" v-show="showDisconnexion()" text="Choisissez une action" id="menu"> 
@@ -109,7 +109,7 @@ let Header = Vue.component('header-component', {
         this.setTitle();
         if (this.token && this.token != '')
             this.checkIfTokenExist();
-        this.imagePath = "img/" + this.collaboratorId + ".jpg";
+        this.imagePath = "img/avatar/" + this.collaboratorId + ".jpg";
     },
     methods: {
         goToTrainingMicroservice(){
