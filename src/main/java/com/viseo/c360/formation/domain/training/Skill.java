@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ public class Skill extends BaseEntity {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany
     List<Training> trainings;
+
+    @NotNull
+    Date date;
 
     public Skill() {
         super();
@@ -53,4 +57,12 @@ public class Skill extends BaseEntity {
     }
 
     public List<Training> getTrainings(){return this.trainings;}
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

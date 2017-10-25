@@ -19,6 +19,7 @@ public class DescriptionToSkill {
         domain.setId(dto.getId());
         domain.setVersion(dto.getVersion());
         domain.setLabel(dto.getLabel());
+        domain.setDate(dto.getDate());
         return domain;
     }
 

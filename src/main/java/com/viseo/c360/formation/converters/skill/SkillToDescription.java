@@ -20,6 +20,7 @@ public class SkillToDescription {
         dto.setVersion(source.getVersion());
         dto.setLabel(source.getLabel());
         dto.setConnectedTrainings(source.getTrainings());
+        dto.setDate(source.getDate());
         return dto;
     }
 

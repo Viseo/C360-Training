@@ -724,7 +724,7 @@ let ShowFormation = Vue.component('show-formation-panel', {
         },
 
         addNewSkill(){
-            var s = {label : this.newTopicSkill};
+            var s = {label : this.newTopicSkill, date : new Date()};
             var skillToRegister = JSON.parse(JSON.stringify(s));
             this.$http.post("api/addskill", skillToRegister).then(
                 function(response) {

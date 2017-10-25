@@ -92,15 +92,26 @@ public class ConsumerMessageHandler {
                 ws.checkIfAlreadyConnected(disconnectionMessage);
             }
             else if (rabbitMsgResponse instanceof InformationMessage){
-                InformationMessage informationMessageResponse = (InformationMessage) rabbitMsgResponse;
-                informationMessageResponse.setSkillsDescription(new SkillToDescription().convert(TrainingDAO.getAllSkills()));
-                if (!informationMessageResponse.getNameFileResponse().equals(responseFormation.getName())) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    try{
-                        rabbitTemplate.convertAndSend(informationMessageResponse.getNameFileResponse(), mapper.writeValueAsString(informationMessageResponse));
-                        System.out.println("Skill list sent successfully : " + informationMessageResponse.getSkillsDescription().size());
-                    }catch (JsonProcessingException e){
-                        throw new RuntimeException(e);
+                if (TrainingDAO != null){
+                    // avoid the initial problem
+                    InformationMessage informationMessageResponse = (InformationMessage) rabbitMsgResponse;
+                    List<SkillDescription> skillsToSend = new SkillToDescription().convert(TrainingDAO.getAllSkills());
+                    skillsToSend.forEach(skill ->{
+                        Date today = new Date();
+                        if ((today.getTime() - skill.getDate().getTime()) > 12*60*60*1000L){
+                            // do the remove function
+                            //skillsToSend.remove(skill);
+                        }
+                    });
+                    informationMessageResponse.setSkillsDescription(skillsToSend);
+                    if (!informationMessageResponse.getNameFileResponse().equals(responseFormation.getName())) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        try{
+                            rabbitTemplate.convertAndSend(informationMessageResponse.getNameFileResponse(), mapper.writeValueAsString(informationMessageResponse));
+                            System.out.println("Skill list sent successfully : " + informationMessageResponse.getSkillsDescription().size());
+                        }catch (JsonProcessingException e){
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
