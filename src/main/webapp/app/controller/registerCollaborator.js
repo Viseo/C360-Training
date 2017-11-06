@@ -496,7 +496,7 @@ let Formulaire = Vue.component('inscription-form', {
                 this.collaborator.lastName = this.lastName;
                 this.collaborator.firstName = this.firstName;
                 this.collaborator.email = this.email;
-                this.collaborator.password = this.password;
+                this.collaborator.password = sha256(this.password);
                 this.collaborator.confirmPassword = this.confirmPassword;
                 this.collaboratorToRegister = JSON.parse(JSON.stringify(this.collaborator));
                 this.saveAction();
@@ -678,7 +678,7 @@ let ConnexionForm = Vue.component('connexionForm', {
             this.isPasswordEmpty();
             if (!this.emailEmpty && !this.passwordEmpty) {
                 this.user.email = this.email;
-                this.user.password = this.password;
+                this.user.password = sha256(this.password);
                 this.userToRegister = JSON.parse(JSON.stringify(this.user));
                 this.verifyUserByDatabase();
             }

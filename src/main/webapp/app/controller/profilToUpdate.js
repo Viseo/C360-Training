@@ -1,4 +1,5 @@
 let profilToUpdate = Vue.component('profil-to-update', {
+    // language=HTML
     template: `
 <form id="register-form"
       @submit.prevent="updateCollaboratorInfo()"
@@ -217,29 +218,29 @@ let profilToUpdate = Vue.component('profil-to-update', {
         </div>
     </div>
     <div class="col-lg-6 col-sm-12 col-xs-12 col-md-6 col-lg-offset-3 col-md-offset-3">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-lg-5 col-lg-offset-1 col-md-3 col-md-offset-3 col-sm-6 col-xs-6">
-                            <button type="submit"
-                                    name="register-submit"
-                                    id="register-submit"
-                                    tabindex="4"
-                                    class="form-control btn btn-primary">
-                                Enregistrer
-                            </button>
-                    </div>
-                    <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3">
-                            <button @click="goTo('registerTrainingCollaborator')"
-                                    name="cancel-submit"
-                                    id="cancel-submit"
-                                    tabindex="4"
-                                    class="form-control btn btn-primary">Annuler
-                            </button>
-                    </div>
-                    <br><br>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-md-3 col-md-offset-3 col-sm-6 col-xs-6">
+                        <button type="submit"
+                                name="register-submit"
+                                id="register-submit"
+                                tabindex="4"
+                                class="form-control btn btn-primary">
+                            Enregistrer
+                        </button>
                 </div>
+                <div class="col-lg-5 col-sm-6 col-xs-6 col-md-3">
+                        <button @click="goTo('registerTrainingCollaborator')"
+                                name="cancel-submit"
+                                id="cancel-submit"
+                                tabindex="4"
+                                class="form-control btn btn-primary">Annuler
+                        </button>
+                </div>
+                <br><br>
             </div>
         </div>
+    </div>
 </form>
 `,
 
@@ -525,7 +526,7 @@ let profilToUpdate = Vue.component('profil-to-update', {
         },
 
         verifyPassword(password) {
-            console.log(password)
+            //console.log(password)
             if (/^(.){6,125}$/.test(password)) {
                 this.errorMessagePassword = '';
                 this.isPasswordValid = true;
@@ -630,13 +631,13 @@ let profilToUpdate = Vue.component('profil-to-update', {
                         }
                         this.saveUpdateCollaborator();
            } else {
-               if (this.infoCollab.password == this.password){
+               if (this.infoCollab.password == sha256(this.password)){
                     this.isRightOldPassword = true;
                     this.oldPasswordEmpty = false;
                     this.passwordEmpty = false;
-                    if(this.infoCollab.password != this.newPassword){
+                    if(this.infoCollab.password != sha256(this.newPassword)){
                         if (this.newPassword == this.confirmPassword) {
-                            this.CollabToUpdate.password = this.newPassword;
+                            this.CollabToUpdate.password = sha256(this.newPassword);
                             if (this.imageHasBeenChanged === true) {
                                 this.updateCollaboratorImage();
                                 this.CollabToUpdate.defaultPicture = false;

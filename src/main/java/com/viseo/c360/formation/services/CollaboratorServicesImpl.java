@@ -405,7 +405,9 @@ public class CollaboratorServicesImpl {
             //  COMPLET
             CollaboratorDescription storedcollaboratorDescription = new CollaboratorToDescription().convert(storedCollaborator);
 
-            if (receivedCollab == null || receivedCollab.getFirstName() == null || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword()) && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) {
+            if (receivedCollab == null || receivedCollab.getFirstName() == null
+                    || (storedcollaboratorDescription.getPassword().equals(receivedCollab.getPassword())  && (storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword())))
+                    || (storedcollaboratorDescription.getLastUpdateDate().after(receivedCollab.getLastUpdateDate()) && storedcollaboratorDescription.getPassword().equals(myCollaboratorDescription.getPassword()))) {
                 System.out.println("MOT DE PASSE IDENTIQUE OU PLUS RECENT");
                 return storedcollaboratorDescription;
             } else if ((myCollaboratorDescription.getPassword().equals(receivedCollab.getPassword())) && (storedcollaboratorDescription.getLastUpdateDate().before(receivedCollab.getLastUpdateDate()))) {
