@@ -264,6 +264,7 @@ let Header = Vue.component('header-component', {
 
                 if (isTokenPresent != undefined && stayConnectedDefined != undefined && isTokenPresent != null && stayConnectedDefined != null) {
                     this.token = String(isTokenPresent.pop());
+                    Vue.http.headers.common['Authorization'] = 'Bearer ' + this.token;
                     return true;
                 }
                 return false;

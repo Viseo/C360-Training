@@ -600,7 +600,7 @@ let ConnexionForm = Vue.component('connexionForm', {
                     <div class="row">
                         <div class="col-xs-12 col-xm-12 col-md-12 cold-lg-12 ">
                             <button ref="submitConnexion" type="submit" name="register-submit" id="register-submit"
-                                    tabindex="4" class="form-control btn btn-primary" @click="sendInformationToCookie()">Se connecter
+                                    tabindex="4" class="form-control btn btn-primary">Se connecter
                             </button>
                         </div>
                     </div>
@@ -709,6 +709,8 @@ let ConnexionForm = Vue.component('connexionForm', {
             let connectUserSuccess = (userPersistedToken) => {
                 this.handleCookie(userPersistedToken.data['userConnected']);
                 if (typeof userPersistedToken.data['userConnected'] != 'undefined') {
+                    Vue.http.headers.common['Authorization'] = 'Bearer ' + userPersistedToken.data['userConnected'];
+                    this.sendInformationToCookie();
                     if (jwt_decode(userPersistedToken.data['userConnected']).roles) {
                         this.goTo('addTrainingTopic');
                     }
