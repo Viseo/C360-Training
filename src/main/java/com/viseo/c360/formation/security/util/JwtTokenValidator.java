@@ -40,7 +40,7 @@ public class JwtTokenValidator {
 
             collaboratorDTO = new CollaboratorDescription();
             collaboratorDTO.setEmail(body.getSubject())
-                    .setIsAdmin((Boolean) body.get("roles"))
+                    .setAdmin((Boolean) body.get("roles"))
                     .setDefaultPicture((Boolean) body.get("defaultPicture"))
                     .setId(Long.parseLong(body.get("id").toString()));
         } catch (JwtException e) {

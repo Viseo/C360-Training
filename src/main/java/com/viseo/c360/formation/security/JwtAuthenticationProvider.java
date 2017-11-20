@@ -49,7 +49,7 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
             throw new JwtTokenMalformedException("JWT token is not valid");
         }
 
-        List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(parsedCollaborator.getIsAdmin().toString());
+        List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(parsedCollaborator.getAdmin().toString());
 
         return new AuthenticatedUser(parsedCollaborator.getId(), parsedCollaborator.getEmail(), token, authorityList);
     }

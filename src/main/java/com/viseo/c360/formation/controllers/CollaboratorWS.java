@@ -73,7 +73,7 @@ public class CollaboratorWS {
     private String createSecurityToken(CollaboratorDescription user){
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("roles", user.getIsAdmin())
+                .claim("roles", user.getAdmin())
                 .claim("id", user.getId())
                 .claim("defaultPicture", user.getDefaultPicture())
                 //.signWith(SignatureAlgorithm.HS512, generateKey())
@@ -105,7 +105,7 @@ public class CollaboratorWS {
     @ResponseBody
     public boolean checkIsAdminAlreadyConnected(@RequestBody String thisToken) {
         try {
-            return mapUserCache.get(thisToken).getIsAdmin();
+            return mapUserCache.get(thisToken).getAdmin();
         } catch (Exception e) {
             e.printStackTrace();
             throw new C360Exception(e);
