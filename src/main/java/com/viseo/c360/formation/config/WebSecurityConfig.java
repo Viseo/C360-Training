@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,8 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * Created by YGU3747 on 10/11/2017
@@ -53,31 +56,48 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure (HttpSecurity httpSecurity) throws Exception{
+        RequestMatcher requestMatcher = new RequestMatcher() {
+
+            // Always allow the HTTP OPTIONS method
+            //private Pattern allowedMethods = Pattern.compile("^OPTIONS$");
+
+            // Disable CSFR protection on the following urls:
+            private AntPathRequestMatcher[] requestMatchers = {
+                    new AntPathRequestMatcher("/login"),
+                    new AntPathRequestMatcher("/api/user/**"),
+                    new AntPathRequestMatcher("/api/sendtoken/**")
+            };
+
+            @Override
+            public boolean matches(HttpServletRequest request) {
+
+                // If the request match /api/** but not the url above, we will open the protection
+                for (AntPathRequestMatcher rm : requestMatchers) {
+                    if (rm.matches(request)){
+                        return false;
+                    }
+                }
+                if (new AntPathRequestMatcher("/api/**").matches(request)) { return true; }
+
+                return false;
+            } // method matches
+
+        };
         httpSecurity
-                // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
-                /*
-                .authorizeRequests()
-                    .antMatchers(HttpMethod.OPTIONS).permitAll()
-                    .and()
-                    */
-                .authorizeRequests()
-                    .anyRequest().permitAll()
-                    .and()
-                .authorizeRequests()
-                //The http.antMatcher states that this HttpSecurity will only be applicable to URLs that start with /api/
-                    .antMatchers("/api/**").authenticated()
+                .requestMatcher(requestMatcher).authorizeRequests()
                     .and()
                 .formLogin()
-                    .loginPage("/login").permitAll()
-                    .and()
+                .loginPage("/login").permitAll()
+                .and()
 
                 // Call our errorHandler if authentication/authorisation fails
                 .exceptionHandling()
-                    .authenticationEntryPoint(unauthorizedHandler)
-                    .and()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //httpSecurity.antMatcher("/api/**").authorizeRequests().anyRequest().authenticated();
         // Custom JWT based security filter
         httpSecurity
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
@@ -86,14 +106,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
 
+
+/*
     @Override
     public void configure(WebSecurity web) throws Exception {
 
-        web.ignoring().antMatchers("/api/collaborateurs/**", "/api/sendtoken/**", "/api/user/**");
+        web.ignoring().antMatchers("**.html", "**.js", "**.css", "**.png");
+        //web.ignoring().antMatchers("/api/collaborateurs/**", "/api/sendtoken/**", "/api/user/**");
         //web.ignoring().antMatchers(HttpMethod.OPTIONS, "/api/**");
 
         //web.ignoring().anyRequest();
     }
-
+*/
 
 }
