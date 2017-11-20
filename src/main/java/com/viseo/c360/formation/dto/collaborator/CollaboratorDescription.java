@@ -32,85 +32,91 @@ public class CollaboratorDescription extends BaseDTO {
         return personnalIdNumber;
     }
 
-    public void setPersonnalIdNumber(String personnalIdNumber) {
+    public CollaboratorDescription setPersonnalIdNumber(String personnalIdNumber) {
         this.personnalIdNumber = personnalIdNumber;
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public CollaboratorDescription setLastName(String lastName) {
         this.lastName = lastName;
+        return this;
     }
 
     public String getFirstName() { return firstName; }
 
-    public void setFirstName(String firstName) {
+    public CollaboratorDescription setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public CollaboratorDescription setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public CollaboratorDescription setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(Boolean admin) {
+    public CollaboratorDescription setIsAdmin(Boolean admin) {
         this.isAdmin = admin;
+        return this;
     }
 
     public Boolean getAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
-    }
-
     public String getFunction() {
         return function;
     }
 
-    public void setFunction(String function) {
+    public CollaboratorDescription setFunction(String function) {
         this.function = function;
+        return this;
     }
 
     public String getBusinessUnit() {
         return businessUnit;
     }
 
-    public void setBusinessUnit(String businessUnit) {
+    public CollaboratorDescription setBusinessUnit(String businessUnit) {
         this.businessUnit = businessUnit;
+        return this;
     }
 
     public Boolean getDefaultPicture() {
         return defaultPicture;
     }
 
-    public void setDefaultPicture(Boolean defaultPicture) {
+    public CollaboratorDescription setDefaultPicture(Boolean defaultPicture) {
         this.defaultPicture = defaultPicture;
+        return this;
     }
 
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(Date lastUpdateDate) {
+    public CollaboratorDescription setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+        return this;
     }
 }

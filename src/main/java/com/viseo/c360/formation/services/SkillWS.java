@@ -58,11 +58,10 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 1*1000, 15*1000);
+        timer.scheduleAtFixedRate(timerTask, 1*1000, 180*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.addskill}", method = RequestMethod.POST)
     @ResponseBody
     public List<SkillDescription>  addSkill(@RequestBody SkillDescription skillDescription){
@@ -82,7 +81,6 @@ public class SkillWS {
         }
     }
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.skills}", method = RequestMethod.GET)
     @ResponseBody
     public List<SkillDescription> getAllSkills() {
@@ -95,7 +93,6 @@ public class SkillWS {
         }
     }
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.skillbytraining}", method = RequestMethod.GET)
     @ResponseBody
     public List<SkillDescription> getSkillsByTraining(@PathVariable("skillId") Long id) {
@@ -108,7 +105,6 @@ public class SkillWS {
     }
 
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.skilltraining}", method = RequestMethod.POST)
     @ResponseBody
     public List<SkillDescription> addSkillTrainingConnection(@PathVariable Long skillId,
@@ -122,7 +118,6 @@ public class SkillWS {
         }
     }
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.skilltraining}", method = RequestMethod.PUT)
     @ResponseBody
     public List<SkillDescription> addSkillTrainingConnection(@PathVariable Long skillId,

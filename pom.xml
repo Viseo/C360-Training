@@ -320,10 +320,20 @@
             <version>${org.springframework.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>4.0.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>4.0.3.RELEASE</version>
+        </dependency>
 
     </dependencies>
     <build>
-        <finalName>C360_competence</finalName>
+        <finalName>C360_formation</finalName>
 
         <plugins>
             <plugin>

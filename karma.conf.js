@@ -51,6 +51,7 @@ module.exports = function (config) {
             'src/test/javaScript/spec/profilToUpdateSpec.js',
             'src/test/javaScript/spec/adminSpec/trainingRankingByOpinionsSpec.js',
             'src/test/javaScript/spec/adminSpec/addSessionSpec.js',
+            'src/test/javascript/spec/adminSpec/testTestSpec.js',
         ],
 
 

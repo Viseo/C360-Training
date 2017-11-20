@@ -98,7 +98,7 @@ public class Collaborator extends BaseEntity {
 	}
 
 	public void setAdmin(Boolean admin) {
-		isAdmin = admin;
+		this.isAdmin = admin;
 	}
 
 	public String getFunction() {

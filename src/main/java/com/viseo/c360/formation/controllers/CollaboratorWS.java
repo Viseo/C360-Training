@@ -20,6 +20,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.ChannelCallback;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -47,6 +48,9 @@ public class CollaboratorWS {
     @Inject
     org.springframework.amqp.core.Queue responseFormation;
 
+    @Value("${jwt.secret}")
+    String secret;
+
     private String compactJws;
     private static final Map<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
@@ -54,6 +58,7 @@ public class CollaboratorWS {
         this.mapUserCache.put(token, user);
     }
 
+    /*
     private String createSecurityToken(CollaboratorDescription user){
         return Jwts.builder()
                 .setSubject(user.getFirstName())
@@ -61,6 +66,18 @@ public class CollaboratorWS {
                 .claim("roles", user.getIsAdmin())
                 .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS512, generateKey())
+                .compact();
+    }
+    */
+
+    private String createSecurityToken(CollaboratorDescription user){
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .claim("roles", user.getIsAdmin())
+                .claim("id", user.getId())
+                .claim("defaultPicture", user.getDefaultPicture())
+                //.signWith(SignatureAlgorithm.HS512, generateKey())
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -71,7 +88,6 @@ public class CollaboratorWS {
         }
     }
 
-    @CrossOrigin
     @RequestMapping(value = "${endpoint.user}", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> getUserByLoginPassword(@RequestBody CollaboratorDescription myCollaboratorDescription) {
