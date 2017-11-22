@@ -73,10 +73,13 @@ public class CollaboratorWS {
     private String createSecurityToken(CollaboratorDescription user){
         return Jwts.builder()
                 .setSubject(user.getEmail())
+                .claim("firstName", user.getFirstName())
+                .claim("lastName", user.getLastName())
                 .claim("roles", user.getAdmin())
+                .claim("email", user.getEmail())
+                .claim("version", user.getVersion())
                 .claim("id", user.getId())
                 .claim("defaultPicture", user.getDefaultPicture())
-                //.signWith(SignatureAlgorithm.HS512, generateKey())
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }

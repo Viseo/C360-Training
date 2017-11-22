@@ -246,7 +246,7 @@ let Header = Vue.component('header-component', {
 
             let retrieveUserInfoFromToken = () => {
                 this.lastName = jwt_decode(this.token).lastName;
-                this.firstName = jwt_decode(this.token).sub;
+                this.firstName = jwt_decode(this.token).firstName;
                 this.collaboratorId = jwt_decode(this.token).id;
             };
 
