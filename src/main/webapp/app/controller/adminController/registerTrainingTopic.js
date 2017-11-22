@@ -449,7 +449,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                             <br/>
                                             <select class="form-control" v-model="numberHalfDays"  
                                                     @focus="resetVariablesByInputNumberHalfDays()" required>
-                                                <option value="" disabled selected hidden>1/2 journées</option>
+                                                <option value="" disabled hidden>1/2 journées</option>
                                                 <option v-for="n in 200">{{n}}</option>
                                             </select>
                                         </div>
@@ -459,7 +459,7 @@ let AddFormationPanel = Vue.component('add-formation-panel', {
                                             <br/>
                                             <select class="form-control" v-model="topicDescription"
                                                 @focus="resetVariablesByInputTopic()" required>
-                                                <option value="" disabled selected hidden>Thèmes</option>
+                                                <option value="" disabled hidden>Thèmes</option>
                                                 <option v-for="option in state.selectOptionsOfTopic">{{ option.name }}</option>
                                             </select>
                                         </div>

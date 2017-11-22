@@ -77,6 +77,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         return false;
                     }
                 }
+                if (new AntPathRequestMatcher("/api/collaborateurs").matches(request)
+                        && Pattern.compile("^POST$").matcher(request.getMethod()).matches())
+                {
+                    // allow register action no token
+                    return false;
+                }
                 if (new AntPathRequestMatcher("/api/**").matches(request)) { return true; }
 
                 return false;
