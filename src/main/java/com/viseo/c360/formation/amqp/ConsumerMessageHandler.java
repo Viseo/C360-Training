@@ -12,8 +12,6 @@ import com.viseo.c360.formation.domain.collaborator.Collaborator;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import com.viseo.c360.formation.dto.training.SkillDescription;
 import com.viseo.c360.formation.services.SkillWS;
-import jdk.internal.org.objectweb.asm.util.TraceAnnotationVisitor;
-import org.apache.commons.collections.map.HashedMap;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

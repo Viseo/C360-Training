@@ -1,9 +1,11 @@
 package com.viseo.c360.formation.dto.collaborator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.viseo.c360.formation.dto.BaseDTO;
 
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaboratorDescription extends BaseDTO {
 
     public static class Regex{

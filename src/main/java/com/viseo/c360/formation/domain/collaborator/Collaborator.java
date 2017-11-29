@@ -1,5 +1,6 @@
 package com.viseo.c360.formation.domain.collaborator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.viseo.c360.formation.domain.BaseEntity;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
 import org.hibernate.validator.constraints.Email;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Collaborator extends BaseEntity {
 
 	@NotNull
