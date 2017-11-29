@@ -58,7 +58,7 @@ public class SkillWS {
     public SkillWS(){
         TimerTask timerTask = new synchronizeDateBase();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 1*1000, 10*1000);
+        timer.scheduleAtFixedRate(timerTask, 1*1000, 180*1000);
         System.out.println("Synchronize DateBase for skill data started");
     }
 

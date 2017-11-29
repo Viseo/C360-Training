@@ -1,3 +1,5 @@
+
+
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.component('dropdown', VueStrap.dropdown);
@@ -112,7 +114,8 @@ let Header = Vue.component('header-component', {
     },
     methods: {
         goToTrainingMicroservice(){
-            window.location.replace("http://localhost:8081/#/login?user="+this.token);
+            window.location.replace(config.competenceServer + this.token);
+            //window.location.replace("http://localhost:8081/#/login?user="+this.token);
         },
         redirectPageHearder(){
             var isAdmin = jwt_decode(this.token).roles;

@@ -699,7 +699,8 @@ let ConnexionForm = Vue.component('connexionForm', {
                                 this.goTo('registerTrainingCollaborator');
                         }
                     };
-                    console.log("Connexion en cours");
+                    Vue.http.headers.common['Authorization'] = 'Bearer ' + token;
+                    console.log("Connexion en cours : " + token);
                     this.$http.post("api/getuserifalreadyconnectedelsewhere", token).then(connectUserSuccess);
                 }
             }
