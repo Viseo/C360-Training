@@ -46,7 +46,7 @@ let Header = Vue.component('header-component', {
                                 <span style="cursor:pointer;" id="navbar-app" class="col-lg-2 col-sm-2 col-md-2 glyphicon glyphicon-th dropdown-toggle" data-toggle="dropdown" aria-hidden="true" href="#"></span> 
                                 <ul id="dropdown-app" class="dropdown-menu"> 
                                     <li> 
-                                        <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
+                                        <span @click="goToCVMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
                                         <span @click="goToTrainingMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCom</p></span> 
                                         <span @click="goTo('registerTrainingCollaborator')" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></span> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/microservices_icon/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
@@ -116,6 +116,9 @@ let Header = Vue.component('header-component', {
         goToTrainingMicroservice(){
             window.location.replace(config.competenceServer + this.token);
             //window.location.replace("http://localhost:8081/#/login?user="+this.token);
+        },
+        goToCVMicroservice(){
+            window.location.replace(config.cvServer + this.token);
         },
         redirectPageHearder(){
             var isAdmin = jwt_decode(this.token).roles;
