@@ -54,6 +54,10 @@ public class CollaboratorWS {
     private String compactJws;
     private static final Map<String, CollaboratorDescription> mapUserCache = new ConcurrentHashMap<>();
 
+    public static Map<String, CollaboratorDescription> getMapUserCache() {
+        return mapUserCache;
+    }
+
     private void putUserInCache(String token, CollaboratorDescription user) {
         this.mapUserCache.put(token, user);
     }

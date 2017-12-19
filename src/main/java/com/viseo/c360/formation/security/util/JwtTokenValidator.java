@@ -1,11 +1,15 @@
 package com.viseo.c360.formation.security.util;
 
+import com.viseo.c360.formation.controllers.CollaboratorWS;
 import com.viseo.c360.formation.dto.collaborator.CollaboratorDescription;
+import com.viseo.c360.formation.security.excepetion.JWTTokenNotValid;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.inject.Inject;
 
 /**
  * Class validates a given token by using the secret configured in the application
@@ -16,7 +20,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenValidator {
 
-
+    @Inject
+    private CollaboratorWS collaboratorWS;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -37,7 +42,9 @@ public class JwtTokenValidator {
                     .setSigningKey(secret)
                     .parseClaimsJws(token)
                     .getBody();
-
+            if(collaboratorWS.getMapUserCache().get(token)==null){
+                throw new JWTTokenNotValid("Token not valid");
+            }
             collaboratorDTO = new CollaboratorDescription();
             collaboratorDTO.setEmail(body.getSubject())
                     .setAdmin((Boolean) body.get("roles"))
