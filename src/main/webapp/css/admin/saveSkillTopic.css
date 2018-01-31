@@ -59,7 +59,7 @@
 }
 
 .saveModal-enter .saveModal-container,
-.saveModall-leave-active .saveModal-container {
+.saveModal-leave-active .saveModal-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }

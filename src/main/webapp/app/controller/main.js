@@ -323,8 +323,18 @@ let Header = Vue.component('header-component', {
                 }
                 document.cookie = "alreadyShownPopUp=" + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
             };
-            console.log("disconnect");
-            this.post("api/userdisconnect", this.token, disconnect);
+            this.$http.post("api/userdisconnect", this.token, disconnect)
+                .
+            then(response => {
+                    console.log("aaaaaaaaaaaa");
+                    document.cookie = "token" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                    this.goTo('login');
+            },
+            error =>{
+                console.log("bbbbbbbbbbbbbbbb");
+                document.cookie = "token" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                this.goTo('login');
+            });
         },
 
     }

@@ -65,7 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             private AntPathRequestMatcher[] requestMatchers = {
                     new AntPathRequestMatcher("/login"),
                     new AntPathRequestMatcher("/api/user/**"),
-                    new AntPathRequestMatcher("/api/sendtoken/**")
+                    new AntPathRequestMatcher("/api/sendtoken/**"),
+                    new AntPathRequestMatcher("/api/getuserifalreadyconnectedelsewhere/**")
             };
 
             @Override
