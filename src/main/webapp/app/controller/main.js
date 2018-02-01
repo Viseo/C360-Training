@@ -47,7 +47,7 @@ let Header = Vue.component('header-component', {
                                 <ul id="dropdown-app" class="dropdown-menu"> 
                                     <li> 
                                         <span @click="goToCVMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.skills"><img src="/img/microservices_icon/icon_cv.png" class="text-center  icon-app"><p>GCv</p></span> 
-                                        <span @click="goToTrainingMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCom</p></span> 
+                                        <span @click="goToComMicroservice()" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.leave"><img src="/img/microservices_icon/icon_competence.png" class="text-center icon-app"><p>GCom</p></span> 
                                         <span @click="goTo('registerTrainingCollaborator')" style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.training"><img src="/img/microservices_icon/icon_formation.png" class="text-center icon-app"><p>GF</p></span> 
                                         <span style="cursor:pointer;" class="col-lg-5 col-md-6 col-sm-6 col-xs-6" v-show="!app.mission"><img src="/img/microservices_icon/icon_mission.png" class="text-center icon-app"><p>GM</p></span> 
                                     </li> 
@@ -96,26 +96,31 @@ let Header = Vue.component('header-component', {
         }
     },
     mounted: function () {
-        Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
-        this.getCookieInfos();
-        if (this.stayConnected === false) {
-            this.checkIfUserInactive();
-        }
-        $('ul.nav li.dropdown').hover(function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
-        }, function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
-        });
+        var d = window.location.href.indexOf("?user=");
+        if (d == -1) {
+            Object.setPrototypeOf(this, BaseComponent(Object.getPrototypeOf(this)));
+            this.getCookieInfos();
+            if (this.stayConnected === false) {
+                this.checkIfUserInactive();
+            }
+            $('ul.nav li.dropdown').hover(function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+            }, function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+            });
 
-        this.setTitle();
-        if (this.token && this.token != '')
-            this.checkIfTokenExist();
-        this.imagePath = "img/avatar/" + this.collaboratorId + ".jpg";
+            this.setTitle();
+            if (this.token && this.token != '')
+                this.checkIfTokenExist();
+            this.imagePath = "img/avatar/" + this.collaboratorId + ".jpg";
+        }
+        else{
+            console.log("redircting page ...");
+        }
     },
     methods: {
-        goToTrainingMicroservice(){
+        goToComMicroservice(){
             window.location.replace(config.competenceServer + this.token);
-            //window.location.replace("http://localhost:8081/#/login?user="+this.token);
         },
         goToCVMicroservice(){
             window.location.replace(config.cvServer + this.token);
@@ -326,12 +331,10 @@ let Header = Vue.component('header-component', {
             this.$http.post("api/userdisconnect", this.token, disconnect)
                 .
             then(response => {
-                    console.log("aaaaaaaaaaaa");
                     document.cookie = "token" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                     this.goTo('login');
             },
             error =>{
-                console.log("bbbbbbbbbbbbbbbb");
                 document.cookie = "token" + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                 this.goTo('login');
             });

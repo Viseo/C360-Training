@@ -113,17 +113,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
 
-
-/*
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-
-        web.ignoring().antMatchers("**.html", "**.js", "**.css", "**.png");
-        //web.ignoring().antMatchers("/api/collaborateurs/**", "/api/sendtoken/**", "/api/user/**");
-        //web.ignoring().antMatchers(HttpMethod.OPTIONS, "/api/**");
-
-        //web.ignoring().anyRequest();
-    }
-*/
-
 }
